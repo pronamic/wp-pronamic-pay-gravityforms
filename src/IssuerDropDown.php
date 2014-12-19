@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_IDeal_IssuerDropDown {
+class Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown {
 	/**
 	 * Type
 	 *

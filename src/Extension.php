@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_IDeal_AddOn {
+class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	/**
 	 * Slug
 	 *
@@ -42,7 +42,7 @@ class Pronamic_GravityForms_IDeal_AddOn {
 		if ( self::is_gravityforms_supported() ) {
 			// Admin
 			if ( is_admin() ) {
-				Pronamic_GravityForms_IDeal_Admin::bootstrap();
+				Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();
 			} else {
 				add_action( 'gform_pre_submission', array( __CLASS__, 'pre_submission' ) );
 			}
@@ -53,7 +53,7 @@ class Pronamic_GravityForms_IDeal_AddOn {
 			add_filter( 'gform_replace_merge_tags', array( __CLASS__, 'replace_merge_tags' ), 10, 7 );
 
 			// iDEAL fields
-			Pronamic_GravityForms_IDeal_Fields::bootstrap();
+			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
 		}
 	}
 
@@ -65,7 +65,7 @@ class Pronamic_GravityForms_IDeal_AddOn {
 	 * @param array $form
 	 */
 	public static function pre_submission( $form ) {
-		$processor = new Pronamic_GravityForms_IDeal_Processor( $form );
+		$processor = new Pronamic_WP_Pay_Extensions_GravityForms_Processor( $form );
 
 		$processor->pre_submission( $form );
 	}
@@ -106,7 +106,7 @@ class Pronamic_GravityForms_IDeal_AddOn {
 		}
 
 		if ( false == $user ) {
-			$created_by = $lead[ Pronamic_GravityForms_LeadProperties::CREATED_BY ];
+			$created_by = $lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::CREATED_BY ];
 
 			$user = new WP_User( $created_by );
 		}
@@ -144,27 +144,27 @@ class Pronamic_GravityForms_IDeal_AddOn {
 
 				switch ( $payment->status ) {
 					case Pronamic_WP_Pay_Statuses::CANCELLED:
-						$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_GravityForms_PaymentStatuses::CANCELLED;
+						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
 
 						$url = $data->get_cancel_url();
 
 						break;
 					case Pronamic_WP_Pay_Statuses::EXPIRED:
-						$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_GravityForms_PaymentStatuses::EXPIRED;
+						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
 
 						$url = $feed->get_url( Pronamic_WP_Pay_GravityForms_Links::EXPIRED );
 
 						break;
 					case Pronamic_WP_Pay_Statuses::FAILURE:
-						$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_GravityForms_PaymentStatuses::FAILED;
+						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
 
 						$url = $data->get_error_url();
 
 						break;
 					case Pronamic_WP_Pay_Statuses::SUCCESS:
-						if ( ! Pronamic_GravityForms_IDeal_Entry::is_payment_approved( $lead ) ) {
+						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
 							// Only fullfill order if the payment isn't approved aloready
-							$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_GravityForms_PaymentStatuses::APPROVED;
+							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
 							self::fulfill_order( $lead );
 						}
@@ -179,7 +179,7 @@ class Pronamic_GravityForms_IDeal_AddOn {
 						break;
 				}
 
-				Pronamic_GravityForms_GravityForms::update_entry( $lead );
+				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry( $lead );
 
 				if ( $url && $can_redirect ) {
 					wp_redirect( $url, 303 );
@@ -300,10 +300,10 @@ class Pronamic_GravityForms_IDeal_AddOn {
 					$is_match = RGFormsModel::is_value_match( $value, $feed->condition_value );
 
 					switch ( $feed->condition_operator ) {
-						case Pronamic_GravityForms_GravityForms::OPERATOR_IS:
+						case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS:
 							$result = $is_match;
 							break;
-						case Pronamic_GravityForms_GravityForms::OPERATOR_IS_NOT:
+						case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT:
 							$result = ! $is_match;
 							break;
 						default: // unknown operator

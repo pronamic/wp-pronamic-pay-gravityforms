@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_IDeal_Entry {
+class Pronamic_WP_Pay_Extensions_GravityForms_Entry {
 	/**
 	 * Check if the specified entry payment is approved
 	 *
@@ -18,10 +18,10 @@ class Pronamic_GravityForms_IDeal_Entry {
 	public static function is_payment_approved( array $entry ) {
 		$approved = false;
 
-		if ( isset( $entry[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ] ) ) {
-			$payment_status = $entry[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ];
+		if ( isset( $entry[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] ) ) {
+			$payment_status = $entry[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ];
 
-			$approved = ( $payment_status == Pronamic_GravityForms_PaymentStatuses::APPROVED );
+			$approved = ( $payment_status == Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED );
 		}
 
 		return $approved;

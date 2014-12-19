@@ -1,6 +1,6 @@
 <?php
 
-class Pronamic_GravityForms_PayFeed {
+class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 	/**
 	 * Indicator for an link to an WordPress page
 	 *

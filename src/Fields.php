@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_IDeal_Fields {
+class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	/**
 	 * Bootstrap
 	 */
@@ -32,7 +32,7 @@ class Pronamic_GravityForms_IDeal_Fields {
 	public static function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
 		$type = RGFormsModel::get_input_type( $field );
 
-		if ( $type == Pronamic_GravityForms_IDeal_IssuerDropDown::TYPE ) {
+		if ( $type == Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ) {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
 
@@ -125,7 +125,7 @@ class Pronamic_GravityForms_IDeal_Fields {
 			array(
 				'class'   => 'button',
 				'value'   => __( 'Issuer Drop Down', 'pronamic_ideal' ),
-				'onclick' => sprintf( "StartAddField('%s');", Pronamic_GravityForms_IDeal_IssuerDropDown::TYPE ),
+				'onclick' => sprintf( "StartAddField('%s');", Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ),
 			),
 		);
 
@@ -147,7 +147,7 @@ class Pronamic_GravityForms_IDeal_Fields {
 	 */
 	public static function field_type_title( $type ) {
 		switch ( $type ) {
-			case Pronamic_GravityForms_IDeal_IssuerDropDown::TYPE:
+			case Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE:
 				return __( 'Issuer Drop Down', 'pronamic_ideal' );
 		}
 

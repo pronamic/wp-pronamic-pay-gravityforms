@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_PaymentStatuses {
+class Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses {
 	/**
 	 * Payment status processing
 	 *

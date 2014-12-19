@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_IDeal_Processor {
+class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	/**
 	 * The Gravity Forms form
 	 *
@@ -37,7 +37,7 @@ class Pronamic_GravityForms_IDeal_Processor {
 	/**
 	 * Payment feed
 	 *
-	 * @var Pronamic_GravityForms_PayFeed
+	 * @var Pronamic_WP_Pay_Extensions_GravityForms_PayFeed
 	 */
 	private $feed;
 
@@ -79,7 +79,7 @@ class Pronamic_GravityForms_IDeal_Processor {
 		$this->feed = get_pronamic_gf_pay_feed_by_form_id( $form['id'] );
 
 		if ( null != $this->feed ) {
-			if ( Pronamic_GravityForms_IDeal_AddOn::is_condition_true( $this->form, $this->feed ) ) {
+			if ( Pronamic_WP_Pay_Extensions_GravityForms_Extension::is_condition_true( $this->form, $this->feed ) ) {
 				$this->process = true;
 
 				$this->add_hooks();
@@ -209,11 +209,11 @@ class Pronamic_GravityForms_IDeal_Processor {
 	public function entry_post_save( $lead, $form ) {
 		if ( $this->is_processing( $form ) && $this->payment ) {
 			// Updating lead's payment_status to Processing
-			$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_STATUS ]   = Pronamic_GravityForms_PaymentStatuses::PROCESSING;
-			$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_AMOUNT ]   = $this->payment->get_amount();
-			$lead[ Pronamic_GravityForms_LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
-			$lead[ Pronamic_GravityForms_LeadProperties::TRANSACTION_TYPE ] = Pronamic_GravityForms_GravityForms::TRANSACTION_TYPE_PAYMENT;
-			$lead[ Pronamic_GravityForms_LeadProperties::TRANSACTION_ID ]   = $this->payment->get_transaction_id();
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]   = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PROCESSING;
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_AMOUNT ]   = $this->payment->get_amount();
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::TRANSACTION_TYPE ] = Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::TRANSACTION_TYPE_PAYMENT;
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::TRANSACTION_ID ]   = $this->payment->get_transaction_id();
 
 			// Update entry meta with payment ID
 			gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
@@ -225,7 +225,7 @@ class Pronamic_GravityForms_IDeal_Processor {
 			gform_update_meta( $lead['id'], 'payment_gateway', 'ideal' );
 
 			// Update lead
-			Pronamic_GravityForms_GravityForms::update_entry( $lead );
+			Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry( $lead );
 		}
 
 		return $lead;

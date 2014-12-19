@@ -8,7 +8,7 @@
  * @author Remco Tolsma
  * @version 1.0
  */
-class Pronamic_GravityForms_LeadProperties {
+class Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties {
 	/**
 	 * Lead propery payment status
 	 *

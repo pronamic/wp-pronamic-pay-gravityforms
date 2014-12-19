@@ -1,0 +1,42 @@
+{
+	"name": "wp-pay-extensions/gravityforms",
+	"description": "Gravity Forms driver for the WordPress payment processing library.",
+	"keywords": ["wordpress", "wp", "pay", "gravityforms", "extension", "pronamic"],
+	"homepage": "http://www.wp-pay.org/extensions/gravityforms/",
+	"license": "GPL-3.0+",
+	"authors": [
+		{
+			"name": "Pronamic",
+			"email": "info@pronamic.eu",
+			"homepage": "http://www.pronamic.eu/",
+			"role": "Company"
+		},
+		{
+			"name": "Remco Tolsma",
+			"email": "info@remcotolsma.nl",
+			"homepage": "http://www.remcotolsma.nl/",
+			"role": "Developer"
+		}
+	],
+	"support": {
+		"email": "support@wp-pay.org",
+		"issues": "https://github.com/wp-pay-extensions/gravityforms/issues",
+		"source": "https://github.com/wp-pay-extensions/gravityforms"
+	},
+	"autoload": {
+		"classmap": ["src/"]
+	},
+	"repositories":[
+		{
+			"type": "composer",
+			"url": "http://wpackagist.org/"
+		}
+	],
+	"require": {
+		"php": ">=5.2.4",
+		"wp-pay/core": "dev-develop"
+	},
+	"require-dev": {
+		"satooshi/php-coveralls": "dev-master"
+	}
+}

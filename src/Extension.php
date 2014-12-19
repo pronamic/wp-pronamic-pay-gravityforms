@@ -137,7 +137,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$form = RGFormsModel::get_form( $form_id );
 			$feed = get_pronamic_gf_pay_feed_by_form_id( $form_id );
 
-			$data = new Pronamic_WP_Pay_GravityForms_PaymentData( $form, $lead, $feed );
+			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
 
 			if ( $feed ) {
 				$url = null;
@@ -152,7 +152,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 					case Pronamic_WP_Pay_Statuses::EXPIRED:
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
 
-						$url = $feed->get_url( Pronamic_WP_Pay_GravityForms_Links::EXPIRED );
+						$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
 
 						break;
 					case Pronamic_WP_Pay_Statuses::FAILURE:

@@ -191,7 +191,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			$this->gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->feed->config_id );
 
 			if ( $this->gateway ) {
-				$data = new Pronamic_WP_Pay_GravityForms_PaymentData( $form, $lead, $this->feed );
+				$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $this->feed );
 
 				$this->payment = Pronamic_WP_Pay_Plugin::start( $this->feed->config_id, $this->gateway, $data );
 

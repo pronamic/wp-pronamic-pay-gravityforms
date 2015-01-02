@@ -28,7 +28,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	/**
 	 * Pronamic iDEAL feed object
 	 *
-	 * @var Pronamic_GravityForms_PayFeed
+	 * @var Pronamic_WP_Pay_Extensions_GravityForms_PayFeed
 	 */
 	private $feed;
 
@@ -39,7 +39,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	 *
 	 * @param array $form
 	 * @param array $lead
-	 * @param Pronamic_GravityForms_PayFeed $feed
+	 * @param Pronamic_WP_Pay_Extensions_GravityForms_PayFeed $feed
 	 */
 	public function __construct( $form, $lead, $feed ) {
 		parent::__construct();
@@ -308,7 +308,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	public function get_issuer_id() {
 		$issuer_id = null;
 
-		$issuer_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_GravityForms_IDeal_IssuerDropDown::TYPE ) );
+		$issuer_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ) );
 		$issuer_field = array_shift( $issuer_fields );
 
 		if ( $issuer_field != null ) {

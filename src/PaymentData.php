@@ -6,7 +6,7 @@
  * Copyright: Copyright (c) 2005 - 2014
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.0.1
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
 	/**

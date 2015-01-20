@@ -34,7 +34,7 @@
 	],
 	"require": {
 		"php": ">=5.2.4",
-		"wp-pay/core": "dev-develop"
+		"wp-pay/core": "~1.0.0"
 	},
 	"require-dev": {
 		"satooshi/php-coveralls": "dev-master"

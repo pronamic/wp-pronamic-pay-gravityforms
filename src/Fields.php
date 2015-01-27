@@ -51,9 +51,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$feed = get_pronamic_gf_pay_feed_by_form_id( $form_id );
 
 			/**
-        	 * Developing warning:
-        	 * Don't use single quotes in the HTML you output, it is buggy in combination with SACK
-        	 */
+			 * Developing warning:
+			 * Don't use single quotes in the HTML you output, it is buggy in combination with SACK
+			 */
 			if ( IS_ADMIN ) {
 				if ( $feed === null ) {
 					$html .= sprintf(

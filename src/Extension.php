@@ -228,6 +228,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 			}
 
+			// Delay Zapier
+			// @see https://github.com/gravityforms/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
+			if ( $feed->delay_zapier && method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
+				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
+			}
+
 			// Delay user registration
 			// @see https://github.com/gravityforms/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
 			if ( $feed->delay_user_registration && method_exists( 'GFUser', 'gf_create_user' ) ) {

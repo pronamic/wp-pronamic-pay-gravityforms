@@ -29,8 +29,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Bootstrap
 	 */
 	public static function bootstrap() {
+		// Actions
 		// Initialize hook, Gravity Forms uses the default priority (10)
 		add_action( 'init', array( __CLASS__, 'init' ), 20 );
+
+		// Post types
+		new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
 	}
 
 	//////////////////////////////////////////////////

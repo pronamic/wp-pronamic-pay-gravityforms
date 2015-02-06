@@ -6,7 +6,7 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.1.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	/**
@@ -14,6 +14,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 */
 	public static function bootstrap() {
 		// Actions
+		add_action( 'admin_init',               array( __CLASS__, 'admin_init' ) );
 		add_action( 'admin_init',               array( __CLASS__, 'maybe_redirect_to_entry' ) );
 
 		// Filters
@@ -25,6 +26,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 
 		// Actions - AJAX
 		add_action( 'wp_ajax_gf_get_form_data', array( __CLASS__, 'ajax_get_form_data' ) );
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Admin initialize
+	 */
+	public static function admin_init() {
+		new Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType();
 	}
 
 	//////////////////////////////////////////////////

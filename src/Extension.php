@@ -29,8 +29,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Bootstrap
 	 */
 	public static function bootstrap() {
+		// Actions
 		// Initialize hook, Gravity Forms uses the default priority (10)
 		add_action( 'init', array( __CLASS__, 'init' ), 20 );
+
+		// Post types
+		new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
 	}
 
 	//////////////////////////////////////////////////
@@ -226,6 +230,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
 			if ( $feed->delay_mailchimp_subscription && method_exists( 'GFMailChimp', 'export' ) ) {
 				call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+			}
+
+			// Delay Zapier
+			// @see https://github.com/gravityforms/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
+			if ( $feed->delay_zapier && method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
+				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
 			// Delay user registration

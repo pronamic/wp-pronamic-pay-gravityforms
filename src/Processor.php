@@ -175,6 +175,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 				remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 			}
+
+			// Maybe delay Zapier
+			if ( $this->feed->delay_zapier ) {
+				// @see https://github.com/gravityforms/gravityformszapier/blob/1.4.2/zapier.php#L106
+				remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
+			}
 		}
 	}
 

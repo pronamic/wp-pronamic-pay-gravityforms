@@ -2,6 +2,7 @@
 
 ## 1.1.0
 *	Added some more classes from the Pronamic iDEAL plugin to this library.
+*	Added support for the Gravity Forms Zapier Add-On.
 
 ## 1.0.2
 *	Require WordPress pay core library version 1.0.0.

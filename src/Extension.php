@@ -147,25 +147,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				$url = null;
 
 				switch ( $payment->status ) {
-					case Pronamic_WP_Pay_Statuses::CANCELLED:
+					case Pronamic_WP_Pay_Statuses::CANCELLED :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
 
 						$url = $data->get_cancel_url();
 
 						break;
-					case Pronamic_WP_Pay_Statuses::EXPIRED:
+					case Pronamic_WP_Pay_Statuses::EXPIRED :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
 
 						$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
 
 						break;
-					case Pronamic_WP_Pay_Statuses::FAILURE:
+					case Pronamic_WP_Pay_Statuses::FAILURE :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
 
 						$url = $data->get_error_url();
 
 						break;
-					case Pronamic_WP_Pay_Statuses::SUCCESS:
+					case Pronamic_WP_Pay_Statuses::SUCCESS :
 						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
 							// Only fullfill order if the payment isn't approved aloready
 							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
@@ -186,8 +186,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 						$url = $data->get_success_url();
 
 						break;
-					case Pronamic_WP_Pay_Statuses::OPEN:
-					default:
+					case Pronamic_WP_Pay_Statuses::OPEN :
+					default :
 						$url = $data->get_normal_return_url();
 
 						break;

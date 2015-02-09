@@ -144,7 +144,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 *
 	 * @param string $payment
 	 */
-	public static function update_status( Pronamic_Pay_Payment $payment, $can_redirect = false ) {
+	public function update_status( Pronamic_Pay_Payment $payment, $can_redirect = false ) {
 		$lead_id = $payment->get_source_id();
 
 		$lead = RGFormsModel::get_lead( $lead_id );

@@ -170,6 +170,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 							// Only fullfill order if the payment isn't approved aloready
 							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
+							// @see https://github.com/gravityforms/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+							$action = array(
+								'id'             => $payment->get_transaction_id(),
+								'type'           => 'complete_payment',
+								'transaction_id' => $payment->get_transaction_id(),
+								'amount'         => $payment->get_amount(),
+								'entry_id'       => $lead['id'],
+							);
+
+							self::complete_payment( $lead, $action );
 							self::fulfill_order( $lead );
 						}
 
@@ -194,6 +204,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 	}
 
+	/**
+	 * Complete payment
+	 * 
+	 * @param array $entry
+	 * @param array $action array(
+	 * 	'id'             => $payment_transaction,
+	 * 	'type'           => 'complete_payment',
+	 * 	'transaction_id' => $payment_transaction,
+	 * 	'amount'         => $payment_amount
+	 * 	'entry_id'       => $lead['id'],
+	 * )
+	 *
+	 * @see https://github.com/gravityforms/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+	 * @see https://github.com/gravityforms/gravityforms/blob/1.9/includes/addon/class-gf-payment-addon.php#L829-L864
+	 */
+	public static function complete_payment( $entry, $action ) {
+		// @see https://github.com/gravityforms/gravityforms/blob/1.9/includes/addon/class-gf-payment-addon.php#L861
+		do_action( 'gform_post_payment_completed', $entry, $action );
+	}
 	/**
 	 * Fulfill order
 	 *

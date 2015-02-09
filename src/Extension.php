@@ -38,11 +38,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Constructs and initialize an Gravity Forms extension object
 	 */
 	public function __construct() {
-		// Add-on
-		if ( class_exists( 'GFPaymentAddOn' ) ) {
-			$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
-		}
-
 		// Post types
 		$this->payment_form_post_type = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
 
@@ -58,6 +53,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	public function init() {
 		if ( $this->is_gravityforms_supported() ) {
+			// Add-on
+			if ( class_exists( 'GFPaymentAddOn' ) ) {
+				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
+			}
+
 			// Admin
 			if ( is_admin() ) {
 				Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();

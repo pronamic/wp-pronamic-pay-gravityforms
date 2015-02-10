@@ -42,6 +42,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$this->payment_form_post_type = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
 
 		// Actions
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		// Initialize hook, Gravity Forms uses the default priority (10)
 		add_action( 'init', array( $this, 'init' ), 20 );
 	}
@@ -49,15 +50,24 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	//////////////////////////////////////////////////
 
 	/**
+	 * Plugins loaded
+	 */
+	public function plugins_loaded() {
+		// Add-on
+		if ( method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
+			GFForms::include_payment_addon_framework();
+
+			if ( class_exists( 'GFPaymentAddOn' ) ) {
+				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
+			}
+		}
+	}
+
+	/**
 	 * Initialize
 	 */
 	public function init() {
 		if ( $this->is_gravityforms_supported() ) {
-			// Add-on
-			if ( class_exists( 'GFPaymentAddOn' ) ) {
-				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
-			}
-
 			// Admin
 			if ( is_admin() ) {
 				Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();

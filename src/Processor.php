@@ -228,7 +228,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
 
 			// Update entry meta with current payment gateway
-			gform_update_meta( $lead['id'], 'payment_gateway', 'ideal' );
+			gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
 
 			// Update lead
 			Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry( $lead );

@@ -29,32 +29,56 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Bootstrap
 	 */
 	public static function bootstrap() {
-		// Actions
-		// Initialize hook, Gravity Forms uses the default priority (10)
-		add_action( 'init', array( __CLASS__, 'init' ), 20 );
-
-		// Post types
-		new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
+		$extension = new Pronamic_WP_Pay_Extensions_GravityForms_Extension();
 	}
 
 	//////////////////////////////////////////////////
 
 	/**
+	 * Constructs and initialize an Gravity Forms extension object
+	 */
+	public function __construct() {
+		// Post types
+		$this->payment_form_post_type = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
+
+		// Actions
+		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+		// Initialize hook, Gravity Forms uses the default priority (10)
+		add_action( 'init', array( $this, 'init' ), 20 );
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Plugins loaded
+	 */
+	public function plugins_loaded() {
+		// Add-on
+		if ( method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
+			GFForms::include_payment_addon_framework();
+
+			if ( class_exists( 'GFPaymentAddOn' ) ) {
+				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
+			}
+		}
+	}
+
+	/**
 	 * Initialize
 	 */
-	public static function init() {
-		if ( self::is_gravityforms_supported() ) {
+	public function init() {
+		if ( $this->is_gravityforms_supported() ) {
 			// Admin
 			if ( is_admin() ) {
 				Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();
 			} else {
-				add_action( 'gform_pre_submission', array( __CLASS__, 'pre_submission' ) );
+				add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
 			}
 
-			add_action( 'pronamic_payment_status_update_' . self::SLUG, array( __CLASS__, 'update_status' ), 10, 2 );
-			add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( __CLASS__, 'source_text' ), 10, 2 );
+			add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
+			add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( $this, 'source_text' ), 10, 2 );
 
-			add_filter( 'gform_replace_merge_tags', array( __CLASS__, 'replace_merge_tags' ), 10, 7 );
+			add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
 			// iDEAL fields
 			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
@@ -68,7 +92,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 *
 	 * @param array $form
 	 */
-	public static function pre_submission( $form ) {
+	public function pre_submission( $form ) {
 		$processor = new Pronamic_WP_Pay_Extensions_GravityForms_Processor( $form );
 
 		$processor->pre_submission( $form );
@@ -79,7 +103,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	/**
 	 * Source column
 	 */
-	public static function source_text( $text, Pronamic_Pay_Payment $payment ) {
+	public function source_text( $text, Pronamic_Pay_Payment $payment ) {
 		$text  = '';
 
 		$text .= __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
@@ -101,7 +125,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * @param array $lead
 	 * @param Feed $feed
 	 */
-	private static function maybe_update_user_role( $lead, $feed ) {
+	private function maybe_update_user_role( $lead, $feed ) {
 		$user = false;
 
 		// Gravity Forms User Registration Add-On
@@ -130,7 +154,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 *
 	 * @param string $payment
 	 */
-	public static function update_status( Pronamic_Pay_Payment $payment, $can_redirect = false ) {
+	public function update_status( Pronamic_Pay_Payment $payment, $can_redirect = false ) {
 		$lead_id = $payment->get_source_id();
 
 		$lead = RGFormsModel::get_lead( $lead_id );
@@ -147,37 +171,50 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				$url = null;
 
 				switch ( $payment->status ) {
-					case Pronamic_WP_Pay_Statuses::CANCELLED:
+					case Pronamic_WP_Pay_Statuses::CANCELLED :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
 
 						$url = $data->get_cancel_url();
 
 						break;
-					case Pronamic_WP_Pay_Statuses::EXPIRED:
+					case Pronamic_WP_Pay_Statuses::EXPIRED :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
 
 						$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
 
 						break;
-					case Pronamic_WP_Pay_Statuses::FAILURE:
+					case Pronamic_WP_Pay_Statuses::FAILURE :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
 
 						$url = $data->get_error_url();
 
 						break;
-					case Pronamic_WP_Pay_Statuses::SUCCESS:
+					case Pronamic_WP_Pay_Statuses::SUCCESS :
 						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
 							// Only fullfill order if the payment isn't approved aloready
 							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
-							self::fulfill_order( $lead );
+							// @see https://github.com/gravityforms/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+							if ( $this->addon ) {
+								$action = array(
+									'id'             => $payment->get_transaction_id(),
+									'type'           => 'complete_payment',
+									'transaction_id' => $payment->get_transaction_id(),
+									'amount'         => $payment->get_amount(),
+									'entry_id'       => $lead['id'],
+								);
+
+								$this->addon->complete_payment( $lead, $action );
+							}
+
+							$this->fulfill_order( $lead );
 						}
 
 						$url = $data->get_success_url();
 
 						break;
-					case Pronamic_WP_Pay_Statuses::OPEN:
-					default:
+					case Pronamic_WP_Pay_Statuses::OPEN :
+					default :
 						$url = $data->get_normal_return_url();
 
 						break;
@@ -199,11 +236,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 *
 	 * @param array $entry
 	 */
-	public static function fulfill_order( $entry ) {
+	public function fulfill_order( $entry ) {
 		$feed = get_pronamic_gf_pay_feed_by_form_id( $entry['form_id'] );
 
 		if ( null !== $feed ) {
-			self::maybe_update_user_role( $entry, $feed );
+			$this->maybe_update_user_role( $entry, $feed );
 
 			$form = RGFormsModel::get_form_meta( $entry['form_id'] );
 
@@ -273,61 +310,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 *
 	 * @return true if Gravity Forms is supported, false otherwise
 	 */
-	public static function is_gravityforms_supported() {
+	public function is_gravityforms_supported() {
 		if ( class_exists( 'GFCommon' ) ) {
 			return version_compare( GFCommon::$version, self::GRAVITY_FORMS_MINIMUM_VERSION, '>=' );
 		} else {
 			return false;
 		}
-	}
-
-	//////////////////////////////////////////////////
-
-	/**
-	 * Check if the iDEAL condition is true
-	 *
-	 * @param mixed $form
-	 * @param mixed $feed
-	 */
-	public static function is_condition_true( $form, $feed ) {
-		$result = true;
-
-		if ( $feed->condition_enabled ) {
-			$field = RGFormsModel::get_field( $form, $feed->condition_field_id );
-
-			if ( empty( $field ) ) {
-				// unknown field
-				$result = true;
-			} else {
-				$is_hidden = RGFormsModel::is_field_hidden( $form, $field, array() );
-
-				if ( $is_hidden ) {
-					// if conditional is enabled, but the field is hidden, ignore conditional
-					$result = false;
-				} else {
-					$value = RGFormsModel::get_field_value( $field, array() );
-
-					$is_match = RGFormsModel::is_value_match( $value, $feed->condition_value );
-
-					switch ( $feed->condition_operator ) {
-						case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS:
-							$result = $is_match;
-							break;
-						case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT:
-							$result = ! $is_match;
-							break;
-						default: // unknown operator
-							$result = true;
-							break;
-					}
-				}
-			}
-		} else {
-			// condition is disabled, result is true
-			$result = true;
-		}
-
-		return $result;
 	}
 
 	//////////////////////////////////////////////////
@@ -343,7 +331,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * @param boolean $nl2br
 	 * @param string $format
 	 */
-	public static function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+	public function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 		$search = array(
 			'{payment_status}',
 			'{payment_date}',

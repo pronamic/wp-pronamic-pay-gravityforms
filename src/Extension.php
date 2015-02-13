@@ -54,7 +54,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	public function plugins_loaded() {
 		// Add-on
-		if ( method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
+		if ( class_exists( 'GFForms' ) && method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
 			GFForms::include_payment_addon_framework();
 
 			if ( class_exists( 'GFPaymentAddOn' ) ) {

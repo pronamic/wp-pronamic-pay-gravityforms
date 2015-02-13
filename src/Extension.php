@@ -6,7 +6,7 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.2.1
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	/**
@@ -54,6 +54,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	public function plugins_loaded() {
 		// Add-on
+		// The `class_exists` call is required to prevent strage errors on some hosting environments
 		if ( class_exists( 'GFForms' ) && method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
 			GFForms::include_payment_addon_framework();
 

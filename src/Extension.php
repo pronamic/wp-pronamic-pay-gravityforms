@@ -55,7 +55,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	public function plugins_loaded() {
 		// Add-on
 		// The `class_exists` call is required to prevent strage errors on some hosting environments
-		if ( class_exists( 'GFForms' ) && method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
 			GFForms::include_payment_addon_framework();
 
 			if ( class_exists( 'GFPaymentAddOn' ) ) {
@@ -254,31 +254,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// Delay Aweber
 			// @see https://github.com/gravityforms/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
-			if ( $feed->delay_aweber_subscription && method_exists( 'GFAWeber', 'export' ) ) {
+			if ( $feed->delay_aweber_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFAWeber', 'export' ) ) {
 				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
 			}
 
 			// Delay Campaign Monitor
 			// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
-			if ( $feed->delay_campaignmonitor_subscription && method_exists( 'GFCampaignMonitor', 'export' ) ) {
+			if ( $feed->delay_campaignmonitor_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFCampaignMonitor', 'export' ) ) {
 				call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
 			}
 
 			// Delay Mailchimp
 			// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
-			if ( $feed->delay_mailchimp_subscription && method_exists( 'GFMailChimp', 'export' ) ) {
+			if ( $feed->delay_mailchimp_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
 				call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 			}
 
 			// Delay Zapier
 			// @see https://github.com/gravityforms/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
-			if ( $feed->delay_zapier && method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
+			if ( $feed->delay_zapier && Pronamic_WP_Pay_Class::method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
 			// Delay user registration
 			// @see https://github.com/gravityforms/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
-			if ( $feed->delay_user_registration && method_exists( 'GFUser', 'gf_create_user' ) ) {
+			if ( $feed->delay_user_registration && Pronamic_WP_Pay_Class::method_exists( 'GFUser', 'gf_create_user' ) ) {
 				call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
 			}
 
@@ -289,12 +289,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				GFCommon::send_notifications( $feed->delay_notification_ids, $form, $entry, true, 'form_submission' );
 			}
 
-			if ( $feed->delay_admin_notification && method_exists( 'GFCommon', 'send_admin_notification' ) ) {
+			if ( $feed->delay_admin_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_admin_notification' ) ) {
 				// https://github.com/gravityforms/gravityforms/blob/1.8.9/common.php#L1265-L1270
 				GFCommon::send_admin_notification( $form, $entry );
 			}
 
-			if ( $feed->delay_user_notification && method_exists( 'GFCommon', 'send_user_notification' ) ) {
+			if ( $feed->delay_user_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_user_notification' ) ) {
 				// https://github.com/gravityforms/gravityforms/blob/1.8.9/common.php#L1258-L1263
 				GFCommon::send_user_notification( $form, $entry );
 			}

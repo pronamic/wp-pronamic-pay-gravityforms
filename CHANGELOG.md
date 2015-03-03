@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.2
+*	Changed WordPress pay core library requirment from ~1.0.0 to >=1.1.0.
+*	Use the new Pronamic_WP_Pay_Class::method_exists() function in the WordPress pay core library.
+
 ## 1.2.1
 *	Fix - PHP crashed on opline 3 of method_exists() errors on some hosting environments.
 

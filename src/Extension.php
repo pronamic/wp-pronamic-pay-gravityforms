@@ -312,11 +312,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * @return true if Gravity Forms is supported, false otherwise
 	 */
 	public function is_gravityforms_supported() {
-		if ( class_exists( 'GFCommon' ) ) {
-			return version_compare( GFCommon::$version, self::GRAVITY_FORMS_MINIMUM_VERSION, '>=' );
-		} else {
-			return false;
-		}
+		return Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( self::GRAVITY_FORMS_MINIMUM_VERSION, '>=' );
 	}
 
 	//////////////////////////////////////////////////

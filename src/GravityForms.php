@@ -74,4 +74,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 			GFFormsModel::update_lead( $entry );
 		}
 	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Compare the current Gravity Forms version
+	 *
+	 * @param string $version
+	 * @param string $operator
+	 */
+	public static function version_compare( $version, $operator ) {
+		if ( class_exists( 'GFCommon' ) ) {
+			return version_compare( GFCommon::$version, $version, $operator );
+		} else {
+			return false;
+		}
+	}
 }

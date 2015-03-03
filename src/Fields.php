@@ -121,14 +121,24 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param array $groups
 	 */
 	public static function add_field_buttons( $groups ) {
+		// Fields
 		$fields = array(
 			array(
-				'class'   => 'button',
-				'value'   => __( 'Issuer Drop Down', 'pronamic_ideal' ),
-				'onclick' => sprintf( "StartAddField('%s');", Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ),
+				'class'     => 'button',
+				'value'     => __( 'Issuer Drop Down', 'pronamic_ideal' ),
+				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE,
 			),
 		);
 
+		// Backwards compatibility version 1.9
+		// @see https://github.com/gravityforms/gravityforms/blob/1.9/js/form_editor.js#L24-L26
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9', '<' ) ) {
+			foreach ( $fields as &$field ) {
+				$field['onclick'] = sprintf( "StartAddField('%s');", $field['data-type'] );
+			}
+		}
+
+		// Group
 		$group = array(
 			'name'   => 'ideal_fields',
 			'label'  => __( 'iDEAL Fields', 'pronamic_ideal' ),

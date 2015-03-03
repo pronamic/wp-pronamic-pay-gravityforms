@@ -3,6 +3,8 @@
 ## 1.2.2
 *	Changed WordPress pay core library requirment from ~1.0.0 to >=1.1.0.
 *	Use the new Pronamic_WP_Pay_Class::method_exists() function in the WordPress pay core library.
+*	Added Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare() function.
+*	Fixed issue with adding issuer dropdown field in Gravity Forms version 1.9 or higher.
 
 ## 1.2.1
 *	Fix - PHP crashed on opline 3 of method_exists() errors on some hosting environments.

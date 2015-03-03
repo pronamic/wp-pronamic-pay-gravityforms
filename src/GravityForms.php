@@ -68,10 +68,26 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 		 * @see https://github.com/gravityforms/gravityforms/blob/1.8.13/includes/api.php#L495-L654
 		 * @see https://github.com/gravityforms/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
 		 */
-		if ( method_exists( 'GFAPI', 'update_entry' ) ) {
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GFAPI', 'update_entry' ) ) {
 			GFAPI::update_entry( $entry );
-		} elseif ( method_exists( 'GFFormsModel', 'update_lead' ) ) {
+		} elseif ( Pronamic_WP_Pay_Class::method_exists( 'GFFormsModel', 'update_lead' ) ) {
 			GFFormsModel::update_lead( $entry );
+		}
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Compare the current Gravity Forms version
+	 *
+	 * @param string $version
+	 * @param string $operator
+	 */
+	public static function version_compare( $version, $operator ) {
+		if ( class_exists( 'GFCommon' ) ) {
+			return version_compare( GFCommon::$version, $version, $operator );
+		} else {
+			return false;
 		}
 	}
 }

@@ -240,7 +240,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	public function fulfill_order( $entry ) {
 		$feed = get_pronamic_gf_pay_feed_by_form_id( $entry['form_id'] );
 
-		if ( null !== $feed ) {
+		$meta_fulfilled = gform_get_meta( $entry['id'], 'pronamic_pay_is_fulfilled' );
+
+		if ( null !== $feed && $meta_fulfilled != 1 ) {
 			$this->maybe_update_user_role( $entry, $feed );
 
 			$form = RGFormsModel::get_form_meta( $entry['form_id'] );
@@ -298,6 +300,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				// https://github.com/gravityforms/gravityforms/blob/1.8.9/common.php#L1258-L1263
 				GFCommon::send_user_notification( $form, $entry );
 			}
+
+			gform_update_meta( $entry['id'], 'pronamic_pay_is_fulfilled', 1 );
 		}
 
 		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action

@@ -22,6 +22,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Entry {
 			$payment_status = $entry[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ];
 
 			$approved = ( $payment_status == Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED );
+
+			if ( ! $approved ) {
+				$approved = ( $payment_status == Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID );
+			}
 		}
 
 		return $approved;

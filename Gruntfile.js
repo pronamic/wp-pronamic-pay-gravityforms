@@ -12,12 +12,14 @@ module.exports = function( grunt ) {
 		// PHP Code Sniffer
 		phpcs: {
 			application: {
-				dir: [ 'src' ],
+				src: [
+					'**/*.php',
+					'!node_modules/**',
+					'!vendor/**',
+				],
 			},
 			options: {
-				standard: 'phpcs.ruleset.xml',
-				extensions: 'php',
-				ignore: 'node_modules'
+				standard: 'phpcs.ruleset.xml'
 			}
 		},
 

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.3
+*	Entry with payment status 'Paid' are now also seen as 'approved'.
+*	WordPress Coding Standards optimizations.
+
 ## 1.2.2
 *	Changed WordPress pay core library requirment from ~1.0.0 to >=1.1.0.
 *	Use the new Pronamic_WP_Pay_Class::method_exists() function in the WordPress pay core library.

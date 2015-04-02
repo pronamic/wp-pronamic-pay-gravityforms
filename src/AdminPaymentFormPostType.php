@@ -117,7 +117,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 		}
 
 		// Check the user's permissions.
-		if ( 'page' == $_POST['post_type'] ) {
+		if ( 'page' == get_post_type( $post_id ) ) {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}

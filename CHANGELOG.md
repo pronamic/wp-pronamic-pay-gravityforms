@@ -2,6 +2,7 @@
 
 ## 1.2.3
 *	Entry with payment status 'Paid' are now also seen as 'approved'.
+*	Use entry ID as default transaction description.
 *	WordPress Coding Standards optimizations.
 
 ## 1.2.2

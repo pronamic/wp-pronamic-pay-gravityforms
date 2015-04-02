@@ -6,7 +6,8 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.1.0
+ * @version 1.2.3
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	/**
@@ -70,8 +71,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 		if ( $payment_id ) {
 			printf(
 				'<a href="%s">%s</a>',
-				get_edit_post_link( $payment_id ),
-				get_the_title( $payment_id )
+				esc_attr( get_edit_post_link( $payment_id ) ),
+				esc_html( get_the_title( $payment_id ) )
 			);
 		}
 	}

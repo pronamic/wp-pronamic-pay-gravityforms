@@ -59,6 +59,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses {
 	const APPROVED = 'Approved';
 
 	/**
+	 * Payment status paid
+	 *
+	 * @var string
+	 */
+	const PAID = 'Paid';
+
+	/**
 	 * Payment status denied
 	 *
 	 * @var string

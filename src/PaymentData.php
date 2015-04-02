@@ -101,7 +101,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	 * @return string
 	 */
 	public function get_description() {
-		$description = GFCommon::replace_variables( $this->feed->transaction_description, $this->form, $this->lead );
+		$description = $this->feed->transaction_description;
+
+		if ( empty( $description ) ) {
+			$description = '{entry_id}';
+		}
+
+		$description = GFCommon::replace_variables( $description, $this->form, $this->lead );
 
 		return $description;
 	}

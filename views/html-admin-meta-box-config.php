@@ -35,7 +35,7 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 
 					<?php foreach ( RGFormsModel::get_forms() as $form ) : ?>
 
-						<option value="<?php echo $form->id; ?>" <?php selected( $form_id, $form->id ); ?>>
+						<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $form_id, $form->id ); ?>>
 							<?php echo esc_html( $form->title ); ?>
 						</option>
 
@@ -163,12 +163,14 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 					$select_value = '<select id="gf_ideal_condition_value" name="_pronamic_pay_gf_condition_value"></select>';
 
 					// Print
+					// @codingStandardsIgnoreStart
 					printf(
 						__( 'Send to gateway if %s %s %s', 'pronamic_ideal' ),
 						$select_field,
 						$select_operator,
 						$select_value
 					);
+					// @codingStandardsIgnoreEnd
 
 					?>
 				</div>
@@ -237,7 +239,7 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 								printf(
 									'<label class="inline" for="%s">%s</label>',
 									esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-									$notification['name']
+									esc_html( $notification['name'] )
 								);
 
 								printf( '</li>' );
@@ -431,7 +433,7 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 
 			<tr>
 				<th scope="row">
-					<?php echo $label; ?>
+					<?php echo esc_html( $label ); ?>
 				</th>
 				<td>
 					<?php
@@ -474,24 +476,32 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 			<tr>
 				<?php
 
-				$type    = @$links[ $name ]['type'];
-				$page_id = @$links[ $name ]['page_id'];
-				$url     = @$links[ $name ]['url'];
+				$type    = null;
+				$page_id = null;
+				$url     = null;
+
+				if ( isset( $links[ $name ] ) ) {
+					$link = $links[ $name ];
+
+					$type    = isset( $link['type'] ) ? $link['type'] : null;
+					$page_id = isset( $link['page_id'] ) ? $link['page_id'] : null;
+					$url     = isset( $link['url'] ) ? $link['url'] : null;
+				}
 
 				?>
 				<th scope="row">
-					<label for="gf_ideal_link_<?php echo $name; ?>_page">
-						<?php echo $label; ?>
+					<label for="gf_ideal_link_<?php echo esc_attr( $name ); ?>_page">
+						<?php echo esc_html( $label ); ?>
 					</label>
 				</th>
 				<td>
 					<fieldset>
 						<legend class="screen-reader-text">
-							<span><?php echo $label; ?></span>
+							<span><?php echo esc_html( $label ); ?></span>
 						</legend>
 
 						<label>
-							<input type="radio" name="_pronamic_pay_gf_links[<?php echo $name; ?>][type]" id="gf_ideal_link_<?php echo $name; ?>_page" value="page" <?php checked( $type, 'page' ); ?> />
+							<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_page" value="page" <?php checked( $type, 'page' ); ?> />
 							<?php _e( 'Page:', 'pronamic_ideal' ); ?>
 						</label>
 
@@ -508,9 +518,9 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 						<br />
 
 						<label>
-							<input type="radio" name="_pronamic_pay_gf_links[<?php echo $name; ?>][type]" id="gf_ideal_link_<?php echo $name; ?>_url" value="url" <?php checked( $type, 'url' ); ?> />
+							<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_url" value="url" <?php checked( $type, 'url' ); ?> />
 							<?php _e( 'URL:', 'pronamic_ideal' ); ?>
-						</label> <input type="text" name="_pronamic_pay_gf_links[<?php echo $name; ?>][url]" value="<?php echo esc_attr( $url ); ?>" class="regular-text" />
+						</label> <input type="text" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][url]" value="<?php echo esc_attr( $url ); ?>" class="regular-text" />
 					</fieldset>
 				<td>
 			</tr>

@@ -6,7 +6,8 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.1.0
+ * @version 1.2.3
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	public function __construct() {
@@ -42,11 +43,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				if ( ! empty( $form_id ) ) {
 					printf(
 						'<a href="%s">%s</a>',
-						add_query_arg( array(
+						esc_attr( add_query_arg( array(
 							'page' => 'gf_edit_forms',
 							'id'   => $form_id,
-						), admin_url( 'admin.php' ) ),
-						get_pronamic_pay_gf_form_title( $form_id )
+						), admin_url( 'admin.php' ) ) ),
+						esc_html( get_pronamic_pay_gf_form_title( $form_id ) )
 					);
 				} else {
 					echo '—';
@@ -64,7 +65,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 				break;
 			case 'pronamic_pay_gf_transaction_description':
-				echo get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
+				echo esc_html( get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true ) );
 
 				break;
 		}
@@ -117,7 +118,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 		}
 
 		// Check the user's permissions.
-		if ( 'page' == $_POST['post_type'] ) {
+		if ( 'page' == get_post_type( $post_id ) ) {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}
@@ -180,7 +181,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 			if ( 'sanitize_text_field' == $function ) {
 				if ( isset( $_POST[ $meta_key ] ) ) {
-					$meta_value = sanitize_text_field( $_POST[ $meta_key ] );
+					$meta_value = sanitize_text_field( $_POST[ $meta_key ] ); // input var okay
 				}
 			} else {
 				$filter  = $function;

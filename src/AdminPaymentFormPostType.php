@@ -42,11 +42,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				if ( ! empty( $form_id ) ) {
 					printf(
 						'<a href="%s">%s</a>',
-						add_query_arg( array(
+						esc_attr( add_query_arg( array(
 							'page' => 'gf_edit_forms',
 							'id'   => $form_id,
-						), admin_url( 'admin.php' ) ),
-						get_pronamic_pay_gf_form_title( $form_id )
+						), admin_url( 'admin.php' ) ) ),
+						esc_html( get_pronamic_pay_gf_form_title( $form_id ) )
 					);
 				} else {
 					echo '—';
@@ -64,7 +64,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 				break;
 			case 'pronamic_pay_gf_transaction_description':
-				echo get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
+				echo esc_html( get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true ) );
 
 				break;
 		}
@@ -180,7 +180,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 			if ( 'sanitize_text_field' == $function ) {
 				if ( isset( $_POST[ $meta_key ] ) ) {
-					$meta_value = sanitize_text_field( $_POST[ $meta_key ] );
+					$meta_value = sanitize_text_field( $_POST[ $meta_key ] ); // input var okay
 				}
 			} else {
 				$filter  = $function;

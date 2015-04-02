@@ -1,6 +1,12 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress Pay Gravity Forms rules">
 	<rule ref="WordPress">
-		<exclude name="WordPress.XSS.EscapeOutput" />
+		<!-- Exclude for wp_json_encode() function -->
+		<exclude name="WordPress.PHP.DiscouragedFunctions.DiscouragedWithAlternative" />
+	</rule>
+
+	<rule ref="WordPress.VIP.DirectDatabaseQuery">
+		<!-- For now a direct database query is the most efficient way -->
+		<exclude-pattern>/src/functions.php</exclude-pattern>
 	</rule>
 </ruleset>

@@ -70,8 +70,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 		if ( $payment_id ) {
 			printf(
 				'<a href="%s">%s</a>',
-				get_edit_post_link( $payment_id ),
-				get_the_title( $payment_id )
+				esc_attr( get_edit_post_link( $payment_id ) ),
+				esc_html( get_the_title( $payment_id ) )
 			);
 		}
 	}

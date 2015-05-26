@@ -336,7 +336,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	 * @see http://www.gravityhelp.com/documentation/page/Gform_confirmation
 	 */
 	public function confirmation( $confirmation, $form, $lead, $ajax ) {
-		if ( $this->is_processing( $form ) && $this->gateway && $this->payment ) {
+		if ( $this->is_processing( $form ) && $this->gateway && $this->payment && $this->payment->get_amount() > 0 ) {
 			if ( is_wp_error( $this->error ) ) {
 				$html  = '';
 

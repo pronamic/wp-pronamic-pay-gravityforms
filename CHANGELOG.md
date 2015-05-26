@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
+- 
+
+## [1.2.4] - 2015-05-26
 - Only process payments if amount is higher than zero.
 
 ## [1.2.3] - 2015-04-02
@@ -38,7 +41,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.2.3...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.2.4...HEAD
+[1.2.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.2.3...1.2.4
 [1.2.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.2.2...1.2.3
 [1.2.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.2.0...1.2.1

@@ -8,6 +8,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - 
 
 ## [1.2.4] - 2015-05-26
+### Changed
 - Only process payments if amount is higher than zero.
 
 ## [1.2.3] - 2015-04-02

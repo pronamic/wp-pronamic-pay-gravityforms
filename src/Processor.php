@@ -183,7 +183,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
 				}
-				
 			}
 
 			// Maybe delay Zapier
@@ -330,7 +329,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			// - the delay registration option is checked
 			// - the order total does NOT equal zero (no delay since there will never be a payment)
 			// - the payment has not already been fulfilled
-			$disable_registration = $this->feed->delay_user_registration && ( $order_total != 0 ) && ! $fulfilled;
+			$disable_registration = $this->feed->delay_user_registration && ( 0 !== $order_total ) && ! $fulfilled;
 		}
 
 		return $disable_registration;
@@ -353,7 +352,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				$html .= '<ul>';
 				$html .= '<li>' . Pronamic_WP_Pay_Plugin::get_default_error_message() . '</li>';
 
-				foreach ( $this->error->get_error_messages() As $message ) {
+				foreach ( $this->error->get_error_messages() as $message ) {
 					$html .= '<li>' . $message . '</li>';
 				}
 
@@ -406,8 +405,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	 * After submission
 	 */
 	public function after_submission( $lead, $form ) {
-		if ( $this->is_processing( $form ) ) {
 
-		}
 	}
 }

@@ -317,7 +317,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$issuer_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ) );
 		$issuer_field = array_shift( $issuer_fields );
 
-		if ( $issuer_field != null ) {
+		if ( null !== $issuer_field ) {
 			$issuer_id = RGFormsModel::get_field_value( $issuer_field );
 		}
 

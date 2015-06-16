@@ -135,7 +135,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
 		}
 
-		if ( false == $user ) {
+		if ( false === $user ) {
 			$created_by = $lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::CREATED_BY ];
 
 			$user = new WP_User( $created_by );

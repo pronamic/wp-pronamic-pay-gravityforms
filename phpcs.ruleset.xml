@@ -1,6 +1,10 @@
 <?xml version="1.0"?>
 <ruleset name="WordPress Pay Gravity Forms rules">
 	<rule ref="WordPress">
+		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
+
+		<exclude name="Squiz.Commenting" />
+
 		<!-- Exclude for wp_json_encode() function -->
 		<exclude name="WordPress.PHP.DiscouragedFunctions.DiscouragedWithAlternative" />
 	</rule>

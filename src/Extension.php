@@ -6,7 +6,8 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.2.1
+ * @version 1.3.0
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	/**
@@ -134,7 +135,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
 		}
 
-		if ( false == $user ) {
+		if ( false === $user ) {
 			$created_by = $lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::CREATED_BY ];
 
 			$user = new WP_User( $created_by );
@@ -256,18 +257,55 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			// @see https://github.com/gravityforms/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
 			if ( $feed->delay_aweber_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFAWeber', 'export' ) ) {
 				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_aweber' ) ) {
+					$addon = gf_aweber();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
 			}
 
 			// Delay Campaign Monitor
-			// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
-			if ( $feed->delay_campaignmonitor_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFCampaignMonitor', 'export' ) ) {
-				call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
+			if ( $feed->delay_campaignmonitor_subscription ) {
+				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
+				if ( Pronamic_WP_Pay_Class::method_exists( 'GFCampaignMonitor', 'export' ) ) {
+					call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
+				}
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_campaignmonitor' ) ) {
+					$addon = gf_campaignmonitor();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
 			}
 
 			// Delay Mailchimp
-			// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
-			if ( $feed->delay_mailchimp_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
-				call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+			if ( $feed->delay_mailchimp_subscription ) {
+				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
+				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
+					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+				}
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_mailchimp' ) ) {
+					$addon = gf_mailchimp();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
 			}
 
 			// Delay Zapier

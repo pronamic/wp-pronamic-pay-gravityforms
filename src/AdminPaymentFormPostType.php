@@ -118,7 +118,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 		}
 
 		// Check the user's permissions.
-		if ( 'page' == get_post_type( $post_id ) ) {
+		if ( 'page' === get_post_type( $post_id ) ) {
 			if ( ! current_user_can( 'edit_page', $post_id ) ) {
 				return $post_id;
 			}
@@ -179,7 +179,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 		foreach ( $definition as $meta_key => $function ) {
 			$meta_value = null;
 
-			if ( 'sanitize_text_field' == $function ) {
+			if ( 'sanitize_text_field' === $function ) {
 				if ( isset( $_POST[ $meta_key ] ) ) {
 					$meta_value = sanitize_text_field( $_POST[ $meta_key ] ); // input var okay
 				}
@@ -195,7 +195,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				$meta_value = filter_input( INPUT_POST, $meta_key, $filter, $options );
 			}
 
-			if ( isset( $meta_value ) && '' != $meta_value ) {
+			if ( isset( $meta_value ) && '' !== $meta_value ) {
 				update_post_meta( $post_id, $meta_key, $meta_value );
 			} else {
 				delete_post_meta( $post_id, $meta_key );

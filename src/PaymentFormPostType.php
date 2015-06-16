@@ -44,7 +44,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 				'search_items'       => __( 'Search Payment Forms', 'pronamic_ideal' ),
 				'not_found'          => __( 'No payment forms found', 'pronamic_ideal' ),
 				'not_found_in_trash' => __( 'No payment forms found in Trash', 'pronamic_ideal' ),
-				'menu_name'          => __( 'Payment Forms', 'pronamic_ideal' )
+				'menu_name'          => __( 'Payment Forms', 'pronamic_ideal' ),
 			),
 			'public'             => false,
 			'publicly_queryable' => false,

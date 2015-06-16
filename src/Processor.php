@@ -6,7 +6,8 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.3.0
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	/**
@@ -162,18 +163,45 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			if ( $this->feed->delay_aweber_subscription ) {
 				// @see https://github.com/gravityforms/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 				remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_aweber' ) ) {
+					$addon = gf_aweber();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
 			}
 
 			// Maybe delay Campaign Monitor subscription
 			if ( $this->feed->delay_campaignmonitor_subscription ) {
 				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 				remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_campaignmonitor' ) ) {
+					$addon = gf_campaignmonitor();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
 			}
 
 			// Maybe delay MailChimp subscription
 			if ( $this->feed->delay_mailchimp_subscription ) {
 				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 				remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_mailchimp' ) ) {
+					$addon = gf_mailchimp();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
 			}
 
 			// Maybe delay Zapier
@@ -320,7 +348,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			// - the delay registration option is checked
 			// - the order total does NOT equal zero (no delay since there will never be a payment)
 			// - the payment has not already been fulfilled
-			$disable_registration = $this->feed->delay_user_registration && ( $order_total != 0 ) && ! $fulfilled;
+			$disable_registration = $this->feed->delay_user_registration && ( 0 !== $order_total ) && ! $fulfilled;
 		}
 
 		return $disable_registration;
@@ -343,7 +371,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				$html .= '<ul>';
 				$html .= '<li>' . Pronamic_WP_Pay_Plugin::get_default_error_message() . '</li>';
 
-				foreach ( $this->error->get_error_messages() As $message ) {
+				foreach ( $this->error->get_error_messages() as $message ) {
 					$html .= '<li>' . $message . '</li>';
 				}
 
@@ -396,8 +424,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	 * After submission
 	 */
 	public function after_submission( $lead, $form ) {
-		if ( $this->is_processing( $form ) ) {
 
-		}
 	}
 }

@@ -174,6 +174,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			if ( $this->feed->delay_mailchimp_subscription ) {
 				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 				remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
+
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'get_instance' ) ) {
+					$addon = GFMailChimp::get_instance();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
+				
 			}
 
 			// Maybe delay Zapier

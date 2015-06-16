@@ -265,9 +265,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			}
 
 			// Delay Mailchimp
-			// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
-			if ( $feed->delay_mailchimp_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
-				call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+			if ( $feed->delay_mailchimp_subscription ) {
+				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
+				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
+					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+				}
+
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L140-L225
+				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'get_instance' ) ) {
+					$addon = GFMailChimp::get_instance();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
 			}
 
 			// Delay Zapier

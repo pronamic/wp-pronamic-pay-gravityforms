@@ -6,7 +6,8 @@
  * Copyright: Copyright (c) 2005 - 2015
  * Company: Pronamic
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.3.0
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	/**
@@ -175,6 +176,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 				remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 
+				// @since 1.3.0
 				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'get_instance' ) ) {
 					$addon = GFMailChimp::get_instance();

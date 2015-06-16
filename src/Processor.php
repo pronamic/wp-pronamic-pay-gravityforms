@@ -163,12 +163,30 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			if ( $this->feed->delay_aweber_subscription ) {
 				// @see https://github.com/gravityforms/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 				remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_aweber' ) ) {
+					$addon = gf_aweber();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
 			}
 
 			// Maybe delay Campaign Monitor subscription
 			if ( $this->feed->delay_campaignmonitor_subscription ) {
 				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 				remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
+
+				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
+				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_campaignmonitor' ) ) {
+					$addon = gf_campaignmonitor();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
 			}
 
 			// Maybe delay MailChimp subscription
@@ -177,9 +195,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 
 				// @since 1.3.0
+				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
 				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
-				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'get_instance' ) ) {
-					$addon = GFMailChimp::get_instance();
+				if ( function_exists( 'gf_mailchimp' ) ) {
+					$addon = gf_mailchimp();
 
 					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
 				}

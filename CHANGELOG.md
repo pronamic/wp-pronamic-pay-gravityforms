@@ -9,6 +9,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [1.3.0] - 2015-06-16
 ### Added
+- Added support for Gravity Forms AWeber Add-On version 2.2.1.
+- Added support for Gravity Forms Campaign Monitor Add-On version 3.3.2.
 - Added support for Gravity Forms MailChimp Add-On version 3.6.3.
 
 ## [1.2.4] - 2015-05-26

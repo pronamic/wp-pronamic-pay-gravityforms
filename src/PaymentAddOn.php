@@ -60,12 +60,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 
 		printf(
 			'<p>%s</p>',
-			sprintf(
-				esc_htmL__( 'You can find your pay feeds under %s.', 'pronamic_ideal' ),
+			wp_kses(
 				sprintf(
-					'<a href="%s">%s</a>',
-					esc_attr( add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'edit.php' ) ) ),
-					esc_html__( 'Forms » iDEAL', 'pronamic_ideal' )
+					esc_html__( 'You can find your pay feeds under %s.', 'pronamic_ideal' ),
+					sprintf(
+						'<a href="%s">%s</a>',
+						esc_attr( add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'edit.php' ) ) ),
+						esc_html__( 'Forms » iDEAL', 'pronamic_ideal' )
+					)
+				),
+				array(
+					'a' => array( 'href' => true ),
 				)
 			)
 		);

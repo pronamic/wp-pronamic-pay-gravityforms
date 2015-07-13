@@ -48,7 +48,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 			$html = '';
 
-			$feed = get_pronamic_gf_pay_feed_by_form_id( $form_id );
+			$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
 
 			/**
 			 * Developing warning:

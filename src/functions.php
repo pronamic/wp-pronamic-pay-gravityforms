@@ -1,9 +1,10 @@
 <?php
 
-function get_pronamic_gf_pay_feed_by_form_id( $form_id ) {
+function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $single = false )
+{
 	global $wpdb;
 
-	$pay_gf = null;
+	$pay_gf = array();
 
 	$db_query = $wpdb->prepare( "
 		SELECT
@@ -26,13 +27,46 @@ function get_pronamic_gf_pay_feed_by_form_id( $form_id ) {
 		;
 	", $form_id );
 
-	$post_id = $wpdb->get_var( $db_query );
+	$post_ids = $wpdb->get_col( $db_query );
 
-	if ( $post_id ) {
-		$pay_gf = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
+	if ( ! empty( $post_ids ) ) {
+		foreach( $post_ids as $post_id )
+		{
+			$pay_gf[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
+
+			if ( $single ) {
+				return $pay_gf[0];
+			}
+		}
+	}
+
+	if ( $single ) {
+		return null;
 	}
 
 	return $pay_gf;
+}
+
+function get_pronamic_gf_pay_feed_by_form_id( $form_id ) {
+	global $wpdb;
+
+	return get_pronamic_gf_pay_feeds_by_form_id( $form_id, true );
+}
+
+function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {
+	$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
+	if ( ! empty( $feeds ) ) {
+		$form = RGFormsModel::get_form_meta( $form_id );
+
+		foreach ( $feeds as $feed ) {
+			if ( Pronamic_WP_Pay_Extensions_GravityForms_Util::is_condition_true( $form, $feed ) ) {
+				return $feed;
+			}
+		}
+	}
+
+	return null;
 }
 
 function get_pronamic_pay_gf_form_title( $form_id ) {

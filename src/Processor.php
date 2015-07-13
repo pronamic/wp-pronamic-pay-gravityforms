@@ -68,7 +68,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	//////////////////////////////////////////////////
 
 	/**
-	 * Constructs and initalize an Gravity Forms payement form processor
+	 * Constructs and initalize an Gravity Forms payment form processor
 	 *
 	 * @param array $form
 	 */
@@ -77,14 +77,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 		$this->form_id = isset( $form['id'] ) ? $form['id'] : null;
 
 		// Get payment feed by form ID
-		$this->feed = get_pronamic_gf_pay_feed_by_form_id( $form['id'] );
+		$this->feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $this->form_id );
 
 		if ( null != $this->feed ) {
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_Util::is_condition_true( $this->form, $this->feed ) ) {
-				$this->process = true;
+			$this->process = true;
 
-				$this->add_hooks();
-			}
+			$this->add_hooks();
 		}
 	}
 

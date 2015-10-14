@@ -1,6 +1,6 @@
 {
   "name": "gravityforms",
-  "version": "1.3.0",
+  "version": "1.3.1",
   "description": "Gravity Forms driver for the WordPress payment processing library.",
   "repository": {
     "type": "git",
@@ -26,17 +26,18 @@
       "url": "http://www.remcotolsma.nl/"
     }
   ],
-  "license": "GPL",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/wp-pay-extensions/gravityforms/issues"
   },
   "homepage": "http://www.wp-pay.org/extensions/gravityforms/",
   "devDependencies": {
     "grunt": "~0.4.5",
-    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-contrib-jshint": "^0.11.3",
     "grunt-phpcs": "^0.4.0",
     "grunt-phplint": "0.0.5",
     "grunt-phpmd": "^0.1.1",
-    "grunt-phpunit": "^0.3.6"
+    "grunt-phpunit": "^0.3.6",
+    "load-grunt-tasks": "^3.3.0"
   }
 }

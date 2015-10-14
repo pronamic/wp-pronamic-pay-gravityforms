@@ -32,11 +32,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	public static function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
 		$type = RGFormsModel::get_input_type( $field );
 
-		if ( $type == Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ) {
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE === $type ) {
 			$id            = $field['id'];
-			$field_id      = IS_ADMIN || $form_id == 0 ? "input_$id" : 'input_' . $form_id . "_$id";
+			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
-			$class_suffix  = RG_CURRENT_VIEW == 'entry' ? '_admin' : '';
+			$class_suffix  = RG_CURRENT_VIEW === 'entry' ? '_admin' : '';
 			$size          = rgar( $field, 'size' );
 
 			$class         = $size . $class_suffix;
@@ -44,18 +44,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 			$tab_index     = GFCommon::get_tabindex();
 
-			$disabled_text = ( IS_ADMIN && RG_CURRENT_VIEW != 'entry' ) ? "disabled='disabled'" : '';
+			$disabled_text = ( IS_ADMIN && 'entry' !== RG_CURRENT_VIEW ) ? "disabled='disabled'" : '';
 
 			$html = '';
 
-			$feed = get_pronamic_gf_pay_feed_by_form_id( $form_id );
+			$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
 
 			/**
 			 * Developing warning:
 			 * Don't use single quotes in the HTML you output, it is buggy in combination with SACK
 			 */
 			if ( IS_ADMIN ) {
-				if ( $feed === null ) {
+				if ( null === $feed ) {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ),
@@ -73,7 +73,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$html_input = '';
 			$html_error = '';
 
-			if ( $feed != null ) {
+			if ( null !== $feed ) {
 				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
 
 				if ( $gateway ) {

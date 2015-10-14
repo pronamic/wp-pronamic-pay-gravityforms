@@ -312,17 +312,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_issuer_id() {
-		$issuer_id = null;
+		$issuer_id    = null;
+		$issuer_field = null;
 
 		$issuer_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ) );
+		foreach ( $issuer_fields as $field ) {
+			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
+				$issuer_field = $field;
 
-		foreach ( $issuer_fields as $index => $issuer ) {
-			if ( RGFormsModel::is_field_hidden( $this->form, $issuer, array() ) ) {
-				unset( $issuer_fields[$index] );
+				break;
 			}
 		}
-
-		$issuer_field = array_shift( $issuer_fields );
 
 		if ( null !== $issuer_field ) {
 			$issuer_id = RGFormsModel::get_field_value( $issuer_field );

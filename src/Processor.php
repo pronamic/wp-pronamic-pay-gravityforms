@@ -422,12 +422,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	 * After submission
 	 */
 	public function after_submission( $lead, $form ) {
-		if ( $this->is_processing( $form ) && $this->payment && $this->payment->get_amount() === 0 ) {
-			$extension = new Pronamic_WP_Pay_Extensions_GravityForms_Extension();
 
-			$this->payment->status = Pronamic_WP_Pay_Statuses::SUCCESS;
-
-			$extension->update_status( $this->payment );
-		}
 	}
 }

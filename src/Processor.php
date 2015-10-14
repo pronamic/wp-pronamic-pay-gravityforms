@@ -79,7 +79,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 		// Get payment feed by form ID
 		$this->feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $this->form_id );
 
-		if ( null != $this->feed ) {
+		if ( null !== $this->feed ) {
 			$this->process = true;
 
 			$this->add_hooks();
@@ -134,7 +134,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 		$is_form = false;
 
 		if ( isset( $form['id'] ) ) {
-			$is_form = ( $this->form_id == $form['id'] );
+			$is_form = ( absint( $this->form_id ) === absint( $form['id'] ) );
 		}
 
 		$is_processing = $this->process && $is_form;

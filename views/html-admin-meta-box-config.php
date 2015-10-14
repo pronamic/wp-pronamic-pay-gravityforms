@@ -100,7 +100,21 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 					<br />
 					<?php esc_html_e( 'Maximum number of charachters is 32, you should also consider the use of variables Gravity Forms. An generated description that is longer than 32 characters will be automatically truncated.', 'pronamic_ideal' ); ?>
 					<br />
-					<?php _e( 'Merge Tag Examples: Entry Id = <code>{entry_id}</code>, Form Id = <code>{form_id}</code>, Form Title = <code>{form_title}</code>', 'pronamic_ideal' ); ?>
+					<?php
+
+					echo wp_kses(
+						sprintf(
+							__( 'Merge Tag Examples: Entry Id = %s, Form Id = %s, Form Title = %s', 'pronamic_ideal' ),
+							'<code>{entry_id}</code>',
+							'<code>{form_id}</code>',
+							'<code>{form_title}</code>'
+						),
+						array(
+							'code' => array(),
+						)
+					);
+
+					?>
 				</span>
 			</td>
 		</tr>
@@ -502,9 +516,9 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 						<?php
 
 						wp_dropdown_pages( array(
-							'selected'         => $page_id,
-							'name'             => '_pronamic_pay_gf_links[' . $name . '][page_id]',
-							'show_option_none' => __( '&mdash; Select &mdash;', 'pronamic_ideal' ),
+							'selected'         => esc_attr( $page_id ),
+							'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
+							'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
 						) );
 
 						?>

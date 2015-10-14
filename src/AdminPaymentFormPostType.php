@@ -180,8 +180,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			$meta_value = null;
 
 			if ( 'sanitize_text_field' === $function ) {
-				if ( isset( $_POST[ $meta_key ] ) ) {
-					$meta_value = sanitize_text_field( $_POST[ $meta_key ] ); // input var okay
+				if ( isset( $_POST[ $meta_key ] ) ) { // WPCS: input var OK
+					$meta_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) ); // WPCS: input var OK
 				}
 			} else {
 				$filter  = $function;

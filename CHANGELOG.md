@@ -9,7 +9,6 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [1.3.1] - 2015-10-14
 - Add support for multiple payment feeds with conditions per form.
-- Process submissions with an amount of 0 as successfully paid.
 - Only use visible issuer dropdowns (allows conditional logic on issuer dropdown field.
 
 ## [1.3.0] - 2015-06-16

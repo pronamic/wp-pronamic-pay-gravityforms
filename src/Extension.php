@@ -165,7 +165,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$form_id = $lead['form_id'];
 
 			$form = RGFormsModel::get_form( $form_id );
-			$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
+			$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
 
 			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
 
@@ -239,7 +239,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * @param array $entry
 	 */
 	public function fulfill_order( $entry ) {
-		$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $entry['form_id'] );
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( rgar( $entry, 'id' ) );
 
 		if ( null !== $feed ) {
 			$this->maybe_update_user_role( $entry, $feed );

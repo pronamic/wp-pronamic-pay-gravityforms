@@ -125,7 +125,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 					'lid'  => $lead_id,
 				), admin_url( 'admin.php' ) );
 
-				wp_redirect( $url, 303 );
+				wp_redirect( $url );
 
 				exit;
 			}

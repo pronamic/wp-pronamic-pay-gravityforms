@@ -225,7 +225,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry( $lead );
 
 				if ( $url && $can_redirect ) {
-					wp_redirect( $url, 303 );
+					wp_redirect( $url );
 
 					exit;
 				}

@@ -1,8 +1,6 @@
 <?php
 
 function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
-	global $wpdb;
-
 	$pay_gf = array();
 
 	$post_ids = get_posts( array(

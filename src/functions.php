@@ -1,6 +1,6 @@
 <?php
 
-function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $single = false ) {
+function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
 	global $wpdb;
 
 	$pay_gf = array();
@@ -20,15 +20,7 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $single = false ) {
 	if ( ! empty( $post_ids ) ) {
 		foreach ( $post_ids as $post_id ) {
 			$pay_gf[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
-
-			if ( $single ) {
-				return $pay_gf[0];
-			}
 		}
-	}
-
-	if ( $single ) {
-		return null;
 	}
 
 	return $pay_gf;

@@ -22,23 +22,25 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
 	return $feeds;
 }
 
-function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {
+function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id, $with_ideal_issuers = false ) {
 	$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
 
 	if ( ! empty( $feeds ) ) {
 		$form = RGFormsModel::get_form_meta( $form_id );
 
-		foreach ( $feeds as $feed ) {
-			if ( WP_ADMIN || ! filter_has_var( INPUT_POST, 'is_submit_'.$form_id ) ) {
+		if ( $with_ideal_issuers ) {
+			foreach ( $feeds as $feed ) {
 				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
 
-				if ( $gateway && ! is_null( $gateway->get_issuers() ) ) {
+				if ( $gateway && null !== $gateway->get_issuers() ) {
 					return $feed;
 				}
 			}
-
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_Util::is_condition_true( $form, $feed ) ) {
-				return $feed;
+		} else {
+			foreach ( $feeds as $feed ) {
+				if ( Pronamic_WP_Pay_Extensions_GravityForms_Util::is_condition_true( $form, $feed ) ) {
+					return $feed;
+				}
 			}
 		}
 	}

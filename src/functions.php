@@ -17,10 +17,8 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
 		),
 	) );
 
-	if ( ! empty( $post_ids ) ) {
-		foreach ( $post_ids as $post_id ) {
-			$pay_gf[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
-		}
+	foreach ( $post_ids as $post_id ) {
+		$pay_gf[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
 	}
 
 	return $pay_gf;

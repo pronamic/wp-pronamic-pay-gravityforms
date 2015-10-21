@@ -45,12 +45,6 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $single = false ) {
 	return $pay_gf;
 }
 
-function get_pronamic_gf_pay_feed_by_form_id( $form_id ) {
-	global $wpdb;
-
-	return get_pronamic_gf_pay_feeds_by_form_id( $form_id, true );
-}
-
 function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {
 	$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
 

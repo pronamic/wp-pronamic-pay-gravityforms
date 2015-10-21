@@ -5,28 +5,17 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $single = false ) {
 
 	$pay_gf = array();
 
-	$db_query = $wpdb->prepare( "
-		SELECT
-			ID
-		FROM
-			$wpdb->posts
-				LEFT JOIN
-			$wpdb->postmeta
-					ON (
-				ID = post_ID
-					AND
-				meta_key = '_pronamic_pay_gf_form_id'
-			)
-		WHERE
-			post_status = 'publish'
-				AND
-			post_type = 'pronamic_pay_gf'
-				AND
-			meta_value = %s
-		;
-	", $form_id );
-
-	$post_ids = $wpdb->get_col( $db_query ); // WPCS: unprepared SQL OK
+	$post_ids = get_posts( array(
+		'fields'         => 'ids',
+		'post_type'      => 'pronamic_pay_gf',
+		'posts_per_page' => 50,
+		'meta_query'     => array(
+			array(
+				'key'     => '_pronamic_pay_gf_form_id',
+				'value'   => $form_id,
+			),
+		),
+	) );
 
 	if ( ! empty( $post_ids ) ) {
 		foreach ( $post_ids as $post_id ) {

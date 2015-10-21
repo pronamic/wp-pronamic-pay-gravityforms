@@ -7,6 +7,12 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 - 
 
+## [1.3.2] - 2015-10-21
+- Fix missing issuer dropdown in form editor and front end for feeds with condition enabled.
+- No longer use an custom query to get the pay Gravity Forms posts.
+- Added an extra parameter to retrieve payments feed with an gateway with iDEAL issuers.
+- No longer redirect with 303 status code.
+
 ## [1.3.1] - 2015-10-14
 - Add support for multiple payment feeds with conditions per form.
 - Only use visible issuer dropdowns (allows conditional logic on issuer dropdown field.

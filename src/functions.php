@@ -1,7 +1,7 @@
 <?php
 
 function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
-	$pay_gf = array();
+	$feeds = array();
 
 	$post_ids = get_posts( array(
 		'fields'         => 'ids',
@@ -16,10 +16,10 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
 	) );
 
 	foreach ( $post_ids as $post_id ) {
-		$pay_gf[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
+		$feeds[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
 	}
 
-	return $pay_gf;
+	return $feeds;
 }
 
 function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {

@@ -222,7 +222,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 						break;
 				}
 
-				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry( $lead );
+				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
+					$lead['id'],
+					Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
+					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
+				);
 
 				if ( $url && $can_redirect ) {
 					wp_redirect( $url );

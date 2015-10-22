@@ -78,6 +78,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	//////////////////////////////////////////////////
 
 	/**
+	 * Update entry property
+	 *
+	 * @param int    $entry_id Entry ID
+	 * @param string $property Name of the property to update
+	 * @param string $value    Value for the property
+	 */
+	public static function update_entry_property( $entry_id, $property, $value ) {
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GFAPI', 'update_entry_property' ) ) {
+			GFAPI::update_entry_property( $entry_id, $property, $value );
+		} elseif ( Pronamic_WP_Pay_Class::method_exists( 'GFFormsModel', 'update_lead_property' ) ) {
+			GFFormsModel::update_lead_property( $entry_id, $property, $value );
+		}
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
 	 * Compare the current Gravity Forms version
 	 *
 	 * @param string $version

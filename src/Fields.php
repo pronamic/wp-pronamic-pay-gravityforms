@@ -17,6 +17,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 		add_filter( 'gform_add_field_buttons', array( __CLASS__, 'add_field_buttons' ) );
 		add_filter( 'gform_field_input',       array( __CLASS__, 'acquirer_field_input' ), 10, 5 );
+		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
 		add_filter( 'gform_field_type_title',  array( __CLASS__, 'field_type_title' ) );
 	}
 
@@ -56,6 +57,125 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			 */
 			if ( IS_ADMIN ) {
 				if ( null === $feed ) {
+					$new_feed_url = add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
+
+					$html .= sprintf(
+						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
+						$new_feed_url,
+						__( 'Create iDEAL feed', 'pronamic_ideal' )
+					);
+
+					$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
+					if ( count( $feeds ) > 0 ) {
+						$html .= sprintf(
+							"<p class='pronamic-pay-error'><strong>%s</strong><br><em>%s</em></p>",
+							__( 'This field is not supported by your payment gateway.', 'pronamic-ideal' ),
+							sprintf(
+								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic-ideal' ),
+								"<a href='" . $new_feed_url . "' target='_blank'>",
+								"</a>"
+							)
+						);
+					}
+				} else {
+					$html .= sprintf(
+						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
+						get_edit_post_link( $feed->id ),
+						__( 'Edit iDEAL feed', 'pronamic_ideal' )
+					);
+				}
+			}
+
+			$html_input = '';
+			$html_error = '';
+
+			if ( null !== $feed ) {
+				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+
+				if ( $gateway ) {
+					// Always use iDEAL payment method for issuer field
+					$payment_method = $gateway->get_payment_method();
+
+					$gateway->set_payment_method( Pronamic_WP_Pay_PaymentMethods::IDEAL );
+
+					$issuer_field = $gateway->get_issuer_field();
+
+					$error = $gateway->get_error();
+
+					if ( is_wp_error( $error ) ) {
+						$html_error .= Pronamic_WP_Pay_Plugin::get_default_error_message();
+						$html_error .= '<br /><em>' . $error->get_error_message() . '</em>';
+					} elseif ( $issuer_field ) {
+						$choices = $issuer_field['choices'];
+
+						$options = Pronamic_WP_HTML_Helper::select_options_grouped( $choices, $value );
+						// Double quotes are not working, se we replace them with an single quote
+						$options = str_replace( '"', '\'', $options );
+
+						$html_input  = '';
+						$html_input .= sprintf( "<select name='input_%d' id='%s' class='%s' %s %s>", $id, $field_id, $css_class, $tab_index, $disabled_text );
+						$html_input .= sprintf( '%s', $options );
+						$html_input .= sprintf( '</select>' );
+					}
+
+					// Reset payment method to original value
+					$gateway->set_payment_method( $payment_method );
+				}
+			}
+
+			if ( $html_error ) {
+				$html .= sprintf( "<div class='gfield_description validation_message'>" );
+				$html .= sprintf( '%s', $html_error );
+				$html .= sprintf( '</div>' );
+			} else {
+				$html .= sprintf( "<div class='ginput_container ginput_ideal'>" );
+				$html .= sprintf( '%s', $html_input );
+				$html .= sprintf( '</div>' );
+			}
+
+			$field_content = $html;
+		}
+
+		return $field_content;
+	}
+
+	/**
+	 * Payment method field input
+	 *
+	 * @param string $field_content
+	 * @param string $field
+	 * @param string $value
+	 * @param string $lead_id
+	 * @param string $form_id
+	 */
+	public static function payment_method_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
+		$type = RGFormsModel::get_input_type( $field );
+
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE === $type ) {
+			$id            = $field['id'];
+			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
+
+			$class_suffix  = RG_CURRENT_VIEW === 'entry' ? '_admin' : '';
+			$size          = rgar( $field, 'size' );
+
+			$class         = $size . $class_suffix;
+			$css_class     = trim( esc_attr( $class ) . ' gfield_pronamic_pay_payment_method_select' );
+
+			$tab_index     = GFCommon::get_tabindex();
+
+			$disabled_text = ( IS_ADMIN && 'entry' !== RG_CURRENT_VIEW ) ? "disabled='disabled'" : '';
+
+			$html = '';
+
+			$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
+
+			/**
+			 * Developing warning:
+			 * Don't use single quotes in the HTML you output, it is buggy in combination with SACK
+			 */
+			if ( IS_ADMIN ) {
+				if ( null === $feed ) {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ),
@@ -77,15 +197,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
 
 				if ( $gateway ) {
-					$issuer_field = $gateway->get_issuer_field();
+					$payment_method_field = $gateway->get_payment_method_field();
 
 					$error = $gateway->get_error();
 
 					if ( is_wp_error( $error ) ) {
 						$html_error .= Pronamic_WP_Pay_Plugin::get_default_error_message();
 						$html_error .= '<br /><em>' . $error->get_error_message() . '</em>';
-					} elseif ( $issuer_field ) {
-						$choices = $issuer_field['choices'];
+					} elseif ( $payment_method_field ) {
+						$choices = $payment_method_field['choices'];
 
 						$options = Pronamic_WP_HTML_Helper::select_options_grouped( $choices, $value );
 						// Double quotes are not working, se we replace them with an single quote
@@ -125,8 +245,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		$fields = array(
 			array(
 				'class'     => 'button',
-				'value'     => __( 'Issuer Drop Down', 'pronamic_ideal' ),
+				'value'     => __( 'Issuer', 'pronamic_ideal' ),
 				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE,
+			),
+			array(
+				'class'     => 'button',
+				'value'     => __( 'Payment Method', 'pronamic_ideal' ),
+				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE,
 			),
 		);
 
@@ -159,6 +284,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		switch ( $type ) {
 			case Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE:
 				return __( 'Issuer Drop Down', 'pronamic_ideal' );
+				break;
+
+			case Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE:
+				return __( 'Payment Method Selector', 'pronamic_ideal' );
+				break;
 		}
 
 		return $type;

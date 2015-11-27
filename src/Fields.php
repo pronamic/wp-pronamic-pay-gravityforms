@@ -19,6 +19,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		add_filter( 'gform_field_input',       array( __CLASS__, 'acquirer_field_input' ), 10, 5 );
 		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
 		add_filter( 'gform_field_type_title',  array( __CLASS__, 'field_type_title' ) );
+
+		add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_default_field_labels' ) );
 	}
 
 	/**
@@ -292,5 +294,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		}
 
 		return $type;
+	}
+
+	/**
+	 * Default field labels
+	 */
+	public static function editor_js_default_field_labels() {
+		$labels = array(
+			Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE        => __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' ),
+			Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE => __( 'Choose a payment method', 'pronamic_ideal' ),
+		);
+
+		foreach( $labels as $type => $label ) {
+			?>
+			case '<?php echo $type; ?>':
+				field.label = "<?php echo $label; ?>";
+				break;
+			<?php
+		}
 	}
 }

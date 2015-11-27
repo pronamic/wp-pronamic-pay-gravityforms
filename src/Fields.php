@@ -194,7 +194,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			if ( IS_ADMIN && empty( $field->choices ) ) {
 				$options = self::get_payment_method_options( $form_id );
 			} else {
-				$options = '';
+				$options = array();
 
 				foreach( $field->choices as $choice ) {
 					if ( $choice['isSelected'] ) {

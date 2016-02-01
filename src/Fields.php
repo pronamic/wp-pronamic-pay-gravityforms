@@ -3,8 +3,9 @@
 /**
  * Title: WordPress pay extension Gravity Forms fields
  * Description:
- * Copyright: Copyright (c) 2005 - 2015
+ * Copyright: Copyright (c) 2005 - 2016
  * Company: Pronamic
+ *
  * @author Remco Tolsma
  * @version 1.0.0
  */
@@ -40,7 +41,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
-			$class_suffix  = RG_CURRENT_VIEW === 'entry' ? '_admin' : '';
+			$class_suffix  = 'entry' === RG_CURRENT_VIEW ? '_admin' : '';
 			$size          = rgar( $field, 'size' );
 
 			$class         = $size . $class_suffix;
@@ -76,8 +77,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 							__( 'This field is not supported by your payment gateway.', 'pronamic-ideal' ),
 							sprintf(
 								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic-ideal' ),
-								"<a href='" . $new_feed_url . "' target='_blank'>",
-								"</a>"
+								sprint( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
+								'</a>'
 							)
 						);
 					}
@@ -157,7 +158,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
-			$class_suffix  = RG_CURRENT_VIEW === 'entry' ? '_admin' : '';
+			$class_suffix  = ( RG_CURRENT_VIEW === 'entry' ) ? '_admin' : '';
 			$size          = rgar( $field, 'size' );
 
 			$class         = $size . $class_suffix;
@@ -196,9 +197,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			} else {
 				$options = array();
 
-				foreach( $field->choices as $choice ) {
+				foreach ( $field->choices as $choice ) {
 					if ( $choice['isSelected'] ) {
-						$options[$choice['value']] = $choice['text'];
+						$options[ $choice['value'] ] = $choice['text'];
 					}
 				}
 			}
@@ -230,7 +231,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 	public static function get_payment_method_options( $form_id ) {
 		$feed    = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
-		$options = array ();
+		$options = array();
 
 		if ( null !== $feed ) {
 			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
@@ -258,20 +259,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @return array $form
 	 */
 	public static function admin_payment_method_options( $form ) {
-		foreach( $form['fields'] as $i => $field ) {
+		foreach ( $form['fields'] as $i => $field ) {
 			if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE === $field->type && empty( $field->choices ) ) {
 				$options = self::get_payment_method_options( $form['id'] );
 
 				if ( is_wp_error( $options ) ) {
-					$options = array ();
+					$options = array();
 				}
 
 				$field->inputType = 'checkbox';
 				$field->enableChoiceValue = true;
 				$field->choices = array();
 
-				foreach ( $options as $payment_method => $name) {
-					$field->choices[] = array (
+				foreach ( $options as $payment_method => $name ) {
+					$field->choices[] = array(
 						'text'                  => $name,
 						'value'                 => $payment_method,
 						'isSelected'            => true,
@@ -353,10 +354,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE => __( 'Choose a payment method', 'pronamic_ideal' ),
 		);
 
-		foreach( $labels as $type => $label ) {
+		foreach ( $labels as $type => $label ) {
 			?>
-			case '<?php echo $type; ?>':
-				field.label = "<?php echo $label; ?>";
+			case '<?php echo esc_js( $type ); ?>':
+				field.label = "<?php echo esc_js( $label ); ?>";
 				break;
 			<?php
 		}

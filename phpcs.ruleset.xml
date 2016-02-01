@@ -3,10 +3,19 @@
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 
+		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
+
 		<exclude name="Squiz.Commenting" />
+		<exclude name="Squiz.PHP.CommentedOutCode.Found" />
+
+		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
 
 		<!-- Exclude for wp_json_encode() function -->
 		<exclude name="WordPress.PHP.DiscouragedFunctions.DiscouragedWithAlternative" />
+
+		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
+
+		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />
 	</rule>
 
 	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query">

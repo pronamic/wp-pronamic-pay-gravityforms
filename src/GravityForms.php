@@ -3,8 +3,9 @@
 /**
  * Title: WordPress pay extension Gravity Forms
  * Description:
- * Copyright: Copyright (c) 2005 - 2015
+ * Copyright: Copyright (c) 2005 - 2016
  * Company: Pronamic
+ *
  * @author Remco Tolsma
  * @version 1.0.0
  */
@@ -72,6 +73,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 			GFAPI::update_entry( $entry );
 		} elseif ( Pronamic_WP_Pay_Class::method_exists( 'GFFormsModel', 'update_lead' ) ) {
 			GFFormsModel::update_lead( $entry );
+		}
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Update entry property
+	 *
+	 * @param int    $entry_id Entry ID
+	 * @param string $property Name of the property to update
+	 * @param string $value    Value for the property
+	 */
+	public static function update_entry_property( $entry_id, $property, $value ) {
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GFAPI', 'update_entry_property' ) ) {
+			GFAPI::update_entry_property( $entry_id, $property, $value );
+		} elseif ( Pronamic_WP_Pay_Class::method_exists( 'GFFormsModel', 'update_lead_property' ) ) {
+			GFFormsModel::update_lead_property( $entry_id, $property, $value );
 		}
 	}
 

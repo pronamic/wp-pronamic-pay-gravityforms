@@ -3,8 +3,9 @@
 /**
  * Title: WordPress pay extension Gravity Forms payment data
  * Description:
- * Copyright: Copyright (c) 2005 - 2015
+ * Copyright: Copyright (c) 2005 - 2016
  * Company: Pronamic
+ *
  * @author Remco Tolsma
  * @version 1.0.1
  */
@@ -305,6 +306,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		}
 
 		return $url;
+	}
+
+	//////////////////////////////////////////////////
+	// Payment method
+	//////////////////////////////////////////////////
+
+	public function get_payment_method() {
+		$payment_method       = null;
+		$payment_method_field = null;
+
+		$payment_method_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE ) );
+
+		foreach ( $payment_method_fields as $field ) {
+			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
+				$payment_method_field = $field;
+
+				break;
+			}
+		}
+
+		if ( null !== $payment_method_field ) {
+			$payment_method = RGFormsModel::get_field_value( $payment_method_field );
+		}
+
+		return $payment_method;
 	}
 
 	//////////////////////////////////////////////////

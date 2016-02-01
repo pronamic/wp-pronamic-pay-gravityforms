@@ -3,8 +3,9 @@
 /**
  * Title: WordPress pay extension Gravity Forms processor
  * Description:
- * Copyright: Copyright (c) 2005 - 2015
+ * Copyright: Copyright (c) 2005 - 2016
  * Company: Pronamic
+ *
  * @author Remco Tolsma
  * @version 1.3.0
  * @since 1.0.0
@@ -225,7 +226,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			if ( $this->gateway ) {
 				$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $this->feed );
 
-				$this->payment = Pronamic_WP_Pay_Plugin::start( $this->feed->config_id, $this->gateway, $data );
+				$payment_method = $data->get_payment_method();
+
+				// Set payment method to iDEAL if issuer_id is set
+				if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
+					$payment_method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
+				}
+
+				$this->payment = Pronamic_WP_Pay_Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
 
 				$this->error = $this->gateway->get_error();
 			}

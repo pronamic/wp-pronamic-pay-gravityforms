@@ -7,6 +7,13 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 - 
 
+## [1.4.0] - 2016-02-01
+- Updated payment status property instead of whole entry.
+- Added Payment Method Selector field and support for payment methods.
+- Added default field labels for issuer drop down and payment method selector.
+- Added payment method choices from gateway to payment method selector field.
+- Fix PHP error if no choices are selected in payment method selector.
+
 ## [1.3.2] - 2015-10-21
 - Fix missing issuer dropdown in form editor and front end for feeds with condition enabled.
 - No longer use an custom query to get the pay Gravity Forms posts.

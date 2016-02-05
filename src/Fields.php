@@ -7,7 +7,8 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.4.1
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	/**
@@ -192,7 +193,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 				}
 			}
 
-			if ( IS_ADMIN && empty( $field->choices ) ) {
+			if ( ( IS_ADMIN && empty( $field->choices ) ) || ! is_array( $field->choices ) ) {
 				$options = self::get_payment_method_options( $form_id );
 			} else {
 				$options = array();

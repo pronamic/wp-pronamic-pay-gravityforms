@@ -78,7 +78,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 							__( 'This field is not supported by your payment gateway.', 'pronamic-ideal' ),
 							sprintf(
 								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic-ideal' ),
-								sprint( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
+								sprintf( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
 								'</a>'
 							)
 						);

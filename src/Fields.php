@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.1
+ * @version 1.4.2
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
@@ -78,7 +78,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 							__( 'This field is not supported by your payment gateway.', 'pronamic-ideal' ),
 							sprintf(
 								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic-ideal' ),
-								sprint( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
+								sprintf( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
 								'</a>'
 							)
 						);
@@ -317,8 +317,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 		// Group
 		$group = array(
-			'name'   => 'ideal_fields',
-			'label'  => __( 'iDEAL Fields', 'pronamic_ideal' ),
+			'name'   => 'pronamic_pay_fields',
+			'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
 			'fields' => $fields,
 		);
 

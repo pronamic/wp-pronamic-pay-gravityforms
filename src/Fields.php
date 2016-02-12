@@ -317,8 +317,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 		// Group
 		$group = array(
-			'name'   => 'ideal_fields',
-			'label'  => __( 'iDEAL Fields', 'pronamic_ideal' ),
+			'name'   => 'pronamic_pay_fields',
+			'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
 			'fields' => $fields,
 		);
 

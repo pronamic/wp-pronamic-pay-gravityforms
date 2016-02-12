@@ -313,24 +313,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_payment_method() {
-		$payment_method       = null;
-		$payment_method_field = null;
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE ) );
 
-		$payment_method_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE ) );
-
-		foreach ( $payment_method_fields as $field ) {
+		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				$payment_method_field = $field;
-
-				break;
+				return rgpost( 'input_' . $field->id );
 			}
 		}
 
-		if ( null !== $payment_method_field ) {
-			$payment_method = RGFormsModel::get_field_value( $payment_method_field );
-		}
-
-		return $payment_method;
+		return null;
 	}
 
 	//////////////////////////////////////////////////

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.1
+ * @version 1.4.2
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {

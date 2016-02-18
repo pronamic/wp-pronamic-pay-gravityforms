@@ -196,6 +196,21 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				$meta_value = filter_input( INPUT_POST, $meta_key, $filter, $options );
 			}
 
+			// Set link type if none selected, use URL if both are set
+			if ( '_pronamic_pay_gf_links' == $meta_key ) {
+				foreach ( $meta_value as $status => $link ) {
+					if ( ! isset( $link['type'] ) ) {
+						if ( ! empty( $link['url'] ) ) {
+							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_URL;
+						} elseif ( ! empty( $link['page_id'] ) ) {
+							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_PAGE;
+						}
+
+						$meta_value[$status] = $link;
+					}
+				}
+			}
+
 			if ( isset( $meta_value ) && '' !== $meta_value ) {
 				update_post_meta( $post_id, $meta_key, $meta_value );
 			} else {

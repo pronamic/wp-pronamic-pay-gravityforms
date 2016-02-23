@@ -264,6 +264,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->get_field_value( 'zip' );
 	}
 
+	public function get_country() {
+		return $this->get_field_value( 'country' );
+	}
+
 	//////////////////////////////////////////////////
 	// URL's
 	//////////////////////////////////////////////////

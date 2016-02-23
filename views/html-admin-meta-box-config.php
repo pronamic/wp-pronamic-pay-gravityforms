@@ -422,15 +422,16 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 	<?php
 
 	$fields = array(
-		'first_name' => __( 'First Name', 'pronamic_ideal' ),
-		'last_name'  => __( 'Last Name', 'pronamic_ideal' ),
-		'email'      => __( 'Email', 'pronamic_ideal' ),
-		'address1'   => __( 'Address', 'pronamic_ideal' ),
-		'address2'   => __( 'Address 2', 'pronamic_ideal' ),
-		'city'       => __( 'City', 'pronamic_ideal' ),
-		'state'      => __( 'State', 'pronamic_ideal' ),
-		'zip'        => __( 'Zip', 'pronamic_ideal' ),
-		'country'    => __( 'Country', 'pronamic_ideal' ),
+		'first_name'       => __( 'First Name', 'pronamic_ideal' ),
+		'last_name'        => __( 'Last Name', 'pronamic_ideal' ),
+		'email'            => __( 'Email', 'pronamic_ideal' ),
+		'address1'         => __( 'Address', 'pronamic_ideal' ),
+		'address2'         => __( 'Address 2', 'pronamic_ideal' ),
+		'city'             => __( 'City', 'pronamic_ideal' ),
+		'state'            => __( 'State', 'pronamic_ideal' ),
+		'zip'              => __( 'Zip', 'pronamic_ideal' ),
+		'country'          => __( 'Country', 'pronamic_ideal' ),
+		'telephone_number' => __( 'Telephone Nnumber', 'pronamic_ideal' ),
 	);
 
 	?>

@@ -268,6 +268,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->get_field_value( 'country' );
 	}
 
+	public function get_telephone_number() {
+		return $this->get_field_value( 'telephone_number' );
+	}
+
 	//////////////////////////////////////////////////
 	// URL's
 	//////////////////////////////////////////////////

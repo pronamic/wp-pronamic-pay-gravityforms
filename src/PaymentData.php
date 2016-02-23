@@ -248,19 +248,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->get_field_value( 'email' );
 	}
 
-	public function getCustomerName() {
+	public function get_customer_name() {
 		return $this->get_field_value( 'first_name' ) . ' ' . $this->get_field_value( 'last_name' );
 	}
 
-	public function getOwnerAddress() {
+	public function get_address() {
 		return $this->get_field_value( 'address1' ) . ' ' . $this->get_field_value( 'address2' );
 	}
 
-	public function getOwnerCity() {
+	public function get_city() {
 		return $this->get_field_value( 'city' );
 	}
 
-	public function getOwnerZip() {
+	public function get_zip() {
 		return $this->get_field_value( 'zip' );
 	}
 

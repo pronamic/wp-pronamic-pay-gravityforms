@@ -47,6 +47,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 		// Initialize hook, Gravity Forms uses the default priority (10)
 		add_action( 'init', array( $this, 'init' ), 20 );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	//////////////////////////////////////////////////
@@ -85,6 +87,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// iDEAL fields
 			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
+		}
+	}
+
+	/**
+	 * Admin enqueue scripts.
+	 */
+	public function admin_enqueue_scripts() {
+		$screen = get_current_screen();
+
+		if (
+			'pronamic_pay_gf' === $screen->post_type
+				&&
+			'toplevel_page_gf_edit_forms' === $screen->id
+		) {
+			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+			wp_register_script(
+				'pronamic-pay-gravityforms',
+				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
+				array( 'jquery' ),
+				'1.3.0',
+				true
+			);
+
+			wp_enqueue_script( 'pronamic-pay-gravityforms' );
 		}
 	}
 

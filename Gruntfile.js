@@ -7,12 +7,6 @@ module.exports = function( grunt ) {
 		// Package
 		pkg: grunt.file.readJSON( 'package.json' ),
 
-		// JSHint
-		jshint: {
-			options: grunt.file.readJSON( '.jshintrc' ),
-			all: [ 'Gruntfile.js' ]
-		},
-
 		// PHP Code Sniffer
 		phpcs: {
 			application: {
@@ -53,9 +47,31 @@ module.exports = function( grunt ) {
 		// PHPUnit
 		phpunit: {
 			application: {}
+		},
+
+		// JSHint
+		jshint: {
+			options: grunt.file.readJSON( '.jshintrc' ),
+			grunt: [ 'Gruntfile.js' ],
+			admin: [
+				'js/admin.js'
+			]
+		},
+
+		// Uglify
+		uglify: {
+			options: {
+				sourceMap: true
+			},
+			scripts: {
+				files: {
+					// Admin
+					'js/admin.min.js': 'js/admin.js'
+				}
+			}
 		}
 	} );
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs' ] );
+	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs', 'jshint', 'uglify' ] );
 };

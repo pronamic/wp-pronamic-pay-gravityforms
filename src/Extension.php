@@ -103,6 +103,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
+			wp_register_style(
+				'pronamic-pay-gravityforms',
+				plugins_url( 'css/admin' . $min . '.js', dirname( __FILE__ ) ),
+				array(),
+				'1.3.0'
+			);
+
 			wp_register_script(
 				'pronamic-pay-gravityforms',
 				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
@@ -110,6 +117,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				'1.3.0',
 				true
 			);
+
+			wp_enqueue_style( 'pronamic-pay-gravityforms' );
 
 			wp_enqueue_script( 'pronamic-pay-gravityforms' );
 		}

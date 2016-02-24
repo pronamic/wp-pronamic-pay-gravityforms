@@ -67,7 +67,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						$new_feed_url,
-						__( 'Create iDEAL feed', 'pronamic_ideal' )
+						__( 'Create pay feed', 'pronamic_ideal' )
 					);
 
 					$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
@@ -87,7 +87,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						get_edit_post_link( $feed->id ),
-						__( 'Edit iDEAL feed', 'pronamic_ideal' )
+						__( 'Edit pay feed', 'pronamic_ideal' )
 					);
 				}
 			}

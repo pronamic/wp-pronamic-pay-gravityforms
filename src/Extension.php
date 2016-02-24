@@ -105,7 +105,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			wp_register_style(
 				'pronamic-pay-gravityforms',
-				plugins_url( 'css/admin' . $min . '.js', dirname( __FILE__ ) ),
+				plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
 				array(),
 				'1.3.0'
 			);

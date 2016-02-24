@@ -1,0 +1,38 @@
+sudo: false
+
+language: php
+
+matrix:
+  include:
+    - php: 5.2
+      env: WP_VERSION=latest WP_MULTISITE=1
+    - php: 5.2
+      env: WP_VERSION=4.0 WP_MULTISITE=1
+    - php: 5.3
+      env: WP_VERSION=4.0
+    - php: 5.4
+      env: WP_VERSION=4.0
+    - php: 5.5
+      env: WP_VERSION=4.0
+    - php: 5.6
+      env: WP_VERSION=4.0 COVERAGE=1 GRUNT=1
+    - php: 7.0
+      env: WP_VERSION=4.0
+    - php: hhvm
+      env: WP_VERSION=4.0
+  fast_finish: true
+
+cache:
+  directories:
+    - node_modules
+    - vendor
+    - $HOME/.composer/cache
+
+before_script:
+  - bash bin/travis-before_script
+
+script:
+  - bash bin/travis-script
+
+after_success:
+  - bash bin/travis-after_success

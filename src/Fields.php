@@ -42,7 +42,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
-			$class_suffix  = 'entry' === RG_CURRENT_VIEW ? '_admin' : '';
+			$class_suffix  = ( 'entry' === RG_CURRENT_VIEW ) ? '_admin' : '';
 			$size          = rgar( $field, 'size' );
 
 			$class         = $size . $class_suffix;

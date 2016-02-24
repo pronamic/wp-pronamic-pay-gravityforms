@@ -98,7 +98,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		if (
 			'pronamic_pay_gf' === $screen->post_type
-				&&
+				||
 			'toplevel_page_gf_edit_forms' === $screen->id
 		) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';

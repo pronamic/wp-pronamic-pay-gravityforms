@@ -14,7 +14,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	/**
 	 * Construct and initialize an Gravity Forms payment add-on
 	 *
-	 * @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
 	 *
 	 * @since 1.3.0
 	 */
@@ -25,7 +25,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		 * Slug
 		 *
 		 * @var string URL-friendly identifier used for form settings, add-on settings, text domain localization...
-		 * @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L24-L27
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L24-L27
 		 */
 		$this->_slug = 'pronamic_pay';
 
@@ -33,7 +33,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	 	 * Title
 	 	 *
 	 	 * @var string Title of the plugin to be used on the settings page, form settings and plugins page. Example: 'Gravity Forms MailChimp Add-On'
-		 * @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L40-L43
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L40-L43
 		 */
 		$this->_title = __( 'WordPress Pay Add-On', 'pronamic_ideal' );
 
@@ -41,7 +41,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		 * Short title
 		 *
 		 * @var string Short version of the plugin title to be used on menus and other places where a less verbose string is useful. Example: 'MailChimp'
-		 * @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L44-L47
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L44-L47
 		 */
 		$this->_short_title = __( 'Pay', 'pronamic_ideal' );
 	}

@@ -308,7 +308,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		);
 
 		// Backwards compatibility version 1.9
-		// @see https://github.com/gravityforms/gravityforms/blob/1.9/js/form_editor.js#L24-L26
+		// @see https://github.com/wp-premium/gravityforms/blob/1.9/js/form_editor.js#L24-L26
 		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9', '<' ) ) {
 			foreach ( $fields as &$field ) {
 				$field['onclick'] = sprintf( "StartAddField('%s');", $field['data-type'] );

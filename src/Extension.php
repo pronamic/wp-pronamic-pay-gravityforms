@@ -233,7 +233,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 							// Only fullfill order if the payment isn't approved aloready
 							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
-							// @see https://github.com/gravityforms/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+							// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
 							if ( $this->addon ) {
 								$action = array(
 									'id'             => $payment->get_transaction_id(),
@@ -288,20 +288,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$form = RGFormsModel::get_form_meta( $entry['form_id'] );
 
 			// Delay post creation
-			// @see https://github.com/gravityforms/gravityforms/blob/1.8.20.5/forms_model.php#L2383
-			// @see https://github.com/gravityforms/gravityformspaypal/blob/1.10.3/paypal.php#L2411-L2415
+			// @see https://github.com/wp-premium/gravityforms/blob/1.8.20.5/forms_model.php#L2383
+			// @see https://github.com/wp-premium/gravityformspaypal/blob/1.10.3/paypal.php#L2411-L2415
 			if ( $feed->delay_post_creation ) {
 				RGFormsModel::create_post( $form, $entry );
 			}
 
 			// Delay Aweber
-			// @see https://github.com/gravityforms/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
+			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
 			if ( $feed->delay_aweber_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFAWeber', 'export' ) ) {
 				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
 
 				// @since 1.3.0
-				// @see https://github.com/gravityforms/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
-				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://github.com/wp-premium/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_aweber' ) ) {
 					$addon = gf_aweber();
 
@@ -313,14 +313,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// Delay Campaign Monitor
 			if ( $feed->delay_campaignmonitor_subscription ) {
-				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
+				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
 				if ( Pronamic_WP_Pay_Class::method_exists( 'GFCampaignMonitor', 'export' ) ) {
 					call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
 				}
 
 				// @since 1.3.0
-				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
-				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_campaignmonitor' ) ) {
 					$addon = gf_campaignmonitor();
 
@@ -332,14 +332,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// Delay Mailchimp
 			if ( $feed->delay_mailchimp_subscription ) {
-				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
+				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
 				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
 					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 				}
 
 				// @since 1.3.0
-				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
-				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_mailchimp' ) ) {
 					$addon = gf_mailchimp();
 
@@ -350,13 +350,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			}
 
 			// Delay Zapier
-			// @see https://github.com/gravityforms/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
+			// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
 			if ( $feed->delay_zapier && Pronamic_WP_Pay_Class::method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
 			// Delay user registration
-			// @see https://github.com/gravityforms/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
+			// @see https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
 			if ( $feed->delay_user_registration && Pronamic_WP_Pay_Class::method_exists( 'GFUser', 'gf_create_user' ) ) {
 				call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
 			}
@@ -369,12 +369,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			}
 
 			if ( $feed->delay_admin_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_admin_notification' ) ) {
-				// https://github.com/gravityforms/gravityforms/blob/1.8.9/common.php#L1265-L1270
+				// https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1265-L1270
 				GFCommon::send_admin_notification( $form, $entry );
 			}
 
 			if ( $feed->delay_user_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_user_notification' ) ) {
-				// https://github.com/gravityforms/gravityforms/blob/1.8.9/common.php#L1258-L1263
+				// https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1258-L1263
 				GFCommon::send_user_notification( $form, $entry );
 			}
 		}

@@ -56,7 +56,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - Fix - PHP crashed on opline 3 of method_exists() errors on some hosting environments.
 
 ## [1.2.0] - 2015-02-12
-- This library now uses the [GFPaymentAddOn class](https://github.com/gravityforms/gravityforms/blob/1.8/includes/addon/class-gf-payment-addon.php) wich was introduced in Gravity Forms version 1.8.
+- This library now uses the [GFPaymentAddOn class](https://github.com/wp-premium/gravityforms/blob/1.8/includes/addon/class-gf-payment-addon.php) wich was introduced in Gravity Forms version 1.8.
 - Changed payment gateway slug from 'ideal' to 'pronamic_pay'.
 
 ## [1.1.0] - 2015-02-06

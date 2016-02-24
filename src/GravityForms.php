@@ -65,9 +65,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 		/*
 		 * GFFormsModel::update_lead() is no longer in use since version 1.8.8! Instead use GFAPI::update_entry().
 		 *
-		 * @see https://github.com/gravityforms/gravityforms/blob/1.8.13/forms_model.php#L587-L624
-		 * @see https://github.com/gravityforms/gravityforms/blob/1.8.13/includes/api.php#L495-L654
-		 * @see https://github.com/gravityforms/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.13/forms_model.php#L587-L624
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.13/includes/api.php#L495-L654
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
 		 */
 		if ( Pronamic_WP_Pay_Class::method_exists( 'GFAPI', 'update_entry' ) ) {
 			GFAPI::update_entry( $entry );

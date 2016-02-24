@@ -155,17 +155,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			// The Add-Ons mainly use the 'gform_after_submission' to export entries, to delay this we have to remove these
 			// actions before this filter executes.
 
-			// @see https://github.com/gravityforms/gravityforms/blob/1.8.16/form_display.php#L101-L103
-			// @see https://github.com/gravityforms/gravityforms/blob/1.8.16/form_display.php#L111-L113
+			// @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103
+			// @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113
 
 			// Maybe delay AWeber subscription
 			if ( $this->feed->delay_aweber_subscription ) {
-				// @see https://github.com/gravityforms/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
+				// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 				remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
 
 				// @since 1.3.0
-				// @see https://github.com/gravityforms/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
-				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://github.com/wp-premium/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_aweber' ) ) {
 					$addon = gf_aweber();
 
@@ -175,12 +175,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 			// Maybe delay Campaign Monitor subscription
 			if ( $this->feed->delay_campaignmonitor_subscription ) {
-				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
+				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 				remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
 
 				// @since 1.3.0
-				// @see https://github.com/gravityforms/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
-				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_campaignmonitor' ) ) {
 					$addon = gf_campaignmonitor();
 
@@ -190,12 +190,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 			// Maybe delay MailChimp subscription
 			if ( $this->feed->delay_mailchimp_subscription ) {
-				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
+				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 				remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 
 				// @since 1.3.0
-				// @see https://github.com/gravityforms/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
-				// @see https://github.com/gravityforms/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_mailchimp' ) ) {
 					$addon = gf_mailchimp();
 
@@ -205,7 +205,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 			// Maybe delay Zapier
 			if ( $this->feed->delay_zapier ) {
-				// @see https://github.com/gravityforms/gravityformszapier/blob/1.4.2/zapier.php#L106
+				// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
 				remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
 			}
 		}

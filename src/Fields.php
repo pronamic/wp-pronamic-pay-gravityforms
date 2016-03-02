@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.2
+ * @version 1.4.3
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
@@ -42,7 +42,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
-			$class_suffix  = 'entry' === RG_CURRENT_VIEW ? '_admin' : '';
+			$class_suffix  = ( 'entry' === RG_CURRENT_VIEW ) ? '_admin' : '';
 			$size          = rgar( $field, 'size' );
 
 			$class         = $size . $class_suffix;
@@ -67,7 +67,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						$new_feed_url,
-						__( 'Create iDEAL feed', 'pronamic_ideal' )
+						__( 'Create pay feed', 'pronamic_ideal' )
 					);
 
 					$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
@@ -87,7 +87,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						get_edit_post_link( $feed->id ),
-						__( 'Edit iDEAL feed', 'pronamic_ideal' )
+						__( 'Edit pay feed', 'pronamic_ideal' )
 					);
 				}
 			}
@@ -308,7 +308,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		);
 
 		// Backwards compatibility version 1.9
-		// @see https://github.com/gravityforms/gravityforms/blob/1.9/js/form_editor.js#L24-L26
+		// @see https://github.com/wp-premium/gravityforms/blob/1.9/js/form_editor.js#L24-L26
 		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9', '<' ) ) {
 			foreach ( $fields as &$field ) {
 				$field['onclick'] = sprintf( "StartAddField('%s');", $field['data-type'] );

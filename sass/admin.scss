@@ -1,0 +1,36 @@
+/**
+ * Gravity Forms notifications
+ */
+.pronamic-pay-gf-notifications {
+	margin-left: 28px;
+}
+
+.pronamic-pay-gf-notifications ul {
+	margin: 0;	
+}
+
+.pronamic-pay-gf-notifications li {
+	margin: 0;	
+}
+
+/**
+ * Gravity Forms editor
+ */
+.gforms_edit_form .ideal-edit-link {
+	display: none;
+
+	float: right;
+
+	font-size: 10px;
+
+	height: 16px;
+
+	line-height: 16px;
+
+	text-decoration: none;
+}
+
+.gforms_edit_form .field_hover .ideal-edit-link ,
+.gforms_edit_form .field_selected .ideal-edit-link {
+	display: block;
+}

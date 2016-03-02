@@ -15,3 +15,6 @@
 
 # WordPress content
 /wp-content/
+
+# SASS
+.sass-cache

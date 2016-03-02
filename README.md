@@ -5,4 +5,4 @@
 ## Links
 
 *	[Gravity Forms](http://www.gravityforms.com/)
-*	[GitHub Gravity Forms](https://github.com/gravityforms/gravityforms)
+*	[GitHub Gravity Forms](https://github.com/wp-premium/gravityforms)

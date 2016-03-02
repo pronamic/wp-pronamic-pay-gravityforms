@@ -7,7 +7,8 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.0.1
+ * @version 1.4.3
+ * @since 1.0.1
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
 	/**
@@ -248,20 +249,28 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->get_field_value( 'email' );
 	}
 
-	public function getCustomerName() {
+	public function get_customer_name() {
 		return $this->get_field_value( 'first_name' ) . ' ' . $this->get_field_value( 'last_name' );
 	}
 
-	public function getOwnerAddress() {
+	public function get_address() {
 		return $this->get_field_value( 'address1' ) . ' ' . $this->get_field_value( 'address2' );
 	}
 
-	public function getOwnerCity() {
+	public function get_city() {
 		return $this->get_field_value( 'city' );
 	}
 
-	public function getOwnerZip() {
+	public function get_zip() {
 		return $this->get_field_value( 'zip' );
+	}
+
+	public function get_country() {
+		return $this->get_field_value( 'country' );
+	}
+
+	public function get_telephone_number() {
+		return $this->get_field_value( 'telephone_number' );
 	}
 
 	//////////////////////////////////////////////////
@@ -313,24 +322,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_payment_method() {
-		$payment_method       = null;
-		$payment_method_field = null;
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE ) );
 
-		$payment_method_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE ) );
-
-		foreach ( $payment_method_fields as $field ) {
+		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				$payment_method_field = $field;
-
-				break;
+				return rgpost( 'input_' . $field->id );
 			}
 		}
 
-		if ( null !== $payment_method_field ) {
-			$payment_method = RGFormsModel::get_field_value( $payment_method_field );
-		}
-
-		return $payment_method;
+		return null;
 	}
 
 	//////////////////////////////////////////////////

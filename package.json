@@ -1,6 +1,6 @@
 {
   "name": "gravityforms",
-  "version": "1.4.2",
+  "version": "1.4.3",
   "description": "Gravity Forms driver for the WordPress payment processing library.",
   "repository": {
     "type": "git",
@@ -43,6 +43,6 @@
     "grunt-phpmd": "^0.1.1",
     "grunt-phpunit": "^0.3.6",
     "grunt-postcss": "^0.7.2",
-    "load-grunt-tasks": "^3.4.0"
+    "load-grunt-tasks": "^3.4.1"
   }
 }

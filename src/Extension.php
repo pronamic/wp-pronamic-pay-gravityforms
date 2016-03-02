@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.3.0
+ * @version 1.4.3
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
@@ -107,14 +107,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				'pronamic-pay-gravityforms',
 				plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
 				array(),
-				'1.3.0'
+				'1.4.3'
 			);
 
 			wp_register_script(
 				'pronamic-pay-gravityforms',
 				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
 				array( 'jquery' ),
-				'1.3.0',
+				'1.4.3',
 				true
 			);
 

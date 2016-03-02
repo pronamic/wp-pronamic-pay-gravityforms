@@ -7,6 +7,17 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.4.3] - 2016-03-02
+- Return value of get_payment_method() must be string, not array.
+- Set link type if none selected.
+- WordPress Coding Standards optimizations.
+- Added support for country field.
+- Added support for telephone number field.
+- Moved scripts from the Pronamic iDEAL plugin to this repository.
+- Moved styles from the Pronamic iDEAL plugin to this Gravity Forms library.
+- Removed use of images.
+- Renamed 'iDEAL feed' to 'pay feed' since we support much more payment methods then iDEAL.
+
 ## [1.4.2] - 2016-02-12
 - Renamed 'iDEAL Fields' to 'Payment Fields' since it's more then iDEAL.
 - Fixed typo `sprint` to `sprintf`.
@@ -72,7 +83,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.2...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.3...HEAD
+[1.4.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.2...1.4.3
 [1.4.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.1...1.4.2
 [1.4.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.0...1.4.1
 [1.4.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.3.2...1.4.0

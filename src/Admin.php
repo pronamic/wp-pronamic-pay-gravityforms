@@ -104,6 +104,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 			'tag'   => '{payment_amount}',
 		);
 
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Payment ID', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_id}',
+		);
+
 		return $merge_tags;
 	}
 

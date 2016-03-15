@@ -413,6 +413,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			'{payment_date}',
 			'{transaction_id}',
 			'{payment_amount}',
+			'{pronamic_payment_id}',
 		);
 
 		$replace = array(
@@ -420,6 +421,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			rgar( $entry, 'payment_date' ),
 			rgar( $entry, 'transaction_id' ),
 			GFCommon::to_money( rgar( $entry, 'payment_amount' ) , rgar( $entry, 'currency' ) ),
+			gform_get_meta( $entry['id'], 'pronamic_payment_id' ),
 		);
 
 		if ( $url_encode ) {

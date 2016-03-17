@@ -85,6 +85,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
+			$this->maybe_display_confirmation();
+
 			// iDEAL fields
 			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
 		}
@@ -259,11 +261,33 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 						break;
 				}
 
+				// Update payment status property of lead
 				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
 					$lead['id'],
 					Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
 					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
 				);
+
+				// Process Gravity Forms confirmations if link type is confirmation
+				$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
+
+				if ( isset( $feed->links[ $link ] ) && $feed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+					$confirmation = $this->get_confirmation( $lead, $payment->status );
+
+					if ( ! empty( $confirmation ) ) {
+						if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
+							$url = $confirmation['redirect'];
+						} else {
+							$url = add_query_arg(
+								array(
+									'pay_confirmation' => $payment->get_id(),
+									'_wpnonce' => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
+								),
+								$lead['source_url']
+							);
+						}
+					}
+				}
 
 				if ( $url && $can_redirect ) {
 					wp_redirect( $url );
@@ -381,6 +405,78 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action
 		do_action( 'gform_ideal_fulfillment', $entry, $feed );
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Maybe display the Gravity Forms confirmation.
+	 *
+	 * @return void
+	 */
+	public function maybe_display_confirmation() {
+		if ( filter_has_var( INPUT_GET, 'pay_confirmation' ) && filter_has_var( INPUT_GET, '_wpnonce' ) ) {
+			$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
+
+			$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+
+			if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
+				return;
+			}
+
+			$payment = get_pronamic_payment( $payment_id );
+
+			$lead_id = $payment->get_source_id();
+
+			$lead = RGFormsModel::get_lead( $lead_id );
+
+			if ( $lead ) {
+				$confirmation = $this->get_confirmation( $lead, $payment->status );
+
+				if ( ! empty( $confirmation ) ) {
+					$form = GFAPI::get_form( $lead['form_id'] );
+
+					GFFormDisplay::$submission[ $form['id'] ] = array(
+						'is_confirmation'      => true,
+						'confirmation_message' => $confirmation,
+						'form'                 => $form,
+						'lead'                 => $lead,
+					);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Get confirmations for lead based on payment status.
+	 *
+	 * @param $lead
+	 *
+	 * @param string $payment_status
+	 *
+	 * @return mixed
+	 */
+	public function get_confirmation( $lead, $payment_status = Pronamic_WP_Pay_Statuses::OPEN ) {
+		$form = GFAPI::get_form( $lead['form_id'] );
+
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead['id'] );
+
+		$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment_status );
+
+		if ( ! class_exists( 'GFFormDisplay' ) ) {
+			require_once( GFCommon::get_base_path() . '/form_display.php' );
+		}
+
+		// Use only link confirmation if set
+		if ( isset( $feed->links[ $link ]['confirmation_id'] ) && ! empty( $feed->links[ $link ]['confirmation_id'] ) ) {
+			$confirmation_id = $feed->links[ $link ]['confirmation_id'];
+
+			if ( isset( $form['confirmations'][ $confirmation_id ] ) ) {
+				$form['confirmations'] = array_intersect_key( $form['confirmations'], array( $confirmation_id => true ) );
+			}
+		}
+
+		return GFFormDisplay::handle_confirmation( $form, $lead, false );
 	}
 
 	//////////////////////////////////////////////////

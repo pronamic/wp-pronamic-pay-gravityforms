@@ -492,9 +492,10 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 				if ( isset( $links[ $name ] ) ) {
 					$link = $links[ $name ];
 
-					$type    = isset( $link['type'] ) ? $link['type'] : null;
-					$page_id = isset( $link['page_id'] ) ? $link['page_id'] : null;
-					$url     = isset( $link['url'] ) ? $link['url'] : null;
+					$type            = isset( $link['type'] ) ? $link['type'] : null;
+					$confirmation_id = isset( $link['confirmation_id'] ) ? $link['confirmation_id'] : null;
+					$page_id         = isset( $link['page_id'] ) ? $link['page_id'] : null;
+					$url             = isset( $link['url'] ) ? $link['url'] : null;
 				}
 
 				?>
@@ -508,6 +509,33 @@ $feed->userRoleFieldId        = get_post_meta( $post_id, '_pronamic_pay_gf_user_
 						<legend class="screen-reader-text">
 							<span><?php echo esc_html( $label ); ?></span>
 						</legend>
+
+						<label>
+							<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_confirmation" value="confirmation" <?php checked( $type, 'confirmation' ); ?> />
+							<?php esc_html_e( 'Confirmation:', 'pronamic_ideal' ); ?>
+						</label>
+
+						<select name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][confirmation_id]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_confirmation_id">
+							<option><?php esc_html_e( '— Select —', 'pronamic_ideal' ); ?></option>
+							<?php
+
+							if ( '' !== $form_id ) {
+								$form = GFAPI::get_form( $form_id );
+
+								foreach ( $form['confirmations'] as $key => $confirmation ) {
+									printf(
+										'<option value="%s" %s>%s</option>',
+										esc_attr( $key ),
+										selected( $key, $confirmation_id ),
+										esc_html( $confirmation['name'] )
+									);
+								}
+							}
+
+							?>
+						</select>
+
+						<br />
 
 						<label>
 							<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_page" value="page" <?php checked( $type, 'page' ); ?> />

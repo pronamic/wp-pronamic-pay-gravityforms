@@ -24,6 +24,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 	 */
 	const LINK_TYPE_URL = 'url';
 
+	/**
+	 * Indicator for an link to the Gravity Forms confirmation.
+	 *
+	 * @var string
+	 */
+	const LINK_TYPE_CONFIRMATION = 'confirmation';
+
 	//////////////////////////////////////////////////
 
 	/**

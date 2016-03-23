@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.4.5] - 2016-03-23
+- Fixed - Parse error: syntax error, unexpected T_PAAMAYIM_NEKUDOTAYIM in Extension.php on line 274.
+
 ## [1.4.4] - 2016-03-23
 - Added support for merge tag 'pronamic_payment_id'.
 - Added ability to use Gravity Forms confirmations (with merge tag support) as payment status page.

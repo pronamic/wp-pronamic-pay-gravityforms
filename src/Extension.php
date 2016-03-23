@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.4
+ * @version 1.4.5
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
@@ -271,7 +271,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				// Process Gravity Forms confirmations if link type is confirmation
 				$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
 
-				if ( isset( $feed->links[ $link ] ) && $feed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+				if ( isset( $feed->links[ $link ] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
 					$confirmation = $this->get_confirmation( $lead, $payment->status );
 
 					if ( ! empty( $confirmation ) ) {

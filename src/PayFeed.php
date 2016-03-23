@@ -150,11 +150,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 			// link is een standard class object, the type variable could not be defined
 			if ( isset( $link['type'] ) ) {
 				switch ( $link['type'] ) {
-					case self::LINK_TYPE_PAGE:
+					case self::LINK_TYPE_PAGE :
 						$url = get_permalink( $link['page_id'] );
 
 						break;
-					case self::LINK_TYPE_URL:
+					case self::LINK_TYPE_URL :
 						$url = $link['url'];
 
 						break;

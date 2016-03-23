@@ -7,7 +7,8 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.4.4
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Links {
 	/**
@@ -51,6 +52,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Links {
 	 * @param Pronamic_WP_Pay_Statuses $payment_status
 	 *
 	 * @return string
+	 * @since 1.4.4
 	 */
 	public static function transform_status( $payment_status ) {
 		switch ( $payment_status ) {

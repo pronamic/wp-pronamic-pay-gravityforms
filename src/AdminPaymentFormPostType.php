@@ -199,7 +199,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			// Set link type if none selected, use URL if both are set
 			if ( '_pronamic_pay_gf_links' === $meta_key ) {
 				foreach ( $meta_value as $status => $link ) {
-					if( isset( $link['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $link['type'] ) {
+					if ( isset( $link['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $link['type'] ) {
 						$form_id = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
 
 						if ( '' !== $form_id ) {

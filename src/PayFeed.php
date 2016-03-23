@@ -8,6 +8,7 @@
  *
  * @author Remco Tolsma
  * @version 1.0.0
+ * @since 1.4.4
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 	/**
@@ -23,6 +24,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 	 * @var string
 	 */
 	const LINK_TYPE_URL = 'url';
+
+	/**
+	 * Indicator for an link to the Gravity Forms confirmation.
+	 *
+	 * @var string
+	 * @since 1.4.4
+	 */
+	const LINK_TYPE_CONFIRMATION = 'confirmation';
 
 	//////////////////////////////////////////////////
 

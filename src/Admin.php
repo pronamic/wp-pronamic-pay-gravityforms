@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.2.3
+ * @version 1.4.4
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
@@ -102,6 +102,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 		$merge_tags[] = array(
 			'label' => __( 'Payment Amount', 'pronamic_ideal' ),
 			'tag'   => '{payment_amount}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Payment ID', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_id}',
 		);
 
 		return $merge_tags;

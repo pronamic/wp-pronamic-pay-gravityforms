@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.4.4] - 2016-03-23
+- Added support for merge tag 'pronamic_payment_id'.
+- Added ability to use Gravity Forms confirmations (with merge tag support) as payment status page.
+
 ## [1.4.3] - 2016-03-02
 - Return value of get_payment_method() must be string, not array.
 - Set link type if none selected.

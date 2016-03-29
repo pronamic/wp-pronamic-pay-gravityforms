@@ -271,7 +271,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				// Process Gravity Forms confirmations if link type is confirmation
 				$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
 
-				if ( isset( $feed->links[ $link ] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+				if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
 					$confirmation = $this->get_confirmation( $lead, $payment->status );
 
 					if ( ! empty( $confirmation ) ) {

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.3
+ * @version 1.4.6
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
@@ -182,13 +182,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ),
-						__( 'Create iDEAL feed', 'pronamic_ideal' )
+						__( 'Create pay feed', 'pronamic_ideal' )
 					);
 				} else {
 					$html .= sprintf(
 						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 						get_edit_post_link( $feed->id ),
-						__( 'Edit iDEAL feed', 'pronamic_ideal' )
+						__( 'Edit pay feed', 'pronamic_ideal' )
 					);
 				}
 			}

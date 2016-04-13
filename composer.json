@@ -27,12 +27,6 @@
 		"classmap": ["src/"],
 		"files": ["src/functions.php"]
 	},
-	"repositories":[
-		{
-			"type": "composer",
-			"url": "http://wpackagist.org/"
-		}
-	],
 	"require": {
 		"php": ">=5.2.4",
 		"xrstf/composer-php52": "1.*",

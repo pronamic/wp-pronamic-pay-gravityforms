@@ -7,6 +7,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.4.6] - 2016-04-13
+- Set global WordPress gateway config as default config in gateways.
+- Fixed 'Notice: Undefined index: type'.
+- Use 'pay feed' instead of 'iDEAL feed' in payment method selector field.
+
 ## [1.4.5] - 2016-03-23
 - Fixed - Parse error: syntax error, unexpected T_PAAMAYIM_NEKUDOTAYIM in Extension.php on line 274.
 
@@ -90,7 +95,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.5...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.6...HEAD
+[1.4.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.5...1.4.6
 [1.4.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.4...1.4.5
 [1.4.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.3...1.4.4
 [1.4.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.2...1.4.3

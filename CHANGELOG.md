@@ -96,7 +96,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - First release.
 
 [unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.6...HEAD
-[1.4.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.5...1.4.6
+[1.4.6]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.5...1.4.6
 [1.4.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.4...1.4.5
 [1.4.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.3...1.4.4
 [1.4.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.2...1.4.3

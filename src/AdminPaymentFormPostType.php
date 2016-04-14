@@ -217,6 +217,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_URL;
 						} elseif ( ! empty( $link['page_id'] ) ) {
 							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_PAGE;
+						} elseif ( ! empty( $link['confirmation_id'] ) ) {
+							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION;
 						}
 
 						$meta_value[ $status ] = $link;

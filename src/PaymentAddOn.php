@@ -55,8 +55,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		GFFormSettings::page_header();
 
 		printf(
-			'<h3>%s</h3>',
-			esc_html__( 'Pay Feeds', 'pronamic_ideal' )
+			'<h3>
+				<span>
+					<i class="fa fa-money"></i> %s
+					<a id="add-new-pronamic-pay-feed" class="add-new-h2" href="%s">%s</a>
+				</span>
+			</h3>',
+			esc_html__( 'Pay', 'pronamic_ideal' ),
+			esc_url( add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ) ),
+			esc_html__( 'Add New', 'gravityforms' )
 		);
 
 		printf(
@@ -66,7 +73,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 					esc_html__( 'You can find your pay feeds under %s.', 'pronamic_ideal' ),
 					sprintf(
 						'<a href="%s">%s</a>',
-						esc_attr( add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'edit.php' ) ) ),
+						esc_url( add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'edit.php' ) ) ),
 						esc_html__( 'Forms » iDEAL', 'pronamic_ideal' )
 					)
 				),

@@ -1,25 +1,23 @@
 /**
  * Gravity Forms notifications
  */
-/* line 4, ../sass/admin.scss */
-.pronamic-pay-gf-notifications {
-  margin-left: 28px;
+/* line 5, ../sass/admin.scss */
+#gf-ideal-feed-editor .form-table td ul {
+  margin: 10px 0 0 0;
 }
-
-/* line 8, ../sass/admin.scss */
-.pronamic-pay-gf-notifications ul {
-  margin: 0;
+/* line 9, ../sass/admin.scss */
+#gf-ideal-feed-editor .form-table td ul li input[type="checkbox"] + label {
+  vertical-align: top;
 }
-
-/* line 12, ../sass/admin.scss */
-.pronamic-pay-gf-notifications li {
-  margin: 0;
+/* line 16, ../sass/admin.scss */
+#gf-ideal-feed-editor .pronamic-gf-links-tab label {
+  line-height: 1.9em;
 }
 
 /**
  * Gravity Forms editor
  */
-/* line 19, ../sass/admin.scss */
+/* line 24, ../sass/admin.scss */
 .gforms_edit_form .ideal-edit-link {
   display: none;
   float: right;
@@ -29,7 +27,7 @@
   text-decoration: none;
 }
 
-/* line 33, ../sass/admin.scss */
+/* line 38, ../sass/admin.scss */
 .gforms_edit_form .field_hover .ideal-edit-link,
 .gforms_edit_form .field_selected .ideal-edit-link {
   display: block;

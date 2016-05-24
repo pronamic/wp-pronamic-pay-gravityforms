@@ -60,8 +60,40 @@ $feed->links                  = $links;
 									<?php echo esc_html( $form->title ); ?>
 								</option>
 
+								<?php
+
+								if ( $form_id && $form_id === $form->id ) {
+									$js_form = GFFormsModel::get_form_meta( $form_id );
+
+									if ( ! isset( $js_form['fields'] ) || ! is_array( $js_form['fields'] ) ) {
+										$js_form['fields'] = array();
+									}
+
+									$js_form = gf_apply_filters( array( 'gform_admin_pre_render', $form_id ), $js_form );
+								}
+
+								?>
+
 							<?php endforeach; ?>
 						</select>
+
+						<?php
+
+						if ( isset( $js_form ) ) {
+							$_GET['id'] = $form_id;
+
+							printf( //xss ok
+								'<script type="text/javascript">
+									var form = %s;
+									%s
+								</script>',
+								json_encode( $js_form ),
+								GFCommon::gf_vars( false )
+							);
+						}
+
+						?>
+
 					</td>
 				</tr>
 				<tr>
@@ -124,7 +156,7 @@ $feed->links                  = $links;
 						$transaction_description = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
 
 						?>
-						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" type="text" class="regular-text" />
+						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
 
 						<span class="description">
 							<?php

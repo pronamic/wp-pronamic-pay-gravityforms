@@ -13,11 +13,15 @@
 #gf-ideal-feed-editor .pronamic-gf-links-tab label {
   line-height: 1.9em;
 }
+/* line 20, ../sass/admin.scss */
+#gf-ideal-feed-editor .all-merge-tags + span.description {
+  display: block;
+}
 
 /**
  * Gravity Forms editor
  */
-/* line 24, ../sass/admin.scss */
+/* line 28, ../sass/admin.scss */
 .gforms_edit_form .ideal-edit-link {
   display: none;
   float: right;
@@ -27,7 +31,7 @@
   text-decoration: none;
 }
 
-/* line 38, ../sass/admin.scss */
+/* line 42, ../sass/admin.scss */
 .gforms_edit_form .field_hover .ideal-edit-link,
 .gforms_edit_form .field_selected .ideal-edit-link {
   display: block;

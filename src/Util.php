@@ -37,6 +37,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Util {
 
 		$value = RGFormsModel::get_field_value( $field, array() );
 
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE === $field->type ) {
+			$value = $field->get_input_value_submission( 'input_' . $field->id, $field->inputName, array(), true );
+		}
+
 		$is_match = RGFormsModel::is_value_match( $value, $feed->condition_value );
 
 		switch ( $feed->condition_operator ) {

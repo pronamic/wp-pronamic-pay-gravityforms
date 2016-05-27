@@ -385,7 +385,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 				$confirmation = $html;
 			} else {
-				$confirmation = array( 'redirect' => $this->payment->get_payment_redirect_url() );
+				$confirmation = array( 'redirect' => $this->payment->get_pay_redirect_url() );
 			}
 
 			if ( ( headers_sent() || $ajax ) && is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {

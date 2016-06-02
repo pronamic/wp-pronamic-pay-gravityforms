@@ -54,7 +54,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	/**
-	 * Get the field value of the specifled field
+	 * Get the field value of the specified field
 	 *
 	 * @param string $field_name
 	 * @return Ambigous <NULL, multitype:>

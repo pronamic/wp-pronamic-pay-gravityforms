@@ -243,7 +243,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 						break;
 					case Pronamic_WP_Pay_Statuses::SUCCESS :
 						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
-							// Only fullfill order if the payment isn't approved aloready
+							// Only fullfill order if the payment isn't approved already
 							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
 							// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742

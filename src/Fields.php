@@ -22,6 +22,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
 		add_filter( 'gform_field_type_title',  array( __CLASS__, 'field_type_title' ) );
 		add_filter( 'gform_admin_pre_render',  array( __CLASS__, 'admin_payment_method_options' ) );
+		add_filter( 'gform_is_value_match',    array( __CLASS__, 'is_value_match' ), 10, 6 );
 
 		add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_default_field_labels' ) );
 	}
@@ -285,6 +286,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		}
 
 		return $form;
+	}
+
+	/**
+	 * Filter value match for payment method selector field.
+	 */
+	public static function is_value_match( $is_match, $field_value, $target_value, $operation, $source_field, $rule ) {
+		if ( null === $source_field || Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE !== $source_field->type ) {
+			return $is_match;
+		}
+
+		return ( $target_value === $source_field->get_input_value_submission( 'input_' . $source_field->id, $source_field->inputName, array(), true ) );
 	}
 
 	/**

@@ -26,6 +26,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	public $type = 'ideal_issuer_drop_down';
 
 	/**
+	 * Constructs and initializes issuers field.
+	 *
+	 * @param $properties
+	 */
+	public function __construct( $properties = array() ) {
+		parent::__construct( $properties );
+
+		// Actions
+		add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
+	}
+
+	/**
 	 * Get form editor field title.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L106-L113
@@ -57,8 +69,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	 * @return array
 	 */
 	public function add_button( $field_groups ) {
+		// We have to make sure the custom pay field group is added, otherwise the button won't be added.
 		$field_groups = Pronamic_WP_Pay_Extensions_GravityForms_Fields::add_pay_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
+	}
+
+	/**
+	 * Editor JavaScript default field values.
+	 *
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/js.php#L834-L836
+	 */
+	public function editor_js_set_default_values() {
+		$label = __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' );
+
+		?>
+		case '<?php echo esc_js( $this->type ); ?>':
+			field.label = '<?php echo esc_js( $label ); ?>';
+
+			break;
+		<?php
 	}
 }

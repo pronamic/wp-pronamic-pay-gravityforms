@@ -41,6 +41,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		$this->inputs = null;
+
+		// Actions
+		add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
 	}
 
 	/**
@@ -75,8 +78,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * @return array
 	 */
 	public function add_button( $field_groups ) {
+		// We have to make sure the custom pay field group is added, otherwise the button won't be added.
 		$field_groups = Pronamic_WP_Pay_Extensions_GravityForms_Fields::add_pay_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
+	}
+
+	/**
+	 * Editor JavaScript default field values.
+	 *
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/js.php#L834-L836
+	 */
+	public function editor_js_set_default_values() {
+		$label = __( 'Choose a payment method', 'pronamic_ideal' );
+
+		?>
+		case '<?php echo esc_js( $this->type ); ?>':
+			field.label = '<?php echo esc_js( $label ); ?>';
+
+			break;
+		<?php
 	}
 }

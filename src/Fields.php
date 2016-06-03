@@ -296,13 +296,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		$fields = array(
 			array(
 				'class'     => 'button',
-				'value'     => __( 'Issuer', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE,
+				'value'     => __( 'Payment Method', 'pronamic_ideal' ),
+				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE,
 			),
 			array(
 				'class'     => 'button',
-				'value'     => __( 'Payment Method', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE,
+				'value'     => __( 'Issuer', 'pronamic_ideal' ),
+				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE,
 			),
 		);
 

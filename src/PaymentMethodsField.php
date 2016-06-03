@@ -13,6 +13,15 @@
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Type
+	 *
+	 * @var string
+	 */
+	const TYPE = 'pronamic_pay_payment_method_selector';
+
+	/**
+	 * Type
+	 *
+	 * @var string
 	 */
 	public $type = 'pronamic_pay_payment_method_selector';
 

@@ -68,9 +68,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 
 		// Fields
-		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
-			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
-			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
+		if ( $this->is_gravityforms_supported() ) {
+			$this->fields = new Pronamic_WP_Pay_Extensions_GravityForms_Fields();
 		}
 	}
 
@@ -94,9 +93,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
 
 			$this->maybe_display_confirmation();
-
-			// iDEAL fields
-			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
 		}
 	}
 

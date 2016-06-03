@@ -12,14 +12,20 @@
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	/**
-	 * Bootstrap
+	 * Construct and intialize custom Gravity Forms fields.
 	 */
-	public static function bootstrap() {
+	public function __construct() {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		add_filter( 'gform_field_input',       array( __CLASS__, 'acquirer_field_input' ), 10, 5 );
-		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
-		add_filter( 'gform_admin_pre_render',  array( __CLASS__, 'admin_payment_method_options' ) );
+		add_filter( 'gform_field_input',       array( $this, 'acquirer_field_input' ), 10, 5 );
+		add_filter( 'gform_field_input',       array( $this, 'payment_method_field_input' ), 10, 5 );
+
+		add_filter( 'gform_admin_pre_render',  array( $this, 'admin_payment_method_options' ) );
+
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
+			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
+			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
+		}
 	}
 
 	/**
@@ -31,7 +37,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param string $lead_id
 	 * @param string $form_id
 	 */
-	public static function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
+	public function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
 		$type = RGFormsModel::get_input_type( $field );
 
 		if ( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE === $type ) {
@@ -150,7 +156,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param string $lead_id
 	 * @param string $form_id
 	 */
-	public static function payment_method_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
+	public function payment_method_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
 		if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE === $field->type ) {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
@@ -190,7 +196,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			}
 
 			if ( ( IS_ADMIN && empty( $field->choices ) ) || ! is_array( $field->choices ) ) {
-				$options = self::get_payment_method_options( $form_id );
+				$options = $this->get_payment_method_options( $form_id );
 			} else {
 				$options = array();
 
@@ -226,7 +232,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		return $field_content;
 	}
 
-	public static function get_payment_method_options( $form_id ) {
+	public function get_payment_method_options( $form_id ) {
 		$feed    = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
 		$options = array();
 
@@ -255,10 +261,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param  array $form
 	 * @return array $form
 	 */
-	public static function admin_payment_method_options( $form ) {
+	public function admin_payment_method_options( $form ) {
 		foreach ( $form['fields'] as $i => $field ) {
 			if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE === $field->type && empty( $field->choices ) ) {
-				$options = self::get_payment_method_options( $form['id'] );
+				$options = $this->get_payment_method_options( $form['id'] );
 
 				if ( is_wp_error( $options ) ) {
 					$options = array();

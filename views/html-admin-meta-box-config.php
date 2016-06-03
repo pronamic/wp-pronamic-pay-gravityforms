@@ -566,7 +566,7 @@ $feed->links                  = $links;
 							?>
 						</div>
 
-						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php esc_attr_e( $condition_enabled ); ?>" />
+						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php echo esc_attr( $condition_enabled ); ?>" />
 
 						<span class="description">
 							<?php esc_html_e( 'Set a condition to only use the gateway if the entry matches the condition.', 'pronamic_ideal' ); ?>

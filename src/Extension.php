@@ -66,6 +66,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
 			}
 		}
+
+		// Fields
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
+			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
+			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
+		}
 	}
 
 	/**
@@ -102,9 +108,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * @return 
 	 */
 	public function field_create( $field, $properties ) {
+		/*
+		 * The `inputType` of the payment methods field was in the past set to `checkbox`
+		 * this results in a `GF_Field_Checkbox` field, but we really need a payment methods
+		 * field.
+		 *
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
+		 */
 		switch ( $field->type ) {
-			case 'ideal_issuer_drop_down' : 
-				return new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField( $properties );
 			case 'pronamic_pay_payment_method_selector' : 
 				return new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField( $properties );
 		}

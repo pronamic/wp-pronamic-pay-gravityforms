@@ -37,7 +37,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	public static function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
 		$type = RGFormsModel::get_input_type( $field );
 
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE === $type ) {
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE === $type ) {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
@@ -302,7 +302,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			array(
 				'class'     => 'button',
 				'value'     => __( 'Issuer', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE,
+				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE,
 			),
 		);
 
@@ -331,7 +331,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 */
 	public static function editor_js_default_field_labels() {
 		$labels = array(
-			Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE        => __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' ),
+			Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE          => __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' ),
 			Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE => __( 'Choose a payment method', 'pronamic_ideal' ),
 		);
 

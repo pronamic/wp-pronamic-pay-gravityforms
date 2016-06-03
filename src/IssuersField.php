@@ -13,6 +13,15 @@
 class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Select {
 	/**
 	 * Type
+	 *
+	 * @var string
+	 */
+	const TYPE = 'ideal_issuer_drop_down';
+
+	/**
+	 * Type
+	 *
+	 * @var string
 	 */
 	public $type = 'ideal_issuer_drop_down';
 

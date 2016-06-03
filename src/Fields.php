@@ -17,7 +17,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	public static function bootstrap() {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		add_filter( 'gform_add_field_buttons', array( __CLASS__, 'add_field_buttons' ) );
 		add_filter( 'gform_field_input',       array( __CLASS__, 'acquirer_field_input' ), 10, 5 );
 		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
 		add_filter( 'gform_admin_pre_render',  array( __CLASS__, 'admin_payment_method_options' ) );
@@ -287,43 +286,22 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	}
 
 	/**
-	 * Add field buttons
+	 * Add pay field group to the Gravity Forms field groups.
 	 *
-	 * @param array $groups
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
+	 * @param array $field_groups
+	 * @return array
 	 */
-	public static function add_field_buttons( $groups ) {
-		// Fields
-		$fields = array(
-			array(
-				'class'     => 'button',
-				'value'     => __( 'Payment Method', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE,
-			),
-			array(
-				'class'     => 'button',
-				'value'     => __( 'Issuer', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE,
-			),
-		);
-
-		// Backwards compatibility version 1.9
-		// @see https://github.com/wp-premium/gravityforms/blob/1.9/js/form_editor.js#L24-L26
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9', '<' ) ) {
-			foreach ( $fields as &$field ) {
-				$field['onclick'] = sprintf( "StartAddField('%s');", $field['data-type'] );
-			}
+	public static function add_pay_field_group( $field_groups ) {
+		if ( ! isset( $field_groups['pronamic_pay_fields'] ) ) {
+			$field_groups['pronamic_pay_fields'] = array(
+				'name'   => 'pronamic_pay_fields',
+				'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
+				'fields' => array(),
+			);
 		}
 
-		// Group
-		$group = array(
-			'name'   => 'pronamic_pay_fields',
-			'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
-			'fields' => $fields,
-		);
-
-		$groups[] = $group;
-
-		return $groups;
+		return $field_groups;
 	}
 
 	/**

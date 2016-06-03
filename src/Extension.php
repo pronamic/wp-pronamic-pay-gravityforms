@@ -85,11 +85,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
+			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+
 			$this->maybe_display_confirmation();
 
 			// iDEAL fields
 			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
 		}
+	}
+
+	/**
+	 * Field create.
+	 *
+	 * @param $field
+	 * @param array $properties
+	 * @return 
+	 */
+	public function field_create( $field, $properties ) {
+		switch ( $field->type ) {
+			case 'ideal_issuer_drop_down' : 
+				return new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField( $properties );
+			case 'pronamic_pay_payment_method_selector' : 
+				return new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField( $properties );
+		}
+
+		return $field;
 	}
 
 	/**

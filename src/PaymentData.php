@@ -340,7 +340,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				return RGFormsModel::get_field_value( $field );  
+				return RGFormsModel::get_field_value( $field );
 			}
 		}
 	}

@@ -35,8 +35,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	}
 
 	public function custom_columns( $column, $post_id ) {
-		global $post;
-
 		switch ( $column ) {
 			case 'pronamic_pay_gf_form':
 				$form_id = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );

@@ -326,11 +326,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				return rgpost( 'input_' . $field->id );
+				return RGFormsModel::get_field_value( $field );
 			}
 		}
-
-		return null;
 	}
 
 	//////////////////////////////////////////////////
@@ -338,23 +336,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_issuer_id() {
-		$issuer_id    = null;
-		$issuer_field = null;
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE ) );
 
-		$issuer_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE ) );
-		foreach ( $issuer_fields as $field ) {
+		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				$issuer_field = $field;
-
-				break;
+				return RGFormsModel::get_field_value( $field );  
 			}
 		}
-
-		if ( null !== $issuer_field ) {
-			$issuer_id = RGFormsModel::get_field_value( $issuer_field );
-		}
-
-		return $issuer_id;
 	}
 
 	//////////////////////////////////////////////////

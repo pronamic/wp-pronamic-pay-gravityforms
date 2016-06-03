@@ -77,9 +77,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					if ( count( $feeds ) > 0 ) {
 						$html .= sprintf(
 							"<p class='pronamic-pay-error'><strong>%s</strong><br><em>%s</em></p>",
-							__( 'This field is not supported by your payment gateway.', 'pronamic-ideal' ),
+							__( 'This field is not supported by your payment gateway.', 'pronamic_ideal' ),
 							sprintf(
-								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic-ideal' ),
+								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic_ideal' ),
 								sprintf( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
 								'</a>'
 							)

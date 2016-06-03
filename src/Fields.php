@@ -17,8 +17,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	public function __construct() {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		add_filter( 'gform_field_input',       array( $this, 'acquirer_field_input' ), 10, 5 );
-		add_filter( 'gform_field_input',       array( $this, 'payment_method_field_input' ), 10, 5 );
+		add_filter( 'gform_field_input', array( $this, 'acquirer_field_input' ), 10, 5 );
+		add_filter( 'gform_field_input', array( $this, 'payment_method_field_input' ), 10, 5 );
 
 		add_filter( 'gform_admin_pre_render',  array( $this, 'admin_payment_method_options' ) );
 

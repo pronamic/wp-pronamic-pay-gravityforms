@@ -20,7 +20,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		add_filter( 'gform_add_field_buttons', array( __CLASS__, 'add_field_buttons' ) );
 		add_filter( 'gform_field_input',       array( __CLASS__, 'acquirer_field_input' ), 10, 5 );
 		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
-		add_filter( 'gform_field_type_title',  array( __CLASS__, 'field_type_title' ) );
 		add_filter( 'gform_admin_pre_render',  array( __CLASS__, 'admin_payment_method_options' ) );
 
 		add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_default_field_labels' ) );
@@ -325,25 +324,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		$groups[] = $group;
 
 		return $groups;
-	}
-
-	/**
-	 * Field type title
-	 *
-	 * @param string $type
-	 */
-	public static function field_type_title( $type ) {
-		switch ( $type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE:
-				return __( 'Issuer Drop Down', 'pronamic_ideal' );
-				break;
-
-			case Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE:
-				return __( 'Payment Method Selector', 'pronamic_ideal' );
-				break;
-		}
-
-		return $type;
 	}
 
 	/**

@@ -63,7 +63,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 			</h3>',
 			esc_html__( 'Pay', 'pronamic_ideal' ),
 			esc_url( add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ) ),
-			esc_html__( 'Add New', 'gravityforms' )
+			esc_html__( 'Add New', 'pronamic_ideal' )
 		);
 
 		printf(

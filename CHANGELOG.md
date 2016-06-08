@@ -7,6 +7,14 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.4.7] - 2016-06-08
+- Set link type to confirmation if set and no URL or page have been set.
+- Cleaned up feed config (tabs, descriptions, tooltips, update confirmations if form changes).
+- Added icon and 'Add new' link to payment addon settings page.
+- Added Merge Tag button to transaction description field (without AJAX form change support).
+- Switched to use of `GF_Field` class.
+- Fixed text domain, `pronamic-ideal` is `pronamic_ideal`.
+
 ## [1.4.6] - 2016-04-13
 - Set global WordPress gateway config as default config in gateways.
 - Fixed 'Notice: Undefined index: type'.
@@ -95,7 +103,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.6...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.7...HEAD
+[1.4.7]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.6...1.4.7
 [1.4.6]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.5...1.4.6
 [1.4.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.4...1.4.5
 [1.4.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.3...1.4.4

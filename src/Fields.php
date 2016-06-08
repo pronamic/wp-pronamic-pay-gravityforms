@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.6
+ * @version 1.4.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
@@ -293,6 +293,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * Add pay field group to the Gravity Forms field groups.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
+	 * @since 1.4.7
 	 * @param array $field_groups
 	 * @return array
 	 */

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.3.0
+ * @version 1.4.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
@@ -385,28 +385,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 				$confirmation = $html;
 			} else {
-				if ( $this->gateway->is_http_redirect() ) {
-					// Redirect user to the issuer
-					$confirmation = array( 'redirect' => $this->payment->get_action_url() );
-				}
-
-				if ( $this->gateway->is_html_form() ) {
-					$auto_submit = true;
-					if ( $ajax ) {
-						// On AJAX enabled forms we can't auto submit, this will auto submit in a hidden iframe
-						$auto_submit = false;
-					}
-
-					// HTML
-					$html  = '';
-					$html .= '<div id="gforms_confirmation_message">';
-					$html .= GFCommon::replace_variables( $form['confirmation']['message'], $form, $lead, false, true, true );
-					$html .= $this->gateway->get_form_html( $this->payment, $auto_submit );
-					$html .= '</div>';
-
-					// Extend the confirmation with the iDEAL form
-					$confirmation = $html;
-				}
+				$confirmation = array( 'redirect' => $this->payment->get_pay_redirect_url() );
 			}
 
 			if ( ( headers_sent() || $ajax ) && is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {

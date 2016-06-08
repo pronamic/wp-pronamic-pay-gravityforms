@@ -1,16 +1,25 @@
 /**
  * Gravity Forms notifications
  */
-.pronamic-pay-gf-notifications {
-	margin-left: 28px;
-}
+#gf-ideal-feed-editor {
+	.form-table td ul {
+		margin: 10px 0 0 0;
 
-.pronamic-pay-gf-notifications ul {
-	margin: 0;	
-}
+		li {
+			input[type="checkbox"] + label {
+				vertical-align: top;
+			}
 
-.pronamic-pay-gf-notifications li {
-	margin: 0;	
+		}
+	}
+
+	.pronamic-gf-links-tab label {
+		line-height: 1.9em;
+	}
+
+	.all-merge-tags + span.description {
+		display: block;
+	}
 }
 
 /**

@@ -22,9 +22,10 @@
 		elements.conditionFieldId = $element.find( '#gf_ideal_condition_field_id' );
 		elements.conditionOperator = $element.find( '#gf_ideal_condition_operator' );
 		elements.conditionValue = $element.find( '#gf_ideal_condition_value' );
+		elements.conditionMessage = $element.find( '#gf_ideal_condition_message' );
+		elements.confirmationSelectFields = $element.find( '.gf_ideal_confirmation_select' );
 		elements.userRoleFieldId = $element.find( '#gf_ideal_user_role_field_id' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
-		elements.delayNotificationsHolder = $element.find( '.pronamic-pay-gf-notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
 
 		// Data
@@ -50,16 +51,55 @@
 		};
 
 		/**
+		 * Update confirmations
+		 */
+		this.updateConfirmationFields = function() {
+			elements.confirmationSelectFields.empty();
+			$( '<option>' ).appendTo( elements.confirmationSelectFields );
+
+			if ( gravityForm ) {
+				$.each( elements.confirmationSelectFields, function( index, field ) {
+					var linkName = $( field ).attr( 'data-pronamic-link-name'),
+						isSelected = false;
+
+					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
+						isSelected = false;
+
+						if ( 'object' === typeof feed.links ) {
+							isSelected = ( feed.links[ linkName ].confirmation_id === confirmation.id );
+						}
+
+						$( '<option>' )
+							.attr( 'value', confirmation.id )
+							.text( confirmation.name )
+							/* jshint eqeqeq: false */
+							.prop( 'selected', isSelected )
+							/* jshint eqeqeq: true */
+							.appendTo( field );
+					});
+				} );
+			}
+		};
+
+		/**
 		 * Toggle condition config
 		 */
 		this.toggleConditionConfig = function() {
-			if ( elements.conditionEnabled.prop( 'checked' ) ) {
-				elements.conditionConfig.fadeIn( 'fast' );
-			} else {
+			var options = elements.conditionFieldId.find( 'option' );
+
+			if ( 1 >= options.length ) {
 				elements.conditionConfig.fadeOut( 'fast' );
+				elements.conditionEnabled.before( elements.conditionConfig );
+				elements.conditionMessage.show();
+				elements.conditionEnabled.val( 0 );
+			} else {
+				elements.conditionConfig.fadeIn( 'fast' );
+				elements.conditionEnabled.after( elements.conditionConfig );
+				elements.conditionMessage.hide();
+				elements.conditionEnabled.val( 1 );
 			}
 		};
-		
+
 		/**
 		 * Update condition fields
 		 */
@@ -79,7 +119,7 @@
 							.attr( 'value', field.id )
 							.text (label )
 							/* jshint eqeqeq: false */
-							.prop( 'selected', feed.conditionFieldId == field.id )
+							.prop( 'selected', ( 1 == feed.conditionEnabled && feed.conditionFieldId == field.id ) )
 							/* jshint eqeqeq: true */
 							.appendTo( elements.conditionFieldId );
 					}
@@ -88,7 +128,7 @@
 				elements.conditionOperator.val( feed.conditionOperator );
 			}
 		};
-		
+
 		/**
 		 * Update condition values
 		 */
@@ -98,6 +138,14 @@
 			
 			elements.conditionValue.empty();
 			$( '<option>' ).appendTo( elements.conditionValue );
+
+			if ( ! field ) {
+				elements.conditionOperator.prop( 'disabled', true );
+				elements.conditionValue.prop( 'disabled', true );
+			} else {
+				elements.conditionOperator.removeProp( 'disabled' );
+				elements.conditionValue.removeProp( 'disabled' );
+			}
 
 			if ( field && field.choices ) {
 				$.each( field.choices, function( key, choice ) {
@@ -220,13 +268,11 @@
 		};
 		
 		this.updateNotifications = function() {			
-			elements.delayNotificationsHolder.empty();
+			elements.delayNotifications.empty();
 
 			if ( gravityForm ) {
-				var list = $( '<ul>' ).appendTo( elements.delayNotificationsHolder );
-
 				$.each( gravityForm.notifications, function( key, notification ) {
-					var item = $( '<li>' ).appendTo( list );
+					var item = $( '<li>' ).appendTo( elements.delayNotifications );
 					
 					var fieldId = 'pronamic-pay-gf-notification-' + notification.id;
 
@@ -281,8 +327,9 @@
 		this.updateFields = function() {
 			obj.updateConfigFields();
 			obj.updateDelayPostCreationItem();
-			obj.toggleConditionConfig();
+			obj.updateConfirmationFields();
 			obj.updateConditionFields();
+			obj.toggleConditionConfig();
 			obj.updateConditionValues();
 			obj.updateUserRoleFields();
 			obj.updateSelectFields();
@@ -294,13 +341,9 @@
 
 		elements.formId.change( obj.changeForm );
 		elements.configId.change( obj.updateConfigFields );
-		elements.conditionEnabled.change( obj.toggleConditionConfig );
 		elements.conditionFieldId.change( obj.updateConditionValues );
-		elements.delayNotifications.change( function() {
-			$( 'input', elements.delayNotificationsHolder ).prop( 'checked', $( this ).prop( 'checked' ) );
-		} );
 	};
-	
+
 	//////////////////////////////////////////////////
 
 	/**

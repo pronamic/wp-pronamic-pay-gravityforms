@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.6
+ * @version 1.4.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
@@ -66,6 +66,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
 			}
 		}
+
+		// Fields
+		if ( $this->is_gravityforms_supported() ) {
+			$this->fields = new Pronamic_WP_Pay_Extensions_GravityForms_Fields();
+		}
 	}
 
 	/**
@@ -85,11 +90,33 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
-			$this->maybe_display_confirmation();
+			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
 
-			// iDEAL fields
-			Pronamic_WP_Pay_Extensions_GravityForms_Fields::bootstrap();
+			$this->maybe_display_confirmation();
 		}
+	}
+
+	/**
+	 * Field create.
+	 *
+	 * @param $field
+	 * @param array $properties
+	 * @return GF_Field
+	 */
+	public function field_create( $field, $properties ) {
+		/*
+		 * The `inputType` of the payment methods field was in the past set to `checkbox`
+		 * this results in a `GF_Field_Checkbox` field, but we really need a payment methods
+		 * field.
+		 *
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
+		 */
+		switch ( $field->type ) {
+			case 'pronamic_pay_payment_method_selector' :
+				return new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField( $properties );
+		}
+
+		return $field;
 	}
 
 	/**
@@ -123,6 +150,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			wp_enqueue_style( 'pronamic-pay-gravityforms' );
 
 			wp_enqueue_script( 'pronamic-pay-gravityforms' );
+
+			// Styles and scripts for Merge Tag button
+			wp_register_style( 'gform_admin', GFCommon::get_base_url() . '/css/admin.min.css' );
+
+			wp_enqueue_style( 'jquery-ui-styles' );
+
+			wp_enqueue_style( 'gform_admin' );
+
+			wp_enqueue_script( 'gform_gravityforms' );
+
+			wp_enqueue_script( 'gform_form_admin' );
 		}
 	}
 
@@ -232,7 +270,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 						break;
 					case Pronamic_WP_Pay_Statuses::SUCCESS :
 						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
-							// Only fullfill order if the payment isn't approved aloready
+							// Only fullfill order if the payment isn't approved already
 							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
 							// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742

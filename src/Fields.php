@@ -7,23 +7,25 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.6
+ * @version 1.4.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	/**
-	 * Bootstrap
+	 * Construct and intialize custom Gravity Forms fields.
 	 */
-	public static function bootstrap() {
+	public function __construct() {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		add_filter( 'gform_add_field_buttons', array( __CLASS__, 'add_field_buttons' ) );
-		add_filter( 'gform_field_input',       array( __CLASS__, 'acquirer_field_input' ), 10, 5 );
-		add_filter( 'gform_field_input',       array( __CLASS__, 'payment_method_field_input' ), 10, 5 );
-		add_filter( 'gform_field_type_title',  array( __CLASS__, 'field_type_title' ) );
-		add_filter( 'gform_admin_pre_render',  array( __CLASS__, 'admin_payment_method_options' ) );
+		add_filter( 'gform_field_input', array( $this, 'acquirer_field_input' ), 10, 5 );
+		add_filter( 'gform_field_input', array( $this, 'payment_method_field_input' ), 10, 5 );
 
-		add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_default_field_labels' ) );
+		add_filter( 'gform_admin_pre_render',  array( $this, 'admin_payment_method_options' ) );
+
+		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
+			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
+			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
+		}
 	}
 
 	/**
@@ -35,10 +37,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param string $lead_id
 	 * @param string $form_id
 	 */
-	public static function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
+	public function acquirer_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
 		$type = RGFormsModel::get_input_type( $field );
 
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE === $type ) {
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE === $type ) {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
@@ -75,9 +77,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 					if ( count( $feeds ) > 0 ) {
 						$html .= sprintf(
 							"<p class='pronamic-pay-error'><strong>%s</strong><br><em>%s</em></p>",
-							__( 'This field is not supported by your payment gateway.', 'pronamic-ideal' ),
+							__( 'This field is not supported by your payment gateway.', 'pronamic_ideal' ),
 							sprintf(
-								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic-ideal' ),
+								__( 'Please remove it from this form or %sadd a supported payment gateway%s.', 'pronamic_ideal' ),
 								sprintf( '<a href="%s" target="_blank">', esc_attr( $new_feed_url ) ),
 								'</a>'
 							)
@@ -154,8 +156,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param string $lead_id
 	 * @param string $form_id
 	 */
-	public static function payment_method_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE === $field->type ) {
+	public function payment_method_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE === $field->type ) {
 			$id            = $field['id'];
 			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
 
@@ -194,7 +196,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			}
 
 			if ( ( IS_ADMIN && empty( $field->choices ) ) || ! is_array( $field->choices ) ) {
-				$options = self::get_payment_method_options( $form_id );
+				$options = $this->get_payment_method_options( $form_id );
 			} else {
 				$options = array();
 
@@ -230,7 +232,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		return $field_content;
 	}
 
-	public static function get_payment_method_options( $form_id ) {
+	public function get_payment_method_options( $form_id ) {
 		$feed    = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
 		$options = array();
 
@@ -259,10 +261,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * @param  array $form
 	 * @return array $form
 	 */
-	public static function admin_payment_method_options( $form ) {
+	public function admin_payment_method_options( $form ) {
 		foreach ( $form['fields'] as $i => $field ) {
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE === $field->type && empty( $field->choices ) ) {
-				$options = self::get_payment_method_options( $form['id'] );
+			if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE === $field->type && empty( $field->choices ) ) {
+				$options = $this->get_payment_method_options( $form['id'] );
 
 				if ( is_wp_error( $options ) ) {
 					$options = array();
@@ -288,79 +290,22 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	}
 
 	/**
-	 * Add field buttons
+	 * Add pay field group to the Gravity Forms field groups.
 	 *
-	 * @param array $groups
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
+	 * @since 1.4.7
+	 * @param array $field_groups
+	 * @return array
 	 */
-	public static function add_field_buttons( $groups ) {
-		// Fields
-		$fields = array(
-			array(
-				'class'     => 'button',
-				'value'     => __( 'Issuer', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE,
-			),
-			array(
-				'class'     => 'button',
-				'value'     => __( 'Payment Method', 'pronamic_ideal' ),
-				'data-type' => Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE,
-			),
-		);
-
-		// Backwards compatibility version 1.9
-		// @see https://github.com/wp-premium/gravityforms/blob/1.9/js/form_editor.js#L24-L26
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9', '<' ) ) {
-			foreach ( $fields as &$field ) {
-				$field['onclick'] = sprintf( "StartAddField('%s');", $field['data-type'] );
-			}
+	public static function add_pay_field_group( $field_groups ) {
+		if ( ! isset( $field_groups['pronamic_pay_fields'] ) ) {
+			$field_groups['pronamic_pay_fields'] = array(
+				'name'   => 'pronamic_pay_fields',
+				'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
+				'fields' => array(),
+			);
 		}
 
-		// Group
-		$group = array(
-			'name'   => 'pronamic_pay_fields',
-			'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
-			'fields' => $fields,
-		);
-
-		$groups[] = $group;
-
-		return $groups;
-	}
-
-	/**
-	 * Field type title
-	 *
-	 * @param string $type
-	 */
-	public static function field_type_title( $type ) {
-		switch ( $type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE:
-				return __( 'Issuer Drop Down', 'pronamic_ideal' );
-				break;
-
-			case Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE:
-				return __( 'Payment Method Selector', 'pronamic_ideal' );
-				break;
-		}
-
-		return $type;
-	}
-
-	/**
-	 * Default field labels
-	 */
-	public static function editor_js_default_field_labels() {
-		$labels = array(
-			Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE        => __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' ),
-			Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE => __( 'Choose a payment method', 'pronamic_ideal' ),
-		);
-
-		foreach ( $labels as $type => $label ) {
-			?>
-			case '<?php echo esc_js( $type ); ?>':
-				field.label = "<?php echo esc_js( $label ); ?>";
-				break;
-			<?php
-		}
+		return $field_groups;
 	}
 }

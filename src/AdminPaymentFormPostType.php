@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.6
+ * @version 1.4.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
@@ -35,8 +35,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	}
 
 	public function custom_columns( $column, $post_id ) {
-		global $post;
-
 		switch ( $column ) {
 			case 'pronamic_pay_gf_form':
 				$form_id = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
@@ -217,6 +215,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_URL;
 						} elseif ( ! empty( $link['page_id'] ) ) {
 							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_PAGE;
+						} elseif ( ! empty( $link['confirmation_id'] ) ) {
+							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION;
 						}
 
 						$meta_value[ $status ] = $link;

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.3
+ * @version 1.4.7
  * @since 1.0.1
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
@@ -54,7 +54,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	/**
-	 * Get the field value of the specifled field
+	 * Get the field value of the specified field
 	 *
 	 * @param string $field_name
 	 * @return Ambigous <NULL, multitype:>
@@ -322,15 +322,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_payment_method() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodSelector::TYPE ) );
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE ) );
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				return rgpost( 'input_' . $field->id );
+				return RGFormsModel::get_field_value( $field );
 			}
 		}
-
-		return null;
 	}
 
 	//////////////////////////////////////////////////
@@ -338,23 +336,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_issuer_id() {
-		$issuer_id    = null;
-		$issuer_field = null;
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE ) );
 
-		$issuer_fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuerDropDown::TYPE ) );
-		foreach ( $issuer_fields as $field ) {
+		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				$issuer_field = $field;
-
-				break;
+				return RGFormsModel::get_field_value( $field );
 			}
 		}
-
-		if ( null !== $issuer_field ) {
-			$issuer_id = RGFormsModel::get_field_value( $issuer_field );
-		}
-
-		return $issuer_id;
 	}
 
 	//////////////////////////////////////////////////

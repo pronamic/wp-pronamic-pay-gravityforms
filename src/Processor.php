@@ -230,12 +230,21 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	 */
 	public function entry_post_save( $lead, $form ) {
 		if ( $this->is_processing( $form ) ) {
+			// Payment ID
+			$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
+
+			if ( ! empty( $payment_id ) ) {
+				return $lead;
+			}
+
+			// Gateway
 			$this->gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->feed->config_id );
 
 			if ( ! $this->gateway ) {
 				return $lead;
 			}
 
+			// New payment
 			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $this->feed );
 
 			$payment_method = $data->get_payment_method();

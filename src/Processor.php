@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.7
+ * @version 1.4.8
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
@@ -68,6 +68,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 	//////////////////////////////////////////////////
 
+
+	/**
+	 * Is entry created?
+	 *
+	 * @var boolean
+	 */
+	private $entry_created;
+
+	//////////////////////////////////////////////////
+
 	/**
 	 * Constructs and initalize an Gravity Forms payment form processor
 	 *
@@ -102,7 +112,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 		 * Handle submission
 		 */
 		// Lead
-		add_action( 'gform_entry_created', array( $this, 'entry_created' ), 10, 2 );
 		add_action( 'gform_entry_post_save', array( $this, 'entry_post_save' ), 10, 2 );
 
 		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications)
@@ -214,40 +223,41 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	//////////////////////////////////////////////////
 
 	/**
-	 * Entry created
-	 *
-	 * @param array $lead
-	 * @param array $form
-	 */
-	public function entry_created( $lead, $form ) {
-		if ( $this->is_processing( $form ) ) {
-			$this->gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->feed->config_id );
-
-			if ( $this->gateway ) {
-				$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $this->feed );
-
-				$payment_method = $data->get_payment_method();
-
-				// Set payment method to iDEAL if issuer_id is set
-				if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
-					$payment_method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
-				}
-
-				$this->payment = Pronamic_WP_Pay_Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
-
-				$this->error = $this->gateway->get_error();
-			}
-		}
-	}
-
-	/**
 	 * Entry post save
 	 *
 	 * @param array $lead
 	 * @param array $form
 	 */
 	public function entry_post_save( $lead, $form ) {
-		if ( $this->is_processing( $form ) && $this->payment ) {
+		if ( $this->is_processing( $form ) ) {
+			// Payment ID
+			$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
+
+			if ( ! empty( $payment_id ) ) {
+				return $lead;
+			}
+
+			// Gateway
+			$this->gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->feed->config_id );
+
+			if ( ! $this->gateway ) {
+				return $lead;
+			}
+
+			// New payment
+			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $this->feed );
+
+			$payment_method = $data->get_payment_method();
+
+			// Set payment method to iDEAL if issuer_id is set
+			if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
+				$payment_method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
+			}
+
+			$this->payment = Pronamic_WP_Pay_Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
+
+			$this->error = $this->gateway->get_error();
+
 			// Updating lead's payment_status to Processing
 			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]   = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PROCESSING;
 			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_AMOUNT ]   = $this->payment->get_amount();

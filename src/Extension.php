@@ -136,14 +136,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				'pronamic-pay-gravityforms',
 				plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
 				array(),
-				'1.4.3'
+				'1.4.8'
 			);
 
 			wp_register_script(
 				'pronamic-pay-gravityforms',
 				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
 				array( 'jquery' ),
-				'1.4.3',
+				'1.4.8',
 				true
 			);
 

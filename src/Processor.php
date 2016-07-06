@@ -112,7 +112,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 		 * Handle submission
 		 */
 		// Lead
-		add_action( 'gform_entry_created', array( $this, 'entry_created' ), 10, 2 );
 		add_action( 'gform_entry_post_save', array( $this, 'entry_post_save' ), 10, 2 );
 
 		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications)
@@ -224,25 +223,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	//////////////////////////////////////////////////
 
 	/**
-	 * Entry created
-	 *
-	 * @param array $lead
-	 * @param array $form
-	 */
-	public function entry_created( $lead, $form ) {
-		if ( $this->is_processing( $form ) ) {
-			$this->entry_created = true;
-		}
-	}
-
-	/**
 	 * Entry post save
 	 *
 	 * @param array $lead
 	 * @param array $form
 	 */
 	public function entry_post_save( $lead, $form ) {
-		if ( $this->is_processing( $form ) && $this->entry_created ) {
+		if ( $this->is_processing( $form ) ) {
 			$this->gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->feed->config_id );
 
 			if ( ! $this->gateway ) {

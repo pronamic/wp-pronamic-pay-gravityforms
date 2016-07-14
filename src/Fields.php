@@ -213,7 +213,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 				$html .= '<br /><em>' . $error->get_error_message() . '</em>';
 				$html .= sprintf( '</div>' );
 			} else {
-				$options = Pronamic_WP_HTML_Helper::select_options_grouped( array( array( 'options' => $options ) ) );
+				$options = Pronamic_WP_HTML_Helper::select_options_grouped( array( array( 'options' => $options ) ), $value );
 				// Double quotes are not working, se we replace them with an single quote
 				$options = str_replace( '"', '\'', $options );
 

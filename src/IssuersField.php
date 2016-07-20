@@ -124,7 +124,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 
 						printf(
 							'<option value="%s">%s</option>',
-							$feed->config_id,
+							esc_attr( $feed->config_id ),
 							get_the_title( $feed->config_id )
 						);
 

@@ -43,7 +43,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		$this->inputs = null;
 
 		// Actions
-		add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
+		if ( ! has_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) ) ) {
+			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
+		}
 	}
 
 	/**
@@ -54,7 +56,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
-		return esc_attr__( 'Payment Method Selector', 'pronamic_ideal' );
+		return esc_attr__( 'Payment Method', 'pronamic_ideal' );
 	}
 
 	/**
@@ -89,11 +91,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/js.php#L834-L836
 	 */
-	public function editor_js_set_default_values() {
+	static function editor_js_set_default_values() {
 		$label = __( 'Choose a payment method', 'pronamic_ideal' );
 
 		?>
-		case '<?php echo esc_js( $this->type ); ?>':
+		case '<?php echo esc_js( self::TYPE ); ?>':
 			field.label = '<?php echo esc_js( $label ); ?>';
 
 			break;

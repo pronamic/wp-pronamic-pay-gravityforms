@@ -47,7 +47,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
-		return esc_attr__( 'Issuer Drop Down', 'pronamic_ideal' );
+		return esc_attr__( 'Issuer', 'pronamic_ideal' );
 	}
 
 	/**

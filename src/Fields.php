@@ -56,6 +56,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 			$html = '';
 
+			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
 			$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id, true );
 
 			/**
@@ -71,8 +73,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 						$new_feed_url,
 						__( 'Create pay feed', 'pronamic_ideal' )
 					);
-
-					$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
 
 					if ( count( $feeds ) > 0 ) {
 						$html .= sprintf(
@@ -98,7 +98,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			$html_error = '';
 
 			if ( null !== $feed ) {
-				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+				$config_id = rgar( $field, 'pronamicPayConfig' );
+
+				$gateway = null;
+
+				if ( count( $feeds ) > 1 && '' !== $config_id ) {
+					$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $config_id );
+				}
+
+				if ( ! $gateway ) {
+					$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+				}
 
 				if ( $gateway ) {
 					// Always use iDEAL payment method for issuer field

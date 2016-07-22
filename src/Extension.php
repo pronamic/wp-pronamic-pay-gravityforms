@@ -112,6 +112,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		switch ( $field->type ) {
+			case 'ideal_issuer_drop_down' :
+				return new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField( $properties );
 			case 'pronamic_pay_payment_method_selector' :
 				return new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField( $properties );
 		}

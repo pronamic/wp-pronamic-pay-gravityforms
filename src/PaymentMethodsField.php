@@ -59,11 +59,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	}
 
 	public function get_form_editor_field_settings() {
-		$settings = parent::get_form_editor_field_settings();
-
-		$settings[] = 'pronamic_pay_config_field_setting';
-
-		return $settings;
+		return array(
+			'conditional_logic_field_setting',
+			'error_message_setting',
+			'enable_enhanced_ui_setting',
+			'label_setting',
+			'label_placement_setting',
+			'admin_label_setting',
+			'size_setting',
+			'choices_setting',
+			'description_setting',
+			'css_class_setting',
+			'pronamic_pay_config_field_setting',
+		);
 	}
 
 	/**

@@ -41,6 +41,64 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		if ( ! has_action( 'gform_field_standard_settings', array( __CLASS__, 'field_settings_config' ) ) ) {
 			add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_settings_config' ), 10, 2 );
 		}
+
+		// Admin
+		if ( is_admin() ) {
+			$this->inputType = 'dropdown';
+		}
+
+		// Choices
+		if ( isset( $this->formId ) ) {
+			$this->set_choices( $this->formId );
+		}
+	}
+
+	public function get_form_editor_field_settings() {
+		$settings = parent::get_form_editor_field_settings();
+
+		$settings[] = 'pronamic_pay_config_field_setting';
+
+		return $settings;
+	}
+
+	private function set_choices( $form_id ) {
+		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
+		$feed = reset( $feeds );
+
+		if ( null !== $feed ) {
+			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+
+			if ( $gateway ) {
+				// Always use iDEAL payment method for issuer field
+				$payment_method = $gateway->get_payment_method();
+
+				$gateway->set_payment_method( Pronamic_WP_Pay_PaymentMethods::IDEAL );
+
+				$field = $gateway->get_issuer_field();
+
+				$error = $gateway->get_error();
+
+				if ( is_wp_error( $error ) ) {
+					// @todo
+				} elseif ( $field ) {
+					$this->choices = array();
+
+					foreach ( $field['choices'] as $group ) {
+						foreach ( $group['options'] as $value => $label ) {
+							$this->choices[] = array(
+								'value'      => $value,
+								'text'       => $label,
+								//'isSelected' => false,
+							);
+						}
+					}
+				}
+
+				// Reset payment method to original value
+				$gateway->set_payment_method( $payment_method );
+			}
+		}
 	}
 
 	/**

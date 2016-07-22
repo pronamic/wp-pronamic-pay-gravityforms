@@ -46,6 +46,79 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		if ( ! has_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) ) ) {
 			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
 		}
+
+		// Admin
+		if ( is_admin() ) {
+			$this->inputType = 'checkbox';
+		}
+
+		// Choices
+		if ( isset( $this->formId ) ) {
+			$this->set_choices( $this->formId );
+		}
+	}
+
+	public function get_form_editor_field_settings() {
+		$settings = parent::get_form_editor_field_settings();
+
+		$settings[] = 'pronamic_pay_config_field_setting';
+
+		return $settings;
+	}
+
+	/**
+	 * Merge field from the payment gateway, leave `isSelected` in tact so users can enable/disable payment methods manual.
+	 *
+	 * @param int $form_id
+	 */
+	private function set_choices( $form_id ) {
+		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
+		$feed = reset( $feeds );
+
+		if ( null !== $feed ) {
+			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+
+			if ( $gateway ) {
+				$field = $gateway->get_payment_method_field();
+
+				$error = $gateway->get_error();
+
+				if ( is_wp_error( $error ) ) {
+					// @todo
+				} elseif ( $field ) {
+					$this->choices = array();
+
+					foreach ( $field['choices'] as $group ) {
+						foreach ( $group['options'] as $value => $label ) {
+							$this->choices[] = array(
+								'value'      => $value,
+								'text'       => $label,
+								'isSelected' => false,
+							);
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public function get_field_input( $form, $value = '', $entry = null ) {
+		$input = parent::get_field_input();
+
+		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
+		if ( empty( $feeds ) ) {
+			$link = sprintf(
+				"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
+				$new_feed_url,
+				__( 'Create pay feed', 'pronamic_ideal' )
+			);
+
+			$input = $link . $input;
+		}
+
+		return $input;
 	}
 
 	/**

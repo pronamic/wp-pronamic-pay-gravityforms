@@ -369,12 +369,12 @@
 	/**
 	 * Ready
 	 */
-	$( document ).ready( function() {
+	$( document ).ready( function() {/*
 		if ( typeof fieldSettings === 'object' ) {
 			fieldSettings.ideal_issuer_drop_down = '.label_setting, .admin_label_setting, .size_setting, .description_setting, .css_class_setting, .error_message_setting, .rules_setting, .conditional_logic_field_setting, .pronamic_pay_config_field_setting';
 			fieldSettings.pronamic_pay_payment_method_selector = '.label_setting, .admin_label_setting, .size_setting, .description_setting, .css_class_setting, .error_message_setting, .rules_setting, .conditional_logic_field_setting';
 		}
-
+*/
 		$( '.gforms_edit_form .ideal-edit-link' ).click( function( event ) {
 			event.stopPropagation();
 		} ); 
@@ -434,7 +434,7 @@
 		if ( 'ideal_issuer_drop_down' !== field.type ) {
 			return;
 		}
-
+/*
 		if ( 0 === $( '#pronamic_pay_config_field option' ).length ) {
 			SetFieldProperty( 'pronamicPayConfig', '' );
 
@@ -442,7 +442,7 @@
 
 			return;
 		}
-
+*/
 		$( '#pronamic_pay_config_field' ).val( field.pronamicPayConfig );
 	} );
 } )( jQuery );

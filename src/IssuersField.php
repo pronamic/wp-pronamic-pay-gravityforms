@@ -42,11 +42,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_settings_config' ), 10, 2 );
 		}
 
-		// Admin
-		if ( is_admin() ) {
-			$this->inputType = 'dropdown';
-		}
-
 		// Choices
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );

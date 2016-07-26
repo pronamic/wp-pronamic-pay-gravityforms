@@ -396,5 +396,10 @@
 				}
 			} );
 		}
+
+		// Action on load field settings
+		$( document ).on( 'gform_load_field_settings', function( e, field ) {
+			$( '#pronamic_pay_config_field' ).val( field.pronamicPayConfigId );
+		} );
 	} );
 } )( jQuery );

@@ -391,9 +391,6 @@
 			// Action on load field choices
 			gform.addAction( 'gform_load_field_choices', function( field ) {
 				if ( 'pronamic_pay_payment_method_selector' === field[0].type ) {
-					// Hide checkbox to show/hide field values
-					$( '#field_choice_values_enabled' ).parent( 'div' ).hide();
-
 					// Prevent custom choice values from using gateway payment method values
 					$( '.field-choice-input.field-choice-value' ).keyup( function() {
 						if ( -1 < $.inArray( this.value, builtin_methods ) ) {

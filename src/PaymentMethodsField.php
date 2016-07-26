@@ -130,9 +130,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		foreach ( $this->choices as $choice ) {
 			$value = $choice['value'];
 
-			if ( isset( $payment_methods[ $value ] ) ) {
-				$choice['builtin'] = true;
-			}
+			$choice['builtin'] = isset( $payment_methods[ $value ] );
 
 			$choices[ $value ] = $choice;
 		}
@@ -244,10 +242,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
 	 */
 	static function editor_js_set_default_values() {
+		/**
+		 * We have to make sure that the `enableChoiceValue` propery is set to true, otherwise the
+		 * labels are used as value.
+		 *
+		 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L1148
+		 */
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
 			if ( ! field.label ) {
 				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
+			}
+
+			if ( ! field.enableChoiceValue ) {
+				field.enableChoiceValue = true;
 			}
 
 			if ( ! field.choices ) {

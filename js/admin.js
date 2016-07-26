@@ -403,14 +403,14 @@
 					} );
 
 					// Special treatment for supported payment methods choices
-					$.each( builtin_methods, function( index, value) {
-						var choiceValueInput = $( '.field-choice-input.field-choice-value[value="' + value + '"]');
+					$.each( builtin_methods, function( index, value ) {
+						var choiceValueInput = $( '.field-choice-input.field-choice-value[value="' + value + '"]' );
 
 						// Values for payment methods provided by the gateway should not be edited
 						choiceValueInput.attr( 'disabled', 'disabled' );
 
 						// Payment methods provided by the gateway should not be removed
-						choiceValueInput.parent( 'li' ).find( '.gf_delete_field_choice').remove();
+						choiceValueInput.parent( 'li' ).find( '.gf_delete_field_choice' ).remove();
 					} );
 				}
 			} );

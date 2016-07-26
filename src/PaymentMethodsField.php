@@ -112,7 +112,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	}
 
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		$input = parent::get_field_input();
+		$input = parent::get_field_input( $form, $value, $entry );
 
 		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
 

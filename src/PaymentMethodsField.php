@@ -137,7 +137,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			$choices[ $value ] = $choice;
 		}
 
+		// Admin
+		if ( ! is_admin() ) {
+			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
+		}
+
+		// Set choices
 		$this->choices = array_values( $choices );
+	}
+
+	/**
+	 * Filter Gravity Forms selected choice.
+	 *
+	 * @param array $choice
+	 * @return boolean true if 'isSelected' is set and true, false otherwise.
+	 */
+	public function filter_choice_is_selected( $choice ) {
+		return is_array( $choice ) && isset( $choice['isSelected'] ) && $choice['isSelected'];
 	}
 
 	/**
@@ -210,6 +226,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * Editor JavaScript default field values.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
 	 */
 	static function editor_js_set_default_values() {
 		$label = __( 'Choose a payment method', 'pronamic_ideal' );
@@ -229,9 +246,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 
 				<?php foreach ( $payment_methods as $value => $label ) : ?>
 
-					var choice = new Choice( <?php echo json_encode( $label ); ?> );
+					var choice = new Choice( <?php echo json_encode( $label ); ?>, <?php echo json_encode( $value ); ?> );
 
-					choice.builtin = true;
+					choice.isSelected = true;
+					choice.builtin    = true;
 
 					field.choices.push( choice );
 

@@ -375,7 +375,7 @@
 		$( '#gf-ideal-feed-editor' ).gravityFormsIdealFeedEditor();
 
 		if ( 'undefined' !== typeof gform && 'undefined' !== typeof form ) {
-			// Detect supported payment methods for this form
+			// Detect built-in payment methods for this form
 			var builtin_methods = [];
 
 			$.each( form.fields, function( index, formField ) {
@@ -396,7 +396,7 @@
 
 					// Prevent custom choice values from using gateway payment method values
 					$( '.field-choice-input.field-choice-value' ).keyup( function() {
-						if ( -1 < $.inArray( this.value, supported_methods ) ) {
+						if ( -1 < $.inArray( this.value, builtin_methods ) ) {
 							// Append '_2' if the value is the same as one of the supported payment methods
 							this.value = this.value + '_2';
 						}

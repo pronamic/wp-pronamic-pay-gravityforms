@@ -1,8 +1,6 @@
 /* global ajaxurl */
-/* global fieldSettings */
 /* global gform */
 /* global form */
-/* global SetFieldProperty */
 ( function( $ ) {
 	/**
 	 * Gravity Forms iDEAL feed editor
@@ -369,12 +367,7 @@
 	/**
 	 * Ready
 	 */
-	$( document ).ready( function() {/*
-		if ( typeof fieldSettings === 'object' ) {
-			fieldSettings.ideal_issuer_drop_down = '.label_setting, .admin_label_setting, .size_setting, .description_setting, .css_class_setting, .error_message_setting, .rules_setting, .conditional_logic_field_setting, .pronamic_pay_config_field_setting';
-			fieldSettings.pronamic_pay_payment_method_selector = '.label_setting, .admin_label_setting, .size_setting, .description_setting, .css_class_setting, .error_message_setting, .rules_setting, .conditional_logic_field_setting';
-		}
-*/
+	$( document ).ready( function() {
 		$( '.gforms_edit_form .ideal-edit-link' ).click( function( event ) {
 			event.stopPropagation();
 		} ); 
@@ -382,19 +375,14 @@
 		$( '#gf-ideal-feed-editor' ).gravityFormsIdealFeedEditor();
 
 		if ( 'undefined' !== typeof gform && 'undefined' !== typeof form ) {
-			// Allow payment method selector to be used in conditional logic
-			gform.addFilter( 'gform_is_conditional_logic_field', function( isConditionalLogicField, field ) {
-				return 'pronamic_pay_payment_method_selector' === field.type || isConditionalLogicField;
-			} );
-
 			// Detect supported payment methods for this form
-			var supported_methods = [];
+			var builtin_methods = [];
 
 			$.each( form.fields, function( index, formField ) {
 				if ( 'pronamic_pay_payment_method_selector' === formField.type ) {
 					$.each( formField.choices, function( choiceIndex, choice ) {
-						if ( choice.pronamic_supported_pm ) {
-							supported_methods.push( choice.pronamic_supported_pm );
+						if ( choice.builtin ) {
+							builtin_methods.push( choice.value );
 						}
 					} );
 				}
@@ -404,10 +392,10 @@
 			gform.addAction( 'gform_load_field_choices', function( field ) {
 				if ( 'pronamic_pay_payment_method_selector' === field[0].type ) {
 					// Hide checkbox to show/hide field values
-					$( '#field_choice_values_enabled' ).parent('div').hide();
+					$( '#field_choice_values_enabled' ).parent( 'div' ).hide();
 
 					// Prevent custom choice values from using gateway payment method values
-					$( '.field-choice-input.field-choice-value').keyup( function() {
+					$( '.field-choice-input.field-choice-value' ).keyup( function() {
 						if ( -1 < $.inArray( this.value, supported_methods ) ) {
 							// Append '_2' if the value is the same as one of the supported payment methods
 							this.value = this.value + '_2';
@@ -415,7 +403,7 @@
 					} );
 
 					// Special treatment for supported payment methods choices
-					$.each( supported_methods, function( index, value) {
+					$.each( builtin_methods, function( index, value) {
 						var choiceValueInput = $( '.field-choice-input.field-choice-value[value="' + value + '"]');
 
 						// Values for payment methods provided by the gateway should not be edited
@@ -427,22 +415,5 @@
 				}
 			} );
 		}
-	} );
-
-	// Action on load field settings
-	$( document ).on( 'gform_load_field_settings', function( e, field ) {
-		if ( 'ideal_issuer_drop_down' !== field.type ) {
-			return;
-		}
-/*
-		if ( 0 === $( '#pronamic_pay_config_field option' ).length ) {
-			SetFieldProperty( 'pronamicPayConfig', '' );
-
-			$( '.pronamic_pay_config_field_setting' ).hide();
-
-			return;
-		}
-*/
-		$( '#pronamic_pay_config_field' ).val( field.pronamicPayConfig );
 	} );
 } )( jQuery );

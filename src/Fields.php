@@ -23,29 +23,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		}
 	}
 
-	public function get_payment_method_options( $form_id ) {
-		$feed    = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id );
-		$options = array();
-
-		if ( null !== $feed ) {
-			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
-
-			if ( $gateway ) {
-				$payment_method_field = $gateway->get_payment_method_field();
-
-				$error = $gateway->get_error();
-
-				if ( is_wp_error( $error ) ) {
-					$options = $error;
-				} elseif ( $payment_method_field ) {
-					$options = $payment_method_field['choices'][0]['options'];
-				}
-			}
-		}
-
-		return $options;
-	}
-
 	/**
 	 * Add pay field group to the Gravity Forms field groups.
 	 *

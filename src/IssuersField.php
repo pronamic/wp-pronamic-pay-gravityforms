@@ -163,45 +163,4 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			break;
 		<?php
 	}
-
-	/**
-	 * Editor configuration field
-	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L525
-	 */
-	static function field_settings_config( $position, $form_id ) {
-		if ( 10 !== $position ) {
-			return;
-		}
-
-		?>
-		<li class="pronamic_pay_config_field_setting field_setting">
-			<label for="pronamic_pay_config_field">
-				<?php esc_html_e( 'iDEAL configuration', 'pronamic_ideal' ); ?>
-				<?php gform_tooltip( 'form_field_pronamic_pay_config' ) ?>
-			</label>
-			<select id="pronamic_pay_config_field" onchange="SetFieldProperty('pronamicPayConfig', jQuery(this).val());">
-				<?php
-
-				$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
-
-				if ( count( $feeds ) > 1 ) :
-
-					foreach ( $feeds as $feed ) :
-
-						printf(
-							'<option value="%s">%s</option>',
-							esc_attr( $feed->config_id ),
-							get_the_title( $feed->config_id )
-						);
-
-					endforeach;
-
-				endif;
-
-				?>
-			</select>
-		</li>
-		<?php
-	}
 }

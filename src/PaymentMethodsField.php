@@ -209,10 +209,29 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	static function editor_js_set_default_values() {
 		$label = __( 'Choose a payment method', 'pronamic_ideal' );
 
+		$payment_methods = array(
+			'ideal' => __( 'iDEAL', 'pronamic_ideal' ),
+		);
+
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
 			if ( ! field.label ) {
 				field.label = '<?php echo esc_js( $label ); ?>';
+			}
+
+			if ( ! field.choices ) {
+				field.choices = new Array();
+
+				<?php foreach ( $payment_methods as $value => $label ) : ?>
+
+					var choice = new Choice( <?php echo json_encode( $label ); ?> );
+
+					choice.builtin = true;
+
+					field.choices.push( choice );
+
+				<?php endforeach; ?>
+
 			}
 
 			break;

@@ -375,22 +375,15 @@
 		$( '#gf-ideal-feed-editor' ).gravityFormsIdealFeedEditor();
 
 		if ( 'undefined' !== typeof gform && 'undefined' !== typeof form ) {
-			// Detect built-in payment methods for this form
-			var builtin_methods = [];
-
-			$.each( form.fields, function( index, formField ) {
-				if ( 'pronamic_pay_payment_method_selector' === formField.type ) {
-					$.each( formField.choices, function( choiceIndex, choice ) {
-						if ( choice.builtin ) {
-							builtin_methods.push( choice.value );
-						}
-					} );
-				}
-			} );
-
 			// Action on load field choices
-			gform.addAction( 'gform_load_field_choices', function( field ) {
-				if ( 'pronamic_pay_payment_method_selector' === field[0].type ) {
+			// @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/form_editor.js#L2428-L2442
+			gform.addAction( 'gform_load_field_choices', function( args ) {
+				var field = args.shift();
+
+				if ( field && 'pronamic_pay_payment_method_selector' === field.type ) {
+					var builtin_choices = field.choices.filter( function( choice ) { return choice.builtin; } );
+					var builtin_methods = builtin_choices.map( function( choice ) { return choice.value; } );
+
 					// Prevent custom choice values from using gateway payment method values
 					$( '.field-choice-input.field-choice-value' ).keyup( function() {
 						if ( -1 < $.inArray( this.value, builtin_methods ) ) {
@@ -400,14 +393,16 @@
 					} );
 
 					// Special treatment for supported payment methods choices
-					$.each( builtin_methods, function( index, value ) {
-						var choiceValueInput = $( '.field-choice-input.field-choice-value[value="' + value + '"]' );
+					$.each( field.choices, function( i, choice ) {
+						if ( choice.builtin ) {
+							var choiceValueInput = $( '.field-choice-input.field-choice-value[value="' + choice.value + '"]' );
 
-						// Values for payment methods provided by the gateway should not be edited
-						choiceValueInput.attr( 'disabled', 'disabled' );
+							// Values for payment methods provided by the gateway should not be edited
+							choiceValueInput.attr( 'disabled', 'disabled' );
 
-						// Payment methods provided by the gateway should not be removed
-						choiceValueInput.parent( 'li' ).find( '.gf_delete_field_choice' ).remove();
+							// Payment methods provided by the gateway should not be removed
+							choiceValueInput.parent( 'li' ).find( '.gf_delete_field_choice' ).remove();
+						}
 					} );
 				}
 			} );

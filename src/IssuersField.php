@@ -44,6 +44,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		}
 	}
 
+	/**
+	 * Get form editor field settings for this field.
+	 *
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
+	 * @return array
+	 */
 	public function get_form_editor_field_settings() {
 		return array(
 			'conditional_logic_field_setting',
@@ -59,6 +66,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		);
 	}
 
+	/**
+	 * Set the issuer choices for this issuers field.
+	 *
+	 * @param int $form_id
+	 */
 	private function set_choices( $form_id ) {
 		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
 
@@ -77,9 +89,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 
 				$error = $gateway->get_error();
 
-				if ( is_wp_error( $error ) ) {
-					// @todo
-				} elseif ( $field ) {
+				// @todo What todo if error?
+				if ( $field && ! is_wp_error( $error ) ) {
 					$this->choices = array();
 
 					foreach ( $field['choices'] as $group ) {

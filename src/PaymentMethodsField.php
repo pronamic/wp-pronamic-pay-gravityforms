@@ -58,6 +58,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		}
 	}
 
+	/**
+	 * Get form editor field settings for this field.
+	 *
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
+	 * @return array
+	 */
 	public function get_form_editor_field_settings() {
 		return array(
 			'conditional_logic_field_setting',
@@ -75,7 +82,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	}
 
 	/**
-	 * Merge field from the payment gateway, leave `isSelected` in tact so users can enable/disable payment methods manual.
+	 * Merge payment method choices from the payment gateway, leave `isSelected` in tact so users can enable/disable payment methods manual.
 	 *
 	 * @param int $form_id
 	 */
@@ -95,9 +102,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 
 				$error = $gateway->get_error();
 
-				if ( is_wp_error( $error ) ) {
-					// @todo
-				} elseif ( $field ) {
+				// @todo What todo if error?
+				if ( $field && ! is_wp_error( $error ) ) {
 					foreach ( $field['choices'] as $group ) {
 						foreach ( $group['options'] as $value => $label ) {
 							$payment_methods[ $value ] = $label;
@@ -129,6 +135,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		}
 	}
 
+	/**
+	 * Get the field input.
+	 *
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
+	 * @param array $form
+	 * @param string $value
+	 * @param array $entry
+	 * @return string
+	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
 		$input = parent::get_field_input( $form, $value, $entry );
 

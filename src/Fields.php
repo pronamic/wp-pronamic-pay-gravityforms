@@ -75,7 +75,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			</label>
 
 			<select id="pronamic_pay_config_field" onchange="SetFieldProperty( 'pronamicPayConfig', jQuery( this ).val() );">
-				<option value=""><?php esc_html_e( 'Use Feed Setting', 'pronamic_ideal' ); ?></option>
+				<option value=""><?php esc_html_e( '— Use Feed Setting —', 'pronamic_ideal' ); ?></option>
 				<?php
 
 				foreach ( $feeds as $feed ) {

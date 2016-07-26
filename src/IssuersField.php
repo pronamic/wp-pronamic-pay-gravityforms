@@ -38,10 +38,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
 		}
 
-		if ( ! has_action( 'gform_field_standard_settings', array( __CLASS__, 'field_settings_config' ) ) ) {
-			add_action( 'gform_field_standard_settings', array( __CLASS__, 'field_settings_config' ), 10, 2 );
-		}
-
 		// Choices
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );

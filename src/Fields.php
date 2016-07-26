@@ -28,8 +28,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		add_action( 'gform_field_standard_settings', array( $this, 'field_standard_settings' ), 10, 2 );
 	}
 
-	public function 
-
 	/**
 	 * Add pay field group to the Gravity Forms field groups.
 	 *

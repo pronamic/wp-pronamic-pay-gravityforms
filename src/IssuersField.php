@@ -62,8 +62,36 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			'size_setting',
 			'description_setting',
 			'css_class_setting',
+			'rules_setting',
 			'pronamic_pay_config_field_setting',
 		);
+	}
+
+	/**
+	 * Get the iDEAL gateway for this field.
+	 *
+	 * @return
+	 */
+	private function get_gateway() {
+		$gateway = null;
+
+		if ( isset( $this->pronamicPayConfigId ) && ! empty( $this->pronamicPayConfigId ) ) {
+			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->pronamicPayConfigId );
+		}
+
+		if ( ! $gateway ) {
+			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
+
+			foreach ( $feeds as $feed ) {
+				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+
+				if ( $gateway && null !== $gateway->get_issuers() ) {
+					return $gateway;
+				}
+			}
+		}
+
+		return $gateway;
 	}
 
 	/**
@@ -72,42 +100,72 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	 * @param int $form_id
 	 */
 	private function set_choices( $form_id ) {
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+		$this->choices = array();
 
-		$feed = reset( $feeds );
+		$gateway = Pronamic_WP_Pay_Extensions_GravityForms_Fields::get_payment_gateway_by_field( $this );
 
-		if ( null !== $feed ) {
-			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+		if ( $gateway ) {
+			// Always use iDEAL payment method for issuer field
+			$payment_method = $gateway->get_payment_method();
 
-			if ( $gateway ) {
-				// Always use iDEAL payment method for issuer field
-				$payment_method = $gateway->get_payment_method();
+			$gateway->set_payment_method( Pronamic_WP_Pay_PaymentMethods::IDEAL );
 
-				$gateway->set_payment_method( Pronamic_WP_Pay_PaymentMethods::IDEAL );
+			$field = $gateway->get_issuer_field();
 
-				$field = $gateway->get_issuer_field();
+			$this->error = $gateway->get_error();
 
-				$error = $gateway->get_error();
+			// @todo What todo if error?
+			if ( $field && ! is_wp_error( $this->error ) ) {
+				$this->choices = array();
 
-				// @todo What todo if error?
-				if ( $field && ! is_wp_error( $error ) ) {
-					$this->choices = array();
-
-					foreach ( $field['choices'] as $group ) {
-						foreach ( $group['options'] as $value => $label ) {
-							$this->choices[] = array(
-								'value'      => $value,
-								'text'       => $label,
-								//'isSelected' => false,
-							);
-						}
+				foreach ( $field['choices'] as $group ) {
+					foreach ( $group['options'] as $value => $label ) {
+						$this->choices[] = array(
+							'value'      => $value,
+							'text'       => $label,
+							//'isSelected' => false,
+						);
 					}
 				}
+			}
 
-				// Reset payment method to original value
-				$gateway->set_payment_method( $payment_method );
+			// Reset payment method to original value
+			$gateway->set_payment_method( $payment_method );
+		}
+	}
+
+	/**
+	 * Get the field input.
+	 *
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
+	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
+	 * @param array $form
+	 * @param string $value
+	 * @param array $entry
+	 * @return string
+	 */
+	public function get_field_input( $form, $value = '', $entry = null ) {
+		$input = parent::get_field_input( $form, $value, $entry );
+
+		if ( is_admin() ) {
+			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+
+			if ( empty( $feeds ) ) {
+				$link = sprintf(
+					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
+					$new_feed_url,
+					__( 'Create pay feed', 'pronamic_ideal' )
+				);
+
+				$input = $link . $input;
 			}
 		}
+
+		if ( is_wp_error( $this->error ) ) {
+			$input = 'Error' . $input;
+		}
+
+		return $input;
 	}
 
 	/**

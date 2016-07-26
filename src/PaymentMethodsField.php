@@ -77,8 +77,36 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			'choices_setting',
 			'description_setting',
 			'css_class_setting',
+			'rules_setting',
 			'pronamic_pay_config_field_setting',
 		);
+	}
+
+	/**
+	 * Get the gateway for this field.
+	 *
+	 * @return
+	 */
+	private function get_gateway() {
+		$gateway = null;
+
+		if ( isset( $this->pronamicPayConfigId ) && ! empty( $this->pronamicPayConfigId ) ) {
+			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->pronamicPayConfigId );
+		}
+
+		if ( ! $gateway ) {
+			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
+
+			foreach ( $feeds as $feed ) {
+				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+
+				if ( $gateway && null !== $gateway->get_payment_method_field() ) {
+					return $gateway;
+				}
+			}
+		}
+
+		return $gateway;
 	}
 
 	/**
@@ -89,25 +117,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	private function set_choices( $form_id ) {
 		$payment_methods = array();
 
-		// Feeds
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+		// Gateway
+		$gateway = Pronamic_WP_Pay_Extensions_GravityForms_Fields::get_payment_gateway_by_field( $this );
 
-		$feed = reset( $feeds );
+		if ( $gateway ) {
+			$field = $gateway->get_payment_method_field();
 
-		if ( null !== $feed ) {
-			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+			$this->error = $gateway->get_error();
 
-			if ( $gateway ) {
-				$field = $gateway->get_payment_method_field();
-
-				$error = $gateway->get_error();
-
-				// @todo What todo if error?
-				if ( $field && ! is_wp_error( $error ) ) {
-					foreach ( $field['choices'] as $group ) {
-						foreach ( $group['options'] as $value => $label ) {
-							$payment_methods[ $value ] = $label;
-						}
+			// @todo What todo if error?
+			if ( $field && ! is_wp_error( $this->error ) ) {
+				foreach ( $field['choices'] as $group ) {
+					foreach ( $group['options'] as $value => $label ) {
+						$payment_methods[ $value ] = $label;
 					}
 				}
 			}
@@ -130,7 +152,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		foreach ( $this->choices as $choice ) {
 			$value = $choice['value'];
 
-			$choice['builtin'] = isset( $payment_methods[ $value ] );
+			if ( isset( $payment_methods[ $value ] ) ) {
+				$choice['builtin'] = true;
+			}
 
 			$choices[ $value ] = $choice;
 		}
@@ -194,6 +218,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			}
 		}
 
+		if ( is_wp_error( $this->error ) ) {
+			$input = 'Error' . $input;
+		}
+
 		return $input;
 	}
 
@@ -242,20 +270,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
 	 */
 	static function editor_js_set_default_values() {
-		/**
-		 * We have to make sure that the `enableChoiceValue` propery is set to true, otherwise the
-		 * labels are used as value.
-		 *
-		 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L1148
-		 */
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
 			if ( ! field.label ) {
 				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
-			}
-
-			if ( ! field.enableChoiceValue ) {
-				field.enableChoiceValue = true;
 			}
 
 			if ( ! field.choices ) {

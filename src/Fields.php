@@ -17,99 +17,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	public function __construct() {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		//add_filter( 'gform_field_input', array( $this, 'payment_method_field_input' ), 10, 5 );
-
 		//add_filter( 'gform_admin_pre_render',  array( $this, 'admin_payment_method_options' ) );
 
 		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
 			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
 			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
 		}
-	}
-
-	/**
-	 * Payment method field input
-	 *
-	 * @param string $field_content
-	 * @param string $field
-	 * @param string $value
-	 * @param string $lead_id
-	 * @param string $form_id
-	 */
-	public function payment_method_field_input( $field_content, $field, $value, $lead_id, $form_id ) {
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE === $field->type ) {
-			$id            = $field['id'];
-			$field_id      = IS_ADMIN || 0 === $form_id ? "input_$id" : 'input_' . $form_id . "_$id";
-
-			$class_suffix  = ( RG_CURRENT_VIEW === 'entry' ) ? '_admin' : '';
-			$size          = rgar( $field, 'size' );
-
-			$class         = $size . $class_suffix;
-			$css_class     = trim( esc_attr( $class ) . ' gfield_pronamic_pay_payment_method_select' );
-
-			$tab_index     = GFCommon::get_tabindex();
-
-			$disabled_text = ( IS_ADMIN && 'entry' !== RG_CURRENT_VIEW ) ? "disabled='disabled'" : '';
-
-			$html = '';
-
-			/**
-			 * Developing warning:
-			 * Don't use single quotes in the HTML you output, it is buggy in combination with SACK
-			 */
-			if ( IS_ADMIN ) {
-				$feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id, true );
-
-				if ( null === $feed ) {
-					$html .= sprintf(
-						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-						add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ),
-						__( 'Create pay feed', 'pronamic_ideal' )
-					);
-				} else {
-					$html .= sprintf(
-						"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-						get_edit_post_link( $feed->id ),
-						__( 'Edit pay feed', 'pronamic_ideal' )
-					);
-				}
-			}
-
-			if ( ( IS_ADMIN && empty( $field->choices ) ) || ! is_array( $field->choices ) ) {
-				$options = $this->get_payment_method_options( $form_id );
-			} else {
-				$options = array();
-
-				foreach ( $field->choices as $choice ) {
-					if ( $choice['isSelected'] ) {
-						$options[ $choice['value'] ] = $choice['text'];
-					}
-				}
-			}
-
-			if ( is_wp_error( $options ) ) {
-				$html .= sprintf( "<div class='gfield_description validation_message'>" );
-				$html .= Pronamic_WP_Pay_Plugin::get_default_error_message();
-				$html .= '<br /><em>' . $error->get_error_message() . '</em>';
-				$html .= sprintf( '</div>' );
-			} else {
-				$options = Pronamic_WP_HTML_Helper::select_options_grouped( array( array( 'options' => $options ) ), $value );
-				// Double quotes are not working, se we replace them with an single quote
-				$options = str_replace( '"', '\'', $options );
-
-				$onchange = IS_ADMIN ? null : $field->get_conditional_logic_event( 'change' );
-
-				$html .= sprintf( "<div class='ginput_container ginput_ideal'>" );
-				$html .= sprintf( "<select name='input_%d' id='%s' class='%s' %s %s %s>", $id, $field_id, $css_class, $tab_index, $disabled_text, $onchange );
-				$html .= sprintf( '%s', $options );
-				$html .= sprintf( '</select>' );
-				$html .= sprintf( '</div>' );
-			}
-
-			$field_content = $html;
-		}
-
-		return $field_content;
 	}
 
 	public function get_payment_method_options( $form_id ) {

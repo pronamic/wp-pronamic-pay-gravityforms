@@ -140,6 +140,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		// Admin
 		if ( ! is_admin() ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
+			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}
 
 		// Set choices
@@ -157,6 +158,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	}
 
 	/**
+	 * Unselect the specified choice.
+	 *
+	 * @param array $choice
+	 * @return array choice
+	 */
+	public function unselect_choice( $choice ) {
+		$choice['isSelected'] = false;
+
+		return $choice;
+	}
+
+	/**
 	 * Get the field input.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
@@ -169,16 +182,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	public function get_field_input( $form, $value = '', $entry = null ) {
 		$input = parent::get_field_input( $form, $value, $entry );
 
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+		if ( is_admin() ) {
+			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
 
-		if ( empty( $feeds ) ) {
-			$link = sprintf(
-				"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-				$new_feed_url,
-				__( 'Create pay feed', 'pronamic_ideal' )
-			);
+			if ( empty( $feeds ) ) {
+				$link = sprintf(
+					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
+					$new_feed_url,
+					__( 'Create pay feed', 'pronamic_ideal' )
+				);
 
-			$input = $link . $input;
+				$input = $link . $input;
+			}
 		}
 
 		return $input;

@@ -17,8 +17,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	public function __construct() {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		//add_filter( 'gform_admin_pre_render',  array( $this, 'admin_payment_method_options' ) );
-
 		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
 			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
 			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
@@ -46,40 +44,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		}
 
 		return $options;
-	}
-
-	/**
-	 * Add choices to payment method selector fields
-	 *
-	 * @param  array $form
-	 * @return array $form
-	 */
-	public function admin_payment_method_options( $form ) {
-		foreach ( $form['fields'] as $i => $field ) {
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE === $field->type && empty( $field->choices ) ) {
-				$options = $this->get_payment_method_options( $form['id'] );
-
-				if ( is_wp_error( $options ) ) {
-					$options = array();
-				}
-
-				$field->inputType = 'checkbox';
-				$field->enableChoiceValue = true;
-				$field->choices = array();
-
-				foreach ( $options as $payment_method => $name ) {
-					$field->choices[] = array(
-						'text'                  => $name,
-						'value'                 => $payment_method,
-						'isSelected'            => true,
-						'price'                 => '',
-						'pronamic_supported_pm' => strval( $payment_method ),
-					);
-				}
-			}
-		}
-
-		return $form;
 	}
 
 	/**

@@ -69,7 +69,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		?>
 		<li class="pronamic_pay_config_field_setting field_setting">
 			<label for="pronamic_pay_config_field">
-				<?php esc_html_e( 'iDEAL configuration', 'pronamic_ideal' ); ?>
+				<?php esc_html_e( 'Gateway', 'pronamic_ideal' ); ?>
 
 				<?php gform_tooltip( 'form_field_pronamic_pay_config' ) ?>
 			</label>

@@ -113,26 +113,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			}
 		}
 
-		// Current
-		foreach ( $this->choices as &$choice ) {
-			$value = $choice['value'];
-
-			if ( isset( $payment_methods[ $value ] ) ) {
-				$choice['builtin'] = true;
-
-				unset( $payment_methods[ $value ] );
-			}
-		}
+		// Choices
+		$choices = array();
 
 		// Built-in
 		foreach ( $payment_methods as $value => $label ) {
-			$this->choices[] = array(
+			$choices[ $value ] = array(
 				'value'      => $value,
 				'text'       => $label,
 				'isSelected' => false,
 				'builtin'    => true,
 			);
 		}
+
+		// Gravity Forms
+		foreach ( $this->choices as &$choice ) {
+			$value = $choice['value'];
+
+			if ( isset( $payment_methods[ $value ] ) ) {
+				$choice['builtin'] = true;
+			}
+
+			$choices[ $value ] = $choice;
+		}
+
+		$this->choices = array_values( $choices );
 	}
 
 	/**

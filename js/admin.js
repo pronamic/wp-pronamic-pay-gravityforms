@@ -381,17 +381,6 @@
 				var field = args.shift();
 
 				if ( field && 'pronamic_pay_payment_method_selector' === field.type ) {
-					var builtin_choices = field.choices.filter( function( choice ) { return choice.builtin; } );
-					var builtin_methods = builtin_choices.map( function( choice ) { return choice.value; } );
-
-					// Prevent custom choice values from using gateway payment method values
-					$( '.field-choice-input.field-choice-value' ).keyup( function() {
-						if ( -1 < $.inArray( this.value, builtin_methods ) ) {
-							// Append '_2' if the value is the same as one of the supported payment methods
-							this.value = this.value + '_2';
-						}
-					} );
-
 					// Special treatment for supported payment methods choices
 					$.each( field.choices, function( i, choice ) {
 						if ( choice.builtin ) {

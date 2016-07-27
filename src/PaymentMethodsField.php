@@ -118,7 +118,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		$payment_methods = array();
 
 		// Gateway
-		$gateway = Pronamic_WP_Pay_Extensions_GravityForms_Fields::get_payment_gateway_by_field( $this );
+		$gateway = $this->get_gateway();
 
 		if ( $gateway ) {
 			$field = $gateway->get_payment_method_field();

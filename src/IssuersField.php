@@ -102,7 +102,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	private function set_choices( $form_id ) {
 		$this->choices = array();
 
-		$gateway = Pronamic_WP_Pay_Extensions_GravityForms_Fields::get_payment_gateway_by_field( $this );
+		$gateway = $this->get_gateway();
 
 		if ( $gateway ) {
 			// Always use iDEAL payment method for issuer field

@@ -69,13 +69,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		?>
 		<li class="pronamic_pay_config_field_setting field_setting">
 			<label for="pronamic_pay_config_field">
-				<?php esc_html_e( 'Gateway', 'pronamic_ideal' ); ?>
+				<?php esc_html_e( 'Payment Gateway Configuration', 'pronamic_ideal' ); ?>
 
 				<?php gform_tooltip( 'form_field_pronamic_pay_config' ) ?>
 			</label>
 
 			<select id="pronamic_pay_config_field" onchange="SetFieldProperty( 'pronamicPayConfigId', jQuery( this ).val() );">
-				<option value=""><?php esc_html_e( '— Use Feed Setting —', 'pronamic_ideal' ); ?></option>
+				<option value=""><?php esc_html_e( '— Use Payment Form Setting —', 'pronamic_ideal' ); ?></option>
 				<?php
 
 				foreach ( $feeds as $feed ) {

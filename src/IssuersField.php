@@ -148,12 +148,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		$input = parent::get_field_input( $form, $value, $entry );
 
 		if ( is_admin() ) {
-			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(
 					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-					$new_feed_url,
+					add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ),
 					__( 'Create pay feed', 'pronamic_ideal' )
 				);
 

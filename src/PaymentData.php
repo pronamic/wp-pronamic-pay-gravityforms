@@ -49,6 +49,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$this->form = $form;
 		$this->lead = $lead;
 		$this->feed = $feed;
+
+		// @todo Set `recurring` if this is a recurring (not first) payment and use lead ID in `get_source_id()`
+		//$this->recurring_source_id = [GF LEAD ID];
+		$this->recurring = isset( $this->recurring_source_id );
 	}
 
 	//////////////////////////////////////////////////
@@ -91,6 +95,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	 * @see Pronamic_Pay_AbstractPaymentData::get_source_id()
 	 */
 	public function get_source_id() {
+		if ( $this->recurring ) {
+			return $this->recurring_source_id;
+		}
+
 		return $this->lead['id'];
 	}
 
@@ -389,5 +397,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		}
 
 		return $credit_card;
+	}
+
+	//////////////////////////////////////////////////
+	// Subscription
+	//////////////////////////////////////////////////
+
+	public function get_subscription() {
+		if ( isset( $this->lead['9'] ) && Pronamic_WP_Pay_PaymentMethods::IDEAL_DIRECTDEBIT === $this->lead['9'] ) {
+			$subscription                  = new Pronamic_Pay_Subscription();
+			//$subscription->frequency       = 10;
+			$subscription->interval        = 1;
+			$subscription->interval_period = 'day';
+			$subscription->amount          = $this->get_amount();
+			$subscription->currency        = $this->get_currency();
+			$subscription->description     = $this->get_description();
+
+			return $subscription;
+		}
+
+		return false;
 	}
 }

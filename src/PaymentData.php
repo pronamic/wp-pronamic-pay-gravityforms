@@ -51,8 +51,32 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$this->feed = $feed;
 
 		// @todo Set `recurring` if this is a recurring (not first) payment and use lead ID in `get_source_id()`
-		//$this->recurring_source_id = [GF LEAD ID];
-		$this->recurring = isset( $this->recurring_source_id );
+		$this->recurring = ( null !== $this->get_recurring_source_id() );
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Get value for field with css class `pronamic-pay-subscription-id`
+	 *
+	 * @return null|string
+	 */
+	private function get_recurring_source_id() {
+		if ( ! is_array( $this->form ) ) {
+			return null;
+		}
+
+		foreach ( $this->form['fields'] as $field ) {
+			if ( 'pronamic-pay-subscription-id' !== $field->cssClass ) {
+				continue;
+			}
+
+			if ( isset( $this->lead[ $field['id'] ] ) && '' !== $this->lead[ $field['id'] ] ) {
+				return $this->lead[ $field['id'] ];
+			}
+		}
+
+		return null;
 	}
 
 	//////////////////////////////////////////////////
@@ -96,7 +120,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	 */
 	public function get_source_id() {
 		if ( $this->recurring ) {
-			return $this->recurring_source_id;
+			return $this->get_recurring_source_id();
 		}
 
 		return $this->lead['id'];

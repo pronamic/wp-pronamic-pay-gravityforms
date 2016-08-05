@@ -404,18 +404,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_subscription() {
-		if ( isset( $this->lead['9'] ) && Pronamic_WP_Pay_PaymentMethods::IDEAL_DIRECTDEBIT === $this->lead['9'] ) {
-			$subscription                  = new Pronamic_Pay_Subscription();
-			//$subscription->frequency       = 10;
-			$subscription->interval        = 1;
-			$subscription->interval_period = 'day';
-			$subscription->amount          = $this->get_amount();
-			$subscription->currency        = $this->get_currency();
-			$subscription->description     = $this->get_description();
-
-			return $subscription;
+		if ( Pronamic_WP_Pay_PaymentMethods::IDEAL_DIRECTDEBIT !== $this->get_payment_method() ) {
+			return false;
 		}
 
-		return false;
+		// Get subscription frequency, interval and interval_period from feed?
+		$subscription                  = new Pronamic_Pay_Subscription();
+		//$subscription->frequency       = 10;
+		$subscription->interval        = 1;
+		$subscription->interval_period = 'day';
+		$subscription->amount          = $this->get_amount();
+		$subscription->currency        = $this->get_currency();
+		$subscription->description     = $this->get_description();
+
+		return $subscription;
 	}
 }

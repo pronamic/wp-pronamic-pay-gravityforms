@@ -212,9 +212,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		// Gravity Forms User Registration Add-on
 		if ( class_exists( 'GF_User_Registration' ) ) {
 			// Version >= 3
-			$user = gf_user_registration()->get_user_by_entry_id( $lead[ 'id' ] );
+			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
 		} elseif ( class_exists( 'GFUserData' ) ) {
-			$user = GFUserData::get_user_by_entry_id( $lead[ 'id' ] );
+			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
 		}
 
 		if ( false === $user ) {

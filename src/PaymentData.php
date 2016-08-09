@@ -428,7 +428,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	//////////////////////////////////////////////////
 
 	public function get_subscription() {
-		if ( Pronamic_WP_Pay_PaymentMethods::IDEAL_DIRECTDEBIT !== $this->get_payment_method() ) {
+		if ( Pronamic_WP_Pay_PaymentMethods::DIRECT_DEBIT_IDEAL !== $this->get_payment_method() ) {
 			return false;
 		}
 

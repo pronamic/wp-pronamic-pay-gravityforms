@@ -32,7 +32,7 @@
   },
   "homepage": "http://www.wp-pay.org/extensions/gravityforms/",
   "devDependencies": {
-    "autoprefixer": "^6.3.7",
+    "autoprefixer": "^6.4.0",
     "grunt": "~1.0.1",
     "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-cssmin": "^1.0.1",

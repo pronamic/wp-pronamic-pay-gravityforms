@@ -203,6 +203,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
+		// Error handling
+		if ( is_wp_error( $this->error ) ) {
+			return $this->error->get_error_message();
+		}
+
+		// Input
 		$input = parent::get_field_input( $form, $value, $entry );
 
 		if ( is_admin() ) {
@@ -217,10 +223,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 
 				$input = $link . $input;
 			}
-		}
-
-		if ( is_wp_error( $this->error ) ) {
-			$input = 'Error' . $input;
 		}
 
 		return $input;

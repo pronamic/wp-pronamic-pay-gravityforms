@@ -85,6 +85,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
 			}
 
+			add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
 			add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
 			add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( $this, 'source_text' ), 10, 2 );
 
@@ -234,6 +235,84 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	//////////////////////////////////////////////////
 
 	/**
+	 * Payment redirect URL filter.
+	 *
+	 * @since unreleased
+	 * @param string                  $url
+	 * @param Pronamic_WP_Pay_Payment $payment
+	 * @return string
+	 */
+	public function redirect_url( $url, $payment ) {
+		$lead_id = $payment->get_source_id();
+
+		$lead = RGFormsModel::get_lead( $lead_id );
+
+		if ( ! $lead ) {
+			return $url;
+		}
+
+		$form_id = $lead['form_id'];
+
+		$form = RGFormsModel::get_form( $form_id );
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+
+		if ( ! $feed ) {
+			return $url;
+		}
+
+		$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
+
+		switch ( $payment->status ) {
+			case Pronamic_WP_Pay_Statuses::CANCELLED :
+				$url = $data->get_cancel_url();
+
+				break;
+			case Pronamic_WP_Pay_Statuses::EXPIRED :
+				$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
+
+				break;
+			case Pronamic_WP_Pay_Statuses::FAILURE :
+				$url = $data->get_error_url();
+
+				break;
+			case Pronamic_WP_Pay_Statuses::SUCCESS :
+				$url = $data->get_success_url();
+
+				break;
+			case Pronamic_WP_Pay_Statuses::OPEN :
+			default :
+				$url = $data->get_normal_return_url();
+
+				break;
+		}
+
+		// Process Gravity Forms confirmations if link type is confirmation
+		$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
+
+		if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+			$confirmation = $this->get_confirmation( $lead, $payment->status );
+
+			if ( ! empty( $confirmation ) ) {
+				if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
+					$url = $confirmation['redirect'];
+				} else {
+					$url = add_query_arg(
+						array(
+							'pay_confirmation' => $payment->get_id(),
+							'_wpnonce' => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
+						),
+						$lead['source_url']
+					);
+				}
+			}
+		}
+
+		return $url;
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
 	 * Update lead status of the specified payment
 	 *
 	 * @param string $payment
@@ -252,25 +331,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
 
 			if ( $feed ) {
-				$url = null;
-
 				switch ( $payment->status ) {
 					case Pronamic_WP_Pay_Statuses::CANCELLED :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
-
-						$url = $data->get_cancel_url();
 
 						break;
 					case Pronamic_WP_Pay_Statuses::EXPIRED :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
 
-						$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
-
 						break;
 					case Pronamic_WP_Pay_Statuses::FAILURE :
 						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
-
-						$url = $data->get_error_url();
 
 						break;
 					case Pronamic_WP_Pay_Statuses::SUCCESS :
@@ -294,12 +365,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 							$this->fulfill_order( $lead );
 						}
 
-						$url = $data->get_success_url();
-
 						break;
 					case Pronamic_WP_Pay_Statuses::OPEN :
 					default :
-						$url = $data->get_normal_return_url();
+						// Nothing to do.
 
 						break;
 				}
@@ -310,33 +379,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 					Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
 					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
 				);
-
-				// Process Gravity Forms confirmations if link type is confirmation
-				$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
-
-				if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-					$confirmation = $this->get_confirmation( $lead, $payment->status );
-
-					if ( ! empty( $confirmation ) ) {
-						if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
-							$url = $confirmation['redirect'];
-						} else {
-							$url = add_query_arg(
-								array(
-									'pay_confirmation' => $payment->get_id(),
-									'_wpnonce' => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
-								),
-								$lead['source_url']
-							);
-						}
-					}
-				}
-
-				if ( $url && $can_redirect ) {
-					wp_redirect( $url );
-
-					exit;
-				}
 			}
 		}
 	}

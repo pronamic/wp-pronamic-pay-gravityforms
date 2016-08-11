@@ -299,7 +299,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 					$url = add_query_arg(
 						array(
 							'pay_confirmation' => $payment->get_id(),
-							'_wpnonce' => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
+							'_wpnonce'         => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
 						),
 						$lead['source_url']
 					);
@@ -322,65 +322,69 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		$lead = RGFormsModel::get_lead( $lead_id );
 
-		if ( $lead ) {
-			$form_id = $lead['form_id'];
+		if ( ! $lead ) {
+			return;
+		}
 
-			$form = RGFormsModel::get_form( $form_id );
-			$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+		$form_id = $lead['form_id'];
 
-			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
+		$form = RGFormsModel::get_form( $form_id );
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
 
-			if ( $feed ) {
-				switch ( $payment->status ) {
-					case Pronamic_WP_Pay_Statuses::CANCELLED :
-						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
+		if ( ! $feed ) {
+			return;
+		}
 
-						break;
-					case Pronamic_WP_Pay_Statuses::EXPIRED :
-						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
+		$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
 
-						break;
-					case Pronamic_WP_Pay_Statuses::FAILURE :
-						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
+		switch ( $payment->status ) {
+			case Pronamic_WP_Pay_Statuses::CANCELLED :
+				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
 
-						break;
-					case Pronamic_WP_Pay_Statuses::SUCCESS :
-						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
-							// Only fullfill order if the payment isn't approved already
-							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
+				break;
+			case Pronamic_WP_Pay_Statuses::EXPIRED :
+				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
 
-							// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
-							if ( $this->addon ) {
-								$action = array(
-									'id'             => $payment->get_transaction_id(),
-									'type'           => 'complete_payment',
-									'transaction_id' => $payment->get_transaction_id(),
-									'amount'         => $payment->get_amount(),
-									'entry_id'       => $lead['id'],
-								);
+				break;
+			case Pronamic_WP_Pay_Statuses::FAILURE :
+				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
 
-								$this->addon->complete_payment( $lead, $action );
-							}
+				break;
+			case Pronamic_WP_Pay_Statuses::SUCCESS :
+				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
+					// Only fullfill order if the payment isn't approved already
+					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
 
-							$this->fulfill_order( $lead );
-						}
+					// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+					if ( $this->addon ) {
+						$action = array(
+							'id'             => $payment->get_transaction_id(),
+							'type'           => 'complete_payment',
+							'transaction_id' => $payment->get_transaction_id(),
+							'amount'         => $payment->get_amount(),
+							'entry_id'       => $lead['id'],
+						);
 
-						break;
-					case Pronamic_WP_Pay_Statuses::OPEN :
-					default :
-						// Nothing to do.
+						$this->addon->complete_payment( $lead, $action );
+					}
 
-						break;
+					$this->fulfill_order( $lead );
 				}
 
-				// Update payment status property of lead
-				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
-					$lead['id'],
-					Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
-					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
-				);
-			}
+				break;
+			case Pronamic_WP_Pay_Statuses::OPEN :
+			default :
+				// Nothing to do.
+
+				break;
 		}
+
+		// Update payment status property of lead
+		Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
+			$lead['id'],
+			Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
+		);
 	}
 
 	/**

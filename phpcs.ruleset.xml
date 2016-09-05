@@ -17,6 +17,7 @@
 		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
 
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect" />
 	</rule>
 
 	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query">

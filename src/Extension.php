@@ -611,7 +611,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		if ( $url_encode ) {
 			foreach ( $replace as &$value ) {
-				$value = urlencode( $value );
+				$value = rawurlencode( $value );
 			}
 		}
 

@@ -139,12 +139,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		$choices = array();
 
 		// Gravity Forms
-		foreach ( $this->choices as $choice ) {
-			$value = $choice['value'];
+		if ( is_array( $this->choices ) ) {
+			foreach ( $this->choices as $choice ) {
+				$value = $choice['value'];
 
-			$choice['builtin'] = isset( $payment_methods[ $value ] );
+				$choice['builtin'] = isset( $payment_methods[ $value ] );
 
-			$choices[ $value ] = $choice;
+				$choices[ $value ] = $choice;
+			}
 		}
 
 		// Built-in

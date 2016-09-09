@@ -49,6 +49,34 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$this->form = $form;
 		$this->lead = $lead;
 		$this->feed = $feed;
+
+		// @todo Set `recurring` if this is a recurring (not first) payment and use lead ID in `get_source_id()`
+		$this->recurring = ( null !== $this->get_recurring_source_id() );
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Get value for field with css class `pronamic-pay-subscription-id`
+	 *
+	 * @return null|string
+	 */
+	private function get_recurring_source_id() {
+		if ( ! is_array( $this->form ) ) {
+			return null;
+		}
+
+		foreach ( $this->form['fields'] as $field ) {
+			if ( 'pronamic-pay-subscription-id' !== $field->cssClass ) {
+				continue;
+			}
+
+			if ( isset( $this->lead[ $field['id'] ] ) && '' !== $this->lead[ $field['id'] ] ) {
+				return $this->lead[ $field['id'] ];
+			}
+		}
+
+		return null;
 	}
 
 	//////////////////////////////////////////////////
@@ -91,6 +119,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	 * @see Pronamic_Pay_AbstractPaymentData::get_source_id()
 	 */
 	public function get_source_id() {
+		if ( $this->recurring ) {
+			return $this->get_recurring_source_id();
+		}
+
 		return $this->lead['id'];
 	}
 
@@ -389,5 +421,26 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		}
 
 		return $credit_card;
+	}
+
+	//////////////////////////////////////////////////
+	// Subscription
+	//////////////////////////////////////////////////
+
+	public function get_subscription() {
+		if ( Pronamic_WP_Pay_PaymentMethods::DIRECT_DEBIT_IDEAL !== $this->get_payment_method() ) {
+			return false;
+		}
+
+		// Get subscription frequency, interval and interval_period from feed?
+		$subscription                  = new Pronamic_Pay_Subscription();
+		//$subscription->frequency       = 10;
+		$subscription->interval        = 1;
+		$subscription->interval_period = 'day';
+		$subscription->amount          = $this->get_amount();
+		$subscription->currency        = $this->get_currency();
+		$subscription->description     = $this->get_description();
+
+		return $subscription;
 	}
 }

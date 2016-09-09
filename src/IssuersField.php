@@ -106,8 +106,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 
 		if ( $gateway ) {
 			// Always use iDEAL payment method for issuer field
-			$payment_method = $gateway->get_payment_method();
-
 			$gateway->set_payment_method( Pronamic_WP_Pay_PaymentMethods::IDEAL );
 
 			$field = $gateway->get_issuer_field();
@@ -128,9 +126,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 					}
 				}
 			}
-
-			// Reset payment method to original value
-			$gateway->set_payment_method( $payment_method );
 		}
 	}
 

@@ -436,7 +436,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$subscription                  = new Pronamic_Pay_Subscription();
 		//$subscription->frequency       = 10;
 		$subscription->interval        = 1;
-		$subscription->interval_period = 'day';
+		$subscription->interval_period = 'D';
 		$subscription->amount          = $this->get_amount();
 		$subscription->currency        = $this->get_currency();
 		$subscription->description     = $this->get_description();

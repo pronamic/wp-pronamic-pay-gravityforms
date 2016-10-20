@@ -32,17 +32,17 @@
   },
   "homepage": "http://www.wp-pay.org/extensions/gravityforms/",
   "devDependencies": {
-    "autoprefixer": "^6.3.7",
+    "autoprefixer": "^6.5.1",
     "grunt": "~1.0.1",
     "grunt-contrib-compass": "^1.1.1",
-    "grunt-contrib-cssmin": "^1.0.1",
+    "grunt-contrib-cssmin": "^1.0.2",
     "grunt-contrib-jshint": "^1.0.0",
-    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-uglify": "^2.0.0",
     "grunt-phpcs": "^0.4.0",
     "grunt-phplint": "0.0.8",
     "grunt-phpmd": "^0.1.1",
     "grunt-phpunit": "^0.3.6",
     "grunt-postcss": "^0.8.0",
-    "load-grunt-tasks": "^3.5.0"
+    "load-grunt-tasks": "^3.5.2"
   }
 }

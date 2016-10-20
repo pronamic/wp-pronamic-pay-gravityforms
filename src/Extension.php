@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.7
+ * @version 1.4.9
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
@@ -85,6 +85,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
 			}
 
+			add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
 			add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
 			add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( $this, 'source_text' ), 10, 2 );
 
@@ -112,6 +113,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		switch ( $field->type ) {
+			case 'ideal_issuer_drop_down' :
+				return new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField( $properties );
 			case 'pronamic_pay_payment_method_selector' :
 				return new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField( $properties );
 		}
@@ -207,8 +210,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	private function maybe_update_user_role( $lead, $feed ) {
 		$user = false;
 
-		// Gravity Forms User Registration Add-On
-		if ( class_exists( 'GFUserData' ) ) {
+		// Gravity Forms User Registration Add-on
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			// Version >= 3
+			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
+		} elseif ( class_exists( 'GFUserData' ) ) {
 			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
 		}
 
@@ -229,6 +235,84 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	//////////////////////////////////////////////////
 
 	/**
+	 * Payment redirect URL filter.
+	 *
+	 * @since unreleased
+	 * @param string                  $url
+	 * @param Pronamic_WP_Pay_Payment $payment
+	 * @return string
+	 */
+	public function redirect_url( $url, $payment ) {
+		$lead_id = $payment->get_source_id();
+
+		$lead = RGFormsModel::get_lead( $lead_id );
+
+		if ( ! $lead ) {
+			return $url;
+		}
+
+		$form_id = $lead['form_id'];
+
+		$form = RGFormsModel::get_form( $form_id );
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+
+		if ( ! $feed ) {
+			return $url;
+		}
+
+		$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
+
+		switch ( $payment->status ) {
+			case Pronamic_WP_Pay_Statuses::CANCELLED :
+				$url = $data->get_cancel_url();
+
+				break;
+			case Pronamic_WP_Pay_Statuses::EXPIRED :
+				$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
+
+				break;
+			case Pronamic_WP_Pay_Statuses::FAILURE :
+				$url = $data->get_error_url();
+
+				break;
+			case Pronamic_WP_Pay_Statuses::SUCCESS :
+				$url = $data->get_success_url();
+
+				break;
+			case Pronamic_WP_Pay_Statuses::OPEN :
+			default :
+				$url = $data->get_normal_return_url();
+
+				break;
+		}
+
+		// Process Gravity Forms confirmations if link type is confirmation
+		$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
+
+		if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+			$confirmation = $this->get_confirmation( $lead, $payment->status );
+
+			if ( ! empty( $confirmation ) ) {
+				if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
+					$url = $confirmation['redirect'];
+				} else {
+					$url = add_query_arg(
+						array(
+							'pay_confirmation' => $payment->get_id(),
+							'_wpnonce'         => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
+						),
+						$lead['source_url']
+					);
+				}
+			}
+		}
+
+		return $url;
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
 	 * Update lead status of the specified payment
 	 *
 	 * @param string $payment
@@ -238,102 +322,69 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		$lead = RGFormsModel::get_lead( $lead_id );
 
-		if ( $lead ) {
-			$form_id = $lead['form_id'];
-
-			$form = RGFormsModel::get_form( $form_id );
-			$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
-
-			$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
-
-			if ( $feed ) {
-				$url = null;
-
-				switch ( $payment->status ) {
-					case Pronamic_WP_Pay_Statuses::CANCELLED :
-						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
-
-						$url = $data->get_cancel_url();
-
-						break;
-					case Pronamic_WP_Pay_Statuses::EXPIRED :
-						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
-
-						$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
-
-						break;
-					case Pronamic_WP_Pay_Statuses::FAILURE :
-						$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
-
-						$url = $data->get_error_url();
-
-						break;
-					case Pronamic_WP_Pay_Statuses::SUCCESS :
-						if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
-							// Only fullfill order if the payment isn't approved already
-							$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
-
-							// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
-							if ( $this->addon ) {
-								$action = array(
-									'id'             => $payment->get_transaction_id(),
-									'type'           => 'complete_payment',
-									'transaction_id' => $payment->get_transaction_id(),
-									'amount'         => $payment->get_amount(),
-									'entry_id'       => $lead['id'],
-								);
-
-								$this->addon->complete_payment( $lead, $action );
-							}
-
-							$this->fulfill_order( $lead );
-						}
-
-						$url = $data->get_success_url();
-
-						break;
-					case Pronamic_WP_Pay_Statuses::OPEN :
-					default :
-						$url = $data->get_normal_return_url();
-
-						break;
-				}
-
-				// Update payment status property of lead
-				Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
-					$lead['id'],
-					Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
-					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
-				);
-
-				// Process Gravity Forms confirmations if link type is confirmation
-				$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
-
-				if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-					$confirmation = $this->get_confirmation( $lead, $payment->status );
-
-					if ( ! empty( $confirmation ) ) {
-						if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
-							$url = $confirmation['redirect'];
-						} else {
-							$url = add_query_arg(
-								array(
-									'pay_confirmation' => $payment->get_id(),
-									'_wpnonce' => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
-								),
-								$lead['source_url']
-							);
-						}
-					}
-				}
-
-				if ( $url && $can_redirect ) {
-					wp_redirect( $url );
-
-					exit;
-				}
-			}
+		if ( ! $lead ) {
+			return;
 		}
+
+		$form_id = $lead['form_id'];
+
+		$form = RGFormsModel::get_form( $form_id );
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+
+		if ( ! $feed ) {
+			return;
+		}
+
+		$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
+
+		switch ( $payment->status ) {
+			case Pronamic_WP_Pay_Statuses::CANCELLED :
+				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED;
+
+				break;
+			case Pronamic_WP_Pay_Statuses::EXPIRED :
+				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED;
+
+				break;
+			case Pronamic_WP_Pay_Statuses::FAILURE :
+				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED;
+
+				break;
+			case Pronamic_WP_Pay_Statuses::SUCCESS :
+				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
+					// Only fullfill order if the payment isn't approved already
+					$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
+
+					// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+					if ( $this->addon ) {
+						$action = array(
+							'id'             => $payment->get_transaction_id(),
+							'type'           => 'complete_payment',
+							'transaction_id' => $payment->get_transaction_id(),
+							'amount'         => $payment->get_amount(),
+							'entry_id'       => $lead['id'],
+						);
+
+						$this->addon->complete_payment( $lead, $action );
+					}
+
+					$this->fulfill_order( $lead );
+				}
+
+				break;
+			case Pronamic_WP_Pay_Statuses::OPEN :
+			default :
+				// Nothing to do.
+
+				break;
+		}
+
+		// Update payment status property of lead
+		Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
+			$lead['id'],
+			Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
+			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
+		);
 	}
 
 	/**
@@ -560,7 +611,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		if ( $url_encode ) {
 			foreach ( $replace as &$value ) {
-				$value = urlencode( $value );
+				$value = rawurlencode( $value );
 			}
 		}
 

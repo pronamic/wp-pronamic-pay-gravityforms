@@ -381,10 +381,13 @@
 				var field = args.shift();
 
 				if ( field && 'pronamic_pay_payment_method_selector' === field.type ) {
+					// Hide "Show values" checkbox
+					$( 'label[for="field_choice_values_enabled"]').parent( 'div').hide();
+
 					// Special treatment for supported payment methods choices
 					$.each( field.choices, function( i, choice ) {
 						if ( choice.builtin ) {
-							var choiceValueInput = $( '.field-choice-input.field-choice-value[value="' + choice.value + '"]' );
+							var choiceValueInput = $( '.field-choice-input.field-choice-value').eq( i );
 
 							// Values for payment methods provided by the gateway should not be edited
 							choiceValueInput.attr( 'disabled', 'disabled' );

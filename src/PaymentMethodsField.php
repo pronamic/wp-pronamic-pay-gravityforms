@@ -50,7 +50,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		// Admin
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
-			$this->inputs    = array();
 		}
 
 		// Choices

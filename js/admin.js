@@ -58,7 +58,7 @@
 
 			if ( gravityForm ) {
 				$.each( elements.confirmationSelectFields, function( index, field ) {
-					var linkName = $( field ).attr( 'data-pronamic-link-name'),
+					var linkName = $( field ).attr( 'data-pronamic-link-name' ),
 						isSelected = false;
 
 					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
@@ -167,8 +167,8 @@
 			if ( gravityForm ) {
 				for ( var i = 0; i < gravityForm.fields.length; i++ ) {
 					/* jshint eqeqeq: false */
-					if ( gravityForm.fields[i].id == id ) {
-						return gravityForm.fields[i];
+					if ( gravityForm.fields[ i ].id == id ) {
+						return gravityForm.fields[ i ];
 					}
 					/* jshint eqeqeq: true */
 				}
@@ -188,8 +188,8 @@
 
 			if ( gravityForm ) {				
 				for ( var i = 0; i < gravityForm.fields.length; i++ ) {
-					if ( $.inArray( gravityForm.fields[i].type, types ) >= 0 ) {
-						fields.push(gravityForm.fields[i]);
+					if ( $.inArray( gravityForm.fields[ i ].type, types ) >= 0 ) {
+						fields.push(gravityForm.fields[ i ]);
 					}
 				}
 			}
@@ -312,7 +312,7 @@
 							.attr( 'value', input.id )
 							.text( label )
 							/* jshint eqeqeq: false */
-							.prop( 'selected', feed.fields[name] == input.id )
+							.prop( 'selected', feed.fields[ name ] == input.id )
 							/* jshint eqeqeq: true */
 							.appendTo( $element );
 					} );
@@ -382,12 +382,12 @@
 
 				if ( field && 'pronamic_pay_payment_method_selector' === field.type ) {
 					// Hide "Show values" checkbox
-					$( 'label[for="field_choice_values_enabled"]').parent( 'div').hide();
+					$( 'label[for="field_choice_values_enabled"]' ).parent( 'div' ).hide();
 
 					// Special treatment for supported payment methods choices
 					$.each( field.choices, function( i, choice ) {
 						if ( choice.builtin ) {
-							var choiceValueInput = $( '.field-choice-input.field-choice-value').eq( i );
+							var choiceValueInput = $( '.field-choice-input.field-choice-value' ).eq( i );
 
 							// Values for payment methods provided by the gateway should not be edited
 							choiceValueInput.attr( 'disabled', 'disabled' );

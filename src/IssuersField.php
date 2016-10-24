@@ -89,8 +89,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			foreach ( $feeds as $feed ) {
 				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
 
-				if ( $gateway && ! empty( $gateway->get_issuers() ) ) {
-					return $gateway;
+				if ( $gateway ) {
+					$issuers = $gateway->get_issuers();
+					
+					if ( ! empty( $issuers ) ) {
+						return $gateway;
+					}
 				}
 			}
 		}

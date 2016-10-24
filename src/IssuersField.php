@@ -91,7 +91,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 
 				if ( $gateway ) {
 					$issuers = $gateway->get_issuers();
-					
+
 					if ( ! empty( $issuers ) ) {
 						return $gateway;
 					}

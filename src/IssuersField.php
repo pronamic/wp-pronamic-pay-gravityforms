@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.9
+ * @version 1.5.0
  * @since 1.4.7
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Select {
@@ -36,6 +36,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		// Actions
 		if ( ! has_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) ) ) {
 			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
+		}
+
+		if ( ! isset( $this->formId ) && defined( 'DOING_AJAX' ) && DOING_AJAX && filter_has_var( INPUT_POST, 'form_id' ) && filter_has_var( INPUT_POST, 'action' ) && 'rg_add_field' === filter_input( INPUT_POST, 'action' ) ) {
+			$this->formId = filter_input( INPUT_POST, 'form_id', FILTER_SANITIZE_NUMBER_INT );
 		}
 
 		// Choices
@@ -85,8 +89,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			foreach ( $feeds as $feed ) {
 				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
 
-				if ( $gateway && null !== $gateway->get_issuers() ) {
-					return $gateway;
+				if ( $gateway ) {
+					$issuers = $gateway->get_issuers();
+
+					if ( ! empty( $issuers ) ) {
+						return $gateway;
+					}
 				}
 			}
 		}

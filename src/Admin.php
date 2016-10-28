@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.4
+ * @version 1.5.1
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
@@ -50,7 +50,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	public static function addon_navigation( $menus ) {
 		$menus[] = array(
 			'name'       => 'edit.php?post_type=pronamic_pay_gf',
-			'label'      => __( 'iDEAL', 'pronamic_ideal' ),
+			'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
 			'callback'   => null,
 			'permission' => 'manage_options',
 		);

@@ -50,7 +50,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	public static function addon_navigation( $menus ) {
 		$menus[] = array(
 			'name'       => 'edit.php?post_type=pronamic_pay_gf',
-			'label'      => __( 'iDEAL', 'pronamic_ideal' ),
+			'label'      => __( 'Pay', 'pronamic_ideal' ),
 			'callback'   => null,
 			'permission' => 'manage_options',
 		);

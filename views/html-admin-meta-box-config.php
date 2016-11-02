@@ -487,7 +487,9 @@ $feed->links                  = $links;
 
 					<tr>
 						<th scope="row">
-							<?php echo esc_html( $label ); ?>
+							<label for="gf_ideal_fields_<?php echo esc_attr( $name ); ?>">
+								<?php echo esc_html( $label ); ?>
+							</label>
 						</th>
 						<td>
 							<?php

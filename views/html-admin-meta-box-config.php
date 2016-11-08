@@ -41,7 +41,11 @@ $feed->links                  = $links;
 		</ul>
 
 		<div class="pronamic-pay-tab">
-			<table class="form-table">
+			<div class="pronamic-pay-tab-block">
+
+			</div>
+
+			<table class="pronamic-pay-table-striped form-table">
 				<tr>
 					<th scope="row">
 						<label for="_pronamic_pay_gf_form_id">
@@ -185,9 +189,6 @@ $feed->links                  = $links;
 						</span>
 					</td>
 				</tr>
-			</table>
-
-			<table class="form-table">
 				<tr>
 					<th scope="row">
 						<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
@@ -373,7 +374,7 @@ $feed->links                  = $links;
 				<?php esc_html_e( 'Set Gravity Forms confirmations, pages or URLs to redirect to after a payment with the mentioned status.', 'pronamic_ideal' ); ?>
 			</div>
 
-			<table class="form-table pronamic-gf-links-tab">
+			<table class="pronamic-pay-table-striped form-table pronamic-gf-links-tab">
 				<?php
 
 				$fields = array(
@@ -481,7 +482,7 @@ $feed->links                  = $links;
 
 			?>
 
-			<table class="form-table">
+			<table class="pronamic-pay-table-striped form-table">
 
 				<?php foreach ( $fields as $name => $label ) : ?>
 
@@ -515,7 +516,7 @@ $feed->links                  = $links;
 				<?php esc_html_e( 'Optional settings for advanced usage only.', 'pronamic_ideal' ); ?>
 			</div>
 
-			<table class="form-table">
+			<table class="pronamic-pay-table-striped form-table">
 				<tr>
 					<th scope="row">
 						<label for="gf_ideal_condition_field_id">

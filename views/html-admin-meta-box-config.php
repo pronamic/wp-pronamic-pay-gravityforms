@@ -369,7 +369,7 @@ $feed->links                  = $links;
 		</div>
 
 		<div class="pronamic-pay-tab">
-			<div>
+			<div class="pronamic-pay-tab-block">
 				<?php esc_html_e( 'Set Gravity Forms confirmations, pages or URLs to redirect to after a payment with the mentioned status.', 'pronamic_ideal' ); ?>
 			</div>
 
@@ -460,7 +460,7 @@ $feed->links                  = $links;
 		</div>
 
 		<div class="pronamic-pay-tab">
-			<div>
+			<div class="pronamic-pay-tab-block">
 				<?php esc_html_e( 'Set corresponding form fields to include user data in the payment data with some payment providers.', 'pronamic_ideal' ); ?>
 			</div>
 
@@ -511,7 +511,7 @@ $feed->links                  = $links;
 		</div>
 
 		<div class="pronamic-pay-tab">
-			<div>
+			<div class="pronamic-pay-tab-block">
 				<?php esc_html_e( 'Optional settings for advanced usage only.', 'pronamic_ideal' ); ?>
 			</div>
 

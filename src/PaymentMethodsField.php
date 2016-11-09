@@ -53,6 +53,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		}
 
 		// Choices
+		$this->enableChoiceValue = true;
+
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );
 		}
@@ -280,6 +282,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			if ( ! field.label ) {
 				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
 			}
+
+			field.enableChoiceValue = true;
 
 			if ( ! field.choices ) {
 				field.choices = new Array();

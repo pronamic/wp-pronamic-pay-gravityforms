@@ -380,10 +380,16 @@
 			gform.addAction( 'gform_load_field_choices', function( args ) {
 				var field = args.shift();
 
-				if ( field && 'pronamic_pay_payment_method_selector' === field.type ) {
-					// Hide "Show values" checkbox
-					$( 'label[for="field_choice_values_enabled"]' ).parent( 'div' ).hide();
+				if ( ! field ) {
+					return;
+				}
 
+				var isPaymentMethodField = 'pronamic_pay_payment_method_selector' === field.type;
+
+				// Toggle "Show values" checkbox
+				$( 'label[for="field_choice_values_enabled"]' ).parent( 'div' ).toggle( ! isPaymentMethodField );
+
+				if ( isPaymentMethodField ) {
 					// Special treatment for supported payment methods choices
 					$.each( field.choices, function( i, choice ) {
 						if ( choice.builtin ) {

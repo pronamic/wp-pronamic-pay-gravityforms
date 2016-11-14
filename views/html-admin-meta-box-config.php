@@ -571,7 +571,7 @@ $feed->links                  = $links;
 
 						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php echo esc_attr( $condition_enabled ); ?>" />
 
-						<p class="description">
+						<p class="pronamic-pay-description description">
 							<?php esc_html_e( 'Set a condition to only use the gateway if the entry matches the condition.', 'pronamic_ideal' ); ?>
 
 							<span id="gf_ideal_condition_message" class="description"><?php esc_html_e( 'To create a condition, your form must contain a drop down, checkbox or multiple choice field.', 'pronamic_ideal' ); ?></span>

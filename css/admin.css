@@ -36,3 +36,8 @@
 .gforms_edit_form .field_selected .ideal-edit-link {
   display: block;
 }
+
+/* line 48, ../sass/admin.scss */
+.pronamic-pay-description {
+  padding-top: 0;
+}

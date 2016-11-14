@@ -141,9 +141,9 @@ $feed->links                  = $links;
 						?>
 						<input id="_pronamic_pay_gf_entry_id_prefix" name="_pronamic_pay_gf_entry_id_prefix" value="<?php echo esc_attr( $entry_id_prefix ); ?>" type="text" class="input-text regular-input" maxlength="8" />
 
-						<span class="description">
+						<p class="pronamic-pay-description description">
 							<?php esc_html_e( 'A prefix makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
-						</span>
+						</p>
 					</td>
 				</tr>
 				<tr>
@@ -162,7 +162,7 @@ $feed->links                  = $links;
 						?>
 						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
 
-						<span class="description">
+						<p class="pronamic-pay-description description">
 							<?php
 
 							echo wp_kses(
@@ -186,7 +186,7 @@ $feed->links                  = $links;
 							<br />
 
 							<?php esc_html_e( 'A description which uses tags and results in more than 32 characters will be truncated.', 'pronamic_ideal' ); ?>
-						</span>
+						</p>
 					</td>
 				</tr>
 				<tr>
@@ -571,11 +571,11 @@ $feed->links                  = $links;
 
 						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php echo esc_attr( $condition_enabled ); ?>" />
 
-						<span class="description">
+						<p class="description">
 							<?php esc_html_e( 'Set a condition to only use the gateway if the entry matches the condition.', 'pronamic_ideal' ); ?>
 
 							<span id="gf_ideal_condition_message" class="description"><?php esc_html_e( 'To create a condition, your form must contain a drop down, checkbox or multiple choice field.', 'pronamic_ideal' ); ?></span>
-						</span>
+						</p>
 					</td>
 				</tr>
 				<tr>

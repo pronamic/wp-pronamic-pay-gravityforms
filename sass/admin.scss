@@ -44,9 +44,12 @@
 	display: block;
 }
 
-// Description
-.pronamic-pay-description {
-	// Gravity Forms defines a padding top on .description
-	// @see https://github.com/wp-premium/gravityforms/blob/2.1.0.1/css/admin.css#L836
-	padding-top: 0;
+// Form table
+.form-table {
+	// Description
+	.pronamic-pay-description {
+		// Gravity Forms defines a padding top on .description
+		// @see https://github.com/wp-premium/gravityforms/blob/2.1.0.1/css/admin.css#L836
+		padding-top: 0;
+	}
 }

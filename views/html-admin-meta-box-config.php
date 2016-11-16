@@ -41,7 +41,11 @@ $feed->links                  = $links;
 		</ul>
 
 		<div class="pronamic-pay-tab">
-			<table class="form-table">
+			<div class="pronamic-pay-tab-block">
+
+			</div>
+
+			<table class="pronamic-pay-table-striped form-table">
 				<tr>
 					<th scope="row">
 						<label for="_pronamic_pay_gf_form_id">
@@ -137,9 +141,9 @@ $feed->links                  = $links;
 						?>
 						<input id="_pronamic_pay_gf_entry_id_prefix" name="_pronamic_pay_gf_entry_id_prefix" value="<?php echo esc_attr( $entry_id_prefix ); ?>" type="text" class="input-text regular-input" maxlength="8" />
 
-						<span class="description">
+						<p class="pronamic-pay-description description">
 							<?php esc_html_e( 'A prefix makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
-						</span>
+						</p>
 					</td>
 				</tr>
 				<tr>
@@ -158,7 +162,7 @@ $feed->links                  = $links;
 						?>
 						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
 
-						<span class="description">
+						<p class="pronamic-pay-description description">
 							<?php
 
 							echo wp_kses(
@@ -182,12 +186,9 @@ $feed->links                  = $links;
 							<br />
 
 							<?php esc_html_e( 'A description which uses tags and results in more than 32 characters will be truncated.', 'pronamic_ideal' ); ?>
-						</span>
+						</p>
 					</td>
 				</tr>
-			</table>
-
-			<table class="form-table">
 				<tr>
 					<th scope="row">
 						<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
@@ -369,11 +370,11 @@ $feed->links                  = $links;
 		</div>
 
 		<div class="pronamic-pay-tab">
-			<div>
+			<div class="pronamic-pay-tab-block">
 				<?php esc_html_e( 'Set Gravity Forms confirmations, pages or URLs to redirect to after a payment with the mentioned status.', 'pronamic_ideal' ); ?>
 			</div>
 
-			<table class="form-table pronamic-gf-links-tab">
+			<table class="pronamic-pay-table-striped form-table pronamic-gf-links-tab">
 				<?php
 
 				$fields = array(
@@ -460,7 +461,7 @@ $feed->links                  = $links;
 		</div>
 
 		<div class="pronamic-pay-tab">
-			<div>
+			<div class="pronamic-pay-tab-block">
 				<?php esc_html_e( 'Set corresponding form fields to include user data in the payment data with some payment providers.', 'pronamic_ideal' ); ?>
 			</div>
 
@@ -481,13 +482,15 @@ $feed->links                  = $links;
 
 			?>
 
-			<table class="form-table">
+			<table class="pronamic-pay-table-striped form-table">
 
 				<?php foreach ( $fields as $name => $label ) : ?>
 
 					<tr>
 						<th scope="row">
-							<?php echo esc_html( $label ); ?>
+							<label for="gf_ideal_fields_<?php echo esc_attr( $name ); ?>">
+								<?php echo esc_html( $label ); ?>
+							</label>
 						</th>
 						<td>
 							<?php
@@ -509,11 +512,11 @@ $feed->links                  = $links;
 		</div>
 
 		<div class="pronamic-pay-tab">
-			<div>
+			<div class="pronamic-pay-tab-block">
 				<?php esc_html_e( 'Optional settings for advanced usage only.', 'pronamic_ideal' ); ?>
 			</div>
 
-			<table class="form-table">
+			<table class="pronamic-pay-table-striped form-table">
 				<tr>
 					<th scope="row">
 						<label for="gf_ideal_condition_field_id">
@@ -568,11 +571,11 @@ $feed->links                  = $links;
 
 						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php echo esc_attr( $condition_enabled ); ?>" />
 
-						<span class="description">
+						<p class="pronamic-pay-description description">
 							<?php esc_html_e( 'Set a condition to only use the gateway if the entry matches the condition.', 'pronamic_ideal' ); ?>
 
 							<span id="gf_ideal_condition_message" class="description"><?php esc_html_e( 'To create a condition, your form must contain a drop down, checkbox or multiple choice field.', 'pronamic_ideal' ); ?></span>
-						</span>
+						</p>
 					</td>
 				</tr>
 				<tr>

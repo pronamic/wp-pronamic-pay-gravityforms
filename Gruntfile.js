@@ -72,6 +72,16 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		// Sass Lint
+		sasslint: {
+			options: {
+				configFile: '.sass-lint.yml'
+			},
+			target: [
+				'sass/**/*.scss'
+			]
+		},
+
 		// Compass
 		compass: {
 			build: {
@@ -111,5 +121,5 @@ module.exports = function( grunt ) {
 
 	// Default task(s).
 	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs' ] );
-	grunt.registerTask( 'assets', [ 'jshint', 'uglify', 'compass', 'postcss', 'cssmin' ] );
+	grunt.registerTask( 'assets', [ 'sasslint', 'jshint', 'uglify', 'compass', 'postcss', 'cssmin' ] );
 };

@@ -72,6 +72,16 @@ module.exports = function( grunt ) {
 			}
 		},
 
+		// Sass Lint
+		sasslint: {
+			options: {
+				configFile: '.sass-lint.yml'
+			},
+			target: [
+				'sass/**/*.scss'
+			]
+		},
+
 		// Compass
 		compass: {
 			build: {

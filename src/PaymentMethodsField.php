@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.9
+ * @version 1.5.2
  * @since 1.4.7
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Field_Select {

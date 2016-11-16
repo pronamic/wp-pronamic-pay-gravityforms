@@ -1,12 +1,10 @@
-/**
- * Gravity Forms notifications
- */
+// Gravity Forms notifications
 #gf-ideal-feed-editor {
 	.form-table td ul {
-		margin: 10px 0 0 0;
+		margin: 10px 0 0;
 
 		li {
-			input[type="checkbox"] + label {
+			input[type='checkbox'] + label {
 				vertical-align: top;
 			}
 
@@ -22,26 +20,28 @@
 	}
 }
 
-/**
- * Gravity Forms editor
- */
-.gforms_edit_form .ideal-edit-link {
-	display: none;
+// Gravity Forms editor
+.gforms_edit_form {
+	.ideal-edit-link {
+		display: none;
 
-	float: right;
+		float: right;
 
-	font-size: 10px;
+		font-size: 10px;
 
-	height: 16px;
+		line-height: 16px;
 
-	line-height: 16px;
+		height: 16px;
 
-	text-decoration: none;
-}
+		text-decoration: none;
+	}
 
-.gforms_edit_form .field_hover .ideal-edit-link ,
-.gforms_edit_form .field_selected .ideal-edit-link {
-	display: block;
+	.field_hover,
+	.field_selected {
+		.ideal-edit-link {
+			display: block;
+		}
+	}
 }
 
 // Form table

@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 -
 
 ## [1.5.2] - 2016-11-16
-- Improved styling of WordPress admin elements.
+- Simplified CSS for WordPress admin elements.
 - Enabled choice values for payment methods field.
 
 ## [1.5.1] - 2016-10-28

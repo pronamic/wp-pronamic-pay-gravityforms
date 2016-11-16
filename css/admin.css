@@ -1,21 +1,9 @@
-/* line 3, ../sass/admin.scss */
-#gf-ideal-feed-editor .form-table td ul {
+/* line 4, ../sass/admin.scss */
+#gf-ideal-feed-editor .form-table ul {
   margin: 10px 0 0;
 }
-/* line 7, ../sass/admin.scss */
-#gf-ideal-feed-editor .form-table td ul li input[type='checkbox'] + label {
-  vertical-align: top;
-}
-/* line 14, ../sass/admin.scss */
-#gf-ideal-feed-editor .pronamic-gf-links-tab label {
-  line-height: 1.9em;
-}
-/* line 18, ../sass/admin.scss */
-#gf-ideal-feed-editor .all-merge-tags + span.description {
-  display: block;
-}
 
-/* line 25, ../sass/admin.scss */
+/* line 12, ../sass/admin.scss */
 .gforms_edit_form .ideal-edit-link {
   display: none;
   float: right;
@@ -24,13 +12,13 @@
   height: 16px;
   text-decoration: none;
 }
-/* line 41, ../sass/admin.scss */
+/* line 28, ../sass/admin.scss */
 .gforms_edit_form .field_hover .ideal-edit-link,
 .gforms_edit_form .field_selected .ideal-edit-link {
   display: block;
 }
 
-/* line 50, ../sass/admin.scss */
+/* line 37, ../sass/admin.scss */
 .form-table .pronamic-pay-description {
   padding-top: 0;
 }

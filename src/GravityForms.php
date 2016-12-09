@@ -43,6 +43,57 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	//////////////////////////////////////////////////
 
 	/**
+	 * Indicator for form total subscription amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_AMOUNT_TOTAL = 'total';
+
+	/**
+	 * Indicator for field subscription amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_AMOUNT_FIELD = 'field';
+
+	/**
+	 * Indicator for field subscription interval type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_INTERVAL_FIELD = 'field';
+
+	/**
+	 * Indicator for fixed subscription interval type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_INTERVAL_FIXED = 'fixed';
+
+	/**
+	 * Indicator for field subscription frequency type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_FREQUENCY_FIELD = 'field';
+
+	/**
+	 * Indicator for fixed subscription frequency type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_FREQUENCY_FIXED = 'fixed';
+
+	/**
+	 * Indicator for unlimited subscription frequency type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_FREQUENCY_UNLIMITED = 'unlimited';
+
+	//////////////////////////////////////////////////
+
+	/**
 	 * Check if Gravity Forms is active (Automattic/developer style)
 	 *
 	 * @see https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/gravityforms.php?at=1.7.8#cl-95

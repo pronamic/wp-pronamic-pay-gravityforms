@@ -61,6 +61,24 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	//////////////////////////////////////////////////
 
 	/**
+	 * Add menu item to form settings
+	 *
+	 * @param $menu_items array with form settings menu items
+	 * @return array
+	 */
+	public static function form_settings_menu_item( $menu_items ) {
+		$menu_items[] = array(
+			'name' => 'pronamic_pay',
+			'label' => __( 'Pay', 'pronamic_ideal' ),
+			'query' => array( 'fid' => null ),
+		);
+
+		return $menu_items;
+	}
+
+	//////////////////////////////////////////////////
+
+	/**
 	 * Render entry info of the specified form and lead
 	 *
 	 * @param string $form_id
@@ -107,6 +125,21 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 		$merge_tags[] = array(
 			'label' => __( 'Pronamic Payment ID', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_id}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Subscription Cancel URL', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_subscription_cancel_url}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Subscription Renew URL', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_subscription_renew_url}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Subscription Renewal Date', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_subscription_renewal_date}',
 		);
 
 		return $merge_tags;

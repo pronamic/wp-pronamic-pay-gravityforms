@@ -3,9 +3,9 @@
 /* global form */
 ( function( $ ) {
 	/**
-	 * Gravity Forms iDEAL feed editor
+	 * Gravity Forms pay feed editor
 	 */
-	var GravityFormsIDealFeedEditor = function( element ) {
+	var gravityFormsPayFeedEditor = function( element ) {
 		var obj = this;
 		var $element = $( element );
 
@@ -26,6 +26,15 @@
 		elements.userRoleFieldId = $element.find( '#gf_ideal_user_role_field_id' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
+		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
+		elements.subscriptionAmountField = $element.find( '#pronamic_pay_gf_subscription_amount_field' );
+		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
+		elements.subscriptionInterval = $element.find( '#pronamic_pay_gf_subscription_interval' );
+		elements.subscriptionIntervalPeriod = $element.find( '#pronamic_pay_gf_subscription_interval_period' );
+		elements.subscriptionIntervalField = $element.find( '#pronamic_pay_gf_subscription_interval_field' );
+		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
+		elements.subscriptionFrequency = $element.find( '#pronamic_pay_gf_subscription_frequency' );
+		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
 
 		// Data
 		var feed = $.parseJSON( elements.feed.val() );
@@ -271,6 +280,10 @@
 
 			if ( gravityForm ) {
 				$.each( gravityForm.notifications, function( key, notification ) {
+					if ( 'form_submission' !== notification.event ) {
+						return;
+					}
+
 					var item = $( '<li>' ).appendTo( elements.delayNotifications );
 					
 					var fieldId = 'pronamic-pay-gf-notification-' + notification.id;
@@ -292,6 +305,121 @@
 		};
 		
 		/**
+		 * Update subscription fields
+		 */
+		this.updateSubscriptionFields = function() {
+			if ( gravityForm ) {
+				elements.subscriptionAmountField.empty();
+				elements.subscriptionIntervalField.empty();
+				elements.subscriptionFrequencyField.empty();
+
+				var products = [];
+
+				if ( gravityForm ) {
+					$.each( gravityForm.fields, function( key, field ) {
+						if ( 'product' === field.type ) {
+							products.push( field );
+						}
+					} );
+				}
+
+				// Recurring amount field
+				$element = $( elements.subscriptionAmountField );
+
+				$( '<option>' ).appendTo( $element );
+
+				$.each( products, function( key, product ) {
+					var label = product.adminLabel ? product.adminLabel : product.label;
+
+					$( '<option>' )
+						.attr( 'value', product.id )
+						.text( label )
+						/* jshint eqeqeq: false */
+						.prop( 'selected', feed.subscriptionAmountField == product.id )
+						/* jshint eqeqeq: true */
+						.appendTo( $element );
+				} );
+
+				elements.subscriptionAmountType.on( 'change', function() {
+					var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
+
+					$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
+
+					var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
+
+					if ( amountSettings.length > 0 ) {
+						amountSettings.show();
+					}
+				} );
+
+				elements.subscriptionAmountType.trigger( 'change' );
+
+				// Interval
+				$element = $( elements.subscriptionIntervalField );
+
+				$( '<option>' ).appendTo( $element );
+
+				$.each( obj.getInputs(), function( key, input ) {
+					var label = input.adminLabel ? input.adminLabel : input.label;
+
+					$( '<option>' )
+						.attr( 'value', input.id )
+						.text( label )
+						/* jshint eqeqeq: false */
+						.prop( 'selected', feed.subscriptionIntervalField == input.id )
+						/* jshint eqeqeq: true */
+						.appendTo( $element );
+				} );
+
+				elements.subscriptionIntervalType.on( 'change', function() {
+					var intervalType = elements.subscriptionIntervalType.filter( ':checked' ).val();
+
+					$( element ).find( '.pronamic-pay-gf-subscription-interval-settings' ).hide();
+
+					var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
+
+					if ( intervalSettings.length > 0 ) {
+						intervalSettings.show();
+					}
+				} );
+
+				elements.subscriptionIntervalType.trigger( 'change' );
+
+				// Frequency
+				$element = $( elements.subscriptionFrequencyField );
+
+				$( '<option>' ).appendTo( $element );
+
+				$.each( obj.getInputs(), function( key, product ) {
+					var label = product.adminLabel ? product.adminLabel : product.label;
+
+					$( '<option>' )
+						.attr( 'value', product.id )
+						.text( label )
+						/* jshint eqeqeq: false */
+						.prop( 'selected', feed.subscriptionFrequencyField == product.id )
+						/* jshint eqeqeq: true */
+						.appendTo( $element );
+				} );
+
+				elements.subscriptionFrequencyType.on( 'change', function() {
+					var frequencyType = elements.subscriptionFrequencyType.filter( ':checked' ).val();
+
+					$( element ).find( '.pronamic-pay-gf-subscription-frequency-settings' ).hide();
+
+					var frequencySettings = $( element ).find( '.pronamic-pay-gf-subscription-frequency-settings.frequency-' + frequencyType );
+
+					if ( frequencySettings.length > 0 ) {
+						frequencySettings.show();
+					}
+				} );
+
+				elements.subscriptionFrequencyType.trigger( 'change' );
+
+			}
+		};
+
+		/**
 		 * Update select fields
 		 */
 		this.updateSelectFields = function() {
@@ -300,7 +428,7 @@
 
 				elements.fieldSelectFields.each( function( i, element ) {
 					$element = $( element );
-					
+
 					var name = $element.data( 'gateway-field-name' );
 
 					$( '<option>' ).appendTo( $element );
@@ -319,7 +447,7 @@
 				} );
 			}
 		};
-		
+
 		/**
 		 * Update fields
 		 */
@@ -331,6 +459,7 @@
 			obj.toggleConditionConfig();
 			obj.updateConditionValues();
 			obj.updateUserRoleFields();
+			obj.updateSubscriptionFields();
 			obj.updateSelectFields();
 			obj.updateNotifications();
 		};
@@ -346,19 +475,19 @@
 	//////////////////////////////////////////////////
 
 	/**
-	 * jQuery plugin - Gravity Forms iDEAL feed editor
+	 * jQuery plugin - Gravity Forms pay feed editor
 	 */
-	$.fn.gravityFormsIdealFeedEditor = function() {
+	$.fn.gravityFormsPayFeedEditor = function() {
 		return this.each( function() {
 			var $this = $( this );
 
-			if ( $this.data( 'gf-ideal-feed-editor' ) ) {
+			if ( $this.data( 'gf-pay-feed-editor' ) ) {
 				return;
 			}
 
-			var editor = new GravityFormsIDealFeedEditor( this );
+			var editor = new gravityFormsPayFeedEditor( this );
 
-			$this.data( 'gf-ideal-feed-editor', editor );
+			$this.data( 'gf-pay-feed-editor', editor );
 		} );
 	};
 
@@ -372,7 +501,7 @@
 			event.stopPropagation();
 		} ); 
 		
-		$( '#gf-ideal-feed-editor' ).gravityFormsIdealFeedEditor();
+		$( '#gf-pay-feed-editor' ).gravityFormsPayFeedEditor();
 
 		if ( 'undefined' !== typeof gform && 'undefined' !== typeof form ) {
 			// Action on load field choices

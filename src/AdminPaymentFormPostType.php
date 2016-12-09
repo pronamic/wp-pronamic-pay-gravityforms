@@ -18,6 +18,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
+		if ( version_compare( GFCommon::$version, '1.7', '>=' ) ) {
+			add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
+		}
+
 		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
 
@@ -90,7 +94,28 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	 * @param WP_Post $post The object for the current post/page.
 	 */
 	public function meta_box_config( $post ) {
-		include dirname( __FILE__ ) . '/../views/html-admin-meta-box-config.php';
+		include dirname( __FILE__ ) . '/../views/html-admin-form-feeds-settings.php';
+	}
+
+	/**
+	 * When the form is deleted from the trash, deletes our custom post.
+	 *
+	 * @param int $form_id The ID of the form being deleted.
+	 */
+	public function delete_payment_form( $form_id ) {
+		global $wpdb;
+
+		$query = new WP_Query( array(
+			'post_type'			=> 'pronamic_pay_gf',
+			'meta_key'			=> array(
+				'key'			=> '_pronamic_pay_gf_form_id',
+				'value'			=> $form_id,
+			),
+		) );
+
+		foreach ( $query->posts as $post ) {
+			wp_delete_post( $post->ID, true );
+		}
 	}
 
 	/**
@@ -153,6 +178,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				'flags'     => FILTER_REQUIRE_ARRAY,
 				),
 			'_pronamic_pay_gf_user_role_field_id'                 => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_amount_type'           => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_amount_field'          => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_type'         => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval'              => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_subscription_interval_period'       => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_field'        => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_frequency_type'        => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_frequency'             => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_subscription_frequency_field'       => 'sanitize_text_field',
 		);
 
 		if ( class_exists( 'GFAWeber' ) ) {

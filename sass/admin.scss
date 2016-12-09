@@ -1,8 +1,55 @@
-// Gravity Forms notifications
-#gf-ideal-feed-editor {
+// White (http://www.colorhexa.com/ffffff)
+$white: #fff;
+
+// Gravity Forms feed list
+#gf-pay-feed-list {
+	.check-column {
+		width: 50px;
+	}
+
+	i {
+		&.dashicons {
+			&.fa- {
+				font-size: inherit;
+				width: auto;
+				height: auto;
+			}
+		}
+	}
+}
+
+// Gravity Forms feed editor
+#gf-pay-feed-editor {
 	.form-table {
 		ul {
 			margin: 10px 0 0;
+		}
+	}
+
+	.pronamic-pay-tab {
+		.pronamic-pay-tab-block {
+			background: $white;
+		}
+
+		.pronamic-pay-table-striped {
+			tr {
+				&:not(.even) {
+					background: $white;
+				}
+			}
+		}
+
+		input + select {
+			vertical-align: initial;
+		}
+	}
+
+	.pronamic-gf-subscription-tab {
+		fieldset {
+			> div {
+				margin-bottom: -1em;
+				margin-left: 2em;
+			}
 		}
 	}
 }

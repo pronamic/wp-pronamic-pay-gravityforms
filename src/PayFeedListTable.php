@@ -69,7 +69,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed_List_Table extends WP_List
 	public function prepare_items() {
 		$query = new WP_Query( array(
 			'post_type'      => 'pronamic_pay_gf',
-			'posts_per_page' => - 1,
+			'posts_per_page' => 50,
 			'meta_query'     => array(
 				array(
 					'key'   => '_pronamic_pay_gf_form_id',

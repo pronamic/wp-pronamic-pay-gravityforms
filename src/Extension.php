@@ -380,7 +380,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
 					// Only fulfill order if the payment isn't approved already
 
-					if ( $data->get_subscription() && ! empty( $payment->get_subscription_id() ) ) {
+					if ( isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
 						$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
 						$this->payment_action( 'create_subscription', $lead, $action );

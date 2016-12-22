@@ -16,18 +16,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 */
 	public static function bootstrap() {
 		// Actions
-		add_action( 'admin_init',               array( __CLASS__, 'admin_init' ) );
-		add_action( 'admin_init',               array( __CLASS__, 'maybe_redirect_to_entry' ) );
+		add_action( 'admin_init',                                 array( __CLASS__, 'admin_init' ) );
+		add_action( 'admin_init',                                 array( __CLASS__, 'maybe_redirect_to_entry' ) );
 
 		// Filters
-		add_filter( 'gform_addon_navigation',   array( __CLASS__, 'addon_navigation' ) );
+		add_filter( 'gform_addon_navigation',                     array( __CLASS__, 'addon_navigation' ) );
 
-		add_filter( 'gform_entry_info',         array( __CLASS__, 'entry_info' ), 10, 2 );
+		add_filter( 'gform_entry_info',                           array( __CLASS__, 'entry_info' ), 10, 2 );
 
-		add_filter( 'gform_custom_merge_tags',  array( __CLASS__, 'custom_merge_tags' ), 10 );
+		add_filter( 'gform_custom_merge_tags',                    array( __CLASS__, 'custom_merge_tags' ), 10 );
 
 		// Actions - AJAX
-		add_action( 'wp_ajax_gf_get_form_data', array( __CLASS__, 'ajax_get_form_data' ) );
+		add_action( 'wp_ajax_gf_get_form_data',                   array( __CLASS__, 'ajax_get_form_data' ) );
+		add_action( 'wp_ajax_gf_dismiss_pronamic_pay_feeds_menu', array( __CLASS__, 'ajax_dismiss_feeds_menu' ) );
 	}
 
 	//////////////////////////////////////////////////
@@ -48,14 +49,44 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 * @return array
 	 */
 	public static function addon_navigation( $menus ) {
+		if ( version_compare( GFCommon::$version, '1.7', '<' ) ) {
+			$menus[] = array(
+				'name'       => 'edit.php?post_type=pronamic_pay_gf',
+				'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
+				'callback'   => null,
+				'permission' => 'manage_options',
+			);
+
+			return $menus;
+		}
+
+		if ( '1' === get_user_meta( get_current_user_id(), '_pronamic_pay_gf_dismiss_feeds_menu', true ) ) {
+			return $menus;
+		}
+
 		$menus[] = array(
-			'name'       => 'edit.php?post_type=pronamic_pay_gf',
+			'name'       => Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn::SLUG,
 			'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
-			'callback'   => null,
+			'callback'   => array( __CLASS__, 'temporary_feeds_page' ),
 			'permission' => 'manage_options',
 		);
 
 		return $menus;
+	}
+
+	/**
+	 * Temporary feeds page
+	 *
+	 * @since unreleased
+	 */
+	public static function temporary_feeds_page() {
+		require dirname( __FILE__ ) . '/../views/html-admin-temporary-feeds-page.php';
+	}
+
+	public function ajax_dismiss_feeds_menu() {
+		$current_user = wp_get_current_user();
+
+		update_user_meta( $current_user->ID, '_pronamic_pay_gf_dismiss_feeds_menu', 1 );
 	}
 
 	//////////////////////////////////////////////////

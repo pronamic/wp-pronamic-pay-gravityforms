@@ -46,7 +46,7 @@ $current_user = wp_get_current_user();
 
 		<p class="lead-description"><?php esc_html_e( 'Pay feeds are now accessed via the Pay sub-menu within the Form Settings.', 'gravityformspaypal' ) ?></p>
 
-		<img src="<?php echo esc_url( plugins_url( '/images/contextual_pay_feeds.png', dirname( __FILE__ ) ) ); ?>" alt="">
+		<img src="<?php echo esc_url( plugins_url( 'images/contextual_pay_feeds.png', dirname( __FILE__ ) ) ); ?>" alt="">
 	</div>
 
 	<form method="post" id="dismiss_menu_form">

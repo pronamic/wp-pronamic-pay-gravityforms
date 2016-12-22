@@ -22,6 +22,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
 		}
 
+		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data' ), 99, 2 );
+
 		add_action( 'save_post', array( $this, 'save_post' ) );
 	}
 
@@ -118,6 +120,44 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 		}
 	}
 
+	public function insert_post_data( $data, $postarr ) {
+		// Check if pay feed post type
+		if ( 'pronamic_pay_gf' !== $postarr['post_type'] ) {
+			return $data;
+		}
+
+		// Check if our nonce is set.
+		if ( ! filter_has_var( INPUT_POST, 'pronamic_pay_nonce' ) ) {
+			return $data;
+		}
+
+		$nonce = filter_input( INPUT_POST, 'pronamic_pay_nonce', FILTER_SANITIZE_STRING );
+
+		// Verify that the nonce is valid.
+		if ( ! wp_verify_nonce( $nonce, 'pronamic_pay_save_pay_gf' ) ) {
+			return $data;
+		}
+
+		// If this is an autosave, our form has not been submitted, so we don't want to do anything.
+		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+			return $data;
+		}
+
+		// Check the user's permissions.
+		if ( ! current_user_can( 'edit_post', $postarr['ID'] ) ) {
+			return $data;
+		}
+
+		/* OK, its safe for us to save the data now. */
+		if ( filter_has_var( INPUT_POST, '_pronamic_pay_gf_post_title' ) ) {
+			$post_title = filter_input( INPUT_POST, '_pronamic_pay_gf_post_title', FILTER_SANITIZE_STRING );
+
+			$data['post_title'] = sanitize_text_field( wp_unslash( $post_title ) );
+		}
+
+		return $data;
+	}
+
 	/**
 	 * When the post is saved, saves our custom data.
 	 *
@@ -176,7 +216,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			'_pronamic_pay_gf_links' => array(
 				'filter'    => FILTER_SANITIZE_STRING,
 				'flags'     => FILTER_REQUIRE_ARRAY,
-				),
+			),
 			'_pronamic_pay_gf_user_role_field_id'                 => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_amount_type'           => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_amount_field'          => 'sanitize_text_field',
@@ -262,6 +302,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				update_post_meta( $post_id, $meta_key, $meta_value );
 			} else {
 				delete_post_meta( $post_id, $meta_key );
+			}
+		}
+
+		if ( filter_has_var( INPUT_POST, '_pronamic_pay_gf_condition_field_id' ) ) {
+			if ( '' !== filter_input( INPUT_POST, '_pronamic_pay_gf_condition_field_id' ) ) {
+				update_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
+			} else {
+				delete_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled' );
 			}
 		}
 	}

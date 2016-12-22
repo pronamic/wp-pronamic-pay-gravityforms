@@ -2,13 +2,9 @@
 $white: #fff;
 
 // Gravity Forms feed list
-#gf-pay-feed-list {
-	.check-column {
-		width: 50px;
-	}
-
-	i {
-		&.dashicons {
+#tab_pronamic_pay {
+	h3 {
+		.dashicons {
 			&.fa- {
 				font-size: inherit;
 				width: auto;
@@ -20,6 +16,10 @@ $white: #fff;
 
 // Gravity Forms feed editor
 #gf-pay-feed-editor {
+	#titlediv {
+		margin-bottom: 1em;
+	}
+
 	.form-table {
 		ul {
 			margin: 10px 0 0;
@@ -82,8 +82,6 @@ $white: #fff;
 .form-table {
 	// Description
 	.pronamic-pay-description {
-		// Gravity Forms defines a padding top on .description
-		// @see https://github.com/wp-premium/gravityforms/blob/2.1.0.1/css/admin.css#L836
-		padding-top: 0;
+		display: block;
 	}
 }

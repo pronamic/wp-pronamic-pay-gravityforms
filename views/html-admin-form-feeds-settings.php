@@ -7,33 +7,7 @@ if ( version_compare( GFCommon::$version, '1.7', '<' ) || ! ( filter_has_var( IN
 
 	$form_id = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
 else :
-	global $wpdb;
-
 	$in_form_settings = true;
-
-	$post_id = null;
-
-	$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT );
-
-	if ( filter_has_var( INPUT_GET, 'fid' ) ) {
-		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
-	}
-
-	if ( null === $post_id ) {
-		$query = new WP_Query( array(
-			'post_type'			=> 'pronamic_pay_gf',
-			'posts_per_page'	=> 1,
-			'meta_query'		=> array(
-				array(
-					'key'   => '_pronamic_pay_gf_form_id',
-					'value' => $form_id,
-				),
-			),
-		) );
-
-		$post_id = $query->posts[0]->ID;
-	}
-
 endif;
 
 $form_meta = RGFormsModel::get_form_meta( $form_id );
@@ -79,19 +53,27 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 	<form id="gf-pay-feed-editor" method="post">
 
-	<?php if ( ! filter_has_var( INPUT_GET, 'fid' ) ) : ?>
+		<div id="titlediv">
+			<div id="titlewrap">
+				<?php
 
-		<h3>
-			<span><i class="dashicons dashicons-money fa-"></i></span> <?php esc_html_e( 'Pay', 'pronamic_ideal' ) ?>
-		</h3>
+				$title_placeholder = __( 'Enter title here', 'pronamic_ideal' );
 
-	<?php endif; ?>
+				?>
 
-<?php else : ?>
+				<label class="screen-reader-text" id="title-prompt-text" for="title">
+					<?php echo $title_placeholder; ?>
+				</label>
+
+				<input type="text" name="_pronamic_pay_gf_post_title" size="30" value="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" id="title" spellcheck="true" autocomplete="off"  placeholder="<?php echo esc_attr( $title_placeholder ); ?>" />
+			</div>
+		</div>
+
+		<?php else : ?>
 
 	<div id="gf-pay-feed-editor">
 
-<?php endif ?>
+<?php endif; ?>
 
 	<?php wp_nonce_field( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' ); ?>
 
@@ -189,7 +171,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						?>
 						<input id="_pronamic_pay_gf_entry_id_prefix" name="_pronamic_pay_gf_entry_id_prefix" value="<?php echo esc_attr( $entry_id_prefix ); ?>" type="text" class="input-text regular-input" maxlength="8" />
 
-						<span class="description">
+						<span class="description pronamic-pay-description">
 							<?php esc_html_e( 'A prefix makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
 						</span>
 					</td>
@@ -210,7 +192,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						?>
 						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
 
-						<span class="description">
+						<span class="description pronamic-pay-description">
 							<?php
 
 							echo wp_kses(
@@ -594,7 +576,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 								<br />
 
-								<span class="description">
+								<span class="description pronamic-pay-description">
 									<?php
 
 									esc_html_e( 'Use a field value of 0 days for one-time payments.', 'pronamic_ideal' );
@@ -765,10 +747,10 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php echo esc_attr( $condition_enabled ); ?>" />
 
-						<span class="description">
+						<span class="description pronamic-pay-description">
 							<?php esc_html_e( 'Set a condition to only use the gateway if the entry matches the condition.', 'pronamic_ideal' ); ?>
 
-							<span id="gf_ideal_condition_message" class="description"><?php esc_html_e( 'To create a condition, your form must contain a drop down, checkbox or multiple choice field.', 'pronamic_ideal' ); ?></span>
+							<span id="gf_ideal_condition_message" class="description pronamic-pay-description"><?php esc_html_e( 'To create a condition, your form must contain a drop down, checkbox or multiple choice field.', 'pronamic_ideal' ); ?></span>
 						</span>
 					</td>
 				</tr>

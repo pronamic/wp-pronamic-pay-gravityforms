@@ -1,14 +1,14 @@
-/* line 6, ../sass/admin.scss */
-#gf-pay-feed-list .check-column {
-  width: 50px;
-}
-/* line 12, ../sass/admin.scss */
-#gf-pay-feed-list i.dashicons.fa- {
+/* line 8, ../sass/admin.scss */
+#tab_pronamic_pay h3 .dashicons.fa- {
   font-size: inherit;
   width: auto;
   height: auto;
 }
 
+/* line 19, ../sass/admin.scss */
+#gf-pay-feed-editor #titlediv {
+  margin-bottom: 1em;
+}
 /* line 24, ../sass/admin.scss */
 #gf-pay-feed-editor .form-table ul {
   margin: 10px 0 0;
@@ -48,5 +48,5 @@
 
 /* line 84, ../sass/admin.scss */
 .form-table .pronamic-pay-description {
-  padding-top: 0;
+  display: block;
 }

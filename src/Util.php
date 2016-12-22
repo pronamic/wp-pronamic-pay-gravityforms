@@ -18,6 +18,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Util {
 	 * @param mixed $feed
 	 */
 	public static function is_condition_true( $form, $feed ) {
+		if ( is_array( $form ) ) {
+			$form = RGFormsModel::get_form_meta( $form['id'] );
+		}
+
+		if ( is_array( $feed ) ) {
+			$feed = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $feed['ID'] );
+		}
+
 		if ( ! $feed->condition_enabled ) {
 			return true;
 		}

@@ -252,7 +252,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	 *
 	 * @since unreleased
 	 */
-	public function feed_list_no_item_message(  ) {
+	public function feed_list_no_item_message() {
 		printf( // WPCS: XSS ok
 			__( 'This form doesn\'t have any pay feeds. Let\'s go %1$screate one%2$s.', 'pronamic_ideal' ),
 			'<a href="' . esc_url( add_query_arg( array( 'fid' => 0 ) ) ) . '">',

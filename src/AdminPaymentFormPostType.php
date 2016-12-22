@@ -105,8 +105,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	 * @param int $form_id The ID of the form being deleted.
 	 */
 	public function delete_payment_form( $form_id ) {
-		global $wpdb;
-
 		$query = new WP_Query( array(
 			'post_type'			=> 'pronamic_pay_gf',
 			'meta_key'			=> array(

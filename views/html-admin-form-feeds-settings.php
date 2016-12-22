@@ -62,7 +62,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				?>
 
 				<label class="screen-reader-text" id="title-prompt-text" for="title">
-					<?php echo $title_placeholder; ?>
+					<?php echo esc_html( $title_placeholder ); ?>
 				</label>
 
 				<input type="text" name="_pronamic_pay_gf_post_title" size="30" value="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" id="title" spellcheck="true" autocomplete="off"  placeholder="<?php echo esc_attr( $title_placeholder ); ?>" />

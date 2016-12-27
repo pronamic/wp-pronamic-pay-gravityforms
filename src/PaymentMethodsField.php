@@ -130,8 +130,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			// @todo What todo if error?
 			if ( $field && ! is_wp_error( $this->error ) ) {
 				foreach ( $field['choices'] as $group ) {
-					foreach ( $group['options'] as $value => $label ) {
-						$payment_methods[ $value ] = $label;
+					if ( isset( $group['options' ) ) {
+						foreach ( $group['options'] as $value => $label ) {
+							$payment_methods[ $value ] = $label;
+						}
 					}
 				}
 			}

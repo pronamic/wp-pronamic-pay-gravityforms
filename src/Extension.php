@@ -216,7 +216,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Source URL.
 	 */
 	public function source_url( $url, Pronamic_Pay_Payment $payment ) {
-		$url = add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) ),
+		$url = add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
 
 		return $url;
 	}

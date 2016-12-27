@@ -90,6 +90,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
 			add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
 			add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( $this, 'source_text' ), 10, 2 );
+			add_filter( 'pronamic_payment_source_description_' . self::SLUG,   array( $this, 'source_description' ), 10, 2 );
 
 			add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
@@ -199,6 +200,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		);
 
 		return $text;
+	}
+
+	/**
+	 * Source description.
+	 */
+	public function source_description( $description, Pronamic_Pay_Payment $payment ) {
+		$description = __( 'Gravity Forms Entry', 'pronamic_ideal' );
+
+		return $description;
 	}
 
 	//////////////////////////////////////////////////

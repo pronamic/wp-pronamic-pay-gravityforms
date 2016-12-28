@@ -32,6 +32,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 	 * Initialize
 	 */
 	public function init() {
+		$show_ui = false;
+
+		if ( class_exists( 'GFCommon' ) && version_compare( GFCommon::$version, '1.7', '<' ) ) {
+			$show_ui = true;
+		}
+
 		register_post_type( 'pronamic_pay_gf', array(
 			'label'              => __( 'Payment Feeds', 'pronamic_ideal' ),
 			'labels'             => array(
@@ -53,7 +59,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 			),
 			'public'             => false,
 			'publicly_queryable' => false,
-			'show_ui'            => version_compare( GFCommon::$version, '1.7', '<' ),
+			'show_ui'            => $show_ui,
 			'show_in_nav_menus'  => false,
 			'show_in_menu'       => false,
 			'show_in_admin_bar'  => false,

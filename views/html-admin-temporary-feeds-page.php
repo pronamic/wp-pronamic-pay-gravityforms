@@ -44,7 +44,7 @@ $current_user = wp_get_current_user();
 	<div class="feature-section one-col">
 		<h2><?php esc_html_e( 'Manage pay feeds contextually', 'pronamic_ideal' ) ?></h2>
 
-		<p class="lead-description"><?php esc_html_e( 'Pay feeds are now accessed via the Pay sub-menu within the Form Settings.', 'gravityformspaypal' ) ?></p>
+		<p class="lead-description"><?php esc_html_e( 'Pay feeds are now accessed via the Pay sub-menu within the Form Settings.', 'pronamic_ideal' ) ?></p>
 
 		<img src="<?php echo esc_url( plugins_url( 'images/contextual_pay_feeds.png', dirname( __FILE__ ) ) ); ?>" alt="">
 	</div>

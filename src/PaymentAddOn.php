@@ -61,6 +61,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
+		if ( filter_has_var( INPUT_POST, 'gf_ideal_feed_id' ) ) {
+			$post_id = filter_input( INPUT_POST, 'gf_ideal_feed_id', FILTER_SANITIZE_STRING );
+		}
+
 		if ( filter_has_var( INPUT_POST, 'pronamic_pay_nonce' ) ) {
 			$nonce = filter_input( INPUT_POST, 'pronamic_pay_nonce', FILTER_SANITIZE_STRING );
 

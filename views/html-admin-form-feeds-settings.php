@@ -78,6 +78,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 	<?php wp_nonce_field( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' ); ?>
 
 	<input id="gf_ideal_gravity_form" name="gf_ideal_gravity_form" value="<?php echo esc_attr( json_encode( $form_meta ) ); ?>" type="hidden" />
+	<input id="gf_ideal_feed_id" name="gf_ideal_feed_id" value="<?php echo esc_attr( $post_id ); ?>" type="hidden" />
 	<input id="gf_ideal_feed" name="gf_ideal_feed" value="<?php echo esc_attr( json_encode( $feed ) ); ?>" type="hidden" />
 
 	<?php if ( filter_has_var( INPUT_GET, 'fid' ) ) : ?>

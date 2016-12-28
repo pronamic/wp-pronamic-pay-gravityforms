@@ -46,6 +46,60 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L44-L47
 		 */
 		$this->_short_title = __( 'Pay', 'pronamic_ideal' );
+
+		// Custom save feed action
+		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ) );
+	}
+
+	public function pronamic_maybe_save_feed() {
+		if ( ! filter_has_var( INPUT_POST, 'pronamic_pay_nonce' ) ) {
+			return;
+		}
+
+		check_admin_referer( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' );
+
+		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
+
+		if ( empty( $form_id ) ) {
+			return;
+		}
+
+		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
+
+		$post_title = filter_input( INPUT_POST, '_pronamic_pay_gf_post_title', FILTER_SANITIZE_STRING );
+
+		if ( '' === trim( $post_title ) ) {
+			$feeds = $this->get_feeds( $form_id );
+
+			$post_title = sprintf(
+				'%s #%s',
+				__( 'Payment feed', 'pronamic_ideal' ),
+				count( $feeds ) + 1
+			);
+		}
+
+		$result = wp_insert_post( array(
+			'ID'             => $post_id,
+			'post_type'      => 'pronamic_pay_gf',
+			'post_name'      => 'pronamic-pay-gf-' . $form_id,
+			'post_title'     => $post_title,
+			'post_status'    => 'publish',
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		) );
+
+		$url = add_query_arg( array(
+			'page'    => 'gf_edit_forms',
+			'view'    => 'settings',
+			'subview' => 'pronamic_pay',
+			'id'      => $form_id,
+			'fid'     => $post_id,
+			'message' => $result ? '1' : '0',
+		), 'admin.php' );
+
+		wp_redirect( $url );
+
+		exit;
 	}
 
 	/**
@@ -54,75 +108,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	 * @since 1.3.0
 	 */
 	public function form_settings( $form ) {
-		if ( ! filter_has_var( INPUT_GET, 'id' ) ) {
-			return;
-		}
-
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
-
-		if ( filter_has_var( INPUT_POST, 'gf_ideal_feed_id' ) ) {
-			$post_id = filter_input( INPUT_POST, 'gf_ideal_feed_id', FILTER_SANITIZE_STRING );
-		}
-
-		if ( filter_has_var( INPUT_POST, 'pronamic_pay_nonce' ) ) {
-			$nonce = filter_input( INPUT_POST, 'pronamic_pay_nonce', FILTER_SANITIZE_STRING );
-
-			// Verify that the nonce is valid.
-			if ( wp_verify_nonce( $nonce, 'pronamic_pay_save_pay_gf' ) ) {
-				if ( ! filter_has_var( INPUT_GET, 'fid' ) ) {
-					return;
-				}
-
-				$post = get_post( $post_id );
-
-				if ( ! $post ) {
-					$post_title = filter_input( INPUT_POST, '_pronamic_pay_gf_post_title', FILTER_SANITIZE_STRING );
-
-					if ( '' === trim( $post_title ) ) {
-						$feeds = $this->get_feeds( $form_id );
-
-						$post_title = sprintf(
-							'%s #%s',
-							__( 'Payment feed', 'pronamic_ideal' ),
-							count( $feeds ) + 1
-						);
-					}
-
-					$post_id = wp_insert_post( array(
-						'post_type'      => 'pronamic_pay_gf',
-						'post_name'      => 'pronamic-pay-gf-' . $form_id,
-						'post_title'     => $post_title,
-						'post_status'    => 'publish',
-						'comment_status' => 'closed',
-						'ping_status'    => 'closed',
-					) );
-				}
-
-				$updated = wp_update_post( array(
-					'ID' => $post_id,
-				) );
-
-				// Notice
-				$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
-				$class = 'error';
-
-				if ( $updated ) {
-					$class = 'updated';
-					$msg   = __( 'Payment feed updated successfully.', 'pronamic_ideal' );
-
-					if ( ! $post ) {
-						$msg = __( 'Payment feed created successfully.', 'pronamic_ideal' );
-					}
-				}
-
-				printf(
-					'<div class="%s"><p>%s</p></div>',
-					esc_attr( $class ),
-					esc_html( $msg )
-				);
-			}
-		}
 
 		if ( filter_has_var( INPUT_GET, 'fid' ) ) {
 			require( dirname( __FILE__ ) . '/../views/html-admin-form-feeds-settings.php' );

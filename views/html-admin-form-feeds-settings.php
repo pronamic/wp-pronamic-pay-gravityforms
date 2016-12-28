@@ -47,6 +47,25 @@ $feed->subscriptionFrequencyType  = $subscription_frequency_type;
 $feed->subscriptionFrequency      = $subscription_frequency;
 $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
+if ( filter_has_var( INPUT_GET, 'message' ) ) {
+	$message = filter_input( INPUT_GET, 'message', FILTER_SANITIZE_STRING );
+
+	// Notice
+	$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
+	$class = 'error';
+
+	if ( '1' === $message ) {
+		$class = 'updated';
+		$msg   = __( 'Payment feed updated successfully.', 'pronamic_ideal' );
+	}
+
+	printf(
+		'<div class="%s below-h2"><p>%s</p></div>',
+		esc_attr( $class ),
+		esc_html( $msg )
+	);
+}
+
 ?>
 
 <?php if ( $in_form_settings ) : ?>

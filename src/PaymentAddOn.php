@@ -99,9 +99,28 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 					) );
 				}
 
-				wp_update_post( array(
+				$updated = wp_update_post( array(
 					'ID' => $post_id,
 				) );
+
+				// Notice
+				$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
+				$class = 'error';
+
+				if ( $updated ) {
+					$class = 'updated';
+					$msg   = __( 'Payment feed updated successfully.', 'pronamic_ideal' );
+
+					if ( ! $post ) {
+						$msg = __( 'Payment feed created successfully.', 'pronamic_ideal' );
+					}
+				}
+
+				printf(
+					'<div class="%s"><p>%s</p></div>',
+					esc_attr( $class ),
+					esc_html( $msg )
+				);
 			}
 		}
 

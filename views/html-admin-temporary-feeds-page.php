@@ -56,7 +56,7 @@ $current_user = wp_get_current_user();
 			<?php esc_html_e( 'I understand this change, hide this message.', 'pronamic_ideal' ); ?>
 		</label>
 
-		<img id="gf_spinner" src="<?php echo esc_attr( GFCommon::get_base_url() . '/images/spinner.gif' ); ?>" alt="<?php esc_html_e( 'Please wait…', 'pronamic_ideal' ); ?>" style="display:none;" />
+		<img id="gf_spinner" src="<?php echo esc_attr( GFCommon::get_base_url() . '/images/spinner.gif' ); ?>" alt="<?php esc_attr_e( 'Please wait…', 'pronamic_ideal' ); ?>" style="display: none;" />
 	</form>
 
 </div>

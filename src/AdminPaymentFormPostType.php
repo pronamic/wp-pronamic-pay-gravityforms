@@ -11,6 +11,14 @@
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
+	/**
+	 * Post type
+	 */
+	const POST_TYPE = 'pronamic_pay_gf';
+
+	/**
+	 * Constructs and intialize admin payment form post type.
+	 */	
 	public function __construct() {
 		add_filter( 'manage_edit-pronamic_pay_gf_columns', array( $this, 'edit_columns' ) );
 
@@ -24,7 +32,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data' ), 99, 2 );
 
-		add_action( 'save_post', array( $this, 'save_post' ) );
+		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_post' ) );
 	}
 
 	public function edit_columns( $columns ) {
@@ -167,50 +175,44 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	public function save_post( $post_id ) {
 		// Check if our nonce is set.
 		if ( ! filter_has_var( INPUT_POST, 'pronamic_pay_nonce' ) ) {
-			return $post_id;
+			return;
 		}
 
 		$nonce = filter_input( INPUT_POST, 'pronamic_pay_nonce', FILTER_SANITIZE_STRING );
 
 		// Verify that the nonce is valid.
 		if ( ! wp_verify_nonce( $nonce, 'pronamic_pay_save_pay_gf' ) ) {
-			return $post_id;
+			return;
 		}
 
 		// If this is an autosave, our form has not been submitted, so we don't want to do anything.
 		if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
-			return $post_id;
+			return;
 		}
 
 		// Check the user's permissions.
-		if ( 'page' === get_post_type( $post_id ) ) {
-			if ( ! current_user_can( 'edit_page', $post_id ) ) {
-				return $post_id;
-			}
-		} else {
-			if ( ! current_user_can( 'edit_post', $post_id ) ) {
-				return $post_id;
-			}
+		if ( ! current_user_can( 'edit_post', $post_id ) ) {
+			return;
 		}
 
 		/* OK, its safe for us to save the data now. */
 		$definition = array(
-			'_pronamic_pay_gf_form_id'                            => 'sanitize_text_field',
-			'_pronamic_pay_gf_config_id'                          => 'sanitize_text_field',
-			'_pronamic_pay_gf_entry_id_prefix'                    => 'sanitize_text_field',
-			'_pronamic_pay_gf_transaction_description'            => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_enabled'                  => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_condition_field_id'                 => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_operator'                 => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_value'                    => 'sanitize_text_field',
-			'_pronamic_pay_gf_delay_admin_notification'           => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_delay_user_notification'            => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_delay_notification_ids'             => array(
+			'_pronamic_pay_gf_form_id'                      => 'sanitize_text_field',
+			'_pronamic_pay_gf_config_id'                    => 'sanitize_text_field',
+			'_pronamic_pay_gf_entry_id_prefix'              => 'sanitize_text_field',
+			'_pronamic_pay_gf_transaction_description'      => 'sanitize_text_field',
+			'_pronamic_pay_gf_condition_enabled'            => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_condition_field_id'           => 'sanitize_text_field',
+			'_pronamic_pay_gf_condition_operator'           => 'sanitize_text_field',
+			'_pronamic_pay_gf_condition_value'              => 'sanitize_text_field',
+			'_pronamic_pay_gf_delay_admin_notification'     => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_delay_user_notification'      => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_delay_notification_ids'       => array(
 				'filter'    => FILTER_SANITIZE_STRING,
 				'flags'     => FILTER_REQUIRE_ARRAY,
 			),
-			'_pronamic_pay_gf_delay_post_creation'                => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_fields'                             => array(
+			'_pronamic_pay_gf_delay_post_creation'          => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_fields'                       => array(
 				'filter'    => FILTER_SANITIZE_STRING,
 				'flags'     => FILTER_REQUIRE_ARRAY,
 			),
@@ -218,16 +220,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 				'filter'    => FILTER_SANITIZE_STRING,
 				'flags'     => FILTER_REQUIRE_ARRAY,
 			),
-			'_pronamic_pay_gf_user_role_field_id'                 => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_amount_type'           => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_amount_field'          => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_interval_type'         => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_interval'              => FILTER_SANITIZE_NUMBER_INT,
-			'_pronamic_pay_gf_subscription_interval_period'       => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_interval_field'        => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_frequency_type'        => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_frequency'             => FILTER_SANITIZE_NUMBER_INT,
-			'_pronamic_pay_gf_subscription_frequency_field'       => 'sanitize_text_field',
+			'_pronamic_pay_gf_user_role_field_id'           => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_amount_type'     => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_amount_field'    => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_type'   => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval'        => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_subscription_interval_period' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_field'  => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_frequency_type'  => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_frequency'       => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 		);
 
 		if ( class_exists( 'GFAWeber' ) ) {

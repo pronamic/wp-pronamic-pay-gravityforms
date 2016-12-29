@@ -116,7 +116,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
 		if ( filter_has_var( INPUT_GET, 'fid' ) ) {
-			require( dirname( __FILE__ ) . '/../views/html-admin-form-feeds-settings.php' );
+			require( dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php' );
 		} else {
 			$this->feed_list_page( $form );
 		}

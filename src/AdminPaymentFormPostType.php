@@ -96,7 +96,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	 * @param WP_Post $post The object for the current post/page.
 	 */
 	public function meta_box_config( $post ) {
-		include dirname( __FILE__ ) . '/../views/html-admin-form-feeds-settings.php';
+		$form_id = get_post_meta( $post->ID, '_pronamic_pay_gf_form_id', true );
+		$post_id = $post->ID;
+
+		include dirname( __FILE__ ) . '/../views/html-admin-feed-meta-box.php';
 	}
 
 	/**

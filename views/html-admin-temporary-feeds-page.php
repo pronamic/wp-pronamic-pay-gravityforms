@@ -2,8 +2,6 @@
 
 global $pronamic_pay_version;
 
-$current_user = wp_get_current_user();
-
 ?>
 
 <script type="text/javascript">

@@ -18,7 +18,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 	/**
 	 * Constructs and intialize admin payment form post type.
-	 */	
+	 */
 	public function __construct() {
 		add_filter( 'manage_edit-pronamic_pay_gf_columns', array( $this, 'edit_columns' ) );
 

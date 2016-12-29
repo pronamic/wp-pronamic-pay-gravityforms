@@ -47,10 +47,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		 */
 		$this->_short_title = __( 'Pay', 'pronamic_ideal' );
 
-		// Custom save feed action
+		/*
+		 * Actions
+		 */
 		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ) );
 	}
 
+	/**
+	 * Maybe save feed.
+	 */
 	public function pronamic_maybe_save_feed() {
 		if ( ! filter_has_var( INPUT_POST, 'pronamic_pay_nonce' ) ) {
 			return;
@@ -81,7 +86,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$result = wp_insert_post( array(
 			'ID'             => $post_id,
 			'post_type'      => 'pronamic_pay_gf',
-			'post_name'      => 'pronamic-pay-gf-' . $form_id,
 			'post_title'     => $post_title,
 			'post_status'    => 'publish',
 			'comment_status' => 'closed',

@@ -50,7 +50,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		/*
 		 * Actions
 		 */
-		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ) );
+		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ), 20 );
 	}
 
 	/**

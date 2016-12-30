@@ -83,7 +83,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 			);
 		}
 
-		$result = wp_insert_post( array(
+		$post_id = wp_insert_post( array(
 			'ID'             => $post_id,
 			'post_type'      => 'pronamic_pay_gf',
 			'post_title'     => $post_title,
@@ -98,7 +98,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 			'subview' => 'pronamic_pay',
 			'id'      => $form_id,
 			'fid'     => $post_id,
-			'message' => $result ? '1' : '0',
+			'message' => $post_id ? '1' : '0',
 		), 'admin.php' );
 
 		wp_redirect( $url );

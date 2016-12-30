@@ -15,11 +15,11 @@ $white: #fff;
 }
 
 // Gravity Forms feed editor
-#gf-pay-feed-editor {
-	#titlediv {
-		margin-bottom: 1em;
-	}
+#titlediv + #gf-pay-feed-editor {
+	margin-top: 1em;
+}
 
+#gf-pay-feed-editor {
 	.form-table {
 		ul {
 			margin: 10px 0 0;

@@ -5,10 +5,11 @@
   height: auto;
 }
 
-/* line 19, ../sass/admin.scss */
-#gf-pay-feed-editor #titlediv {
-  margin-bottom: 1em;
+/* line 18, ../sass/admin.scss */
+#titlediv + #gf-pay-feed-editor {
+  margin-top: 1em;
 }
+
 /* line 24, ../sass/admin.scss */
 #gf-pay-feed-editor .form-table ul {
   margin: 10px 0 0;

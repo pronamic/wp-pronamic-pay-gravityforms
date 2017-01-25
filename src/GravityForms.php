@@ -3,11 +3,12 @@
 /**
  * Title: WordPress pay extension Gravity Forms
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.6.0
+ * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	/**
@@ -39,6 +40,57 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	 * @var string
 	 */
 	const OPERATOR_IS_NOT = '!=';
+
+	//////////////////////////////////////////////////
+
+	/**
+	 * Indicator for form total subscription amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_AMOUNT_TOTAL = 'total';
+
+	/**
+	 * Indicator for field subscription amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_AMOUNT_FIELD = 'field';
+
+	/**
+	 * Indicator for field subscription interval type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_INTERVAL_FIELD = 'field';
+
+	/**
+	 * Indicator for fixed subscription interval type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_INTERVAL_FIXED = 'fixed';
+
+	/**
+	 * Indicator for field subscription frequency type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_FREQUENCY_FIELD = 'field';
+
+	/**
+	 * Indicator for fixed subscription frequency type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_FREQUENCY_FIXED = 'fixed';
+
+	/**
+	 * Indicator for unlimited subscription frequency type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_FREQUENCY_UNLIMITED = 'unlimited';
 
 	//////////////////////////////////////////////////
 

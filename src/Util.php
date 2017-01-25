@@ -3,11 +3,11 @@
 /**
  * Title: WordPress pay extension Gravity Forms extension
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.7
+ * @version 1.6.0
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Util {
@@ -18,6 +18,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Util {
 	 * @param mixed $feed
 	 */
 	public static function is_condition_true( $form, $feed ) {
+		if ( is_array( $form ) ) {
+			$form = RGFormsModel::get_form_meta( $form['id'] );
+		}
+
+		if ( is_array( $feed ) ) {
+			$feed = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $feed['ID'] );
+		}
+
 		if ( ! $feed->condition_enabled ) {
 			return true;
 		}

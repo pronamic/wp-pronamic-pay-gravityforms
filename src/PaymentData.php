@@ -3,11 +3,11 @@
 /**
  * Title: WordPress pay extension Gravity Forms payment data
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.9
+ * @version 1.6.0
  * @since 1.0.1
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
@@ -60,17 +60,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	 * @return Ambigous <NULL, multitype:>
 	 */
 	private function get_field_value( $field_name ) {
-		$value = null;
-
-		if ( isset( $this->feed->fields[ $field_name ] ) ) {
-			$field_id = $this->feed->fields[ $field_name ];
-
-			if ( isset( $this->lead[ $field_id ] ) ) {
-				$value = $this->lead[ $field_id ];
-			}
+		if ( ! isset( $this->feed->fields[ $field_name ] ) ) {
+			return null;
 		}
 
-		return $value;
+		$field_id = $this->feed->fields[ $field_name ];
+
+		if ( ! isset( $this->lead[ $field_id ] ) ) {
+			return null;
+		}
+
+		return $this->lead[ $field_id ];
 	}
 
 	//////////////////////////////////////////////////
@@ -326,7 +326,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				return RGFormsModel::get_field_value( $field );
+				$method = RGFormsModel::get_field_value( $field );
+
+				if ( ! $this->get_subscription() && Pronamic_WP_Pay_PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
+					// DIRECT_DEBIT_IDEAL can only be used for subscription payments.
+
+					$method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
+				}
+
+				return $method;
 			}
 		}
 	}
@@ -389,5 +397,94 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		}
 
 		return $credit_card;
+	}
+
+	//////////////////////////////////////////////////
+	// Subscription
+	//////////////////////////////////////////////////
+
+	public function get_subscription() {
+		// Amount
+		$amount = 0;
+
+		switch ( $this->feed->subscription_amount_type ) {
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_TOTAL :
+				$items = $this->get_items();
+
+				$amount = $items->get_amount();
+
+				break;
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_FIELD :
+				$field_id = $this->feed->subscription_amount_field;
+
+				$product_fields = GFCommon::get_product_fields( $this->form, $this->lead );
+
+				if ( isset( $product_fields['products'][ $field_id ] ) ) {
+					$amount = GFCommon::to_number( $product_fields['products'][ $field_id ]['price'] );
+					$amount *= $product_fields['products'][ $field_id ]['quantity'];
+				}
+
+				break;
+		}
+
+		if ( 0 === $amount ) {
+			return;
+		}
+
+		// Interval
+		$interval = '';
+		$interval_period = 'D';
+
+		switch ( $this->feed->subscription_interval_type ) {
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIELD :
+				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_interval_field );
+
+				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+					if ( isset( $this->lead[ $this->feed->subscription_interval_field ] ) ) {
+						$interval = $this->lead[ $this->feed->subscription_interval_field ];
+
+						if ( '0' === $interval ) {
+							return;
+						}
+					}
+				}
+
+				break;
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIXED :
+				$interval        = $this->feed->subscription_interval;
+				$interval_period = $this->feed->subscription_interval_period;
+
+				break;
+		}
+
+		// Frequency
+		$frequency = '';
+
+		switch ( $this->feed->subscription_frequency_type ) {
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIELD :
+				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
+
+				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
+						$frequency = $this->lead[ $this->feed->subscription_frequency_field ];
+					}
+				}
+
+				break;
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIXED :
+				$frequency = $this->feed->subscription_frequency;
+
+				break;
+		}
+
+		$subscription                  = new Pronamic_Pay_Subscription();
+		$subscription->frequency       = $frequency;
+		$subscription->interval        = $interval;
+		$subscription->interval_period = $interval_period;
+		$subscription->amount          = $amount;
+		$subscription->currency        = $this->get_currency();
+		$subscription->description     = $this->get_description();
+
+		return $subscription;
 	}
 }

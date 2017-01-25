@@ -7,6 +7,12 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.6.0] - 2017-01-25
+- Added support for subscriptions.
+- Added temporary pay feeds moved notice.
+- Added filter function for the payment source description.
+- Added filter for source URL.
+
 ## [1.5.2] - 2016-11-16
 - Simplified CSS for WordPress admin elements.
 - Enabled choice values for payment methods field.
@@ -124,7 +130,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.2...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.0...HEAD
+[1.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.2...1.6.0
 [1.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.0...1.5.1
 [1.5.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.4.9...1.5.0

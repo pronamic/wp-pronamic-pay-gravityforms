@@ -3,11 +3,11 @@
 /**
  * Title: WordPress payment form post type
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.5.1
+ * @version 1.6.0
  * @since 1.1.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
@@ -26,10 +26,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 		add_action( 'init', array( $this, 'init' ), 0 ); // highest priority
 	}
 
-	//////////////////////////////////////////////////
+	/**
+	 * Get the show UI flag for the payment form post type.
+	 *
+	 * @return boolean true if show UI, false otherwise
+	 */
+	private function get_show_ui() {
+		// If Gravity Forms is active and version is lower then 1.7 we show the WordPress UI.
+		return class_exists( 'GFCommon' ) && version_compare( GFCommon::$version, '1.7', '<' );
+	}
 
 	/**
-	 * Initialize
+	 * Initialize.
 	 */
 	public function init() {
 		register_post_type( 'pronamic_pay_gf', array(
@@ -53,7 +61,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 			),
 			'public'             => false,
 			'publicly_queryable' => false,
-			'show_ui'            => true,
+			'show_ui'            => $this->get_show_ui(),
 			'show_in_nav_menus'  => false,
 			'show_in_menu'       => false,
 			'show_in_admin_bar'  => false,

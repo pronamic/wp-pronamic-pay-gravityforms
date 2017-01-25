@@ -3,11 +3,11 @@
 /**
  * Title: WordPress pay extension Gravity Forms pay feed
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.0.0
+ * @version 1.6.0
  * @since 1.4.4
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
@@ -99,24 +99,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 		$this->post = get_post( $post_id );
 
 		// Load
-		$this->config_id                = get_post_meta( $post_id, '_pronamic_pay_gf_config_id', true );
+		$this->form_id                            = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
+		$this->config_id                          = get_post_meta( $post_id, '_pronamic_pay_gf_config_id', true );
 
-		$this->entry_id_prefix          = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
+		$this->entry_id_prefix                    = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
 
-		$this->transaction_description  = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
+		$this->transaction_description            = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
 
-		$this->condition_enabled        = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-		$this->condition_field_id       = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
-		$this->condition_operator       = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
-		$this->condition_value          = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+		$this->condition_enabled                  = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
+		$this->condition_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
+		$this->condition_operator                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
+		$this->condition_value                    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
 
-		$ids = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
-		$this->delay_notification_ids   = is_array( $ids ) ? $ids : array();
+		$ids                                      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
+		$this->delay_notification_ids             = is_array( $ids ) ? $ids : array();
 
-		$this->delay_admin_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
-		$this->delay_user_notification  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
+		$this->delay_admin_notification           = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
+		$this->delay_user_notification            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
 
-		$this->delay_post_creation      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
+		$this->delay_post_creation                = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
 
 		$this->delay_aweber_subscription          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_aweber_subscription', true );
 		$this->delay_campaignmonitor_subscription = get_post_meta( $post_id, '_pronamic_pay_gf_delay_campaignmonitor_subscription', true );
@@ -125,13 +126,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 
 		$this->delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
 
-		$fields = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
-		$this->fields                   = is_array( $fields ) ? $fields : array();
+		$fields                                   = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
+		$this->fields                             = is_array( $fields ) ? $fields : array();
 
-		$links = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
-		$this->links                    = is_array( $links ) ? $links : array();
+		$links                                    = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
+		$this->links                              = is_array( $links ) ? $links : array();
 
-		$this->user_role_field_id       = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
+		$this->user_role_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
+
+		$this->subscription_amount_type           = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
+		$this->subscription_amount_field          = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_field', true );
+		$this->subscription_interval_type         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_type', true );
+		$this->subscription_interval              = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval', true );
+		$this->subscription_interval_period       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_period', true );
+		$this->subscription_interval_field        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
+		$this->subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
+		$this->subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
+		$this->subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
 	}
 
 	//////////////////////////////////////////////////

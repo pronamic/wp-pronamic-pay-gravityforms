@@ -1,18 +1,22 @@
 <?php
 
-function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
+function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $meta = array() ) {
 	$feeds = array();
+
+	$meta_query = array(
+		array(
+			'key'     => '_pronamic_pay_gf_form_id',
+			'value'   => $form_id,
+		),
+	);
+
+	$meta_query = array_merge( $meta_query, $meta );
 
 	$post_ids = get_posts( array(
 		'fields'         => 'ids',
 		'post_type'      => 'pronamic_pay_gf',
 		'posts_per_page' => 50,
-		'meta_query'     => array(
-			array(
-				'key'     => '_pronamic_pay_gf_form_id',
-				'value'   => $form_id,
-			),
-		),
+		'meta_query'     => $meta_query,
 	) );
 
 	foreach ( $post_ids as $post_id ) {
@@ -23,7 +27,21 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id ) {
 }
 
 function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {
-	$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+	$meta = array(
+		array(
+			'relation'    => 'OR',
+			array(
+				'key'     => '_pronamic_pay_gf_feed_active',
+				'value'   => 1,
+			),
+			array(
+				'key'     => '_pronamic_pay_gf_feed_active',
+				'compare' => 'NOT EXISTS',
+			),
+		),
+	);
+
+	$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id, $meta );
 
 	if ( ! empty( $feeds ) ) {
 		$form = RGFormsModel::get_form_meta( $form_id );

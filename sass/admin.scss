@@ -1,8 +1,55 @@
-// Gravity Forms notifications
-#gf-ideal-feed-editor {
+// White (http://www.colorhexa.com/ffffff)
+$white: #fff;
+
+// Gravity Forms feed list
+#tab_pronamic_pay {
+	h3 {
+		.dashicons {
+			&.fa- {
+				font-size: inherit;
+				width: auto;
+				height: auto;
+			}
+		}
+	}
+}
+
+// Gravity Forms feed editor
+#titlediv + #gf-pay-feed-editor {
+	margin-top: 1em;
+}
+
+#gf-pay-feed-editor {
 	.form-table {
 		ul {
 			margin: 10px 0 0;
+		}
+	}
+
+	.pronamic-pay-tab {
+		.pronamic-pay-tab-block {
+			background: $white;
+		}
+
+		.pronamic-pay-table-striped {
+			tr {
+				&:not(.even) {
+					background: $white;
+				}
+			}
+		}
+
+		input + select {
+			vertical-align: initial;
+		}
+	}
+
+	.pronamic-gf-subscription-tab {
+		fieldset {
+			> div {
+				margin-bottom: -1em;
+				margin-left: 2em;
+			}
 		}
 	}
 }
@@ -35,8 +82,6 @@
 .form-table {
 	// Description
 	.pronamic-pay-description {
-		// Gravity Forms defines a padding top on .description
-		// @see https://github.com/wp-premium/gravityforms/blob/2.1.0.1/css/admin.css#L836
-		padding-top: 0;
+		display: block;
 	}
 }

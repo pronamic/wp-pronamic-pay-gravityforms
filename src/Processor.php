@@ -3,14 +3,21 @@
 /**
  * Title: WordPress pay extension Gravity Forms processor
  * Description:
- * Copyright: Copyright (c) 2005 - 2016
+ * Copyright: Copyright (c) 2005 - 2017
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.8
+ * @version 1.6.0
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
+	/**
+	 * The Pronamic iDEAL Gravity Forms extension
+	 *
+	 * @var Pronamic_WP_Pay_Extensions_GravityForms_Extension
+	 */
+	private $extension;
+
 	/**
 	 * The Gravity Forms form
 	 *
@@ -83,9 +90,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	 *
 	 * @param array $form
 	 */
-	public function __construct( array $form ) {
-		$this->form    = $form;
-		$this->form_id = isset( $form['id'] ) ? $form['id'] : null;
+	public function __construct( array $form, Pronamic_WP_Pay_Extensions_GravityForms_Extension $extension ) {
+		$this->extension = $extension;
+		$this->form      = $form;
+		$this->form_id   = isset( $form['id'] ) ? $form['id'] : null;
 
 		// Get payment feed by form ID
 		$this->feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $this->form_id );
@@ -268,6 +276,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			// Update entry meta with payment ID
 			gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
 
+			// Update entry meta with subscription ID
+			gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
+
 			// Update entry meta with feed ID
 			gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
 
@@ -276,6 +287,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 			// Update lead
 			Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry( $lead );
+
+			// Add pending payment
+			$action = array(
+				'id'             => $this->payment->get_id(),
+				'transaction_id' => $this->payment->get_transaction_id(),
+				'amount'         => $this->payment->get_amount(),
+				'entry_id'       => $lead['id'],
+			);
+
+			$this->extension->payment_action( 'add_pending_payment', $lead, $action );
 		}
 
 		return $lead;

@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.6.1] - 2017-02-09
+- Only check admin referer for payment feeds and not when saving/testing configurations.
+
 ## [1.6.0] - 2017-01-25
 - Added support for subscriptions.
 - Added temporary pay feeds moved notice.
@@ -130,7 +133,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.0...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.1...HEAD
+[1.6.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.2...1.6.0
 [1.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.1...1.5.2
 [1.5.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.0...1.5.1

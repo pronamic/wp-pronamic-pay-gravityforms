@@ -61,15 +61,22 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 			return;
 		}
 
-		check_admin_referer( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' );
-
-		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
-
-		if ( empty( $form_id ) ) {
+		if ( ! filter_has_var( INPUT_GET, 'id' ) ) {
 			return;
 		}
 
+		if ( ! filter_has_var( INPUT_GET, 'fid' ) ) {
+			return;
+		}
+
+		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
+
+		if ( empty( $form_id ) || empty( $post_id ) ) {
+			return;
+		}
+
+		check_admin_referer( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' );
 
 		$post_title = filter_input( INPUT_POST, '_pronamic_pay_gf_post_title', FILTER_SANITIZE_STRING );
 

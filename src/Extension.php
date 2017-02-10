@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.9
+ * @version 1.6.2
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
@@ -175,7 +175,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 	}
 
-	function no_conflict_scripts( $scripts ) {
+	/**
+	 * Gravity Forms No Conflict scripts.
+	 *
+	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_scripts/
+	 * @param array $scripts
+	 * @return array
+	 */
+	public function no_conflict_scripts( $scripts ) {
 		$scripts[] = 'jquery-tiptip';
 		$scripts[] = 'pronamic-pay-admin';
 		$scripts[] = 'pronamic-pay-gravityforms';
@@ -183,7 +190,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		return $scripts;
 	}
 
-	function no_conflict_styles( $styles ) {
+
+	/**
+	 * Gravity Forms No Conflict styles.
+	 *
+	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_styles/
+	 * @param array $styles
+	 * @return array
+	 */
+	public function no_conflict_styles( $styles ) {
 		$styles[] = 'jquery-tiptip';
 		$styles[] = 'pronamic-pay-icons';
 		$styles[] = 'pronamic-pay-admin';

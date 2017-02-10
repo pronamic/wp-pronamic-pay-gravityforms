@@ -97,6 +97,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
 
+			// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled
+			add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
+			add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
+
 			$this->maybe_display_confirmation();
 		}
 	}
@@ -169,6 +173,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			wp_enqueue_script( 'gform_form_admin' );
 		}
+	}
+
+	function no_conflict_scripts( $scripts ) {
+		$scripts[] = 'jquery-tiptip';
+		$scripts[] = 'pronamic-pay-admin';
+		$scripts[] = 'pronamic-pay-gravityforms';
+
+		return $scripts;
+	}
+
+	function no_conflict_styles( $styles ) {
+		$styles[] = 'jquery-tiptip';
+		$styles[] = 'pronamic-pay-icons';
+		$styles[] = 'pronamic-pay-admin';
+		$styles[] = 'pronamic-pay-gravityforms';
+
+		return $styles;
 	}
 
 	//////////////////////////////////////////////////

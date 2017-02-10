@@ -72,7 +72,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
-		if ( empty( $form_id ) || empty( $post_id ) ) {
+		if ( empty( $form_id ) ) {
 			return;
 		}
 

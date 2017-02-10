@@ -190,7 +190,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 
 			$post['id'] = $post['ID'];
 
-			$post['is_active'] = ( '1' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) );
+			$is_active = get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true );
+
+			$post['is_active'] = ( '0' !== $is_active );
 			$post['meta'] = array(
 				'transactionType' => 'product',
 			);

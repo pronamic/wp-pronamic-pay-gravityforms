@@ -2,11 +2,12 @@
 
 <phpunit
     bootstrap="tests/bootstrap.php"
+    backupGlobals="false"
     colors="true"
 >
     <testsuites>
-        <testsuite name="WordPress Pay Gravity Forms Test Suite">
-            <directory>./tests/</directory>
+        <testsuite>
+            <directory suffix=".php">./tests/</directory>
         </testsuite>
     </testsuites>
 

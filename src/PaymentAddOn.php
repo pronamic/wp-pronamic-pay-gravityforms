@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.1
+ * @version 1.6.2
  * @since 1.1.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddOn {
@@ -72,7 +72,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
-		if ( empty( $form_id ) || empty( $post_id ) ) {
+		if ( empty( $form_id ) ) {
 			return;
 		}
 
@@ -190,7 +190,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 
 			$post['id'] = $post['ID'];
 
-			$post['is_active'] = ( '1' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) );
+			// Is activated?
+			$post['is_active'] = true;
+
+			if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
+				$post['is_active'] = false;
+			}
+
 			$post['meta'] = array(
 				'transactionType' => 'product',
 			);

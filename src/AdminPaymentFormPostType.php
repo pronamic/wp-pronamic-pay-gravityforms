@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.2
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
@@ -314,6 +314,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			} else {
 				delete_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled' );
 			}
+		}
+
+		$active = get_post_meta( $post_id, '_pronamic_pay_gf_feed_active', true );
+
+		if ( '' === $active ) {
+			update_post_meta( $post_id, '_pronamic_pay_gf_feed_active', '1' );
 		}
 	}
 }

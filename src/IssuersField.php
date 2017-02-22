@@ -159,7 +159,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		if ( is_admin() ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
 
-			$new_feed_url = add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
+			$new_feed_url = add_query_arg( array(
+				'page'    => 'gf_edit_forms',
+				'view'    => 'settings',
+				'subview' => 'pronamic_pay',
+				'id'      => $form['id'],
+				'fid'     => 0,
+				), admin_url( 'admin.php' )
+			);
+
+			if ( version_compare( GFCommon::$version, '1.7', '<' ) ) {
+				$new_feed_url = add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
+			}
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(

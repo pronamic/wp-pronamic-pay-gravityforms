@@ -221,4 +221,23 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 
 		die();
 	}
+
+	/**
+	 * Get new feed URL.
+	 *
+	 * @return string
+	 */
+	public static function get_new_feed_url() {
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '<' ) ) {
+			return add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
+		}
+
+		return add_query_arg( array(
+			'page'    => 'gf_edit_forms',
+			'view'    => 'settings',
+			'subview' => 'pronamic_pay',
+			'id'      => $form['id'],
+			'fid'     => 0,
+		), admin_url( 'admin.php' ) );
+	}
 }

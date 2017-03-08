@@ -734,26 +734,28 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 		<?php
 
-		$js_form = GFFormsModel::get_form_meta( $form_id );
+		if ( version_compare( GFCommon::$version, '1.7', '<' ) ) :
 
-		if ( $form_id && null !== $js_form ) :
+			$js_form = GFFormsModel::get_form_meta( $form_id );
 
-			if ( ! isset( $js_form['fields'] ) || ! is_array( $js_form['fields'] ) ) {
-				$js_form['fields'] = array();
-			}
+			if ( $form_id && null !== $js_form ) :
 
-			$js_form = gf_apply_filters( array( 'gform_admin_pre_render', $form_id ), $js_form );
+				if ( ! isset( $js_form['fields'] ) || ! is_array( $js_form['fields'] ) ) {
+					$js_form['fields'] = array();
+				}
 
-			$_GET['id'] = $form_id;
+				$_GET['id'] = $form_id;
 
-			printf( //xss ok
-				'<script type="text/javascript">
-				var form = %s;
-				%s
-				</script>',
-				json_encode( $js_form ),
-				GFCommon::gf_vars( false )
-			);
+				printf( //xss ok
+					'<script type="text/javascript">
+					var form = %s;
+					%s
+					</script>',
+					json_encode( $js_form ),
+					GFCommon::gf_vars( false )
+				);
+
+			endif;
 
 		endif;
 

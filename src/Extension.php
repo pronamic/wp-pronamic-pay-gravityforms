@@ -18,13 +18,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	const SLUG = 'gravityformsideal';
 
-	/**
-	 * Gravity Forms minimum required version
-	 *
-	 * @var string
-	 */
-	const GRAVITY_FORMS_MINIMUM_VERSION = '1.0';
-
 	//////////////////////////////////////////////////
 
 	/**
@@ -32,23 +25,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	public static function bootstrap() {
 		$extension = new Pronamic_WP_Pay_Extensions_GravityForms_Extension();
+		$extension->setup();
 	}
 
 	//////////////////////////////////////////////////
 
 	/**
-	 * Constructs and initialize an Gravity Forms extension object
+	 * Setup.
 	 */
-	public function __construct() {
-		// Post types
-		$this->payment_form_post_type = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
-
-		// Actions
+	public function setup() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
-		// Initialize hook, Gravity Forms uses the default priority (10)
-		add_action( 'init', array( $this, 'init' ), 20 );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 	}
 
 	//////////////////////////////////////////////////
@@ -57,6 +43,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Plugins loaded
 	 */
 	public function plugins_loaded() {
+		// Gravity Forms version 1.0 is required.
+		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.0', '<' ) ) {
+			return;
+		}
+
+		// Post types
+		$this->payment_form_post_type = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
+
+		// Actions
+		// Initialize hook, Gravity Forms uses the default priority (10)
+		add_action( 'init', array( $this, 'init' ), 20 );
+
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+
 		// Add-on
 		// The `class_exists` call is required to prevent strange errors on some hosting environments
 		if ( Pronamic_WP_Pay_Class::method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
@@ -68,41 +68,37 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 
 		// Fields
-		if ( $this->is_gravityforms_supported() ) {
-			$this->fields = new Pronamic_WP_Pay_Extensions_GravityForms_Fields();
-		}
+		$this->fields = new Pronamic_WP_Pay_Extensions_GravityForms_Fields();
 	}
 
 	/**
 	 * Initialize
 	 */
 	public function init() {
-		if ( $this->is_gravityforms_supported() ) {
-			// Admin
-			if ( is_admin() ) {
-				Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();
-			} else {
-				add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
-			}
-
-			add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
-			add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
-			add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
-			add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
-			add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( $this, 'source_text' ), 10, 2 );
-			add_filter( 'pronamic_payment_source_description_' . self::SLUG,   array( $this, 'source_description' ), 10, 2 );
-			add_filter( 'pronamic_payment_source_url_' . self::SLUG,   array( $this, 'source_url' ), 10, 2 );
-
-			add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
-
-			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
-
-			// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled
-			add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
-			add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
-
-			$this->maybe_display_confirmation();
+		// Admin
+		if ( is_admin() ) {
+			Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();
+		} else {
+			add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
 		}
+
+		add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
+		add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
+		add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
+		add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
+		add_filter( 'pronamic_payment_source_text_' . self::SLUG,   array( $this, 'source_text' ), 10, 2 );
+		add_filter( 'pronamic_payment_source_description_' . self::SLUG,   array( $this, 'source_description' ), 10, 2 );
+		add_filter( 'pronamic_payment_source_url_' . self::SLUG,   array( $this, 'source_url' ), 10, 2 );
+
+		add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
+
+		add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+
+		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled
+		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
+		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
+
+		$this->maybe_display_confirmation();
 	}
 
 	/**
@@ -811,17 +807,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 
 		return GFFormDisplay::handle_confirmation( $form, $lead, false );
-	}
-
-	//////////////////////////////////////////////////
-
-	/**
-	 * Checks if Gravity Forms is supported
-	 *
-	 * @return true if Gravity Forms is supported, false otherwise
-	 */
-	public function is_gravityforms_supported() {
-		return Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( self::GRAVITY_FORMS_MINIMUM_VERSION, '>=' );
 	}
 
 	//////////////////////////////////////////////////

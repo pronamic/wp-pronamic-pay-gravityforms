@@ -7,6 +7,12 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.6.3] - Unreleased
+- Updated new feed URL link in payment fields.
+- Only load the payment methods field if Gravity Forms version is > 1.9.19.
+- Simplified loading and setting up the Gravity Forms extension with a early return.
+- Fixed 'Warning: Missing argument 3 for gf_apply_filters()'.
+
 ## [1.6.2] - 2017-02-10
 - No longer check on the payment feed post ID, a empty payment feed post ID is allowed when creating new payment feeds.
 - Auto enable new payment feeds.
@@ -139,7 +145,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.2...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.3...HEAD
+[1.6.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.2...1.6.3
 [1.6.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.1...1.6.2
 [1.6.1]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.0...1.6.1
 [1.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.5.2...1.6.0

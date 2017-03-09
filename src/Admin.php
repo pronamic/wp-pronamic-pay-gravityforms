@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.3
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
@@ -225,6 +225,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	/**
 	 * Get new feed URL.
 	 *
+	 * @since 1.6.3
 	 * @param string $form_id
 	 * @return string
 	 */

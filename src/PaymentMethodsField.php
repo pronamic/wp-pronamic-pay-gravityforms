@@ -223,7 +223,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			if ( empty( $feeds ) ) {
 				$link = sprintf(
 					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-					esc_url( Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url() ),
+					esc_url( Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url( $form['id'] ) ),
 					esc_html__( 'New Payment Feed', 'pronamic_ideal' )
 				);
 

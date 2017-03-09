@@ -159,7 +159,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		if ( is_admin() ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
 
-			$new_feed_url = Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url();
+			$new_feed_url = Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url( $form['id'] );
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(

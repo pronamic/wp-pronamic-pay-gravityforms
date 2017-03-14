@@ -232,6 +232,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 		);
 
+		if ( class_exists( 'GFActiveCampaign' ) ) {
+			$definition['_pronamic_pay_gf_delay_activecampaign_subscription'] = FILTER_VALIDATE_BOOLEAN;
+		}
+
 		if ( class_exists( 'GFAWeber' ) ) {
 			$definition['_pronamic_pay_gf_delay_aweber_subscription'] = FILTER_VALIDATE_BOOLEAN;
 		}

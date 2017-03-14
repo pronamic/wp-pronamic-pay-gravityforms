@@ -286,6 +286,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						<?php
 
 						$delay_post_creation                = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
+						$delay_activecamp_subscription      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_activecampaign_subscription', true );
 						$delay_aweber_subscription          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_aweber_subscription', true );
 						$delay_campaignmonitor_subscription = get_post_meta( $post_id, '_pronamic_pay_gf_delay_campaignmonitor_subscription', true );
 						$delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
@@ -322,6 +323,18 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									<label for="_pronamic_pay_gf_delay_zapier">
 										<?php esc_html_e( 'Sending data to Zapier', 'pronamic_ideal' ); ?>
+									</label>
+								</li>
+
+							<?php endif; ?>
+
+							<?php if ( class_exists( 'GFActiveCampaign' ) ) : ?>
+
+								<li>
+									<input type="checkbox" name="_pronamic_pay_gf_delay_activecampaign_subscription" id="_pronamic_pay_gf_delay_activecampaign_subscription" value="true" <?php checked( $delay_activecamp_subscription ); ?> />
+
+									<label for="_pronamic_pay_gf_delay_activecampaign_subscription">
+										<?php esc_html_e( 'Subscribing the user to ActiveCampaign', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
 

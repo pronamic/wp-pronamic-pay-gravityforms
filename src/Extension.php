@@ -648,6 +648,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				RGFormsModel::create_post( $form, $entry );
 			}
 
+			// Delay ActiveCampaign
+			if ( $feed->delay_activecampaign_subscription ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityformsactivecampaign/blob/1.4/activecampaign.php#L44-L46
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_activecampaign' ) ) {
+					$addon = gf_activecampaign();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
+			}
+
 			// Delay Aweber
 			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
 			if ( $feed->delay_aweber_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFAWeber', 'export' ) ) {

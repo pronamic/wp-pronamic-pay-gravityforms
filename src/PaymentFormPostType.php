@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.4
  * @since 1.1.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
@@ -33,7 +33,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 	 */
 	private function get_show_ui() {
 		// If Gravity Forms is active and version is lower then 1.7 we show the WordPress UI.
-		return class_exists( 'GFCommon' ) && version_compare( GFCommon::$version, '1.7', '<' );
+		return Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '<' );
 	}
 
 	/**

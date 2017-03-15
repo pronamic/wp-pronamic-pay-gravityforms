@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.3
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
@@ -174,6 +174,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 			// @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103
 			// @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113
+
+			// Maybe delay ActiveCampaign subscription
+			if ( $this->feed->delay_activecampaign_subscription ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityformsactivecampaign/blob/1.4/activecampaign.php#L44-L46
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_activecampaign' ) ) {
+					$addon = gf_activecampaign();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
+			}
 
 			// Maybe delay AWeber subscription
 			if ( $this->feed->delay_aweber_subscription ) {

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.3
  * @since 1.4.7
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Field_Select {
@@ -223,8 +223,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			if ( empty( $feeds ) ) {
 				$link = sprintf(
 					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-					add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) ),
-					__( 'Create pay feed', 'pronamic_ideal' )
+					esc_url( Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url( $form['id'] ) ),
+					esc_html__( 'New Payment Feed', 'pronamic_ideal' )
 				);
 
 				$input = $link . $input;

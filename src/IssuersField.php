@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.5.0
+ * @version 1.6.3
  * @since 1.4.7
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Select {
@@ -159,12 +159,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		if ( is_admin() ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
 
-			$new_feed_url = add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
+			$new_feed_url = Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url( $form['id'] );
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(
 					'<a class="ideal-edit-link" href="%s" target="_blank">%s</a>',
-					esc_attr( $new_feed_url ),
+					esc_url( $new_feed_url ),
 					__( 'New Payment Feed', 'pronamic_ideal' )
 				);
 
@@ -178,7 +178,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 					__( 'This field is not supported by your payment gateway.', 'pronamic_ideal' ),
 					sprintf(
 						__( 'Please remove it from this form or <a href="%s" target="_blank">add a supported payment gateway</a>.', 'pronamic_ideal' ),
-						esc_attr( $new_feed_url )
+						esc_url( $new_feed_url )
 					)
 				);
 

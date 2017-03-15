@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.5.1
+ * @version 1.6.3
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
@@ -20,8 +20,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 
 		// Register custom fields
 		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
-			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
 			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
+
+			// We do some voodoo in the payment methods field class which requires the `gform_gf_field_create` filter added in Gravity Forms 1.9.19.
+			if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9.19', '>=' ) ) {
+				GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
+			}
 		}
 
 		// Add extra fields settings

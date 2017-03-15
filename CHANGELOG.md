@@ -7,11 +7,12 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
-## [1.6.3] - Unreleased
+## [1.6.3] - 2017-03-15
 - Updated new feed URL link in payment fields.
 - Only load the payment methods field if Gravity Forms version is > 1.9.19.
 - Simplified loading and setting up the Gravity Forms extension with a early return.
 - Fixed 'Warning: Missing argument 3 for gf_apply_filters()'.
+- Added support for delaying ActiveCampaign subscriptions.
 
 ## [1.6.2] - 2017-02-10
 - No longer check on the payment feed post ID, a empty payment feed post ID is allowed when creating new payment feeds.

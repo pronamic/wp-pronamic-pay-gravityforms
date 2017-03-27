@@ -18,7 +18,7 @@ add_action( 'gform_ideal_fulfillment', 'your_function_name', 10, 4 );
 
 #### Parameters
 
-**$entry** | [Entry Object](https://www.gravityhelp.com/documentation/article/entry-object/)
+**`$entry`** | [Entry Object](https://www.gravityhelp.com/documentation/article/entry-object/)
 
 The entry used to generate the transaction.
 

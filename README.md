@@ -13,7 +13,7 @@ This hook runs when a transaction is completed successfully for the Pronamic iDE
 #### Usage
 
 ```php
-add_action( 'gform_ideal_fulfillment', 'your_function_name', 10, 4 );
+add_action( 'gform_ideal_fulfillment', 'your_function_name', 10, 2 );
 ```
 
 #### Parameters

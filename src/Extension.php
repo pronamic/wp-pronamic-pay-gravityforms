@@ -634,7 +634,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * @param array $entry
 	 */
 	public function fulfill_order( $entry ) {
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( rgar( $entry, 'id' ) );
+		$entry_id = rgar( $entry, 'id' );
+
+		// Get entry with current payment status.
+		$entry = RGFormsModel::get_lead( $entry_id );
+
+		$feed = get_pronamic_gf_pay_feed_by_entry_id( $entry_id );
 
 		if ( null !== $feed ) {
 			$this->maybe_update_user_role( $entry, $feed );

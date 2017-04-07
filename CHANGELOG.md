@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.6.5] - 2017-04-07
+- Fulfill order with payment status 'Paid'.
+- Prevent sending delayed notification twice.
+
 ## [1.6.4] - 2017-03-15
 - Use version compare helper to prevent fatal errors.
 
@@ -149,7 +153,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.4...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.5...HEAD
+[1.6.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.4...1.6.5
 [1.6.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.3...1.6.4
 [1.6.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.2...1.6.3
 [1.6.2]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.1...1.6.2

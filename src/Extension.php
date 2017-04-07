@@ -737,8 +737,22 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			// Delay notifications
 			// Determine if the feed has Gravity Form 1.7 Feed IDs
 			if ( $feed->has_delayed_notifications() ) {
+				$delay_notification_ids = array();
+
+				foreach ( $feed->delay_notification_ids as $notification_id ) {
+					if ( ! isset( $form['notifications'][ $notification_id ] ) ) {
+						continue;
+					}
+
+					if ( isset( $form['notifications'][ $notification_id ]['event'] ) && 'form_submission' !== $form['notifications'][ $notification_id ]['event'] ) {
+						continue;
+					}
+
+					$delay_notification_ids[] = $notification_id;
+				}
+
 				// @see https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/common.php?at=1.7.8#cl-1512
-				GFCommon::send_notifications( $feed->delay_notification_ids, $form, $entry, true, 'form_submission' );
+				GFCommon::send_notifications( $delay_notification_ids, $form, $entry, true, 'form_submission' );
 			}
 
 			if ( $feed->delay_admin_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_admin_notification' ) ) {

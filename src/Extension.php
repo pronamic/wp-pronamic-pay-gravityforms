@@ -402,11 +402,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$action['subscription_id'] = $payment->get_subscription_id();
 		}
 
-		$succes_action = 'complete_payment';
+		$success_action = 'complete_payment';
 		$fail_action   = 'fail_payment';
 
 		if ( $payment->get_recurring() ) {
-			$succes_action = 'add_subscription_payment';
+			$success_action = 'add_subscription_payment';
 			$fail_action   = 'fail_subscription_payment';
 		}
 
@@ -424,9 +424,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 				break;
 			case Pronamic_WP_Pay_Statuses::SUCCESS :
-				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $succes_action ) {
+				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
-					$this->payment_action( $succes_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID );
+					$this->payment_action( $success_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID );
 				}
 
 				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {

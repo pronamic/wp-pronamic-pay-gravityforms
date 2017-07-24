@@ -577,31 +577,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$result = false;
 
 		switch ( $action['type'] ) {
-			case 'complete_payment':
+			case 'complete_payment' :
 				$result = $this->addon->complete_payment( $lead, $action );
 
 				break;
-			case 'refund_payment':
+			case 'refund_payment' :
 				$result = $this->addon->refund_payment( $lead, $action );
 
 				break;
-			case 'fail_payment':
+			case 'fail_payment' :
 				$result = $this->addon->fail_payment( $lead, $action );
 
 				break;
-			case 'add_pending_payment':
+			case 'add_pending_payment' :
 				$result = $this->addon->add_pending_payment( $lead, $action );
 
 				break;
-			case 'void_authorization':
+			case 'void_authorization' :
 				$result = $this->addon->void_authorization( $lead, $action );
 
 				break;
-			case 'create_subscription':
+			case 'create_subscription' :
 				$result = $this->addon->start_subscription( $lead, $action );
 
 				break;
-			case 'cancel_subscription':
+			case 'cancel_subscription' :
 				$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead['id'] );
 
 				if ( ! isset( $action['note'] ) ) {
@@ -611,15 +611,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				$result = $this->addon->cancel_subscription( $lead, $feed, $action['note'] );
 
 				break;
-			case 'expire_subscription':
+			case 'expire_subscription' :
 				$result = $this->addon->expire_subscription( $lead, $action );
 
 				break;
-			case 'add_subscription_payment':
+			case 'add_subscription_payment' :
 				$result = $this->addon->add_subscription_payment( $lead, $action );
 
 				break;
-			case 'fail_subscription_payment':
+			case 'fail_subscription_payment' :
 				$result = $this->addon->fail_subscription_payment( $lead, $action );
 
 				break;

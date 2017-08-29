@@ -249,6 +249,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->get_field_value( 'email' );
 	}
 
+	public function get_first_name() {
+		return $this->get_field_value( 'first_name' );
+	}
+
+	public function get_last_name() {
+		return $this->get_field_value( 'last_name' );
+	}
+
 	public function get_customer_name() {
 		return $this->get_field_value( 'first_name' ) . ' ' . $this->get_field_value( 'last_name' );
 	}

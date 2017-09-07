@@ -860,7 +860,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$subscription_renew_url    = '';
 		$subscription_renewal_date = '';
 
-		$subscription_id = gform_get_meta( $entry['id'], 'pronamic_subscription_id' );
+		$subscription_id = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_id' );
 
 		if ( ! empty( $subscription_id ) ) {
 			$subscription = get_pronamic_subscription( $subscription_id );
@@ -891,7 +891,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			'{payment_date}'                       => rgar( $entry, 'payment_date' ),
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
-			'{pronamic_payment_id}'                => gform_get_meta( $entry['id'], 'pronamic_payment_id' ),
+			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,
 			'{pronamic_subscription_renewal_date}' => $subscription_renewal_date,

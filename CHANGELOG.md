@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.6.6] - 2017-09-13
+- Implemented `get_first_name()` and `get_last_name()`.
+- Fix possible PHP notices for undefined index `id`.
+
 ## [1.6.5] - 2017-04-07
 - Fulfill order with payment status 'Paid'.
 - Prevent sending delayed notification twice.
@@ -153,7 +157,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.5...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.6...HEAD
+[1.6.6]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.5...1.6.6
 [1.6.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.4...1.6.5
 [1.6.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.3...1.6.4
 [1.6.3]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.2...1.6.3

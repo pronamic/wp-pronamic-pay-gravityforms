@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.6
  * @since 1.0.1
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
@@ -247,6 +247,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 	public function get_email() {
 		return $this->get_field_value( 'email' );
+	}
+
+	public function get_first_name() {
+		return $this->get_field_value( 'first_name' );
+	}
+
+	public function get_last_name() {
+		return $this->get_field_value( 'last_name' );
 	}
 
 	public function get_customer_name() {

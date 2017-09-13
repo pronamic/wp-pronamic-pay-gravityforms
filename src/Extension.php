@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.5
+ * @version 1.6.6
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
@@ -402,11 +402,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			$action['subscription_id'] = $payment->get_subscription_id();
 		}
 
-		$succes_action = 'complete_payment';
+		$success_action = 'complete_payment';
 		$fail_action   = 'fail_payment';
 
 		if ( $payment->get_recurring() ) {
-			$succes_action = 'add_subscription_payment';
+			$success_action = 'add_subscription_payment';
 			$fail_action   = 'fail_subscription_payment';
 		}
 
@@ -424,9 +424,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 				break;
 			case Pronamic_WP_Pay_Statuses::SUCCESS :
-				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $succes_action ) {
+				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
-					$this->payment_action( $succes_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID );
+					$this->payment_action( $success_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID );
 				}
 
 				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
@@ -577,31 +577,31 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$result = false;
 
 		switch ( $action['type'] ) {
-			case 'complete_payment':
+			case 'complete_payment' :
 				$result = $this->addon->complete_payment( $lead, $action );
 
 				break;
-			case 'refund_payment':
+			case 'refund_payment' :
 				$result = $this->addon->refund_payment( $lead, $action );
 
 				break;
-			case 'fail_payment':
+			case 'fail_payment' :
 				$result = $this->addon->fail_payment( $lead, $action );
 
 				break;
-			case 'add_pending_payment':
+			case 'add_pending_payment' :
 				$result = $this->addon->add_pending_payment( $lead, $action );
 
 				break;
-			case 'void_authorization':
+			case 'void_authorization' :
 				$result = $this->addon->void_authorization( $lead, $action );
 
 				break;
-			case 'create_subscription':
+			case 'create_subscription' :
 				$result = $this->addon->start_subscription( $lead, $action );
 
 				break;
-			case 'cancel_subscription':
+			case 'cancel_subscription' :
 				$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead['id'] );
 
 				if ( ! isset( $action['note'] ) ) {
@@ -611,15 +611,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				$result = $this->addon->cancel_subscription( $lead, $feed, $action['note'] );
 
 				break;
-			case 'expire_subscription':
+			case 'expire_subscription' :
 				$result = $this->addon->expire_subscription( $lead, $action );
 
 				break;
-			case 'add_subscription_payment':
+			case 'add_subscription_payment' :
 				$result = $this->addon->add_subscription_payment( $lead, $action );
 
 				break;
-			case 'fail_subscription_payment':
+			case 'fail_subscription_payment' :
 				$result = $this->addon->fail_subscription_payment( $lead, $action );
 
 				break;
@@ -860,7 +860,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$subscription_renew_url    = '';
 		$subscription_renewal_date = '';
 
-		$subscription_id = gform_get_meta( $entry['id'], 'pronamic_subscription_id' );
+		$subscription_id = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_id' );
 
 		if ( ! empty( $subscription_id ) ) {
 			$subscription = get_pronamic_subscription( $subscription_id );
@@ -891,7 +891,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			'{payment_date}'                       => rgar( $entry, 'payment_date' ),
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
-			'{pronamic_payment_id}'                => gform_get_meta( $entry['id'], 'pronamic_payment_id' ),
+			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,
 			'{pronamic_subscription_renewal_date}' => $subscription_renewal_date,

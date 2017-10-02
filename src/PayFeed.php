@@ -123,6 +123,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 		$this->delay_aweber_subscription          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_aweber_subscription', true );
 		$this->delay_campaignmonitor_subscription = get_post_meta( $post_id, '_pronamic_pay_gf_delay_campaignmonitor_subscription', true );
 		$this->delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
+		$this->delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
 		$this->delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
 
 		$this->delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );

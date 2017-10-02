@@ -728,6 +728,27 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
+			// Delay Sliced Invoices
+			if ( $feed->delay_sliced_invoices && Pronamic_WP_Pay_Class::method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://plugins.trac.wordpress.org/browser/sliced-invoices-gravity-forms/tags/1.10.0/class-sliced-invoices-gf.php#L10
+
+				$addons = GFAddOn::get_registered_addons();
+
+				foreach ( $addons as $class ) {
+					if ( 'Sliced_Invoices_GF' !== $class ) {
+						continue;
+					}
+
+					$addon = call_user_func( array( $class, 'get_instance' ) );
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
+			}
+
 			// Delay user registration
 			// @see https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
 			if ( $feed->delay_user_registration && Pronamic_WP_Pay_Class::method_exists( 'GFUser', 'gf_create_user' ) ) {

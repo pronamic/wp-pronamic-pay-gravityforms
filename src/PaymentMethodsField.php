@@ -167,7 +167,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 		}
 
 		// Admin
-		if ( ! is_admin() ) {
+		if ( 'form_editor' !== GFForms::get_page() ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}

@@ -291,6 +291,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						$delay_campaignmonitor_subscription = get_post_meta( $post_id, '_pronamic_pay_gf_delay_campaignmonitor_subscription', true );
 						$delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
 						$delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
+						$delay_moneybird                    = get_post_meta( $post_id, '_pronamic_pay_gf_delay_moneybird', true );
 						$delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
 						$delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
 
@@ -324,6 +325,18 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									<label for="_pronamic_pay_gf_delay_sliced_invoices">
 										<?php esc_html_e( 'Creating quotes and invoices with Sliced Invoices', 'pronamic_ideal' ); ?>
+									</label>
+								</li>
+
+							<?php endif; ?>
+
+							<?php if ( class_exists( 'GFMoneybird' ) ) : ?>
+
+								<li>
+									<input type="checkbox" name="_pronamic_pay_gf_delay_moneybird" id="_pronamic_pay_gf_delay_moneybird" value="true" <?php checked( $delay_moneybird ); ?> />
+
+									<label for="_pronamic_pay_gf_delay_moneybird">
+										<?php esc_html_e( 'Sending estimates and invoices with Moneybird', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
 

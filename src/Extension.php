@@ -728,6 +728,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
+			// Delay Moneybird
+			if ( $feed->delay_moneybird ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_moneybird' ) ) {
+					$addon = gf_moneybird();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
+			}
+
 			// Delay Sliced Invoices
 			if ( $feed->delay_sliced_invoices && Pronamic_WP_Pay_Class::method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
 				// @since unreleased

@@ -232,6 +232,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				}
 			}
 
+			// Maybe delay Moneybird
+			if ( $this->feed->delay_moneybird ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_moneybird' ) ) {
+					$addon = gf_moneybird();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
+			}
+
 			// Maybe delay Zapier
 			if ( $this->feed->delay_zapier ) {
 				// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106

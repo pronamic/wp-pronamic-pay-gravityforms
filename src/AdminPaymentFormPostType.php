@@ -256,6 +256,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			$definition['_pronamic_pay_gf_delay_zapier'] = FILTER_VALIDATE_BOOLEAN;
 		}
 
+		if ( class_exists( 'GFMoneybird' ) ) {
+			$definition['_pronamic_pay_gf_delay_moneybird'] = FILTER_VALIDATE_BOOLEAN;
+		}
+
 		if ( class_exists( 'Sliced_Invoices_GF' ) ) {
 			$definition['_pronamic_pay_gf_delay_sliced_invoices'] = FILTER_VALIDATE_BOOLEAN;
 		}

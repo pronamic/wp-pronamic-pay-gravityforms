@@ -478,7 +478,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			'entry_id'         => $lead['id'],
 		);
 
-		switch ( $subscription->status ) {
+		switch ( $subscription->get_status() ) {
 			case Pronamic_WP_Pay_Statuses::CANCELLED :
 				$this->payment_action( 'cancel_subscription', $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED );
 

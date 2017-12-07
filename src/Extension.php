@@ -899,25 +899,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		if ( ! empty( $subscription_id ) ) {
 			$subscription = get_pronamic_subscription( $subscription_id );
 
-			$subscription_cancel_url = add_query_arg(
-				array(
-					'subscription' => $subscription_id,
-					'key'          => $subscription->get_key(),
-					'action'       => 'cancel',
-				), home_url()
-			);
+			$next_payment = $subscription->get_next_payment_date();
 
-			$subscription_renew_url = add_query_arg(
-				array(
-					'subscription' => $subscription_id,
-					'key'          => $subscription->get_key(),
-					'action'       => 'renew',
-				), home_url()
-			);
+			if ( $next_payment ) {
+				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment->getTimestamp() );
+			}
 
-			$next_payment = $subscription->get_next_payment_datetime();
-
-			$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment->getTimestamp() );
+			$subscription_cancel_url = $subscription->get_cancel_url();
+			$subscription_renew_url  = $subscription->get_renewal_url();
 		}
 
 		$replacements = array(
@@ -937,7 +926,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			}
 		}
 
-		$text = str_replace( array_keys( $replacements ), array_values( $replacements ), $text );
+		$text = strtr( $text, $replacements );
 
 		return $text;
 	}

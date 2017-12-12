@@ -8,27 +8,28 @@
     "packages": [
         {
             "name": "wp-pay/core",
-            "version": "1.3.13",
+            "version": "1.3.14",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-pay/core.git",
-                "reference": "da2142766d4635556280fc5e3ac89060e64adeb2"
+                "reference": "3330ae7993c1d79e1f1c8a498d8410cfc674f0d6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-pay/core/zipball/da2142766d4635556280fc5e3ac89060e64adeb2",
-                "reference": "da2142766d4635556280fc5e3ac89060e64adeb2",
+                "url": "https://api.github.com/repos/wp-pay/core/zipball/3330ae7993c1d79e1f1c8a498d8410cfc674f0d6",
+                "reference": "3330ae7993c1d79e1f1c8a498d8410cfc674f0d6",
                 "shasum": ""
             },
             "require": {
                 "php": "^5.3"
             },
             "require-dev": {
+                "php-coveralls/php-coveralls": "^1.0",
                 "phpmd/phpmd": "^2.4",
                 "phpunit/phpunit": "^4.5",
-                "satooshi/php-coveralls": "^1.0",
                 "squizlabs/php_codesniffer": "^2.7",
-                "wp-coding-standards/wpcs": "0.10.0"
+                "wimg/php-compatibility": "^8.0",
+                "wp-coding-standards/wpcs": "^0.14.0"
             },
             "type": "library",
             "autoload": {
@@ -64,7 +65,7 @@
                 "wordpress",
                 "wp"
             ],
-            "time": "2017-09-14T09:00:42+00:00"
+            "time": "2017-12-12T12:40:02+00:00"
         }
     ],
     "packages-dev": [

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.3
+ * @version 1.6.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
@@ -124,7 +124,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications)
 		add_filter( 'gform_disable_admin_notification_' . $this->form_id, array( $this, 'maybe_delay_admin_notification' ), 10, 3 );
-		add_filter( 'gform_disable_user_notification_' . $this->form_id,  array( $this, 'maybe_delay_user_notification' ), 10, 3 );
+		add_filter( 'gform_disable_user_notification_' . $this->form_id, array( $this, 'maybe_delay_user_notification' ), 10, 3 );
 		add_filter( 'gform_disable_post_creation_' . $this->form_id, array( $this, 'maybe_delay_post_creation' ), 10, 3 );
 		add_filter( 'gform_disable_notification_' . $this->form_id, array( $this, 'maybe_delay_notification' ), 10, 4 );
 
@@ -232,10 +232,39 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				}
 			}
 
+			// Maybe delay Moneybird
+			if ( $this->feed->delay_moneybird ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_moneybird' ) ) {
+					$addon = gf_moneybird();
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
+			}
+
 			// Maybe delay Zapier
 			if ( $this->feed->delay_zapier ) {
 				// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
 				remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
+			}
+
+			if ( $this->feed->delay_sliced_invoices ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @see https://plugins.trac.wordpress.org/browser/sliced-invoices-gravity-forms/tags/1.10.0/class-sliced-invoices-gf.php#L10
+
+				$addons = GFAddOn::get_registered_addons();
+
+				foreach ( $addons as $class ) {
+					if ( 'Sliced_Invoices_GF' !== $class ) {
+						continue;
+					}
+
+					$addon = call_user_func( array( $class, 'get_instance' ) );
+
+					remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+				}
 			}
 		}
 	}
@@ -415,9 +444,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	public function confirmation( $confirmation, $form, $lead, $ajax ) {
 		if ( $this->is_processing( $form ) && $this->gateway && $this->payment && $this->payment->get_amount() > 0 ) {
 			if ( is_wp_error( $this->error ) ) {
-				$html  = '';
-
-				$html .= '<ul>';
+				$html  = '<ul>';
 				$html .= '<li>' . Pronamic_WP_Pay_Plugin::get_default_error_message() . '</li>';
 
 				foreach ( $this->error->get_error_messages() as $message ) {
@@ -435,7 +462,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				$url = $confirmation['redirect'];
 
 				// Using esc_js() and esc_url() on the URL is causing problems, the & in the URL is modified to &amp; or &#038;
-				$confirmation = sprintf( '<script>function gformRedirect(){document.location.href = %s;}', json_encode( $url ) );
+				$confirmation = sprintf( '<script>function gformRedirect(){document.location.href = %s;}', wp_json_encode( $url ) );
 				if ( ! $ajax ) {
 					$confirmation .= 'gformRedirect();';
 				}

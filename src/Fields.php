@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.3
+ * @version 1.6.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
@@ -75,7 +75,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 			<label for="pronamic_pay_config_field">
 				<?php esc_html_e( 'Payment Gateway Configuration', 'pronamic_ideal' ); ?>
 
-				<?php gform_tooltip( 'form_field_pronamic_pay_config' ) ?>
+				<?php gform_tooltip( 'form_field_pronamic_pay_config' ); ?>
 			</label>
 
 			<select id="pronamic_pay_config_field" onchange="SetFieldProperty( 'pronamicPayConfigId', jQuery( this ).val() );" class="fieldwidth-3">

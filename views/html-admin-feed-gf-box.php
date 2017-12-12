@@ -38,7 +38,7 @@
 		</div>
 	</div>
 
-	<?php include dirname( __FILE__ ) . '/html-admin-feed-settings.php'; ?>
+	<?php require dirname( __FILE__ ) . '/html-admin-feed-settings.php'; ?>
 
 	<?php submit_button(); ?>
 </form>

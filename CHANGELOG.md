@@ -7,6 +7,12 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [1.6.7] - 2017-12-12
+- Added support for delaying Sliced Invoices feed processing.
+- Filter payment method choices if not in form editor.
+- Added support for delaying Moneybird feed processing.
+- Simplified merge tag replacement.
+
 ## [1.6.6] - 2017-09-13
 - Implemented `get_first_name()` and `get_last_name()`.
 - Fix possible PHP notices for undefined index `id`.
@@ -157,7 +163,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.6...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.7...HEAD
+[1.6.7]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.6...1.6.7
 [1.6.6]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.5...1.6.6
 [1.6.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.4...1.6.5
 [1.6.4]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.3...1.6.4

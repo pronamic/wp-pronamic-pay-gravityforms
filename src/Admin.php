@@ -16,18 +16,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 */
 	public static function bootstrap() {
 		// Actions
-		add_action( 'admin_init',                                 array( __CLASS__, 'admin_init' ) );
-		add_action( 'admin_init',                                 array( __CLASS__, 'maybe_redirect_to_entry' ) );
+		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_entry' ) );
 
 		// Filters
-		add_filter( 'gform_addon_navigation',                     array( __CLASS__, 'addon_navigation' ) );
+		add_filter( 'gform_addon_navigation', array( __CLASS__, 'addon_navigation' ) );
 
-		add_filter( 'gform_entry_info',                           array( __CLASS__, 'entry_info' ), 10, 2 );
+		add_filter( 'gform_entry_info', array( __CLASS__, 'entry_info' ), 10, 2 );
 
-		add_filter( 'gform_custom_merge_tags',                    array( __CLASS__, 'custom_merge_tags' ), 10 );
+		add_filter( 'gform_custom_merge_tags', array( __CLASS__, 'custom_merge_tags' ), 10 );
 
 		// Actions - AJAX
-		add_action( 'wp_ajax_gf_get_form_data',                   array( __CLASS__, 'ajax_get_form_data' ) );
+		add_action( 'wp_ajax_gf_get_form_data', array( __CLASS__, 'ajax_get_form_data' ) );
 		add_action( 'wp_ajax_gf_dismiss_pronamic_pay_feeds_menu', array( __CLASS__, 'ajax_dismiss_feeds_menu' ) );
 	}
 
@@ -99,7 +99,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 */
 	public static function form_settings_menu_item( $menu_items ) {
 		$menu_items[] = array(
-			'name' => 'pronamic_pay',
+			'name'  => 'pronamic_pay',
 			'label' => __( 'Pay', 'pronamic_ideal' ),
 			'query' => array( 'fid' => null ),
 		);
@@ -179,7 +179,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	//////////////////////////////////////////////////
 
 	/**
-	 * Maybed redirect to Gravity Forms entry
+	 * Maybe redirect to Gravity Forms entry
 	 */
 	public static function maybe_redirect_to_entry() {
 		if ( filter_has_var( INPUT_GET, 'pronamic_gf_lid' ) ) {
@@ -195,7 +195,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 					'lid'  => $lead_id,
 				), admin_url( 'admin.php' ) );
 
-				wp_redirect( $url );
+				wp_safe_redirect( $url );
 
 				exit;
 			}
@@ -210,14 +210,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	public static function ajax_get_form_data() {
 		$form_id = filter_input( INPUT_GET, 'formId', FILTER_SANITIZE_STRING );
 
-		$result = new stdClass();
+		$result          = new stdClass();
 		$result->success = true;
 		$result->data    = RGFormsModel::get_form_meta( $form_id );
 
 		// Output
 		header( 'Content-Type: application/json' );
 
-		echo json_encode( $result );
+		echo wp_json_encode( $result );
 
 		die();
 	}

@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.4.4
+ * @version 1.6.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Links {
@@ -56,27 +56,21 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Links {
 	 */
 	public static function transform_status( $payment_status ) {
 		switch ( $payment_status ) {
-			case Pronamic_WP_Pay_Statuses::CANCELLED :
+			case Pronamic_WP_Pay_Statuses::CANCELLED:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL;
 
-				break;
-			case Pronamic_WP_Pay_Statuses::EXPIRED :
+			case Pronamic_WP_Pay_Statuses::EXPIRED:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED;
 
-				break;
-			case Pronamic_WP_Pay_Statuses::FAILURE :
+			case Pronamic_WP_Pay_Statuses::FAILURE:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR;
 
-				break;
-			case Pronamic_WP_Pay_Statuses::SUCCESS :
+			case Pronamic_WP_Pay_Statuses::SUCCESS:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS;
 
-				break;
-			case Pronamic_WP_Pay_Statuses::OPEN :
-			default :
+			case Pronamic_WP_Pay_Statuses::OPEN:
+			default:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN;
-
-				break;
 		}
 	}
 }

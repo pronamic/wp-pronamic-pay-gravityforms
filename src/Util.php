@@ -7,7 +7,7 @@
  * Company: Pronamic
  *
  * @author Remco Tolsma
- * @version 1.6.0
+ * @version 1.6.7
  * @since 1.0.0
  */
 class Pronamic_WP_Pay_Extensions_GravityForms_Util {
@@ -49,18 +49,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Util {
 		$is_match = RGFormsModel::is_value_match( $value, $feed->condition_value );
 
 		switch ( $feed->condition_operator ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS :
-				$result = $is_match;
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS:
+				return $is_match;
 
-				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT :
-				$result = ! $is_match;
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT:
+				return ! $is_match;
 
-				break;
-			default :
-				$result = true;
+			default:
+				return true;
 		}
-
-		return $result;
 	}
 }

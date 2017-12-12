@@ -1,6 +1,14 @@
 <?xml version="1.0"?>
 
 <ruleset name="WordPress Pay Gravity Forms rules">
+	<config name="installed_paths" value="vendor/wp-coding-standards/wpcs,vendor/wimg/php-compatibility" />
+
+	<config name="minimum_supported_wp_version" value="4.7" />
+
+	<config name="testVersion" value="5.3-99.0" />
+
+	<rule ref="PHPCompatibility" />
+
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 

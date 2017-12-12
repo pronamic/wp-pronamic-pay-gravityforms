@@ -127,8 +127,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 				foreach ( $field['choices'] as $group ) {
 					foreach ( $group['options'] as $value => $label ) {
 						$this->choices[] = array(
-							'value'      => $value,
-							'text'       => $label,
+							'value' => $value,
+							'text'  => $label,
 							//'isSelected' => false,
 						);
 					}
@@ -177,6 +177,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 					'<p class="pronamic-pay-error"><strong>%s</strong><br><em>%s</em></p>',
 					__( 'This field is not supported by your payment gateway.', 'pronamic_ideal' ),
 					sprintf(
+						/* translators: %s: new feed URL */
 						__( 'Please remove it from this form or <a href="%s" target="_blank">add a supported payment gateway</a>.', 'pronamic_ideal' ),
 						esc_url( $new_feed_url )
 					)
@@ -232,7 +233,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
 	 */
-	static function editor_js_set_default_values() {
+	public static function editor_js_set_default_values() {
 		$label = __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' );
 
 		?>

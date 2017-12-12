@@ -26,7 +26,8 @@ global $pronamic_pay_version;
 		<?php
 
 		echo esc_html( sprintf(
-			__( 'Pronamic iDEAL v%s', 'pronamic_ideal' ),
+			/* translators: %s: Pronamic Pay version number, i.e. 4.7.0 */
+			__( 'Pronamic Pay v%s', 'pronamic_ideal' ),
 			$pronamic_pay_version
 		) );
 
@@ -34,15 +35,15 @@ global $pronamic_pay_version;
 	</h1>
 
 	<div class="about-text">
-		<?php esc_html_e( 'Thank you for updating! This new version of Pronamic iDEAL changes how you manage your payment feeds.', 'pronamic_ideal' ) ?>
+		<?php esc_html_e( 'Thank you for updating! This new version of Pronamic Pay changes how you manage your payment feeds.', 'pronamic_ideal' ); ?>
 	</div>
 
 	<hr/>
 
 	<div class="feature-section one-col">
-		<h2><?php esc_html_e( 'Manage pay feeds contextually', 'pronamic_ideal' ) ?></h2>
+		<h2><?php esc_html_e( 'Manage pay feeds contextually', 'pronamic_ideal' ); ?></h2>
 
-		<p class="lead-description"><?php esc_html_e( 'Pay feeds are now accessed via the Pay sub-menu within the Form Settings.', 'pronamic_ideal' ) ?></p>
+		<p class="lead-description"><?php esc_html_e( 'Pay feeds are now accessed via the Pay sub-menu within the Form Settings.', 'pronamic_ideal' ); ?></p>
 
 		<img src="<?php echo esc_url( plugins_url( 'images/contextual_pay_feeds.png', dirname( __FILE__ ) ) ); ?>" alt="">
 	</div>

@@ -117,10 +117,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	 */
 	public function delete_payment_form( $form_id ) {
 		$query = new WP_Query( array(
-			'post_type'			=> 'pronamic_pay_gf',
-			'meta_key'			=> array(
-				'key'			=> '_pronamic_pay_gf_form_id',
-				'value'			=> $form_id,
+			'post_type' => 'pronamic_pay_gf',
+			'meta_key'  => array(
+				'key'   => '_pronamic_pay_gf_form_id',
+				'value' => $form_id,
 			),
 		) );
 
@@ -197,38 +197,38 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 		/* OK, its safe for us to save the data now. */
 		$definition = array(
-			'_pronamic_pay_gf_form_id'                      => 'sanitize_text_field',
-			'_pronamic_pay_gf_config_id'                    => 'sanitize_text_field',
-			'_pronamic_pay_gf_entry_id_prefix'              => 'sanitize_text_field',
-			'_pronamic_pay_gf_transaction_description'      => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_enabled'            => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_condition_field_id'           => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_operator'           => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_value'              => 'sanitize_text_field',
-			'_pronamic_pay_gf_delay_admin_notification'     => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_delay_user_notification'      => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_delay_notification_ids'       => array(
-				'filter'    => FILTER_SANITIZE_STRING,
-				'flags'     => FILTER_REQUIRE_ARRAY,
+			'_pronamic_pay_gf_form_id'                     => 'sanitize_text_field',
+			'_pronamic_pay_gf_config_id'                   => 'sanitize_text_field',
+			'_pronamic_pay_gf_entry_id_prefix'             => 'sanitize_text_field',
+			'_pronamic_pay_gf_transaction_description'     => 'sanitize_text_field',
+			'_pronamic_pay_gf_condition_enabled'           => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_condition_field_id'          => 'sanitize_text_field',
+			'_pronamic_pay_gf_condition_operator'          => 'sanitize_text_field',
+			'_pronamic_pay_gf_condition_value'             => 'sanitize_text_field',
+			'_pronamic_pay_gf_delay_admin_notification'    => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_delay_user_notification'     => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_delay_notification_ids'      => array(
+				'filter' => FILTER_SANITIZE_STRING,
+				'flags'  => FILTER_REQUIRE_ARRAY,
 			),
-			'_pronamic_pay_gf_delay_post_creation'          => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_fields'                       => array(
-				'filter'    => FILTER_SANITIZE_STRING,
-				'flags'     => FILTER_REQUIRE_ARRAY,
+			'_pronamic_pay_gf_delay_post_creation'         => FILTER_VALIDATE_BOOLEAN,
+			'_pronamic_pay_gf_fields'                      => array(
+				'filter' => FILTER_SANITIZE_STRING,
+				'flags'  => FILTER_REQUIRE_ARRAY,
 			),
-			'_pronamic_pay_gf_links' => array(
-				'filter'    => FILTER_SANITIZE_STRING,
-				'flags'     => FILTER_REQUIRE_ARRAY,
+			'_pronamic_pay_gf_links'                       => array(
+				'filter' => FILTER_SANITIZE_STRING,
+				'flags'  => FILTER_REQUIRE_ARRAY,
 			),
-			'_pronamic_pay_gf_user_role_field_id'           => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_amount_type'     => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_amount_field'    => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_interval_type'   => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_interval'        => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_user_role_field_id'          => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_amount_type'    => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_amount_field'   => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_type'  => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval'       => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_interval_period' => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_interval_field'  => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_frequency_type'  => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_frequency'       => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_subscription_interval_field' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_frequency_type' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_frequency'      => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 		);
 

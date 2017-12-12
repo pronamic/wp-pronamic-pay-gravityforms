@@ -17,6 +17,9 @@
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Squiz.PHP.CommentedOutCode.Found" />
 
+		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
+		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
+
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
 
 		<!-- Exclude for wp_json_encode() function -->
@@ -27,6 +30,11 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_get_user_meta" />
+		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_update_user_meta" />
+
+        <exclude name="WordPress.VIP.SlowDBQuery.slow_db_query_meta_key" />
+        <exclude name="WordPress.VIP.SlowDBQuery.slow_db_query_meta_query" />
 	</rule>
 
 	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query">

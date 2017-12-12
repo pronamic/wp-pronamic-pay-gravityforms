@@ -41,9 +41,9 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 <div id="gf-pay-feed-editor">
 	<?php wp_nonce_field( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' ); ?>
 
-	<input id="gf_ideal_gravity_form" name="gf_ideal_gravity_form" value="<?php echo esc_attr( json_encode( $form_meta ) ); ?>" type="hidden" />
+	<input id="gf_ideal_gravity_form" name="gf_ideal_gravity_form" value="<?php echo esc_attr( wp_json_encode( $form_meta ) ); ?>" type="hidden" />
 	<input id="gf_ideal_feed_id" name="gf_ideal_feed_id" value="<?php echo esc_attr( $post_id ); ?>" type="hidden" />
-	<input id="gf_ideal_feed" name="gf_ideal_feed" value="<?php echo esc_attr( json_encode( $feed ) ); ?>" type="hidden" />
+	<input id="gf_ideal_feed" name="gf_ideal_feed" value="<?php echo esc_attr( wp_json_encode( $feed ) ); ?>" type="hidden" />
 
 	<?php if ( filter_has_var( INPUT_GET, 'fid' ) ) : ?>
 
@@ -202,7 +202,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						}
 
 						$delay_admin_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
-						$delay_user_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
+						$delay_user_notification  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
 
 						if ( version_compare( GFCommon::$version, '1.7', '>=' ) ) :
 
@@ -423,7 +423,9 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 					Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
 				);
 
-				foreach ( $fields as $name => $label ) : ?>
+				foreach ( $fields as $name => $label ) :
+
+					?>
 
 					<tr>
 						<?php
@@ -790,7 +792,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 					var form = %s;
 					%s
 					</script>',
-					json_encode( $js_form ),
+					wp_json_encode( $js_form ),
 					GFCommon::gf_vars( false )
 				);
 

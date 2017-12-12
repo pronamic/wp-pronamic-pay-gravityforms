@@ -108,7 +108,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 			'message' => $post_id ? '1' : '0',
 		), 'admin.php' );
 
-		wp_redirect( $url );
+		wp_safe_redirect( $url );
 
 		exit;
 	}
@@ -123,7 +123,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
 		if ( filter_has_var( INPUT_GET, 'fid' ) ) {
-			require( dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php' );
+			require dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php';
 		} else {
 			$this->feed_list_page( $form );
 		}
@@ -281,6 +281,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	 */
 	public function feed_list_no_item_message() {
 		printf( // WPCS: XSS ok
+			/* translators: 1: <a href="new feed URL">, 2: </a> */
 			__( 'This form doesn\'t have any pay feeds. Let\'s go %1$screate one%2$s.', 'pronamic_ideal' ),
 			'<a href="' . esc_url( add_query_arg( array( 'fid' => 0 ) ) ) . '">',
 			'</a>'
@@ -298,9 +299,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		$form = (array) $form;
 
 		$query = new WP_Query( array(
-			'post_type'			=> 'pronamic_pay_gf',
-			'posts_per_page'	=> 50,
-			'meta_query'		=> array(
+			'post_type'      => 'pronamic_pay_gf',
+			'posts_per_page' => 50,
+			'meta_query'     => array(
 				array(
 					'key'   => '_pronamic_pay_gf_form_id',
 					'value' => $form['id'],
@@ -313,9 +314,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		}
 
 		$events = array(
-			'complete_payment'          => esc_html__( 'Payment Completed', 'pronamic_ideal' ),
-			'fail_payment'              => esc_html__( 'Payment Failed', 'pronamic_ideal' ),
-			'add_pending_payment'       => esc_html__( 'Payment Pending', 'pronamic_ideal' ),
+			'complete_payment'    => esc_html__( 'Payment Completed', 'pronamic_ideal' ),
+			'fail_payment'        => esc_html__( 'Payment Failed', 'pronamic_ideal' ),
+			'add_pending_payment' => esc_html__( 'Payment Pending', 'pronamic_ideal' ),
 		);
 
 		foreach ( $query->posts as $post ) {

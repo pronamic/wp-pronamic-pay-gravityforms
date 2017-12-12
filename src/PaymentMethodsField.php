@@ -278,7 +278,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
 	 */
-	static function editor_js_set_default_values() {
+	public static function editor_js_set_default_values() {
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
 			if ( ! field.label ) {
@@ -292,7 +292,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 
 				<?php foreach ( Pronamic_WP_Pay_PaymentMethods::get_payment_methods() as $value => $label ) : ?>
 
-					var choice = new Choice( <?php echo json_encode( $label ); ?>, <?php echo json_encode( $value ); ?> );
+					var choice = new Choice( <?php echo wp_json_encode( $label ); ?>, <?php echo wp_json_encode( $value ); ?> );
 
 					choice.isSelected = true;
 					choice.builtin    = true;

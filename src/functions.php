@@ -5,21 +5,21 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $meta = array() ) {
 
 	$meta_query = array(
 		array(
-			'key'     => '_pronamic_pay_gf_form_id',
-			'value'   => $form_id,
+			'key'   => '_pronamic_pay_gf_form_id',
+			'value' => $form_id,
 		),
 	);
 
 	$meta_query = array_merge( $meta_query, $meta );
 
-	$post_ids = get_posts( array(
+	$query = new WP_Query( array(
 		'fields'         => 'ids',
 		'post_type'      => 'pronamic_pay_gf',
 		'posts_per_page' => 50,
 		'meta_query'     => $meta_query,
 	) );
 
-	foreach ( $post_ids as $post_id ) {
+	foreach ( $query->posts as $post_id ) {
 		$feeds[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
 	}
 
@@ -29,10 +29,10 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $meta = array() ) {
 function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {
 	$meta = array(
 		array(
-			'relation'    => 'OR',
+			'relation' => 'OR',
 			array(
-				'key'     => '_pronamic_pay_gf_feed_active',
-				'value'   => 1,
+				'key'   => '_pronamic_pay_gf_feed_active',
+				'value' => 1,
 			),
 			array(
 				'key'     => '_pronamic_pay_gf_feed_active',

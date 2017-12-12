@@ -143,8 +143,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 		foreach ( $products['products'] as $product ) {
 			$description = $product['name'];
-			$price = GFCommon::to_number( $product['price'] );
-			$quantity = $product['quantity'];
+			$price       = GFCommon::to_number( $product['price'] );
+			$quantity    = $product['quantity'];
 
 			$item = new Pronamic_IDeal_Item();
 			$item->setNumber( $number++ );
@@ -157,7 +157,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 			if ( isset( $product['options'] ) && is_array( $product['options'] ) ) {
 				foreach ( $product['options'] as $option ) {
 					$description = $option['option_label'];
-					$price = GFCommon::to_number( $option['price'] );
+					$price       = GFCommon::to_number( $option['price'] );
 
 					$item = new Pronamic_IDeal_Item();
 					$item->setNumber( $number++ );
@@ -176,8 +176,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 			if ( isset( $shipping['price'] ) && ! empty( $shipping['price'] ) ) {
 				$description = $shipping['name'];
-				$price = GFCommon::to_number( $shipping['price'] );
-				$quantity = 1;
+				$price       = GFCommon::to_number( $shipping['price'] );
+				$quantity    = 1;
 
 				$item = new Pronamic_IDeal_Item();
 				$item->setNumber( $number++ );
@@ -211,7 +211,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 					$description .= ' - ' . $label;
 				}
 
-				$price = GFCommon::to_number( $value );
+				$price    = GFCommon::to_number( $value );
 				$quantity = 1;
 
 				$item = new Pronamic_IDeal_Item();
@@ -377,12 +377,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 			// Number
 			$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );
-			$number = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
+			$number        = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
 
 			$credit_card->set_number( $number );
 
 			// Expiration date
-			$variable_name = sprintf( 'input_%s_2', $credit_card_field['id'] );
+			$variable_name   = sprintf( 'input_%s_2', $credit_card_field['id'] );
 			$expiration_date = filter_input( INPUT_POST, $variable_name, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY );
 
 			$month = array_shift( $expiration_date );
@@ -399,7 +399,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 
 			// Name
 			$variable_name = sprintf( 'input_%s_5', $credit_card_field['id'] );
-			$name = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
+			$name          = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
 
 			$credit_card->set_name( $name );
 		}
@@ -416,19 +416,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$amount = 0;
 
 		switch ( $this->feed->subscription_amount_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_TOTAL :
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
 				$items = $this->get_items();
 
 				$amount = $items->get_amount();
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_FIELD :
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
 				$field_id = $this->feed->subscription_amount_field;
 
 				$product_fields = GFCommon::get_product_fields( $this->form, $this->lead );
 
 				if ( isset( $product_fields['products'][ $field_id ] ) ) {
-					$amount = GFCommon::to_number( $product_fields['products'][ $field_id ]['price'] );
+					$amount  = GFCommon::to_number( $product_fields['products'][ $field_id ]['price'] );
 					$amount *= $product_fields['products'][ $field_id ]['quantity'];
 				}
 
@@ -440,11 +440,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		}
 
 		// Interval
-		$interval = '';
+		$interval        = '';
 		$interval_period = 'D';
 
 		switch ( $this->feed->subscription_interval_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIELD :
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_interval_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
@@ -458,7 +458,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 				}
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIXED :
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
 				$interval        = $this->feed->subscription_interval;
 				$interval_period = $this->feed->subscription_interval_period;
 
@@ -469,7 +469,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$frequency = '';
 
 		switch ( $this->feed->subscription_frequency_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIELD :
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
@@ -479,7 +479,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 				}
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIXED :
+			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
 				$frequency = $this->feed->subscription_frequency;
 
 				break;

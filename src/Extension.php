@@ -227,7 +227,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$text .= sprintf(
 			'<a href="%s">%s</a>',
 			add_query_arg( array( 'pronamic_gf_lid' => $payment->get_source_id() ), admin_url( 'admin.php' ) ),
-			/* translators: %s: payment source ID */
+			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
 		);
 

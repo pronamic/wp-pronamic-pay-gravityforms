@@ -13,6 +13,16 @@
 class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddOn {
 	const SLUG = 'pronamic_pay';
 
+	// Members plugin integration
+	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L21-L22
+	protected $_capabilities = array( 'gravityforms_pronamic_pay', 'gravityforms_pronamic_pay_uninstall' );
+
+	// Permissions
+	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L24-L27
+	protected $_capabilities_settings_page = 'gravityforms_pronamic_pay';
+	protected $_capabilities_form_settings = 'gravityforms_pronamic_pay';
+	protected $_capabilities_uninstall     = 'gravityforms_pronamic_pay_uninstall';
+
 	/**
 	 * Construct and initialize an Gravity Forms payment add-on
 	 *

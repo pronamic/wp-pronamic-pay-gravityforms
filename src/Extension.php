@@ -443,9 +443,6 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				break;
 			case Pronamic_WP_Pay_Statuses::OPEN:
 			default:
-				if ( $payment->get_recurring() ) {
-					$this->payment_action( $fail_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED );
-				}
 		}
 	}
 

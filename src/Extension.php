@@ -1,4 +1,5 @@
 <?php
+use Pronamic\WordPress\Pay\Payments\Payment;
 
 /**
  * Title: WordPress pay extension Gravity Forms extension
@@ -291,8 +292,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Payment redirect URL filter.
 	 *
 	 * @since unreleased
-	 * @param string                  $url
-	 * @param Pronamic_WP_Pay_Payment $payment
+	 *
+	 * @param string  $url
+	 * @param Payment $payment
+	 *
 	 * @return string
 	 */
 	public function redirect_url( $url, $payment ) {

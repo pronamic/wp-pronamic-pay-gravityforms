@@ -1,4 +1,5 @@
 <?php
+use Pronamic\WordPress\Pay\Plugin;
 
 /**
  * Title: WordPress pay extension Gravity Forms issuers field
@@ -80,14 +81,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		$gateway = null;
 
 		if ( isset( $this->pronamicPayConfigId ) && ! empty( $this->pronamicPayConfigId ) ) {
-			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->pronamicPayConfigId );
+			$gateway = Plugin::get_gateway( $this->pronamicPayConfigId );
 		}
 
 		if ( ! $gateway ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
 
 			foreach ( $feeds as $feed ) {
-				$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $feed->config_id );
+				$gateway = Plugin::get_gateway( $feed->config_id );
 
 				if ( $gateway ) {
 					$issuers = $gateway->get_transient_issuers();

@@ -1,4 +1,5 @@
 <?php
+use Pronamic\WordPress\Pay\Plugin;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment add-on
@@ -334,7 +335,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 			$config_id = get_post_meta( $post->ID, '_pronamic_pay_gf_config_id', true );
 
 			// Get the gateway from the configuration
-			$gateway = Pronamic_WP_Pay_Plugin::get_gateway( $config_id );
+			$gateway = Plugin::get_gateway( $config_id );
 
 			if ( $gateway && $gateway->supports( 'recurring' ) ) {
 				$subscription_events = array(

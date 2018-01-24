@@ -1,4 +1,6 @@
 <?php
+use Pronamic\WordPress\Pay\Payments\Payment;
+use Pronamic\WordPress\Pay\Plugin;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
@@ -53,14 +55,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 	/**
 	 * Gateway
 	 *
-	 * @var Pronamic_WP_Pay_Payment
+	 * @var Payment
 	 */
 	private $gateway;
 
 	/**
 	 * Payment
 	 *
-	 * @var Pronamic_WP_Pay_Payment
+	 * @var Payment
 	 */
 	private $payment;
 
@@ -287,7 +289,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 			}
 
 			// Gateway
-			$this->gateway = Pronamic_WP_Pay_Plugin::get_gateway( $this->feed->config_id );
+			$this->gateway = Plugin::get_gateway( $this->feed->config_id );
 
 			if ( ! $this->gateway ) {
 				return $lead;
@@ -303,7 +305,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 				$payment_method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
 			}
 
-			$this->payment = Pronamic_WP_Pay_Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
+			$this->payment = Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
 
 			$this->error = $this->gateway->get_error();
 
@@ -445,7 +447,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 		if ( $this->is_processing( $form ) && $this->gateway && $this->payment && $this->payment->get_amount() > 0 ) {
 			if ( is_wp_error( $this->error ) ) {
 				$html  = '<ul>';
-				$html .= '<li>' . Pronamic_WP_Pay_Plugin::get_default_error_message() . '</li>';
+				$html .= '<li>' . Plugin::get_default_error_message() . '</li>';
 
 				foreach ( $this->error->get_error_messages() as $message ) {
 					$html .= '<li>' . $message . '</li>';

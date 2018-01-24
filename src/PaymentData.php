@@ -1,4 +1,6 @@
 <?php
+use Pronamic\WordPress\Pay\Payments\PaymentData;
+use Pronamic\WordPress\Pay\CreditCard;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment data
@@ -10,7 +12,7 @@
  * @version 1.6.7
  * @since 1.0.1
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
+class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
@@ -88,7 +90,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	/**
 	 * Get source ID
 	 *
-	 * @see Pronamic_Pay_AbstractPaymentData::get_source_id()
+	 * @see Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_source_id()
 	 */
 	public function get_source_id() {
 		return $this->lead['id'];
@@ -373,7 +375,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$credit_card_field = array_shift( $credit_card_fields );
 
 		if ( $credit_card_field ) {
-			$credit_card = new Pronamic_Pay_CreditCard();
+			$credit_card = new CreditCard();
 
 			// Number
 			$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );

@@ -1,4 +1,6 @@
 <?php
+use Pronamic\WordPress\Pay\Core\Pronamic_WP_Pay_Class;
+use Pronamic\WordPress\Pay\Core\Util;
 
 /**
  * Title: WordPress pay extension Gravity Forms
@@ -121,9 +123,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.13/includes/api.php#L495-L654
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
 		 */
-		if ( Pronamic_WP_Pay_Class::method_exists( 'GFAPI', 'update_entry' ) ) {
+		if ( Util::class_method_exists( 'GFAPI', 'update_entry' ) ) {
 			GFAPI::update_entry( $entry );
-		} elseif ( Pronamic_WP_Pay_Class::method_exists( 'GFFormsModel', 'update_lead' ) ) {
+		} elseif ( Util::class_method_exists( 'GFFormsModel', 'update_lead' ) ) {
 			GFFormsModel::update_lead( $entry );
 		}
 	}
@@ -138,9 +140,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	 * @param string $value    Value for the property
 	 */
 	public static function update_entry_property( $entry_id, $property, $value ) {
-		if ( Pronamic_WP_Pay_Class::method_exists( 'GFAPI', 'update_entry_property' ) ) {
+		if ( Util::class_method_exists( 'GFAPI', 'update_entry_property' ) ) {
 			GFAPI::update_entry_property( $entry_id, $property, $value );
-		} elseif ( Pronamic_WP_Pay_Class::method_exists( 'GFFormsModel', 'update_lead_property' ) ) {
+		} elseif ( Util::class_method_exists( 'GFFormsModel', 'update_lead_property' ) ) {
 			GFFormsModel::update_lead_property( $entry_id, $property, $value );
 		}
 	}

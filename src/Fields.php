@@ -1,4 +1,6 @@
 <?php
+use Pronamic\WordPress\Pay\Core\Pronamic_WP_Pay_Class;
+use Pronamic\WordPress\Pay\Core\Util;
 
 /**
  * Title: WordPress pay extension Gravity Forms fields
@@ -19,7 +21,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
 		// Register custom fields
-		if ( Pronamic_WP_Pay_Class::method_exists( 'GF_Fields', 'register' ) ) {
+		if ( Util::class_method_exists( 'GF_Fields', 'register' ) ) {
 			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
 
 			// We do some voodoo in the payment methods field class which requires the `gform_gf_field_create` filter added in Gravity Forms 1.9.19.

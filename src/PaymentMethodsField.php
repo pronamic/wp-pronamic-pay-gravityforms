@@ -1,4 +1,5 @@
 <?php
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
@@ -291,7 +292,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			if ( ! field.choices ) {
 				field.choices = new Array();
 
-				<?php foreach ( Pronamic_WP_Pay_PaymentMethods::get_payment_methods() as $value => $label ) : ?>
+				<?php foreach ( PaymentMethods::get_payment_methods() as $value => $label ) : ?>
 
 					var choice = new Choice( <?php echo wp_json_encode( $label ); ?>, <?php echo wp_json_encode( $value ); ?> );
 

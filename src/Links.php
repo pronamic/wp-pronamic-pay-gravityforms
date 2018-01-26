@@ -1,4 +1,5 @@
 <?php
+use Pronamic\WordPress\Pay\Core\Statuses;
 
 /**
  * Title: WordPress pay extension Gravity Forms links
@@ -49,26 +50,26 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Links {
 	/**
 	 * Link for payment status.
 	 *
-	 * @param Pronamic_WP_Pay_Statuses $payment_status
+	 * @param Statuses $payment_status
 	 *
 	 * @return string
 	 * @since 1.4.4
 	 */
 	public static function transform_status( $payment_status ) {
 		switch ( $payment_status ) {
-			case Pronamic_WP_Pay_Statuses::CANCELLED:
+			case Statuses::CANCELLED:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL;
 
-			case Pronamic_WP_Pay_Statuses::EXPIRED:
+			case Statuses::EXPIRED:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED;
 
-			case Pronamic_WP_Pay_Statuses::FAILURE:
+			case Statuses::FAILURE:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR;
 
-			case Pronamic_WP_Pay_Statuses::SUCCESS:
+			case Statuses::SUCCESS:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS;
 
-			case Pronamic_WP_Pay_Statuses::OPEN:
+			case Statuses::OPEN:
 			default:
 				return Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN;
 		}

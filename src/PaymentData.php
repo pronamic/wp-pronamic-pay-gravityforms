@@ -1,6 +1,9 @@
 <?php
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\PaymentData;
 use Pronamic\WordPress\Pay\CreditCard;
+use Pronamic\WordPress\Pay\Payments\Item;
+use Pronamic\WordPress\Pay\Payments\Items;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment data
@@ -133,10 +136,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	 * Get items
 	 *
 	 * @see Pronamic_Pay_PaymentDataInterface::get_items()
-	 * @return Pronamic_IDeal_Items
+	 * @return Items
 	 */
 	public function get_items() {
-		$items = new Pronamic_IDeal_Items();
+		$items = new Items();
 
 		$number = 0;
 
@@ -148,7 +151,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 			$price       = GFCommon::to_number( $product['price'] );
 			$quantity    = $product['quantity'];
 
-			$item = new Pronamic_IDeal_Item();
+			$item = new Item();
 			$item->setNumber( $number++ );
 			$item->setDescription( $description );
 			$item->setPrice( $price );
@@ -161,7 +164,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 					$description = $option['option_label'];
 					$price       = GFCommon::to_number( $option['price'] );
 
-					$item = new Pronamic_IDeal_Item();
+					$item = new Item();
 					$item->setNumber( $number++ );
 					$item->setDescription( $description );
 					$item->setPrice( $price );
@@ -181,7 +184,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 				$price       = GFCommon::to_number( $shipping['price'] );
 				$quantity    = 1;
 
-				$item = new Pronamic_IDeal_Item();
+				$item = new Item();
 				$item->setNumber( $number++ );
 				$item->setDescription( $description );
 				$item->setPrice( $price );
@@ -216,7 +219,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 				$price    = GFCommon::to_number( $value );
 				$quantity = 1;
 
-				$item = new Pronamic_IDeal_Item();
+				$item = new Item();
 				$item->setNumber( $i );
 				$item->setDescription( $description );
 				$item->setQuantity( $quantity );
@@ -338,10 +341,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
 				$method = RGFormsModel::get_field_value( $field );
 
-				if ( ! $this->get_subscription() && Pronamic_WP_Pay_PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
+				if ( ! $this->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
 					// DIRECT_DEBIT_IDEAL can only be used for subscription payments.
 
-					$method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
+					$method = PaymentMethods::IDEAL;
 				}
 
 				return $method;

@@ -1,4 +1,5 @@
 <?php
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -302,7 +303,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Processor {
 
 			// Set payment method to iDEAL if issuer_id is set
 			if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
-				$payment_method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
+				$payment_method = PaymentMethods::IDEAL;
 			}
 
 			$this->payment = Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );

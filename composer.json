@@ -3,7 +3,7 @@
 	"description": "Gravity Forms driver for the WordPress payment processing library.",
 	"keywords": ["wordpress", "wp", "pay", "gravityforms", "extension", "pronamic"],
 	"homepage": "http://www.wp-pay.org/extensions/gravityforms/",
-	"license": "GPL-3.0+",
+	"license": "GPL-3.0-or-later",
 	"authors": [
 		{
 			"name": "Pronamic",

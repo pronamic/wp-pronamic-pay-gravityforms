@@ -126,8 +126,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	 * @return string
 	 */
 	public function get_order_id() {
+		$prefix = $this->feed->entry_id_prefix;
+
 		// @see http://www.gravityhelp.com/documentation/page/Entry_Object#Standard
-		$order_id = $this->feed->entry_id_prefix . $this->lead['id'];
+		$order_id = $prefix . $this->lead['id'];
+
+		// If prefix is a merge tag, only use prefix as order ID.
+		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, 0, -1 ) ) {
+			$order_id = GFCommon::replace_variables( $prefix, $this->form, $this->lead );
+		}
 
 		return $order_id;
 	}

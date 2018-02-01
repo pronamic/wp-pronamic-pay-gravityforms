@@ -1,4 +1,5 @@
 <?php
+
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -40,7 +41,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
 		}
 
-		if ( ! isset( $this->formId ) && defined( 'DOING_AJAX' ) && DOING_AJAX && filter_has_var( INPUT_POST, 'form_id' ) && filter_has_var( INPUT_POST, 'action' ) && 'rg_add_field' === filter_input( INPUT_POST, 'action' ) ) {
+		if ( ! isset( $this->formId ) && defined( 'DOING_AJAX' ) && DOING_AJAX && filter_has_var( INPUT_POST, 'form_id' ) && 'rg_add_field' === filter_input( INPUT_POST, 'action' ) && false !== strpos( filter_input( INPUT_POST, 'field' ), self::TYPE ) ) {
 			$this->formId = filter_input( INPUT_POST, 'form_id', FILTER_SANITIZE_NUMBER_INT );
 		}
 

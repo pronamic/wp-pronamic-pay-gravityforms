@@ -1,4 +1,7 @@
 <?php
+
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
 use Pronamic\WordPress\Pay\Core\Statuses;
 
 /**
@@ -7,11 +10,11 @@ use Pronamic\WordPress\Pay\Core\Statuses;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_Links {
+class Links {
 	/**
 	 * Indicator for the open status link
 	 *
@@ -58,20 +61,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Links {
 	public static function transform_status( $payment_status ) {
 		switch ( $payment_status ) {
 			case Statuses::CANCELLED:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL;
+				return Links::CANCEL;
 
 			case Statuses::EXPIRED:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED;
+				return Links::EXPIRED;
 
 			case Statuses::FAILURE:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR;
+				return Links::ERROR;
 
 			case Statuses::SUCCESS:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS;
+				return Links::SUCCESS;
 
 			case Statuses::OPEN:
 			default:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN;
+				return Links::OPEN;
 		}
 	}
 }

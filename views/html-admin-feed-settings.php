@@ -1,5 +1,9 @@
 <?php
 
+use Pronamic\WordPress\Pay\Admin\AdminModule;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
+
 $form_meta = RGFormsModel::get_form_meta( $form_id );
 
 $condition_enabled            = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
@@ -112,7 +116,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							$config_id = get_option( 'pronamic_pay_config_id' );
 						}
 
-						Pronamic_WP_Pay_Admin::dropdown_configs( array(
+						AdminModule::dropdown_configs( array(
 							'name'     => '_pronamic_pay_gf_config_id',
 							'selected' => $config_id,
 						) );
@@ -416,11 +420,11 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				<?php
 
 				$fields = array(
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS => __( 'Success', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL  => __( 'Cancelled', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED => __( 'Expired', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR   => __( 'Error', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
+					Links::SUCCESS => __( 'Success', 'pronamic_ideal' ),
+					Links::CANCEL  => __( 'Cancelled', 'pronamic_ideal' ),
+					Links::EXPIRED => __( 'Expired', 'pronamic_ideal' ),
+					Links::ERROR   => __( 'Error', 'pronamic_ideal' ),
+					Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
 				);
 
 				foreach ( $fields as $name => $label ) :
@@ -721,8 +725,8 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								$operators[] = '';
 							}
 
-							$operators[ Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS ]     = __( 'is', 'pronamic_ideal' );
-							$operators[ Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT ] = __( 'is not', 'pronamic_ideal' );
+							$operators[ GravityForms::OPERATOR_IS ]     = __( 'is', 'pronamic_ideal' );
+							$operators[ GravityForms::OPERATOR_IS_NOT ] = __( 'is not', 'pronamic_ideal' );
 
 							foreach ( $operators as $value => $label ) {
 								$select_operator .= sprintf(

@@ -1,5 +1,11 @@
 <?php
+
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GFAddOnFeedsTable;
+use GFPaymentAddOn;
 use Pronamic\WordPress\Pay\Plugin;
+use WP_Query;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment add-on
@@ -7,11 +13,11 @@ use Pronamic\WordPress\Pay\Plugin;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.1.0
+ * @since   1.1.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddOn {
+class PaymentAddOn extends GFPaymentAddOn {
 	const SLUG = 'pronamic_pay';
 
 	// Members plugin integration
@@ -21,13 +27,15 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	// Permissions
 	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L24-L27
 	protected $_capabilities_settings_page = 'gravityforms_pronamic_pay';
+
 	protected $_capabilities_form_settings = 'gravityforms_pronamic_pay';
-	protected $_capabilities_uninstall     = 'gravityforms_pronamic_pay_uninstall';
+
+	protected $_capabilities_uninstall = 'gravityforms_pronamic_pay_uninstall';
 
 	/**
 	 * Construct and initialize an Gravity Forms payment add-on
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
+	 * @see   https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
 	 *
 	 * @since 1.3.0
 	 */
@@ -218,10 +226,24 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 		return $posts;
 	}
 
+	/**
+	 * Is feed condition met?
+	 *
+	 * @param $feed
+	 * @param $form
+	 * @param $entry
+	 *
+	 * @return bool
+	 */
 	public function is_feed_condition_met( $feed, $form, $entry ) {
-		return Pronamic_WP_Pay_Extensions_GravityForms_Util::is_condition_true( $form, $feed );
+		return Util::is_condition_true( $form, $feed );
 	}
 
+	/**
+	 * Feed list columns.
+	 *
+	 * @return array
+	 */
 	public function feed_list_columns() {
 		return array(
 			'name'                    => esc_html__( 'Name', 'pronamic_ideal' ),
@@ -233,7 +255,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 	/**
 	 * Column name value.
 	 *
-	 * @param  array $feed
+	 * @param array $feed
 	 *
 	 * @since unreleased
 	 */
@@ -370,6 +392,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 
 	/**
 	 * Activate feed
+	 *
+	 * @param $feed_id
+	 * @param $is_active
+	 *
+	 * @return bool|int
 	 */
 	public function update_feed_active( $feed_id, $is_active ) {
 		return update_post_meta( $feed_id, '_pronamic_pay_gf_feed_active', $is_active );
@@ -377,6 +404,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn extends GFPaymentAddO
 
 	/**
 	 * Delete feed
+	 *
+	 * @param $feed_id
 	 */
 	public function delete_feed( $feed_id ) {
 		wp_delete_post( $feed_id );

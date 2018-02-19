@@ -24,7 +24,9 @@
 		"source": "https://github.com/wp-pay-extensions/gravityforms"
 	},
 	"autoload": {
-		"classmap": ["src/"],
+		"psr-4": {
+			"Pronamic\\WordPress\\Pay\\Extensions\\GravityForms\\": "src/"
+		},
 		"files": ["src/functions.php"]
 	},
 	"config": {

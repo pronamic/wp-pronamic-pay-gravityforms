@@ -1,16 +1,18 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
 /**
  * Title: WordPress pay extension Gravity Forms pay feed
  * Description:
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.4.4
+ * @since   1.4.4
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
+class PayFeed {
 	/**
 	 * Indicator for an link to an WordPress page
 	 *
@@ -148,6 +150,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 	 * Get the URL of the specified name
 	 *
 	 * @param string $name
+	 *
+	 * @return false|null|string
 	 */
 	public function get_url( $name ) {
 		$url = null;
@@ -155,7 +159,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PayFeed {
 		if ( isset( $this->links[ $name ] ) ) {
 			$link = $this->links[ $name ];
 
-			// link is een standard class object, the type variable could not be defined
+			// link is a standard class object, the type variable could not be defined
 			if ( isset( $link['type'] ) ) {
 				switch ( $link['type'] ) {
 					case self::LINK_TYPE_PAGE:

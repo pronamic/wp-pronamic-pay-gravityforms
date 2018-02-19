@@ -1,5 +1,9 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GF_Field_Select;
+use Pronamic\WordPress\Pay\Core\Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -9,11 +13,11 @@ use Pronamic\WordPress\Pay\Plugin;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.4.7
+ * @since   1.4.7
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Select {
+class IssuersField extends GF_Field_Select {
 	/**
 	 * Type
 	 *
@@ -77,7 +81,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	/**
 	 * Get the iDEAL gateway for this field.
 	 *
-	 * @return
+	 * @return null|Gateway
 	 */
 	private function get_gateway() {
 		$gateway = null;
@@ -95,9 +99,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 				if ( $gateway ) {
 					$issuers = $gateway->get_transient_issuers();
 
-					if ( ! empty( $issuers ) ) {
-						return $gateway;
+					if ( empty( $issuers ) ) {
+						continue;
 					}
+
+					return $gateway;
 				}
 			}
 		}
@@ -115,27 +121,29 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 
 		$gateway = $this->get_gateway();
 
-		if ( $gateway ) {
-			// Always use iDEAL payment method for issuer field
-			$gateway->set_payment_method( PaymentMethods::IDEAL );
+		if ( ! $gateway ) {
+			return;
+		}
 
-			$field = $gateway->get_issuer_field();
+		// Always use iDEAL payment method for issuer field
+		$gateway->set_payment_method( PaymentMethods::IDEAL );
 
-			$this->error = $gateway->get_error();
+		$field = $gateway->get_issuer_field();
 
-			// @todo What todo if error?
-			if ( $field && ! is_wp_error( $this->error ) ) {
-				$this->choices = array();
+		$this->error = $gateway->get_error();
 
-				foreach ( $field['choices'] as $group ) {
-					foreach ( $group['options'] as $value => $label ) {
-						$this->choices[] = array(
-							'value' => $value,
-							'text'  => $label,
-							//'isSelected' => false,
-						);
-					}
-				}
+		// @todo What todo if error?
+		if ( ! $field || is_wp_error( $this->error ) ) {
+			return;
+		}
+
+		foreach ( $field['choices'] as $group ) {
+			foreach ( $group['options'] as $value => $label ) {
+				$this->choices[] = array(
+					'value' => $value,
+					'text'  => $label,
+					//'isSelected' => false,
+				);
 			}
 		}
 	}
@@ -145,9 +153,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
-	 * @param array $form
+	 *
+	 * @param array  $form
 	 * @param string $value
-	 * @param array $entry
+	 * @param null   $entry
+	 *
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
@@ -162,7 +172,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 		if ( is_admin() ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
 
-			$new_feed_url = Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url( $form['id'] );
+			$new_feed_url = Admin::get_new_feed_url( $form['id'] );
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(
@@ -222,11 +232,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
+	 *
+	 * @param $field_groups
+	 *
 	 * @return array
 	 */
 	public function add_button( $field_groups ) {
 		// We have to make sure the custom pay field group is added, otherwise the button won't be added.
-		$field_groups = Pronamic_WP_Pay_Extensions_GravityForms_Fields::add_pay_field_group( $field_groups );
+		$field_groups = Fields::add_pay_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
@@ -241,11 +254,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_IssuersField extends GF_Field_Sele
 
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
-			if ( ! field.label ) {
-				field.label = '<?php echo esc_js( $label ); ?>';
-			}
+		if ( ! field.label ) {
+		field.label = '<?php echo esc_js( $label ); ?>';
+		}
 
-			break;
+		break;
 		<?php
 	}
 }

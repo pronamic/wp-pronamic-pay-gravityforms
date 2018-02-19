@@ -1,5 +1,8 @@
 <?php
 
+use Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\Util;
+
 function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $meta = array() ) {
 	$feeds = array();
 
@@ -20,7 +23,7 @@ function get_pronamic_gf_pay_feeds_by_form_id( $form_id, $meta = array() ) {
 	) );
 
 	foreach ( $query->posts as $post_id ) {
-		$feeds[] = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $post_id );
+		$feeds[] = new PayFeed( $post_id );
 	}
 
 	return $feeds;
@@ -47,7 +50,7 @@ function get_pronamic_gf_pay_conditioned_feed_by_form_id( $form_id ) {
 		$form = RGFormsModel::get_form_meta( $form_id );
 
 		foreach ( $feeds as $feed ) {
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_Util::is_condition_true( $form, $feed ) ) {
+			if ( Util::is_condition_true( $form, $feed ) ) {
 				return $feed;
 			}
 		}
@@ -60,7 +63,7 @@ function get_pronamic_gf_pay_feed_by_entry_id( $entry_id ) {
 	$feed_id = gform_get_meta( $entry_id, 'ideal_feed_id' );
 
 	if ( ! empty( $feed_id ) ) {
-		return new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $feed_id );
+		return new PayFeed( $feed_id );
 	}
 
 	return null;

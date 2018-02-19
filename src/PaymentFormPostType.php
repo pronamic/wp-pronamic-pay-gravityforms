@@ -1,22 +1,24 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
 /**
  * Title: WordPress payment form post type
  * Description:
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.4
- * @since 1.1.0
+ * @since   1.1.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
+class PaymentFormPostType {
 	/**
 	 * Construct and initialize payment form post type
 	 */
 	public function __construct() {
 		/**
-		 * Priotiry of the initial post types function should be set to < 10
+		 * Priority of the initial post types function should be set to < 10
 		 *
 		 * @see https://core.trac.wordpress.org/ticket/28488
 		 * @see https://core.trac.wordpress.org/changeset/29318
@@ -33,7 +35,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType {
 	 */
 	private function get_show_ui() {
 		// If Gravity Forms is active and version is lower then 1.7 we show the WordPress UI.
-		return Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '<' );
+		return GravityForms::version_compare( '1.7', '<' );
 	}
 
 	/**

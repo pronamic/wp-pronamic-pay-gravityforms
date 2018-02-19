@@ -1,15 +1,17 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
 /**
  * Title: WordPress pay extension Gravity Forms lead properties
  * Description:
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties {
+class LeadProperties {
 	/**
 	 * Lead propery payment status
 	 *

@@ -1,6 +1,9 @@
 <?php
-use Pronamic\WordPress\Pay\Core\Pronamic_WP_Pay_Class;
-use Pronamic\WordPress\Pay\Core\Util;
+
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GF_Fields;
+use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 
 /**
  * Title: WordPress pay extension Gravity Forms fields
@@ -8,11 +11,11 @@ use Pronamic\WordPress\Pay\Core\Util;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
+class Fields {
 	/**
 	 * Construct and intialize custom Gravity Forms fields.
 	 */
@@ -21,12 +24,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
 		// Register custom fields
-		if ( Util::class_method_exists( 'GF_Fields', 'register' ) ) {
-			GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField() );
+		if ( Core_Util::class_method_exists( 'GF_Fields', 'register' ) ) {
+			GF_Fields::register( new IssuersField() );
 
 			// We do some voodoo in the payment methods field class which requires the `gform_gf_field_create` filter added in Gravity Forms 1.9.19.
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.9.19', '>=' ) ) {
-				GF_Fields::register( new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField() );
+			if ( GravityForms::version_compare( '1.9.19', '>=' ) ) {
+				GF_Fields::register( new PaymentMethodsField() );
 			}
 		}
 
@@ -37,9 +40,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	/**
 	 * Add pay field group to the Gravity Forms field groups.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
+	 * @see   https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
 	 * @since 1.4.7
+	 *
 	 * @param array $field_groups
+	 *
 	 * @return array
 	 */
 	public static function add_pay_field_group( $field_groups ) {
@@ -58,8 +63,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 	 * Field standard settings.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L525
+	 *
 	 * @param int $position position of the field settings
-	 * @param int $form_id current form ID
+	 * @param int $form_id  current form ID
 	 */
 	public function field_standard_settings( $position, $form_id ) {
 		if ( 10 !== $position ) {
@@ -80,7 +86,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Fields {
 				<?php gform_tooltip( 'form_field_pronamic_pay_config' ); ?>
 			</label>
 
-			<select id="pronamic_pay_config_field" onchange="SetFieldProperty( 'pronamicPayConfigId', jQuery( this ).val() );" class="fieldwidth-3">
+			<select id="pronamic_pay_config_field"
+					onchange="SetFieldProperty( 'pronamicPayConfigId', jQuery( this ).val() );" class="fieldwidth-3">
 				<option value=""><?php esc_html_e( '— Use Payment Feed Setting —', 'pronamic_ideal' ); ?></option>
 				<?php
 

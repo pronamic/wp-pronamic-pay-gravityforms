@@ -1,9 +1,15 @@
 <?php
+
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GFCommon;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
-use Pronamic\WordPress\Pay\Payments\PaymentData;
 use Pronamic\WordPress\Pay\CreditCard;
 use Pronamic\WordPress\Pay\Payments\Item;
 use Pronamic\WordPress\Pay\Payments\Items;
+use Pronamic\WordPress\Pay\Payments\PaymentData as Pay_PaymentData;
+use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use RGFormsModel;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment data
@@ -11,11 +17,11 @@ use Pronamic\WordPress\Pay\Payments\Items;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.0.1
+ * @since   1.0.1
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
+class PaymentData extends Pay_PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
@@ -35,7 +41,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Pronamic iDEAL feed object
 	 *
-	 * @var Pronamic_WP_Pay_Extensions_GravityForms_PayFeed
+	 * @var PayFeed
 	 */
 	private $feed;
 
@@ -44,9 +50,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Constructs and initialize an Gravity Forms iDEAL data proxy
 	 *
-	 * @param array $form
-	 * @param array $lead
-	 * @param Pronamic_WP_Pay_Extensions_GravityForms_PayFeed $feed
+	 * @param array   $form
+	 * @param array   $lead
+	 * @param PayFeed $feed
 	 */
 	public function __construct( $form, $lead, $feed ) {
 		parent::__construct();
@@ -62,7 +68,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	 * Get the field value of the specified field
 	 *
 	 * @param string $field_name
-	 * @return Ambigous <NULL, multitype:>
+	 *
+	 * @return null|string
 	 */
 	private function get_field_value( $field_name ) {
 		if ( ! isset( $this->feed->fields[ $field_name ] ) ) {
@@ -84,6 +91,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	 * Get source indicator
 	 *
 	 * @see Pronamic_Pay_PaymentDataInterface::get_source()
+	 *
 	 * @return string
 	 */
 	public function get_source() {
@@ -93,7 +101,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Get source ID
 	 *
-	 * @see Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_source_id()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_source_id()
+	 *
+	 * @return string
 	 */
 	public function get_source_id() {
 		return $this->lead['id'];
@@ -104,7 +114,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Get description
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_description()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_description()
+	 *
 	 * @return string
 	 */
 	public function get_description() {
@@ -122,7 +133,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Get order ID
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_order_id()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_order_id()
+	 *
 	 * @return string
 	 */
 	public function get_order_id() {
@@ -132,7 +144,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 		$order_id = $prefix . $this->lead['id'];
 
 		// If prefix is a merge tag, only use prefix as order ID.
-		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, 0, -1 ) ) {
+		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, 0, - 1 ) ) {
 			$order_id = GFCommon::replace_variables( $prefix, $this->form, $this->lead );
 		}
 
@@ -142,7 +154,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Get items
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_items()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_items()
+	 *
 	 * @return Items
 	 */
 	public function get_items() {
@@ -159,7 +172,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 			$quantity    = $product['quantity'];
 
 			$item = new Item();
-			$item->setNumber( $number++ );
+			$item->setNumber( $number ++ );
 			$item->setDescription( $description );
 			$item->setPrice( $price );
 			$item->setQuantity( $quantity );
@@ -172,7 +185,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 					$price       = GFCommon::to_number( $option['price'] );
 
 					$item = new Item();
-					$item->setNumber( $number++ );
+					$item->setNumber( $number ++ );
 					$item->setDescription( $description );
 					$item->setPrice( $price );
 					$item->setQuantity( $quantity ); // Product quantity
@@ -192,7 +205,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 				$quantity    = 1;
 
 				$item = new Item();
-				$item->setNumber( $number++ );
+				$item->setNumber( $number ++ );
 				$item->setDescription( $description );
 				$item->setPrice( $price );
 				$item->setQuantity( $quantity );
@@ -246,7 +259,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	/**
 	 * Get currency alphabetic code
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_currency_alphabetic_code()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_currency_alphabetic_code()
+	 *
 	 * @return string
 	 */
 	public function get_currency_alphabetic_code() {
@@ -298,7 +312,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	//////////////////////////////////////////////////
 
 	public function get_normal_return_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN );
+		$url = $this->feed->get_url( Links::OPEN );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_normal_return_url();
@@ -308,7 +322,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	}
 
 	public function get_cancel_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL );
+		$url = $this->feed->get_url( Links::CANCEL );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_cancel_url();
@@ -318,7 +332,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	}
 
 	public function get_success_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS );
+		$url = $this->feed->get_url( Links::SUCCESS );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_success_url();
@@ -328,7 +342,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	}
 
 	public function get_error_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR );
+		$url = $this->feed->get_url( Links::ERROR );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_error_url();
@@ -342,7 +356,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	//////////////////////////////////////////////////
 
 	public function get_payment_method() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE ) );
+		$fields = GFCommon::get_fields_by_type( $this->form, array( PaymentMethodsField::TYPE ) );
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
@@ -364,12 +378,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 	//////////////////////////////////////////////////
 
 	public function get_issuer_id() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE ) );
+		$fields = GFCommon::get_fields_by_type( $this->form, array( IssuersField::TYPE ) );
 
 		foreach ( $fields as $field ) {
-			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				return RGFormsModel::get_field_value( $field );
+			if ( RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
+				continue;
 			}
+
+			return RGFormsModel::get_field_value( $field );
 		}
 	}
 
@@ -428,13 +444,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 		$amount = 0;
 
 		switch ( $this->feed->subscription_amount_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
+			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
 				$items = $this->get_items();
 
 				$amount = $items->get_amount();
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
+			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
 				$field_id = $this->feed->subscription_amount_field;
 
 				$product_fields = GFCommon::get_product_fields( $this->form, $this->lead );
@@ -456,7 +472,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 		$interval_period = 'D';
 
 		switch ( $this->feed->subscription_interval_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
+			case GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_interval_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
@@ -470,7 +486,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 				}
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
+			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
 				$interval        = $this->feed->subscription_interval;
 				$interval_period = $this->feed->subscription_interval_period;
 
@@ -481,7 +497,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 		$frequency = '';
 
 		switch ( $this->feed->subscription_frequency_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
@@ -491,13 +507,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends PaymentData {
 				}
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
 				$frequency = $this->feed->subscription_frequency;
 
 				break;
 		}
 
-		$subscription                  = new Pronamic_Pay_Subscription();
+		$subscription                  = new Subscription();
 		$subscription->frequency       = $frequency;
 		$subscription->interval        = $interval;
 		$subscription->interval_period = $interval_period;

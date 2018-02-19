@@ -1,16 +1,21 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use RGFormsModel;
+use stdClass;
+
 /**
  * Title: WordPress pay extension Gravity Forms admin
  * Description:
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.4
- * @since 1.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
+class Admin {
 	/**
 	 * Bootstrap
 	 */
@@ -37,7 +42,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 * Admin initialize
 	 */
 	public static function admin_init() {
-		new Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType();
+		new AdminPaymentFormPostType();
 	}
 
 	//////////////////////////////////////////////////
@@ -45,11 +50,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	/**
 	 * Gravity Forms addon navigation
 	 *
-	 * @param $menus array with addon menu items
+	 * @param array $menus Addon menu items
+	 *
 	 * @return array
 	 */
 	public static function addon_navigation( $menus ) {
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '<' ) ) {
+		if ( GravityForms::version_compare( '1.7', '<' ) ) {
 			$menus[] = array(
 				'name'       => 'edit.php?post_type=pronamic_pay_gf',
 				'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
@@ -65,7 +71,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 		}
 
 		$menus[] = array(
-			'name'       => Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn::SLUG,
+			'name'       => PaymentAddOn::SLUG,
 			'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
 			'callback'   => array( __CLASS__, 'temporary_feeds_page' ),
 			'permission' => 'manage_options',
@@ -83,6 +89,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 		require dirname( __FILE__ ) . '/../views/html-admin-temporary-feeds-page.php';
 	}
 
+	/**
+	 * Ajax action to dismiss feeds menu item.
+	 */
 	public function ajax_dismiss_feeds_menu() {
 		$current_user = wp_get_current_user();
 
@@ -95,6 +104,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 * Add menu item to form settings
 	 *
 	 * @param $menu_items array with form settings menu items
+	 *
 	 * @return array
 	 */
 	public static function form_settings_menu_item( $menu_items ) {
@@ -113,18 +123,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 * Render entry info of the specified form and lead
 	 *
 	 * @param string $form_id
-	 * @param array $lead
+	 * @param array  $lead
 	 */
 	public static function entry_info( $form_id, $lead ) {
 		$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
 
-		if ( $payment_id ) {
-			printf(
-				'<a href="%s">%s</a>',
-				esc_attr( get_edit_post_link( $payment_id ) ),
-				esc_html( get_the_title( $payment_id ) )
-			);
+		if ( ! $payment_id ) {
+			return;
 		}
+
+		printf(
+			'<a href="%s">%s</a>',
+			esc_attr( get_edit_post_link( $payment_id ) ),
+			esc_html( get_the_title( $payment_id ) )
+		);
 	}
 
 	//////////////////////////////////////////////////
@@ -182,23 +194,25 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 * Maybe redirect to Gravity Forms entry
 	 */
 	public static function maybe_redirect_to_entry() {
-		if ( filter_has_var( INPUT_GET, 'pronamic_gf_lid' ) ) {
-			$lead_id = filter_input( INPUT_GET, 'pronamic_gf_lid', FILTER_SANITIZE_STRING );
+		if ( ! filter_has_var( INPUT_GET, 'pronamic_gf_lid' ) ) {
+			return;
+		}
 
-			$lead = RGFormsModel::get_lead( $lead_id );
+		$lead_id = filter_input( INPUT_GET, 'pronamic_gf_lid', FILTER_SANITIZE_STRING );
 
-			if ( ! empty( $lead ) ) {
-				$url = add_query_arg( array(
-					'page' => 'gf_entries',
-					'view' => 'entry',
-					'id'   => $lead['form_id'],
-					'lid'  => $lead_id,
-				), admin_url( 'admin.php' ) );
+		$lead = RGFormsModel::get_lead( $lead_id );
 
-				wp_safe_redirect( $url );
+		if ( ! empty( $lead ) ) {
+			$url = add_query_arg( array(
+				'page' => 'gf_entries',
+				'view' => 'entry',
+				'id'   => $lead['form_id'],
+				'lid'  => $lead_id,
+			), admin_url( 'admin.php' ) );
 
-				exit;
-			}
+			wp_safe_redirect( $url );
+
+			exit;
 		}
 	}
 
@@ -226,11 +240,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Admin {
 	 * Get new feed URL.
 	 *
 	 * @since 1.6.3
+	 *
 	 * @param string $form_id
+	 *
 	 * @return string
 	 */
 	public static function get_new_feed_url( $form_id ) {
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '<' ) ) {
+		if ( GravityForms::version_compare( '1.7', '<' ) ) {
 			return add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
 		}
 

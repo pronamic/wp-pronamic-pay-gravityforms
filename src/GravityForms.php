@@ -1,6 +1,11 @@
 <?php
-use Pronamic\WordPress\Pay\Core\Pronamic_WP_Pay_Class;
-use Pronamic\WordPress\Pay\Core\Util;
+
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GFAPI;
+use GFCommon;
+use GFFormsModel;
+use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 
 /**
  * Title: WordPress pay extension Gravity Forms
@@ -8,11 +13,11 @@ use Pronamic\WordPress\Pay\Core\Util;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.0
- * @since 1.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
+class GravityForms {
 	/**
 	 * Indicator for an payment transaction type
 	 *
@@ -123,9 +128,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.13/includes/api.php#L495-L654
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
 		 */
-		if ( Util::class_method_exists( 'GFAPI', 'update_entry' ) ) {
+		if ( Core_Util::class_method_exists( 'GFAPI', 'update_entry' ) ) {
 			GFAPI::update_entry( $entry );
-		} elseif ( Util::class_method_exists( 'GFFormsModel', 'update_lead' ) ) {
+		} elseif ( Core_Util::class_method_exists( 'GFFormsModel', 'update_lead' ) ) {
 			GFFormsModel::update_lead( $entry );
 		}
 	}
@@ -140,9 +145,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	 * @param string $value    Value for the property
 	 */
 	public static function update_entry_property( $entry_id, $property, $value ) {
-		if ( Util::class_method_exists( 'GFAPI', 'update_entry_property' ) ) {
+		if ( Core_Util::class_method_exists( 'GFAPI', 'update_entry_property' ) ) {
 			GFAPI::update_entry_property( $entry_id, $property, $value );
-		} elseif ( Util::class_method_exists( 'GFFormsModel', 'update_lead_property' ) ) {
+		} elseif ( Core_Util::class_method_exists( 'GFFormsModel', 'update_lead_property' ) ) {
 			GFFormsModel::update_lead_property( $entry_id, $property, $value );
 		}
 	}
@@ -154,12 +159,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_GravityForms {
 	 *
 	 * @param string $version
 	 * @param string $operator
+	 *
+	 * @return bool|mixed
 	 */
 	public static function version_compare( $version, $operator ) {
 		if ( class_exists( 'GFCommon' ) ) {
 			return version_compare( GFCommon::$version, $version, $operator );
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 }

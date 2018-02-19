@@ -1,5 +1,7 @@
 <?php
 
+use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
+
 /**
  * Title: WordPress pay extension Gravity Forms links test
  * Description:
@@ -21,11 +23,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_LinksTest extends PHPUnit_Framewor
 
 	public function matrix_provider() {
 		return array(
-			array( 'open', Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN ),
-			array( 'cancel', Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL ),
-			array( 'error', Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR ),
-			array( 'success', Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS ),
-			array( 'expired', Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED ),
+			array( 'open', Links::OPEN ),
+			array( 'cancel', Links::CANCEL ),
+			array( 'error', Links::ERROR ),
+			array( 'success', Links::SUCCESS ),
+			array( 'expired', Links::EXPIRED ),
 		);
 	}
 }

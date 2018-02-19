@@ -1,4 +1,9 @@
 <?php
+
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GF_Field_Select;
+use GFForms;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -8,11 +13,11 @@ use Pronamic\WordPress\Pay\Plugin;
  * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
+ * @author  Remco Tolsma
  * @version 1.6.7
- * @since 1.4.7
+ * @since   1.4.7
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Field_Select {
+class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Type
 	 *
@@ -30,7 +35,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	/**
 	 * Constructs and initializes payment methods field.
 	 *
-	 * @param $properties
+	 * @param array $properties
 	 */
 	public function __construct( $properties = array() ) {
 		parent::__construct( $properties );
@@ -67,6 +72,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
+	 *
 	 * @return array
 	 */
 	public function get_form_editor_field_settings() {
@@ -89,7 +95,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	/**
 	 * Get the gateway for this field.
 	 *
-	 * @return
+	 * @return null|\Pronamic\WordPress\Pay\Core\Gateway
 	 */
 	private function get_gateway() {
 		$gateway = null;
@@ -182,6 +188,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * Filter Gravity Forms selected choice.
 	 *
 	 * @param array $choice
+	 *
 	 * @return boolean true if 'isSelected' is set and true, false otherwise.
 	 */
 	public function filter_choice_is_selected( $choice ) {
@@ -192,6 +199,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * Unselect the specified choice.
 	 *
 	 * @param array $choice
+	 *
 	 * @return array choice
 	 */
 	public function unselect_choice( $choice ) {
@@ -205,9 +213,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
-	 * @param array $form
+	 *
+	 * @param array  $form
 	 * @param string $value
-	 * @param array $entry
+	 * @param array  $entry
+	 *
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
@@ -225,7 +235,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 			if ( empty( $feeds ) ) {
 				$link = sprintf(
 					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
-					esc_url( Pronamic_WP_Pay_Extensions_GravityForms_Admin::get_new_feed_url( $form['id'] ) ),
+					esc_url( Admin::get_new_feed_url( $form['id'] ) ),
 					esc_html__( 'New Payment Feed', 'pronamic_ideal' )
 				);
 
@@ -241,6 +251,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L106-L113
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field-select.php#L12-L14
+	 *
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
@@ -251,6 +262,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 * Get form editor button.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L115-L129
+	 *
 	 * @return array
 	 */
 	public function get_form_editor_button() {
@@ -269,7 +281,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	 */
 	public function add_button( $field_groups ) {
 		// We have to make sure the custom pay field group is added, otherwise the button won't be added.
-		$field_groups = Pronamic_WP_Pay_Extensions_GravityForms_Fields::add_pay_field_group( $field_groups );
+		$field_groups = Fields::add_pay_field_group( $field_groups );
 
 		return parent::add_button( $field_groups );
 	}
@@ -283,29 +295,29 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField extends GF_Fie
 	public static function editor_js_set_default_values() {
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
-			if ( ! field.label ) {
-				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
-			}
+		if ( ! field.label ) {
+		field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
+		}
 
-			field.enableChoiceValue = true;
+		field.enableChoiceValue = true;
 
-			if ( ! field.choices ) {
-				field.choices = new Array();
+		if ( ! field.choices ) {
+		field.choices = new Array();
 
-				<?php foreach ( PaymentMethods::get_payment_methods() as $value => $label ) : ?>
+		<?php foreach ( PaymentMethods::get_payment_methods() as $value => $label ) : ?>
 
-					var choice = new Choice( <?php echo wp_json_encode( $label ); ?>, <?php echo wp_json_encode( $value ); ?> );
+			var choice = new Choice( <?php echo wp_json_encode( $label ); ?>, <?php echo wp_json_encode( $value ); ?> );
 
-					choice.isSelected = true;
-					choice.builtin    = true;
+			choice.isSelected = true;
+			choice.builtin    = true;
 
-					field.choices.push( choice );
+			field.choices.push( choice );
 
-				<?php endforeach; ?>
+		<?php endforeach; ?>
 
-			}
+		}
 
-			break;
+		break;
 		<?php
 	}
 }

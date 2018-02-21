@@ -146,7 +146,7 @@ class Processor {
 		 */
 		add_action( 'gform_after_submission_' . $this->form_id, array( $this, 'after_submission' ), 10, 2 );
 
-		add_action( 'gform_disable_registration', array( $this, 'maybe_delay_user_registration' ), 10, 4 );
+		add_filter( 'gform_is_delayed_pre_process_feed', array( $this, 'maybe_delay_user_registration' ), 10, 4 );
 	}
 
 	//////////////////////////////////////////////////
@@ -437,25 +437,30 @@ class Processor {
 	/**
 	 * Maybe delay user registration
 	 *
-	 * @param $is_disabled
+	 * @param $is_delayed
 	 * @param $form
 	 * @param $entry
-	 * @param $fulfilled
+	 * @param $slug
 	 *
 	 * @return bool
 	 */
-	public function maybe_delay_user_registration( $is_disabled, $form, $entry, $fulfilled ) {
-		if ( ! $is_disabled && $this->is_processing( $form ) ) {
-			$order_total = GFCommon::get_order_total( $form, $entry );
-
-			// delay the registration IF:
-			// - the delay registration option is checked
-			// - the order total does NOT equal zero (no delay since there will never be a payment)
-			// - the payment has not already been fulfilled
-			$is_disabled = $this->feed->delay_user_registration && ( 0 !== $order_total ) && ! $fulfilled;
+	public function maybe_delay_user_registration( $is_delayed, $form, $entry, $slug ) {
+		if ( 'gravityformsuserregistration' !== $slug ) {
+			return $is_delayed;
 		}
 
-		return $is_disabled;
+		if ( $is_delayed || ! $this->is_processing( $form ) ) {
+			return $is_delayed;
+		}
+
+		$order_total = GFCommon::get_order_total( $form, $entry );
+
+		// delay the registration IF:
+		// - the delay registration option is checked
+		// - the order total does NOT equal zero (no delay since there will never be a payment)
+		$is_delayed = $this->feed->delay_user_registration && ( 0 !== $order_total );
+
+		return $is_delayed;
 	}
 
 	//////////////////////////////////////////////////

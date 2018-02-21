@@ -789,8 +789,16 @@ class Extension {
 
 			// Delay user registration
 			// @see https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
-			if ( $feed->delay_user_registration && Core_Util::class_method_exists( 'GFUser', 'gf_create_user' ) ) {
-				call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
+			if ( $feed->delay_user_registration ) {
+				if ( function_exists( 'gf_user_registration' ) ) {
+					$addon = gf_user_registration();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				} elseif ( Core_Util::class_method_exists( 'GFUser', 'gf_create_user' ) ) {
+					call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
+				}
 			}
 
 			// Delay notifications

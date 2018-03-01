@@ -80,7 +80,7 @@ class Fields {
 
 		?>
 		<li class="pronamic_pay_config_field_setting field_setting">
-			<label for="pronamic_pay_config_field">
+			<label for="pronamic_pay_config_field" class="section_label">
 				<?php esc_html_e( 'Payment Gateway Configuration', 'pronamic_ideal' ); ?>
 
 				<?php gform_tooltip( 'form_field_pronamic_pay_config' ); ?>

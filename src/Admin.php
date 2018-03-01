@@ -36,16 +36,12 @@ class Admin {
 		add_action( 'wp_ajax_gf_dismiss_pronamic_pay_feeds_menu', array( __CLASS__, 'ajax_dismiss_feeds_menu' ) );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Admin initialize
 	 */
 	public static function admin_init() {
 		new AdminPaymentFormPostType();
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Gravity Forms addon navigation
@@ -98,8 +94,6 @@ class Admin {
 		update_user_meta( $current_user->ID, '_pronamic_pay_gf_dismiss_feeds_menu', 1 );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Add menu item to form settings
 	 *
@@ -116,8 +110,6 @@ class Admin {
 
 		return $menu_items;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Render entry info of the specified form and lead
@@ -138,8 +130,6 @@ class Admin {
 			esc_html( get_the_title( $payment_id ) )
 		);
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Custom merge tags
@@ -188,8 +178,6 @@ class Admin {
 		return $merge_tags;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Maybe redirect to Gravity Forms entry
 	 */
@@ -215,8 +203,6 @@ class Admin {
 			exit;
 		}
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Handle AJAX request get form data

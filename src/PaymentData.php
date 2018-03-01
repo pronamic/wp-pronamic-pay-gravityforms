@@ -45,8 +45,6 @@ class PaymentData extends Pay_PaymentData {
 	 */
 	private $feed;
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Constructs and initialize an Gravity Forms iDEAL data proxy
 	 *
@@ -61,8 +59,6 @@ class PaymentData extends Pay_PaymentData {
 		$this->lead = $lead;
 		$this->feed = $feed;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Get the field value of the specified field
@@ -85,8 +81,6 @@ class PaymentData extends Pay_PaymentData {
 		return $this->lead[ $field_id ];
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get source indicator
 	 *
@@ -108,8 +102,6 @@ class PaymentData extends Pay_PaymentData {
 	public function get_source_id() {
 		return $this->lead['id'];
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Get description
@@ -254,8 +246,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// Currency
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get currency alphabetic code
 	 *
@@ -269,8 +259,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// Customer
-	//////////////////////////////////////////////////
-
 	public function get_email() {
 		return $this->get_field_value( 'email' );
 	}
@@ -309,8 +297,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// URL's
-	//////////////////////////////////////////////////
-
 	public function get_normal_return_url() {
 		$url = $this->feed->get_url( Links::OPEN );
 
@@ -353,8 +339,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// Payment method
-	//////////////////////////////////////////////////
-
 	public function get_payment_method() {
 		$fields = GFCommon::get_fields_by_type( $this->form, array( PaymentMethodsField::TYPE ) );
 
@@ -375,8 +359,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// Issuer
-	//////////////////////////////////////////////////
-
 	public function get_issuer_id() {
 		$fields = GFCommon::get_fields_by_type( $this->form, array( IssuersField::TYPE ) );
 
@@ -391,8 +373,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// Creditcard
-	//////////////////////////////////////////////////
-
 	public function get_credit_card() {
 		$credit_card = null;
 
@@ -437,8 +417,6 @@ class PaymentData extends Pay_PaymentData {
 
 	//////////////////////////////////////////////////
 	// Subscription
-	//////////////////////////////////////////////////
-
 	public function get_subscription() {
 		// Amount
 		$amount = 0;

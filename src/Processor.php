@@ -41,16 +41,12 @@ class Processor {
 	 */
 	private $form_id;
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Process flag
 	 *
 	 * @var boolean
 	 */
 	private $process;
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Payment feed
@@ -73,8 +69,6 @@ class Processor {
 	 */
 	private $payment;
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Error
 	 *
@@ -82,16 +76,12 @@ class Processor {
 	 */
 	private $error;
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Is entry created?
 	 *
 	 * @var boolean
 	 */
 	private $entry_created;
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Constructs and initalize an Gravity Forms payment form processor
@@ -113,8 +103,6 @@ class Processor {
 			$this->add_hooks();
 		}
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Add hooks
@@ -149,8 +137,6 @@ class Processor {
 		add_filter( 'gform_is_delayed_pre_process_feed', array( $this, 'maybe_delay_user_registration' ), 10, 4 );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Check if we are processing the passed in form
 	 *
@@ -169,8 +155,6 @@ class Processor {
 
 		return $is_processing;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Pre submission
@@ -281,8 +265,6 @@ class Processor {
 		}
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Entry post save
 	 *
@@ -359,10 +341,6 @@ class Processor {
 		return $lead;
 	}
 
-	//////////////////////////////////////////////////
-	// Delay functions
-	//////////////////////////////////////////////////
-
 	/**
 	 * Maybe delay notifications.
 	 *
@@ -432,8 +410,6 @@ class Processor {
 		return $is_disabled;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Maybe delay user registration
 	 *
@@ -462,10 +438,6 @@ class Processor {
 
 		return $is_delayed;
 	}
-
-	//////////////////////////////////////////////////
-	// Confirmation
-	//////////////////////////////////////////////////
 
 	/**
 	 * Confirmation
@@ -514,8 +486,6 @@ class Processor {
 
 		return $confirmation;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * After submission

@@ -35,8 +35,6 @@ class PayFeed {
 	 */
 	const LINK_TYPE_CONFIRMATION = 'confirmation';
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * The payment (post) ID.
 	 *
@@ -49,13 +47,7 @@ class PayFeed {
 	 */
 	public $post;
 
-	//////////////////////////////////////////////////
-
 	public $condition_enabled;
-
-	//////////////////////////////////////////////////
-	// Delay
-	//////////////////////////////////////////////////
 
 	/**
 	 * Delay notification ID's contains an array of notification ID's wich
@@ -88,8 +80,6 @@ class PayFeed {
 	 * @var boolean
 	 */
 	public $delay_user_notification;
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Construct and initialize payment object
@@ -143,8 +133,6 @@ class PayFeed {
 		$links       = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
 		$this->links = is_array( $links ) ? $links : array();
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Get the URL of the specified name

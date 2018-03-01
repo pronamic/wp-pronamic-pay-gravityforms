@@ -34,8 +34,6 @@ class Extension {
 	 */
 	const SLUG = 'gravityformsideal';
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Bootstrap
 	 */
@@ -44,16 +42,12 @@ class Extension {
 		$extension->setup();
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Setup.
 	 */
 	public function setup() {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Plugins loaded
@@ -223,8 +217,6 @@ class Extension {
 		return $styles;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Pre submssion
 	 *
@@ -235,8 +227,6 @@ class Extension {
 
 		$processor->pre_submission( $form );
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Source column
@@ -278,8 +268,6 @@ class Extension {
 		return add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Maybe update user role of the specified lead and feed
 	 *
@@ -310,8 +298,6 @@ class Extension {
 			$user->set_role( $value );
 		}
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Payment redirect URL filter.
@@ -390,8 +376,6 @@ class Extension {
 
 		return $url;
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Update lead status of the specified payment
@@ -837,8 +821,6 @@ class Extension {
 		do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Maybe display the Gravity Forms confirmation.
 	 *
@@ -908,8 +890,6 @@ class Extension {
 
 		return GFFormDisplay::handle_confirmation( $form, $lead, false );
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Replace merge tags

@@ -32,8 +32,6 @@ class GravityForms {
 	 */
 	const TRANSACTION_TYPE_SUBSCRIPTION = 2;
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Operator is
 	 *
@@ -47,8 +45,6 @@ class GravityForms {
 	 * @var string
 	 */
 	const OPERATOR_IS_NOT = '!=';
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Indicator for form total subscription amount type.
@@ -99,8 +95,6 @@ class GravityForms {
 	 */
 	const SUBSCRIPTION_FREQUENCY_UNLIMITED = 'unlimited';
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Check if Gravity Forms is active (Automattic/developer style)
 	 *
@@ -112,8 +106,6 @@ class GravityForms {
 	public static function is_active() {
 		return class_exists( 'GFForms' );
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Update entry
@@ -135,8 +127,6 @@ class GravityForms {
 		}
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Update entry property
 	 *
@@ -151,8 +141,6 @@ class GravityForms {
 			GFFormsModel::update_lead_property( $entry_id, $property, $value );
 		}
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Compare the current Gravity Forms version

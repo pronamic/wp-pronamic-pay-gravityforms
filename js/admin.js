@@ -345,11 +345,23 @@
 
 					$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
 
-					var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
+					if ( '' === amountType ) {
+                        elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
+					} else {
+                        elements.subscriptionAmountType.parents('tr').siblings().show();
 
-					if ( amountSettings.length > 0 ) {
-						amountSettings.show();
-					}
+						// Set background color of visible even rows
+						var rows = elements.subscriptionAmountType.parents( 'table' ).find( 'tr' );
+
+						rows.removeClass( 'even' );
+						rows.filter( ':visible:even' ).addClass( 'even' );
+                    }
+
+                    var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
+
+                    if ( amountSettings.length > 0 ) {
+                        amountSettings.show();
+                    }
 				} );
 
 				elements.subscriptionAmountType.trigger( 'change' );

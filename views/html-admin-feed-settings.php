@@ -523,6 +523,13 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							</legend>
 
 							<label>
+								<input id="pronamic_pay_gf_subscription_amount_type_none" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="" <?php checked( $subscription_amount_type, '' ); ?> />
+								<?php esc_html_e( 'None', 'pronamic_ideal' ); ?>
+							</label>
+
+							<br />
+
+							<label>
 								<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $subscription_amount_type, 'total' ); ?> />
 								<?php esc_html_e( 'Form total', 'pronamic_ideal' ); ?>
 							</label>

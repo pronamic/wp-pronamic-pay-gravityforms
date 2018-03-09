@@ -123,10 +123,12 @@ class AdminPaymentFormPostType {
 	 */
 	public function delete_payment_form( $form_id ) {
 		$query = new WP_Query( array(
-			'post_type' => 'pronamic_pay_gf',
-			'meta_key'  => array(
-				'key'   => '_pronamic_pay_gf_form_id',
-				'value' => $form_id,
+			'post_type'  => 'pronamic_pay_gf',
+			'meta_query' => array(
+				array(
+					'key'   => '_pronamic_pay_gf_form_id',
+					'value' => $form_id,
+				),
 			),
 		) );
 

@@ -272,6 +272,10 @@ class AdminPaymentFormPostType {
 			$definition['_pronamic_pay_gf_delay_zapier'] = FILTER_VALIDATE_BOOLEAN;
 		}
 
+		if ( class_exists( 'GF_Dropbox' ) ) {
+			$definition['_pronamic_pay_gf_delay_dropbox'] = FILTER_VALIDATE_BOOLEAN;
+		}
+
 		if ( class_exists( 'GFMoneybird' ) ) {
 			$definition['_pronamic_pay_gf_delay_moneybird'] = FILTER_VALIDATE_BOOLEAN;
 		}

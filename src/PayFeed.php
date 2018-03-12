@@ -108,6 +108,7 @@ class PayFeed {
 		$this->delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
 		$this->delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
 		$this->delay_moneybird                    = get_post_meta( $post_id, '_pronamic_pay_gf_delay_moneybird', true );
+		$this->delay_dropbox                      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_dropbox', true );
 		$this->delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
 		$this->delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
 		$this->user_role_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );

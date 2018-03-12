@@ -737,6 +737,19 @@ class Extension {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
+			// Delay Dropbox
+			if ( $feed->delay_dropbox ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_dropbox' ) ) {
+					$addon = gf_dropbox();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
+			}
+
 			// Delay Moneybird
 			if ( $feed->delay_moneybird ) {
 				// @since unreleased

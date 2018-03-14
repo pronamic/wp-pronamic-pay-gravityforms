@@ -482,17 +482,6 @@ class Processor {
 
 				$confirmation = $html;
 			}
-
-			if ( ( headers_sent() || $ajax ) && is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
-				$url = $confirmation['redirect'];
-
-				// Using esc_js() and esc_url() on the URL is causing problems, the & in the URL is modified to &amp; or &#038;
-				$confirmation = sprintf( '<script>function gformRedirect(){document.location.href = %s;}', wp_json_encode( $url ) );
-				if ( ! $ajax ) {
-					$confirmation .= 'gformRedirect();';
-				}
-				$confirmation .= '</script>';
-			}
 		}
 
 		return $confirmation;

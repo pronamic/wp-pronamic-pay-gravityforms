@@ -244,8 +244,6 @@ class PaymentData extends Pay_PaymentData {
 		return $items;
 	}
 
-	//////////////////////////////////////////////////
-	// Currency
 	/**
 	 * Get currency alphabetic code
 	 *
@@ -257,8 +255,6 @@ class PaymentData extends Pay_PaymentData {
 		return GFCommon::get_currency();
 	}
 
-	//////////////////////////////////////////////////
-	// Customer
 	public function get_email() {
 		return $this->get_field_value( 'email' );
 	}
@@ -295,8 +291,6 @@ class PaymentData extends Pay_PaymentData {
 		return $this->get_field_value( 'telephone_number' );
 	}
 
-	//////////////////////////////////////////////////
-	// URL's
 	public function get_normal_return_url() {
 		$url = $this->feed->get_url( Links::OPEN );
 
@@ -337,8 +331,6 @@ class PaymentData extends Pay_PaymentData {
 		return $url;
 	}
 
-	//////////////////////////////////////////////////
-	// Payment method
 	public function get_payment_method() {
 		$fields = GFCommon::get_fields_by_type( $this->form, array( Fields::PAYMENT_METHODS_FIELD_TYPE ) );
 
@@ -357,8 +349,6 @@ class PaymentData extends Pay_PaymentData {
 		}
 	}
 
-	//////////////////////////////////////////////////
-	// Issuer
 	public function get_issuer_id() {
 		$fields = GFCommon::get_fields_by_type( $this->form, array( IssuersField::TYPE ) );
 
@@ -371,8 +361,6 @@ class PaymentData extends Pay_PaymentData {
 		}
 	}
 
-	//////////////////////////////////////////////////
-	// Creditcard
 	public function get_credit_card() {
 		$credit_card = null;
 
@@ -415,8 +403,6 @@ class PaymentData extends Pay_PaymentData {
 		return $credit_card;
 	}
 
-	//////////////////////////////////////////////////
-	// Subscription
 	public function get_subscription() {
 		// Amount
 		$amount = 0;

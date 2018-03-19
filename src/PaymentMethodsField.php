@@ -138,10 +138,12 @@ class PaymentMethodsField extends GF_Field_Select {
 			// @todo What todo if error?
 			if ( $field && ! is_wp_error( $this->error ) ) {
 				foreach ( $field['choices'] as $group ) {
-					if ( isset( $group['options'] ) ) {
-						foreach ( $group['options'] as $value => $label ) {
-							$payment_methods[ $value ] = $label;
-						}
+					if ( ! isset( $group['options'] ) ) {
+						continue;
+					}
+
+					foreach ( $group['options'] as $value => $label ) {
+						$payment_methods[ $value ] = $label;
 					}
 				}
 			}

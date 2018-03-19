@@ -128,9 +128,9 @@ class Extension {
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		switch ( $field->type ) {
-			case 'ideal_issuer_drop_down':
+			case Fields::ISSUERS_FIELD_TYPE:
 				return new IssuersField( $properties );
-			case 'pronamic_pay_payment_method_selector':
+			case Fields::PAYMENT_METHODS_FIELD_TYPE:
 				return new PaymentMethodsField( $properties );
 		}
 

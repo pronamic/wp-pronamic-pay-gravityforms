@@ -17,6 +17,16 @@ use Pronamic\WordPress\Pay\Core\Util as Core_Util;
  */
 class Fields {
 	/**
+	 * Issuers field type.
+	 */
+	const ISSUERS_FIELD_TYPE = 'ideal_issuer_drop_down';
+
+	/**
+	 * Payment methods field type.
+	 */
+	const PAYMENT_METHODS_FIELD_TYPE = 'pronamic_pay_payment_method_selector';
+
+	/**
 	 * Construct and intialize custom Gravity Forms fields.
 	 */
 	public function __construct() {

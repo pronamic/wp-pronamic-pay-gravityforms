@@ -23,14 +23,14 @@ class PaymentMethodsField extends GF_Field_Select {
 	 *
 	 * @var string
 	 */
-	const TYPE = 'pronamic_pay_payment_method_selector';
+	const TYPE = Fields::PAYMENT_METHODS_FIELD_TYPE;
 
 	/**
 	 * Type
 	 *
 	 * @var string
 	 */
-	public $type = 'pronamic_pay_payment_method_selector';
+	public $type = Fields::PAYMENT_METHODS_FIELD_TYPE;
 
 	/**
 	 * Constructs and initializes payment methods field.

@@ -23,14 +23,14 @@ class IssuersField extends GF_Field_Select {
 	 *
 	 * @var string
 	 */
-	const TYPE = 'ideal_issuer_drop_down';
+	const TYPE = Fields::ISSUERS_FIELD_TYPE;
 
 	/**
 	 * Type
 	 *
 	 * @var string
 	 */
-	public $type = 'ideal_issuer_drop_down';
+	public $type = Fields::ISSUERS_FIELD_TYPE;
 
 	/**
 	 * Constructs and initializes issuers field.

@@ -340,7 +340,7 @@ class PaymentData extends Pay_PaymentData {
 	//////////////////////////////////////////////////
 	// Payment method
 	public function get_payment_method() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( PaymentMethodsField::TYPE ) );
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Fields::PAYMENT_METHODS_FIELD_TYPE ) );
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {

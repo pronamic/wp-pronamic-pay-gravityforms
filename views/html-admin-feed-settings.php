@@ -80,7 +80,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<?php esc_html_e( 'Form', 'pronamic_ideal' ); ?>
 							</label>
 
-							<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'The Gravity Forms form to process payments for.', 'pronamic_ideal' ); ?>"></span>
+							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'The Gravity Forms form to process payments for.', 'pronamic_ideal' ); ?>"></span>
 						</th>
 						<td>
 							<select id="_pronamic_pay_gf_form_id" name="_pronamic_pay_gf_form_id">
@@ -105,7 +105,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<?php esc_html_e( 'Configuration', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Gateway configuration, created via <strong>iDEAL » Configurations</strong>.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Gateway configuration, created via <strong>Pay » Configurations</strong>.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -130,7 +130,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<?php esc_html_e( 'Entry ID Prefix', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Prefix for the entry ID.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Prefix for the entry ID.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -151,7 +151,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<?php esc_html_e( 'Transaction Description', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Transaction description that will be send with the payment. Use tags to customize the description.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Transaction description that will be send with the payment. Use tags to customize the description.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -192,7 +192,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 					<th scope="row">
 						<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<p>
@@ -280,7 +280,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 					<th scope="row">
 						<?php esc_html_e( 'Delay actions', 'pronamic_ideal' ); ?>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Actions for which execution will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Actions for which execution will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<p>

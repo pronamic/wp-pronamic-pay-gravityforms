@@ -50,13 +50,17 @@ class PaymentMethodsField extends GF_Field_Select {
 		$this->inputs = null;
 
 		// Actions
-		if ( ! has_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) ) ) {
-			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
+		if ( ! has_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) ) ) {
+			add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
 		}
 
 		// Admin
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
+
+			if ( empty( $this->formId ) && 'gf_edit_forms' === filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) ) {
+				$this->formId = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
+			}
 		}
 
 		// Choices
@@ -93,61 +97,52 @@ class PaymentMethodsField extends GF_Field_Select {
 	}
 
 	/**
-	 * Get the gateway for this field.
+	 * Get the gateways for this field.
 	 *
-	 * @return null|\Pronamic\WordPress\Pay\Core\Gateway
+	 * @return array
 	 */
-	private function get_gateway() {
-		$gateway = null;
+	private function get_gateways() {
+		$gateways = array();
 
-		if ( isset( $this->pronamicPayConfigId ) && ! empty( $this->pronamicPayConfigId ) ) {
+		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
+
+		// Get all config IDs.
+		$config_ids = wp_list_pluck( $feeds, 'config_id' );
+
+		// Remove duplicates.
+		$config_ids = array_unique( $config_ids );
+
+		// Check if field config ID setting is set as config of a payment feed.
+		if ( isset( $this->pronamicPayConfigId ) && in_array( $this->pronamicPayConfigId, $config_ids, true ) ) {
 			$gateway = Plugin::get_gateway( $this->pronamicPayConfigId );
-		}
 
-		if ( ! $gateway ) {
-			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
-
-			foreach ( $feeds as $feed ) {
-				$gateway = Plugin::get_gateway( $feed->config_id );
-
-				if ( $gateway && null !== $gateway->get_payment_method_field() ) {
-					return $gateway;
-				}
+			if ( $gateway ) {
+				$gateways[] = $gateway;
 			}
 		}
 
-		return $gateway;
+		// Get all gateways if config ID setting is unused.
+		if ( empty( $gateways ) ) {
+			$gateways = array_map(
+				array( 'Pronamic\WordPress\Pay\Plugin', 'get_gateway' ),
+				$config_ids
+			);
+
+			// Remove non-existing gateways.
+			$gateways = array_filter( $gateways );
+		}
+
+		return $gateways;
 	}
 
 	/**
 	 * Merge payment method choices from the payment gateway, leave `isSelected` in tact so users can enable/disable payment methods manual.
 	 *
-	 * @param int $form_id
+	 * @param int $form_id Form ID.
 	 */
 	private function set_choices( $form_id ) {
-		$payment_methods = array();
-
-		// Gateway
-		$gateway = $this->get_gateway();
-
-		if ( $gateway ) {
-			$field = $gateway->get_payment_method_field();
-
-			$this->error = $gateway->get_error();
-
-			// @todo What todo if error?
-			if ( $field && ! is_wp_error( $this->error ) ) {
-				foreach ( $field['choices'] as $group ) {
-					if ( ! isset( $group['options'] ) ) {
-						continue;
-					}
-
-					foreach ( $group['options'] as $value => $label ) {
-						$payment_methods[ $value ] = $label;
-					}
-				}
-			}
-		}
+		// Gateway available payment methods.
+		$payment_methods = $this->get_gateway_payment_methods();
 
 		// Choices
 		$choices = array();
@@ -223,12 +218,12 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		// Error handling
+		// Error handling.
 		if ( is_wp_error( $this->error ) ) {
 			return $this->error->get_error_message();
 		}
 
-		// Input
+		// Input.
 		$input = parent::get_field_input( $form, $value, $entry );
 
 		if ( is_admin() ) {
@@ -279,6 +274,9 @@ class PaymentMethodsField extends GF_Field_Select {
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
+	 *
+	 * @param array $field_groups Field groups.
+	 *
 	 * @return array
 	 */
 	public function add_button( $field_groups ) {
@@ -289,12 +287,37 @@ class PaymentMethodsField extends GF_Field_Select {
 	}
 
 	/**
+	 * Get gateway available payment methods.
+	 *
+	 * @return array
+	 */
+	private function get_gateway_payment_methods() {
+		$gateways = $this->get_gateways();
+
+		$payment_methods = array();
+
+		foreach ( $gateways as $gateway ) {
+			$options = $gateway->get_payment_method_field_options( false );
+
+			$payment_methods = array_merge( $payment_methods, $options );
+
+			$this->error = $gateway->get_error();
+		}
+
+		if ( empty( $payment_methods ) ) {
+			$payment_methods = PaymentMethods::get_active_payment_methods();
+		}
+
+		return $payment_methods;
+	}
+
+	/**
 	 * Editor JavaScript default field values.
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
 	 */
-	public static function editor_js_set_default_values() {
+	public function editor_js_set_default_values() {
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
 		if ( ! field.label ) {
@@ -306,9 +329,9 @@ class PaymentMethodsField extends GF_Field_Select {
 		if ( ! field.choices ) {
 		field.choices = new Array();
 
-		<?php foreach ( PaymentMethods::get_payment_methods() as $value => $label ) : ?>
+		<?php foreach ( $this->get_gateway_payment_methods() as $payment_method => $name ) : ?>
 
-			var choice = new Choice( <?php echo wp_json_encode( $label ); ?>, <?php echo wp_json_encode( $value ); ?> );
+			var choice = new Choice( <?php echo wp_json_encode( $name ); ?>, <?php echo wp_json_encode( strval( $payment_method ) ); ?> );
 
 			choice.isSelected = true;
 			choice.builtin    = true;

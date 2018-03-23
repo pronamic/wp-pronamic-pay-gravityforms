@@ -1,6 +1,7 @@
 /* global ajaxurl */
 /* global gform */
 /* global form */
+/* global SetFieldProperty */
 ( function( $ ) {
 	/**
 	 * Gravity Forms pay feed editor
@@ -549,7 +550,13 @@
 
 		// Action on load field settings
 		$( document ).on( 'gform_load_field_settings', function( e, field ) {
-			$( '#pronamic_pay_config_field' ).val( field.pronamicPayConfigId );
+			var $pronamicPayConfigField = $( '#pronamic_pay_config_field' );
+
+			if ( $pronamicPayConfigField.find( 'option[value="' + field.pronamicPayConfigId + '"]' ).length > 0 ) {
+				$pronamicPayConfigField.val( field.pronamicPayConfigId );
+			} else {
+				SetFieldProperty( 'pronamicPayConfigId', '' );
+			}
 		} );
 	} );
 } )( jQuery );

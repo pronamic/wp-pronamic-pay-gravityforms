@@ -306,13 +306,21 @@ class Processor {
 		// New payment
 		$data = new PaymentData( $form, $lead, $this->feed );
 
-		$payment_method = $data->get_payment_method();
+		// Does entry contain any items?
+		$items = $data->get_items();
+
+		if ( 0 === iterator_count( $items ) ) {
+			return $lead;
+		}
 
 		// Set payment method to iDEAL if issuer_id is set
+		$payment_method = $data->get_payment_method();
+
 		if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
 			$payment_method = PaymentMethods::IDEAL;
 		}
 
+		// Start payment.
 		$this->payment = Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
 
 		$this->error = $this->gateway->get_error();
@@ -467,21 +475,23 @@ class Processor {
 			return $confirmation;
 		}
 
-		if ( $this->gateway && $this->payment && $this->payment->get_amount() > 0 ) {
-			$confirmation = array( 'redirect' => $this->payment->get_pay_redirect_url() );
+		if ( ! $this->gateway || ! $this->payment ) {
+			return $confirmation;
+		}
 
-			if ( is_wp_error( $this->error ) ) {
-				$html  = '<ul>';
-				$html .= '<li>' . Plugin::get_default_error_message() . '</li>';
+		$confirmation = array( 'redirect' => $this->payment->get_pay_redirect_url() );
 
-				foreach ( $this->error->get_error_messages() as $message ) {
-					$html .= '<li>' . $message . '</li>';
-				}
+		if ( is_wp_error( $this->error ) ) {
+			$html  = '<ul>';
+			$html .= '<li>' . Plugin::get_default_error_message() . '</li>';
 
-				$html .= '</ul>';
-
-				$confirmation = $html;
+			foreach ( $this->error->get_error_messages() as $message ) {
+				$html .= '<li>' . $message . '</li>';
 			}
+
+			$html .= '</ul>';
+
+			$confirmation = $html;
 		}
 
 		return $confirmation;

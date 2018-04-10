@@ -356,8 +356,14 @@ class Extension {
 		// Process Gravity Forms confirmations if link type is confirmation
 		$link = Links::transform_status( $payment->status );
 
-		if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-			$confirmation = $this->get_confirmation( $lead, $payment->status );
+		if ( isset( $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+			$amount = $payment->get_amount();
+
+			if ( empty( $amount ) ) {
+				$confirmation = true;
+			} else {
+				$confirmation = $this->get_confirmation( $lead, $payment->status );
+			}
 
 			if ( ! empty( $confirmation ) ) {
 				if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
@@ -840,35 +846,48 @@ class Extension {
 	 * @return void
 	 */
 	public function maybe_display_confirmation() {
-		if ( filter_has_var( INPUT_GET, 'pay_confirmation' ) && filter_has_var( INPUT_GET, '_wpnonce' ) ) {
-			$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
+		if ( ! filter_has_var( INPUT_GET, 'pay_confirmation' ) || ! filter_has_var( INPUT_GET, '_wpnonce' ) ) {
+			return;
+		}
 
-			$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+		$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
 
-			if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
-				return;
+		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
+			return;
+		}
+
+		$payment = get_pronamic_payment( $payment_id );
+
+		$lead_id = $payment->get_source_id();
+
+		$lead = RGFormsModel::get_lead( $lead_id );
+
+		// Return if lead does not exist.
+		if ( ! $lead ) {
+			return;
+		}
+
+		$confirmation = $this->get_confirmation( $lead, $payment->status );
+
+		// Display confirmation if it exists.
+		if ( ! empty( $confirmation ) ) {
+			if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
+				wp_redirect( $confirmation[ 'redirect' ] );
+
+				exit;
 			}
 
-			$payment = get_pronamic_payment( $payment_id );
+			$form = GFAPI::get_form( $lead['form_id'] );
 
-			$lead_id = $payment->get_source_id();
-
-			$lead = RGFormsModel::get_lead( $lead_id );
-
-			if ( $lead ) {
-				$confirmation = $this->get_confirmation( $lead, $payment->status );
-
-				if ( ! empty( $confirmation ) ) {
-					$form = GFAPI::get_form( $lead['form_id'] );
-
-					GFFormDisplay::$submission[ $form['id'] ] = array(
-						'is_confirmation'      => true,
-						'confirmation_message' => $confirmation,
-						'form'                 => $form,
-						'lead'                 => $lead,
-					);
-				}
-			}
+			GFFormDisplay::$submission[ $form['id'] ] = array(
+				'is_confirmation'      => true,
+				'confirmation_message' => $confirmation,
+				'form'                 => $form,
+				'lead'                 => $lead,
+			);
 		}
 	}
 

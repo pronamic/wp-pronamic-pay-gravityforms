@@ -875,7 +875,7 @@ class Extension {
 		// Display confirmation if it exists.
 		if ( ! empty( $confirmation ) ) {
 			if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
-				wp_redirect( $confirmation[ 'redirect' ] );
+				wp_redirect( $confirmation['redirect'] );
 
 				exit;
 			}

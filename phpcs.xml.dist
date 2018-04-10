@@ -32,6 +32,7 @@
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_get_user_meta" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_update_user_meta" />
+        <exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect_wp_redirect" />
 
         <exclude name="WordPress.VIP.SlowDBQuery.slow_db_query_meta_key" />
         <exclude name="WordPress.VIP.SlowDBQuery.slow_db_query_meta_query" />

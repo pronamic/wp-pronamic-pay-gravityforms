@@ -240,6 +240,17 @@ class Processor {
 			}
 		}
 
+		// Maybe delay Twilio
+		if ( $this->feed->delay_twilio ) {
+			// @since unreleased
+			// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+			if ( function_exists( 'gf_twilio' ) ) {
+				$addon = gf_twilio();
+
+				remove_filter( 'gform_entry_post_save', array( $addon, 'maybe_process_feed' ), 10, 2 );
+			}
+		}
+
 		// Maybe delay Dropbox
 		if ( $this->feed->delay_dropbox ) {
 			// @since unreleased

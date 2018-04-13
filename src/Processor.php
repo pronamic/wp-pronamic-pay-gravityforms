@@ -300,24 +300,24 @@ class Processor {
 			return $lead;
 		}
 
-		// Payment ID
+		// Check for payment ID.
 		$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
 
 		if ( ! empty( $payment_id ) ) {
 			return $lead;
 		}
 
-		// Gateway
+		// Gateway.
 		$this->gateway = Plugin::get_gateway( $this->feed->config_id );
 
 		if ( ! $this->gateway ) {
 			return $lead;
 		}
 
-		// New payment
+		// Payment data.
 		$data = new PaymentData( $form, $lead, $this->feed );
 
-		// Does entry contain any items?
+		// Does payment data contain any items?
 		$items = $data->get_items();
 
 		if ( 0 === iterator_count( $items ) ) {

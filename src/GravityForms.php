@@ -143,6 +143,24 @@ class GravityForms {
 	}
 
 	/**
+	 * Get entry property.
+	 *
+	 * @param int    $entry_id Entry ID.
+	 * @param string $property Name of the property to fetch.
+	 *
+	 * @return mixed|null
+	 */
+	public static function get_entry_property( $entry_id, $property ) {
+		$entry = GFFormsModel::get_lead( $entry_id );
+
+		if ( isset( $entry[ $property ] ) ) {
+			return $entry[ $property ];
+		}
+
+		return null;
+	}
+
+	/**
 	 * Compare the current Gravity Forms version
 	 *
 	 * @param string $version

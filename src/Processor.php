@@ -324,7 +324,17 @@ class Processor {
 			return $lead;
 		}
 
-		// Set payment method to iDEAL if issuer_id is set
+		// Update entry meta.
+		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
+		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
+
+		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
+		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
+		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
+
+		GravityForms::update_entry( $lead );
+
+		// Set payment method to iDEAL if issuer ID is set.
 		$payment_method = $data->get_payment_method();
 
 		if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
@@ -336,37 +346,28 @@ class Processor {
 
 		$this->error = $this->gateway->get_error();
 
-		// Updating lead's payment_status to Processing
-		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
-		$lead[ LeadProperties::PAYMENT_AMOUNT ]   = $this->payment->get_amount();
-		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
-		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
-		$lead[ LeadProperties::TRANSACTION_ID ]   = $this->payment->get_transaction_id();
-
-		// Update entry meta with payment ID
+		// Update entry meta.
 		gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
-
-		// Update entry meta with subscription ID
 		gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
 
-		// Update entry meta with feed ID
-		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
+		$lead[ LeadProperties::PAYMENT_STATUS ] = GravityForms::get_entry_property( $lead['id'], LeadProperties::PAYMENT_STATUS );
+		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_amount();
+		$lead[ LeadProperties::TRANSACTION_ID ] = $this->payment->get_transaction_id();
 
-		// Update entry meta with current payment gateway
-		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
-
-		// Update lead
 		GravityForms::update_entry( $lead );
 
-		// Add pending payment
-		$action = array(
-			'id'             => $this->payment->get_id(),
-			'transaction_id' => $this->payment->get_transaction_id(),
-			'amount'         => $this->payment->get_amount(),
-			'entry_id'       => $lead['id'],
-		);
+		// Add pending payment if no gateway errors occurred.
+		if ( ! $this->gateway->has_error() ) {
+			// Add pending payment.
+			$action = array(
+				'id'             => $this->payment->get_id(),
+				'transaction_id' => $this->payment->get_transaction_id(),
+				'amount'         => $this->payment->get_amount(),
+				'entry_id'       => $lead['id'],
+			);
 
-		$this->extension->payment_action( 'add_pending_payment', $lead, $action );
+			$this->extension->payment_action( 'add_pending_payment', $lead, $action );
+		}
 
 		return $lead;
 	}

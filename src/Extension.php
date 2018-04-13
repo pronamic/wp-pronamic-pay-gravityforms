@@ -485,6 +485,10 @@ class Extension {
 			return;
 		}
 
+		if ( empty ( $lead['is_fulfilled'] ) ) {
+			return;
+		}
+
 		$action = array(
 			'id'              => $subscription->get_id(),
 			'transaction_id'  => $subscription->get_transaction_id(),

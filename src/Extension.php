@@ -485,7 +485,7 @@ class Extension {
 			return;
 		}
 
-		if ( empty ( $lead['is_fulfilled'] ) ) {
+		if ( empty( $lead['is_fulfilled'] ) ) {
 			return;
 		}
 

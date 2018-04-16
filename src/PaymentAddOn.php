@@ -347,33 +347,18 @@ class PaymentAddOn extends GFPaymentAddOn {
 		}
 
 		$events = array(
-			'complete_payment'    => esc_html__( 'Payment Completed', 'pronamic_ideal' ),
-			'fail_payment'        => esc_html__( 'Payment Failed', 'pronamic_ideal' ),
-			'add_pending_payment' => esc_html__( 'Payment Pending', 'pronamic_ideal' ),
+			'complete_payment'          => esc_html__( 'Payment Completed', 'pronamic_ideal' ),
+			'fail_payment'              => esc_html__( 'Payment Failed', 'pronamic_ideal' ),
+			'add_pending_payment'       => esc_html__( 'Payment Pending', 'pronamic_ideal' ),
+
+			// Subscription events.
+			'create_subscription'       => esc_html__( 'Subscription Created', 'pronamic_ideal' ),
+			'cancel_subscription'       => esc_html__( 'Subscription Canceled', 'pronamic_ideal' ),
+			'expire_subscription'       => esc_html__( 'Subscription Expired', 'pronamic_ideal' ),
+			'renew_subscription'        => esc_html__( 'Subscription Renewal Notice', 'pronamic_ideal' ),
+			'add_subscription_payment'  => esc_html__( 'Subscription Payment Added', 'pronamic_ideal' ),
+			'fail_subscription_payment' => esc_html__( 'Subscription Payment Failed', 'pronamic_ideal' ),
 		);
-
-		foreach ( $query->posts as $post ) {
-			// Get the config ID from the pay feed
-			$config_id = get_post_meta( $post->ID, '_pronamic_pay_gf_config_id', true );
-
-			// Get the gateway from the configuration
-			$gateway = Plugin::get_gateway( $config_id );
-
-			if ( $gateway && $gateway->supports( 'recurring' ) ) {
-				$subscription_events = array(
-					'create_subscription'       => esc_html__( 'Subscription Created', 'pronamic_ideal' ),
-					'cancel_subscription'       => esc_html__( 'Subscription Canceled', 'pronamic_ideal' ),
-					'expire_subscription'       => esc_html__( 'Subscription Expired', 'pronamic_ideal' ),
-					'renew_subscription'        => esc_html__( 'Subscription Renewal Notice', 'pronamic_ideal' ),
-					'add_subscription_payment'  => esc_html__( 'Subscription Payment Added', 'pronamic_ideal' ),
-					'fail_subscription_payment' => esc_html__( 'Subscription Payment Failed', 'pronamic_ideal' ),
-				);
-
-				$events = array_merge( $events, $subscription_events );
-
-				return $events;
-			}
-		}
 
 		return $events;
 	}

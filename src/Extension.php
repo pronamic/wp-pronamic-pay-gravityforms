@@ -423,7 +423,7 @@ class Extension {
 		$success_action = 'complete_payment';
 		$fail_action    = 'fail_payment';
 
-		if ( $payment->get_recurring() ) {
+		if ( 'recurring' === $payment->recurring_type ) {
 			$success_action = 'add_subscription_payment';
 			$fail_action    = 'fail_subscription_payment';
 		}
@@ -498,6 +498,7 @@ class Extension {
 				$this->payment_action( 'cancel_subscription', $lead, $action, PaymentStatuses::CANCELLED );
 
 				break;
+			case Statuses::EXPIRED:
 			case Statuses::COMPLETED:
 				// @todo are we sure an 'expired subscription' is the same as the Pronamic\WordPress\Pay\Core\Statuses::COMPLETED status?
 				$this->payment_action( 'expire_subscription', $lead, $action, PaymentStatuses::EXPIRED );

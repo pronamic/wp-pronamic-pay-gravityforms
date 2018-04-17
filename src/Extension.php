@@ -9,6 +9,7 @@ use GFCommon;
 use GFFormDisplay;
 use GFForms;
 use GFUserData;
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Statuses;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
@@ -103,6 +104,8 @@ class Extension {
 		add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
 		add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+
+		add_filter( 'gform_currencies', array( __CLASS__, 'currencies' ), 10, 1 );
 
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
@@ -994,5 +997,28 @@ class Extension {
 		$text = strtr( $text, $replacements );
 
 		return $text;
+	}
+
+	/**
+	 * Filter currencies.
+	 *
+	 * @param array $currencies Available currencies.
+	 *
+	 * @return mixed
+	 */
+	public static function currencies( $currencies ) {
+		if ( PaymentMethods::is_active( PaymentMethods::GULDEN ) ) {
+			$currencies['NLG'] = array(
+				'name'               => PaymentMethods::get_name( PaymentMethods::GULDEN ),
+				'symbol_left'        => 'G',
+				'symbol_right'       => '',
+				'symbol_padding'     => ' ',
+				'thousand_separator' => '',
+				'decimal_separator'  => '.',
+				'decimals'           => 4,
+			);
+		}
+
+		return $currencies;
 	}
 }

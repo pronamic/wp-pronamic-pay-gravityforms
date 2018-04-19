@@ -411,7 +411,7 @@ class PaymentData extends Pay_PaymentData {
 			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
 				$items = $this->get_items();
 
-				$amount = $items->get_amount();
+				$amount = $items->get_amount()->get_amount();
 
 				break;
 			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:

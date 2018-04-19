@@ -351,7 +351,7 @@ class Processor {
 		gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
 
 		$lead[ LeadProperties::PAYMENT_STATUS ] = GravityForms::get_entry_property( $lead['id'], LeadProperties::PAYMENT_STATUS );
-		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_amount();
+		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_amount()->get_amount();
 		$lead[ LeadProperties::TRANSACTION_ID ] = $this->payment->get_transaction_id();
 
 		GravityForms::update_entry( $lead );
@@ -362,7 +362,7 @@ class Processor {
 			$action = array(
 				'id'             => $this->payment->get_id(),
 				'transaction_id' => $this->payment->get_transaction_id(),
-				'amount'         => $this->payment->get_amount(),
+				'amount'         => $this->payment->get_amount()->get_amount(),
 				'entry_id'       => $lead['id'],
 			);
 

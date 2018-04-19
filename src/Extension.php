@@ -360,7 +360,7 @@ class Extension {
 		$link = Links::transform_status( $payment->status );
 
 		if ( isset( $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-			$amount = $payment->get_amount();
+			$amount = $payment->get_amount()->get_amount();
 
 			if ( empty( $amount ) ) {
 				$confirmation = true;
@@ -415,7 +415,7 @@ class Extension {
 		$action = array(
 			'id'             => $payment->get_id(),
 			'transaction_id' => $payment->get_transaction_id(),
-			'amount'         => $payment->get_amount(),
+			'amount'         => $payment->get_amount()->get_amount(),
 			'entry_id'       => $lead['id'],
 		);
 
@@ -496,7 +496,7 @@ class Extension {
 			'id'              => $subscription->get_id(),
 			'transaction_id'  => $subscription->get_transaction_id(),
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount(),
+			'amount'          => $subscription->get_amount()->get_amount(),
 			'entry_id'        => $lead['id'],
 		);
 
@@ -540,7 +540,7 @@ class Extension {
 
 		$action = array(
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount(),
+			'amount'          => $subscription->get_amount()->get_amount(),
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
 		);

@@ -3,6 +3,7 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
+use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\CreditCard;
 use Pronamic\WordPress\Pay\Payments\Item;
@@ -481,9 +482,12 @@ class PaymentData extends Pay_PaymentData {
 		$subscription->frequency       = $frequency;
 		$subscription->interval        = $interval;
 		$subscription->interval_period = $interval_period;
-		$subscription->amount          = $amount;
-		$subscription->currency        = $this->get_currency();
 		$subscription->description     = $this->get_description();
+
+		$subscription->set_amount( new Money(
+			$amount,
+			$this->get_currency_alphabetic_code()
+		) );
 
 		return $subscription;
 	}

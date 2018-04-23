@@ -467,7 +467,7 @@ class PaymentData extends Pay_PaymentData {
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
-						$frequency = $this->lead[ $this->feed->subscription_frequency_field ];
+						$frequency = intval( $this->lead[ $this->feed->subscription_frequency_field ] );
 					}
 				}
 

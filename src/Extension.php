@@ -10,6 +10,7 @@ use GFFormDisplay;
 use GFForms;
 use GFUserData;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Recurring;
 use Pronamic\WordPress\Pay\Core\Statuses;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Payments\Payment;
@@ -453,7 +454,7 @@ class Extension {
 				if ( ! Entry::is_payment_approved( $lead ) ) {
 					// Only fulfill order if the payment isn't approved already
 
-					if ( 'first' === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
+					if ( Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
 						$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
 						$this->payment_action( 'create_subscription', $lead, $action );

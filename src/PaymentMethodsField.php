@@ -172,7 +172,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		}
 
 		// Admin
-		if ( 'form_editor' !== GFForms::get_page() ) {
+		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ) ) ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}
@@ -305,7 +305,11 @@ class PaymentMethodsField extends GF_Field_Select {
 		}
 
 		if ( empty( $payment_methods ) ) {
-			$payment_methods = PaymentMethods::get_active_payment_methods();
+			$active_methods = PaymentMethods::get_active_payment_methods();
+
+			foreach ( $active_methods as $payment_method ) {
+				$payment_methods[ $payment_method ] = PaymentMethods::get_name( $payment_method );
+			}
 		}
 
 		return $payment_methods;

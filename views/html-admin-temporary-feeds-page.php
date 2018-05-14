@@ -1,9 +1,3 @@
-<?php
-
-global $pronamic_pay_version;
-
-?>
-
 <script type="text/javascript">
 	function dismissMenu() {
 		jQuery( '#gf_spinner' ).show();
@@ -28,7 +22,7 @@ global $pronamic_pay_version;
 		echo esc_html( sprintf(
 			/* translators: %s: Pronamic Pay version number, i.e. 4.7.0 */
 			__( 'Pronamic Pay v%s', 'pronamic_ideal' ),
-			$pronamic_pay_version
+			pronamic_pay_plugin()->get_version()
 		) );
 
 		?>

@@ -1,16 +1,34 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GF_Field;
+use GFAddOn;
+use GFAPI;
+use GFCommon;
+use GFFormDisplay;
+use GFForms;
+use GFUserData;
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Recurring;
+use Pronamic\WordPress\Pay\Core\Statuses;
+use Pronamic\WordPress\Pay\Core\Util as Core_Util;
+use Pronamic\WordPress\Pay\Payments\Payment;
+use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use RGFormsModel;
+use WP_User;
+
 /**
  * Title: WordPress pay extension Gravity Forms extension
  * Description:
- * Copyright: Copyright (c) 2005 - 2017
+ * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
- * @version 1.6.7
- * @since 1.0.0
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
+class Extension {
 	/**
 	 * Slug
 	 *
@@ -18,17 +36,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	const SLUG = 'gravityformsideal';
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Bootstrap
 	 */
 	public static function bootstrap() {
-		$extension = new Pronamic_WP_Pay_Extensions_GravityForms_Extension();
+		$extension = new Extension();
 		$extension->setup();
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Setup.
@@ -37,19 +51,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Plugins loaded
 	 */
 	public function plugins_loaded() {
 		// Gravity Forms version 1.0 is required.
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.0', '<' ) ) {
+		if ( GravityForms::version_compare( '1.0', '<' ) ) {
 			return;
 		}
 
 		// Post types
-		$this->payment_form_post_type = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentFormPostType();
+		$this->payment_form_post_type = new PaymentFormPostType();
 
 		// Actions
 		// Initialize hook, Gravity Forms uses the default priority (10)
@@ -59,16 +71,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		// Add-on
 		// The `class_exists` call is required to prevent strange errors on some hosting environments
-		if ( Pronamic_WP_Pay_Class::method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
+		if ( Core_Util::class_method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
 			GFForms::include_payment_addon_framework();
 
 			if ( class_exists( 'GFPaymentAddOn' ) ) {
-				$this->addon = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentAddOn();
+				$this->addon = new PaymentAddOn();
 			}
 		}
 
 		// Fields
-		$this->fields = new Pronamic_WP_Pay_Extensions_GravityForms_Fields();
+		$this->fields = new Fields();
 	}
 
 	/**
@@ -77,7 +89,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	public function init() {
 		// Admin
 		if ( is_admin() ) {
-			Pronamic_WP_Pay_Extensions_GravityForms_Admin::bootstrap();
+			Admin::bootstrap();
 		} else {
 			add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
 		}
@@ -94,6 +106,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
 
+		add_filter( 'gform_currencies', array( __CLASS__, 'currencies' ), 10, 1 );
+
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
 		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
@@ -104,9 +118,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	/**
 	 * Field create.
 	 *
-	 * @param $field
+	 * @param       $field
 	 * @param array $properties
-	 * @return GF_Field
+	 *
+	 * @return IssuersField|PaymentMethodsField
 	 */
 	public function field_create( $field, $properties ) {
 		/*
@@ -117,10 +132,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		switch ( $field->type ) {
-			case 'ideal_issuer_drop_down':
-				return new Pronamic_WP_Pay_Extensions_GravityForms_IssuersField( $properties );
-			case 'pronamic_pay_payment_method_selector':
-				return new Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField( $properties );
+			case Fields::ISSUERS_FIELD_TYPE:
+				return new IssuersField( $properties );
+			case Fields::PAYMENT_METHODS_FIELD_TYPE:
+				return new PaymentMethodsField( $properties );
 		}
 
 		return $field;
@@ -134,7 +149,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		if (
 			'pronamic_pay_gf' === $screen->post_type
-				||
+			||
 			'toplevel_page_gf_edit_forms' === $screen->id
 		) {
 			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
@@ -175,7 +190,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 * Gravity Forms No Conflict scripts.
 	 *
 	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_scripts/
+	 *
 	 * @param array $scripts
+	 *
 	 * @return array
 	 */
 	public function no_conflict_scripts( $scripts ) {
@@ -186,12 +203,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		return $scripts;
 	}
 
-
 	/**
 	 * Gravity Forms No Conflict styles.
 	 *
 	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_styles/
+	 *
 	 * @param array $styles
+	 *
 	 * @return array
 	 */
 	public function no_conflict_styles( $styles ) {
@@ -203,31 +221,27 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		return $styles;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Pre submssion
 	 *
 	 * @param array $form
 	 */
 	public function pre_submission( $form ) {
-		$processor = new Pronamic_WP_Pay_Extensions_GravityForms_Processor( $form, $this );
+		$processor = new Processor( $form, $this );
 
 		$processor->pre_submission( $form );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Source column
 	 */
-	public function source_text( $text, Pronamic_Pay_Payment $payment ) {
+	public function source_text( $text, Payment $payment ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
 		$text .= sprintf(
 			'<a href="%s">%s</a>',
 			add_query_arg( array( 'pronamic_gf_lid' => $payment->get_source_id() ), admin_url( 'admin.php' ) ),
-			/* translators: %s: payment source ID */
+			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
 		);
 
@@ -236,29 +250,33 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 	/**
 	 * Source description.
+	 *
+	 * @param         $description
+	 * @param Payment $payment
+	 *
+	 * @return string
 	 */
-	public function source_description( $description, Pronamic_Pay_Payment $payment ) {
-		$description = __( 'Gravity Forms Entry', 'pronamic_ideal' );
-
-		return $description;
+	public function source_description( $description, Payment $payment ) {
+		return __( 'Gravity Forms Entry', 'pronamic_ideal' );
 	}
 
 	/**
 	 * Source URL.
+	 *
+	 * @param         $url
+	 * @param Payment $payment
+	 *
+	 * @return string
 	 */
-	public function source_url( $url, Pronamic_Pay_Payment $payment ) {
-		$url = add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
-
-		return $url;
+	public function source_url( $url, Payment $payment ) {
+		return add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
 	}
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Maybe update user role of the specified lead and feed
 	 *
-	 * @param array $lead
-	 * @param Feed $feed
+	 * @param array   $lead
+	 * @param PayFeed $feed
 	 */
 	private function maybe_update_user_role( $lead, $feed ) {
 		$user = false;
@@ -272,7 +290,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 
 		if ( false === $user ) {
-			$created_by = $lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::CREATED_BY ];
+			$created_by = $lead[ LeadProperties::CREATED_BY ];
 
 			$user = new WP_User( $created_by );
 		}
@@ -285,14 +303,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Payment redirect URL filter.
 	 *
 	 * @since unreleased
-	 * @param string                  $url
-	 * @param Pronamic_WP_Pay_Payment $payment
+	 *
+	 * @param string  $url
+	 * @param Payment $payment
+	 *
 	 * @return string
 	 */
 	public function redirect_url( $url, $payment ) {
@@ -313,26 +331,26 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			return $url;
 		}
 
-		$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
+		$data = new PaymentData( $form, $lead, $feed );
 
 		switch ( $payment->status ) {
-			case Pronamic_WP_Pay_Statuses::CANCELLED:
+			case Statuses::CANCELLED:
 				$url = $data->get_cancel_url();
 
 				break;
-			case Pronamic_WP_Pay_Statuses::EXPIRED:
-				$url = $feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED );
+			case Statuses::EXPIRED:
+				$url = $feed->get_url( Links::EXPIRED );
 
 				break;
-			case Pronamic_WP_Pay_Statuses::FAILURE:
+			case Statuses::FAILURE:
 				$url = $data->get_error_url();
 
 				break;
-			case Pronamic_WP_Pay_Statuses::SUCCESS:
+			case Statuses::SUCCESS:
 				$url = $data->get_success_url();
 
 				break;
-			case Pronamic_WP_Pay_Statuses::OPEN:
+			case Statuses::OPEN:
 			default:
 				$url = $data->get_normal_return_url();
 
@@ -340,10 +358,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		}
 
 		// Process Gravity Forms confirmations if link type is confirmation
-		$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment->status );
+		$link = Links::transform_status( $payment->status );
 
-		if ( isset( $feed->links[ $link ], $feed->links[ $link ]['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-			$confirmation = $this->get_confirmation( $lead, $payment->status );
+		if ( isset( $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
+			$amount = $payment->get_amount()->get_amount();
+
+			if ( empty( $amount ) ) {
+				$confirmation = true;
+			} else {
+				$confirmation = $this->get_confirmation( $lead, $payment->status );
+			}
 
 			if ( ! empty( $confirmation ) ) {
 				if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
@@ -363,14 +387,13 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		return $url;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Update lead status of the specified payment
 	 *
-	 * @param string $payment
+	 * @param Payment $payment
+	 * @param bool    $can_redirect
 	 */
-	public function update_status( Pronamic_Pay_Payment $payment, $can_redirect = false ) {
+	public function update_status( Payment $payment, $can_redirect = false ) {
 		$lead_id = $payment->get_source_id();
 
 		$lead = RGFormsModel::get_lead( $lead_id );
@@ -388,12 +411,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			return;
 		}
 
-		$data = new Pronamic_WP_Pay_Extensions_GravityForms_PaymentData( $form, $lead, $feed );
+		$data = new PaymentData( $form, $lead, $feed );
 
 		$action = array(
 			'id'             => $payment->get_id(),
 			'transaction_id' => $payment->get_transaction_id(),
-			'amount'         => $payment->get_amount(),
+			'amount'         => $payment->get_amount()->get_amount(),
 			'entry_id'       => $lead['id'],
 		);
 
@@ -404,34 +427,34 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$success_action = 'complete_payment';
 		$fail_action    = 'fail_payment';
 
-		if ( $payment->get_recurring() ) {
+		if ( 'recurring' === $payment->recurring_type ) {
 			$success_action = 'add_subscription_payment';
 			$fail_action    = 'fail_subscription_payment';
 		}
 
 		switch ( $payment->status ) {
-			case Pronamic_WP_Pay_Statuses::CANCELLED:
-				$this->payment_action( $fail_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED );
+			case Statuses::CANCELLED:
+				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::CANCELLED );
 
 				break;
-			case Pronamic_WP_Pay_Statuses::EXPIRED:
-				$this->payment_action( $fail_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED );
+			case Statuses::EXPIRED:
+				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::EXPIRED );
 
 				break;
-			case Pronamic_WP_Pay_Statuses::FAILURE:
-				$this->payment_action( $fail_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED );
+			case Statuses::FAILURE:
+				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::FAILED );
 
 				break;
-			case Pronamic_WP_Pay_Statuses::SUCCESS:
-				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
+			case Statuses::SUCCESS:
+				if ( ! Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
-					$this->payment_action( $success_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID );
+					$this->payment_action( $success_action, $lead, $action, PaymentStatuses::PAID );
 				}
 
-				if ( ! Pronamic_WP_Pay_Extensions_GravityForms_Entry::is_payment_approved( $lead ) ) {
+				if ( ! Entry::is_payment_approved( $lead ) ) {
 					// Only fulfill order if the payment isn't approved already
 
-					if ( isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
+					if ( Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
 						$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
 						$this->payment_action( 'create_subscription', $lead, $action );
@@ -441,20 +464,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				}
 
 				break;
-			case Pronamic_WP_Pay_Statuses::OPEN:
+			case Statuses::OPEN:
 			default:
-				if ( $payment->get_recurring() ) {
-					$this->payment_action( $fail_action, $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::FAILED );
-				}
 		}
 	}
 
 	/**
 	 * Update lead status of the specified subscription
 	 *
-	 * @param Pronamic_Pay_Subscription $subscription
+	 * @param Subscription $subscription
 	 */
-	public function subscription_update_status( Pronamic_Pay_Subscription $subscription ) {
+	public function subscription_update_status( Subscription $subscription ) {
 		$lead_id = $subscription->get_source_id();
 
 		$lead = RGFormsModel::get_lead( $lead_id );
@@ -469,22 +489,27 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			return;
 		}
 
+		if ( empty( $lead['is_fulfilled'] ) ) {
+			return;
+		}
+
 		$action = array(
 			'id'              => $subscription->get_id(),
 			'transaction_id'  => $subscription->get_transaction_id(),
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount(),
+			'amount'          => $subscription->get_amount()->get_amount(),
 			'entry_id'        => $lead['id'],
 		);
 
 		switch ( $subscription->get_status() ) {
-			case Pronamic_WP_Pay_Statuses::CANCELLED:
-				$this->payment_action( 'cancel_subscription', $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::CANCELLED );
+			case Statuses::CANCELLED:
+				$this->payment_action( 'cancel_subscription', $lead, $action, PaymentStatuses::CANCELLED );
 
 				break;
-			case Pronamic_WP_Pay_Statuses::COMPLETED:
-				// @todo are we sure an 'expired subscription' is the same as the Pronamic_WP_Pay_Statuses::COMPLETED status?
-				$this->payment_action( 'expire_subscription', $lead, $action, Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::EXPIRED );
+			case Statuses::EXPIRED:
+			case Statuses::COMPLETED:
+				// @todo are we sure an 'expired subscription' is the same as the Pronamic\WordPress\Pay\Core\Statuses::COMPLETED status?
+				$this->payment_action( 'expire_subscription', $lead, $action, PaymentStatuses::EXPIRED );
 
 				break;
 		}
@@ -493,9 +518,9 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	/**
 	 * Send subscription renewal notice
 	 *
-	 * @param Pronamic_Pay_Subscription $subscription
+	 * @param Subscription $subscription
 	 */
-	public function subscription_renewal_notice( Pronamic_Pay_Subscription $subscription ) {
+	public function subscription_renewal_notice( Subscription $subscription ) {
 		if ( ! $this->addon ) {
 			return;
 		}
@@ -516,7 +541,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 		$action = array(
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount(),
+			'amount'          => $subscription->get_amount()->get_amount(),
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
 		);
@@ -547,17 +572,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 	 */
 	public function payment_action( $type, $lead, $action, $payment_status = null ) {
 		if ( ! $this->addon ) {
-			if ( Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::PAID === $payment_status ) {
-				$payment_status = Pronamic_WP_Pay_Extensions_GravityForms_PaymentStatuses::APPROVED;
+			if ( PaymentStatuses::PAID === $payment_status ) {
+				$payment_status = PaymentStatuses::APPROVED;
 			}
 
-			$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ] = $payment_status;
+			$lead[ LeadProperties::PAYMENT_STATUS ] = $payment_status;
 
 			// Update payment status property of lead
-			Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::update_entry_property(
+			GravityForms::update_entry_property(
 				$lead['id'],
-				Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS,
-				$lead[ Pronamic_WP_Pay_Extensions_GravityForms_LeadProperties::PAYMENT_STATUS ]
+				LeadProperties::PAYMENT_STATUS,
+				$lead[ LeadProperties::PAYMENT_STATUS ]
 			);
 
 			return false;
@@ -668,7 +693,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// Delay Aweber
 			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
-			if ( $feed->delay_aweber_subscription && Pronamic_WP_Pay_Class::method_exists( 'GFAWeber', 'export' ) ) {
+			if ( $feed->delay_aweber_subscription && Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
 				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
 
 				// @since 1.3.0
@@ -686,7 +711,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			// Delay Campaign Monitor
 			if ( $feed->delay_campaignmonitor_subscription ) {
 				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
-				if ( Pronamic_WP_Pay_Class::method_exists( 'GFCampaignMonitor', 'export' ) ) {
+				if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
 					call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
 				}
 
@@ -705,7 +730,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 			// Delay Mailchimp
 			if ( $feed->delay_mailchimp_subscription ) {
 				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
-				if ( Pronamic_WP_Pay_Class::method_exists( 'GFMailChimp', 'export' ) ) {
+				if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
 					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 				}
 
@@ -723,8 +748,21 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// Delay Zapier
 			// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
-			if ( $feed->delay_zapier && Pronamic_WP_Pay_Class::method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
+			if ( $feed->delay_zapier && Core_Util::class_method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
+			}
+
+			// Delay Dropbox
+			if ( $feed->delay_dropbox ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_dropbox' ) ) {
+					$addon = gf_dropbox();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
 			}
 
 			// Delay Moneybird
@@ -740,8 +778,21 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				}
 			}
 
+			// Delay Twilio
+			if ( $feed->delay_twilio ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_twilio' ) ) {
+					$addon = gf_twilio();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
+			}
+
 			// Delay Sliced Invoices
-			if ( $feed->delay_sliced_invoices && Pronamic_WP_Pay_Class::method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
+			if ( $feed->delay_sliced_invoices && Core_Util::class_method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
 				// @since unreleased
 				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				// @see https://plugins.trac.wordpress.org/browser/sliced-invoices-gravity-forms/tags/1.10.0/class-sliced-invoices-gf.php#L10
@@ -763,8 +814,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 
 			// Delay user registration
 			// @see https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
-			if ( $feed->delay_user_registration && Pronamic_WP_Pay_Class::method_exists( 'GFUser', 'gf_create_user' ) ) {
-				call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
+			if ( $feed->delay_user_registration ) {
+				if ( function_exists( 'gf_user_registration' ) ) {
+					$addon = gf_user_registration();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				} elseif ( Core_Util::class_method_exists( 'GFUser', 'gf_create_user' ) ) {
+					call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
+				}
 			}
 
 			// Delay notifications
@@ -788,12 +847,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 				GFCommon::send_notifications( $delay_notification_ids, $form, $entry, true, 'form_submission' );
 			}
 
-			if ( $feed->delay_admin_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_admin_notification' ) ) {
+			if ( $feed->delay_admin_notification && Core_Util::class_method_exists( 'GFCommon', 'send_admin_notification' ) ) {
 				// https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1265-L1270
 				GFCommon::send_admin_notification( $form, $entry );
 			}
 
-			if ( $feed->delay_user_notification && Pronamic_WP_Pay_Class::method_exists( 'GFCommon', 'send_user_notification' ) ) {
+			if ( $feed->delay_user_notification && Core_Util::class_method_exists( 'GFCommon', 'send_user_notification' ) ) {
 				// https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1258-L1263
 				GFCommon::send_user_notification( $form, $entry );
 			}
@@ -803,61 +862,72 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Maybe display the Gravity Forms confirmation.
 	 *
 	 * @return void
 	 */
 	public function maybe_display_confirmation() {
-		if ( filter_has_var( INPUT_GET, 'pay_confirmation' ) && filter_has_var( INPUT_GET, '_wpnonce' ) ) {
-			$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
+		if ( ! filter_has_var( INPUT_GET, 'pay_confirmation' ) || ! filter_has_var( INPUT_GET, '_wpnonce' ) ) {
+			return;
+		}
 
-			$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+		$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
 
-			if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
-				return;
+		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
+
+		// Verify nonce.
+		if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
+			return;
+		}
+
+		$payment = get_pronamic_payment( $payment_id );
+
+		$lead_id = $payment->get_source_id();
+
+		$lead = RGFormsModel::get_lead( $lead_id );
+
+		// Return if lead does not exist.
+		if ( ! $lead ) {
+			return;
+		}
+
+		$confirmation = $this->get_confirmation( $lead, $payment->status );
+
+		// Display confirmation if it exists.
+		if ( ! empty( $confirmation ) ) {
+			if ( is_array( $confirmation ) && isset( $confirmation['redirect'] ) ) {
+				wp_redirect( $confirmation['redirect'] );
+
+				exit;
 			}
 
-			$payment = get_pronamic_payment( $payment_id );
+			$form = GFAPI::get_form( $lead['form_id'] );
 
-			$lead_id = $payment->get_source_id();
-
-			$lead = RGFormsModel::get_lead( $lead_id );
-
-			if ( $lead ) {
-				$confirmation = $this->get_confirmation( $lead, $payment->status );
-
-				if ( ! empty( $confirmation ) ) {
-					$form = GFAPI::get_form( $lead['form_id'] );
-
-					GFFormDisplay::$submission[ $form['id'] ] = array(
-						'is_confirmation'      => true,
-						'confirmation_message' => $confirmation,
-						'form'                 => $form,
-						'lead'                 => $lead,
-					);
-				}
-			}
+			GFFormDisplay::$submission[ $form['id'] ] = array(
+				'is_confirmation'      => true,
+				'confirmation_message' => $confirmation,
+				'form'                 => $form,
+				'lead'                 => $lead,
+			);
 		}
 	}
 
 	/**
 	 * Get confirmations for lead based on payment status.
 	 *
-	 * @param $lead
+	 * @param        $lead
 	 *
 	 * @param string $payment_status
 	 *
 	 * @return mixed
 	 */
-	public function get_confirmation( $lead, $payment_status = Pronamic_WP_Pay_Statuses::OPEN ) {
+	public function get_confirmation( $lead, $payment_status = Statuses::OPEN ) {
 		$form = GFAPI::get_form( $lead['form_id'] );
 
 		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead['id'] );
 
-		$link = Pronamic_WP_Pay_Extensions_GravityForms_Links::transform_status( $payment_status );
+		$link = Links::transform_status( $payment_status );
 
 		if ( ! class_exists( 'GFFormDisplay' ) ) {
 			require_once GFCommon::get_base_path() . '/form_display.php';
@@ -875,18 +945,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		return GFFormDisplay::handle_confirmation( $form, $lead, false );
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Replace merge tags
 	 *
-	 * @param string $text
-	 * @param array $form
-	 * @param array $entry
+	 * @param string  $text
+	 * @param array   $form
+	 * @param array   $entry
 	 * @param boolean $url_encode
 	 * @param boolean $esc_html
 	 * @param boolean $nl2br
-	 * @param string $format
+	 * @param string  $format
+	 *
+	 * @return string
 	 */
 	public function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
 		$subscription_cancel_url   = '';
@@ -928,5 +998,28 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Extension {
 		$text = strtr( $text, $replacements );
 
 		return $text;
+	}
+
+	/**
+	 * Filter currencies.
+	 *
+	 * @param array $currencies Available currencies.
+	 *
+	 * @return mixed
+	 */
+	public static function currencies( $currencies ) {
+		if ( PaymentMethods::is_active( PaymentMethods::GULDEN ) ) {
+			$currencies['NLG'] = array(
+				'name'               => PaymentMethods::get_name( PaymentMethods::GULDEN ),
+				'symbol_left'        => 'G',
+				'symbol_right'       => '',
+				'symbol_padding'     => ' ',
+				'thousand_separator' => '',
+				'decimal_separator'  => '.',
+				'decimals'           => 4,
+			);
+		}
+
+		return $currencies;
 	}
 }

@@ -1,16 +1,22 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GFAPI;
+use WP_Post;
+use WP_Query;
+
 /**
  * Title: WordPress admin payment form post type
  * Description:
- * Copyright: Copyright (c) 2005 - 2017
+ * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
- * @version 1.6.7
- * @since 1.0.0
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
+class AdminPaymentFormPostType {
 	/**
 	 * Post type
 	 */
@@ -26,7 +32,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
-		if ( Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare( '1.7', '>=' ) ) {
+		if ( GravityForms::version_compare( '1.7', '>=' ) ) {
 			add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
 		}
 
@@ -117,10 +123,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 	 */
 	public function delete_payment_form( $form_id ) {
 		$query = new WP_Query( array(
-			'post_type' => 'pronamic_pay_gf',
-			'meta_key'  => array(
-				'key'   => '_pronamic_pay_gf_form_id',
-				'value' => $form_id,
+			'post_type'  => 'pronamic_pay_gf',
+			'meta_query' => array(
+				array(
+					'key'   => '_pronamic_pay_gf_form_id',
+					'value' => $form_id,
+				),
 			),
 		) );
 
@@ -129,6 +137,14 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 		}
 	}
 
+	/**
+	 * When a new payment feed is created, filter the post data.
+	 *
+	 * @param array $data
+	 * @param array $postarr
+	 *
+	 * @return array
+	 */
 	public function insert_post_data( $data, $postarr ) {
 		// Check if pay feed post type
 		if ( 'pronamic_pay_gf' !== $postarr['post_type'] ) {
@@ -256,8 +272,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			$definition['_pronamic_pay_gf_delay_zapier'] = FILTER_VALIDATE_BOOLEAN;
 		}
 
+		if ( class_exists( 'GF_Dropbox' ) ) {
+			$definition['_pronamic_pay_gf_delay_dropbox'] = FILTER_VALIDATE_BOOLEAN;
+		}
+
 		if ( class_exists( 'GFMoneybird' ) ) {
 			$definition['_pronamic_pay_gf_delay_moneybird'] = FILTER_VALIDATE_BOOLEAN;
+		}
+
+		if ( class_exists( 'GFTwilio' ) ) {
+			$definition['_pronamic_pay_gf_delay_twilio'] = FILTER_VALIDATE_BOOLEAN;
 		}
 
 		if ( class_exists( 'Sliced_Invoices_GF' ) ) {
@@ -286,7 +310,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 			// Set link type if none selected, use URL if both are set
 			if ( '_pronamic_pay_gf_links' === $meta_key ) {
 				foreach ( $meta_value as $status => $link ) {
-					if ( isset( $link['type'] ) && Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION === $link['type'] ) {
+					if ( isset( $link['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $link['type'] ) {
 						$form_id = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
 
 						if ( '' !== $form_id ) {
@@ -301,11 +325,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_AdminPaymentFormPostType {
 
 					if ( ! isset( $link['type'] ) ) {
 						if ( ! empty( $link['url'] ) ) {
-							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_URL;
+							$link['type'] = PayFeed::LINK_TYPE_URL;
 						} elseif ( ! empty( $link['page_id'] ) ) {
-							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_PAGE;
+							$link['type'] = PayFeed::LINK_TYPE_PAGE;
 						} elseif ( ! empty( $link['confirmation_id'] ) ) {
-							$link['type'] = Pronamic_WP_Pay_Extensions_GravityForms_PayFeed::LINK_TYPE_CONFIRMATION;
+							$link['type'] = PayFeed::LINK_TYPE_CONFIRMATION;
 						}
 
 						$meta_value[ $status ] = $link;

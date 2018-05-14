@@ -1,21 +1,27 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use RGFormsModel;
+
 /**
  * Title: WordPress pay extension Gravity Forms extension
  * Description:
- * Copyright: Copyright (c) 2005 - 2017
+ * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
- * @version 1.6.7
- * @since 1.0.0
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_Util {
+class Util {
 	/**
 	 * Check if the iDEAL condition is true
 	 *
 	 * @param mixed $form
 	 * @param mixed $feed
+	 *
+	 * @return bool
 	 */
 	public static function is_condition_true( $form, $feed ) {
 		if ( is_array( $form ) ) {
@@ -23,7 +29,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Util {
 		}
 
 		if ( is_array( $feed ) ) {
-			$feed = new Pronamic_WP_Pay_Extensions_GravityForms_PayFeed( $feed['ID'] );
+			$feed = new PayFeed( $feed['ID'] );
 		}
 
 		if ( ! $feed->condition_enabled ) {
@@ -49,10 +55,10 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Util {
 		$is_match = RGFormsModel::is_value_match( $value, $feed->condition_value );
 
 		switch ( $feed->condition_operator ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS:
+			case GravityForms::OPERATOR_IS:
 				return $is_match;
 
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT:
+			case GravityForms::OPERATOR_IS_NOT:
 				return ! $is_match;
 
 			default:

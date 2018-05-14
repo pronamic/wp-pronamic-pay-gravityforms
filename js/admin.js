@@ -1,6 +1,7 @@
 /* global ajaxurl */
 /* global gform */
 /* global form */
+/* global SetFieldProperty */
 ( function( $ ) {
 	/**
 	 * Gravity Forms pay feed editor
@@ -345,11 +346,23 @@
 
 					$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
 
-					var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
+					if ( '' === amountType ) {
+                        elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
+					} else {
+                        elements.subscriptionAmountType.parents('tr').siblings().show();
 
-					if ( amountSettings.length > 0 ) {
-						amountSettings.show();
-					}
+						// Set background color of visible even rows
+						var rows = elements.subscriptionAmountType.parents( 'table' ).find( 'tr' );
+
+						rows.removeClass( 'even' );
+						rows.filter( ':visible:even' ).addClass( 'even' );
+                    }
+
+                    var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
+
+                    if ( amountSettings.length > 0 ) {
+                        amountSettings.show();
+                    }
 				} );
 
 				elements.subscriptionAmountType.trigger( 'change' );
@@ -537,7 +550,13 @@
 
 		// Action on load field settings
 		$( document ).on( 'gform_load_field_settings', function( e, field ) {
-			$( '#pronamic_pay_config_field' ).val( field.pronamicPayConfigId );
+			var $pronamicPayConfigField = $( '#pronamic_pay_config_field' );
+
+			if ( $pronamicPayConfigField.find( 'option[value="' + field.pronamicPayConfigId + '"]' ).length > 0 ) {
+				$pronamicPayConfigField.val( field.pronamicPayConfigId );
+			} else {
+				SetFieldProperty( 'pronamicPayConfigId', '' );
+			}
 		} );
 	} );
 } )( jQuery );

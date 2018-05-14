@@ -1,5 +1,9 @@
 <?php
 
+use Pronamic\WordPress\Pay\Admin\AdminModule;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
+
 $form_meta = RGFormsModel::get_form_meta( $form_id );
 
 $condition_enabled            = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
@@ -76,7 +80,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<?php esc_html_e( 'Form', 'pronamic_ideal' ); ?>
 							</label>
 
-							<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'The Gravity Forms form to process payments for.', 'pronamic_ideal' ); ?>"></span>
+							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'The Gravity Forms form to process payments for.', 'pronamic_ideal' ); ?>"></span>
 						</th>
 						<td>
 							<select id="_pronamic_pay_gf_form_id" name="_pronamic_pay_gf_form_id">
@@ -101,7 +105,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<?php esc_html_e( 'Configuration', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Gateway configuration, created via <strong>iDEAL » Configurations</strong>.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Gateway configuration, created via <strong>Pay » Configurations</strong>.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -112,7 +116,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							$config_id = get_option( 'pronamic_pay_config_id' );
 						}
 
-						Pronamic_WP_Pay_Admin::dropdown_configs( array(
+						AdminModule::dropdown_configs( array(
 							'name'     => '_pronamic_pay_gf_config_id',
 							'selected' => $config_id,
 						) );
@@ -126,7 +130,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<?php esc_html_e( 'Entry ID Prefix', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Prefix for the entry ID.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Prefix for the entry ID.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -134,7 +138,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						$entry_id_prefix = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
 
 						?>
-						<input id="_pronamic_pay_gf_entry_id_prefix" name="_pronamic_pay_gf_entry_id_prefix" value="<?php echo esc_attr( $entry_id_prefix ); ?>" type="text" class="input-text regular-input" maxlength="8" />
+						<input id="_pronamic_pay_gf_entry_id_prefix" name="_pronamic_pay_gf_entry_id_prefix" value="<?php echo esc_attr( $entry_id_prefix ); ?>" type="text" class="input-text regular-input" />
 
 						<span class="description pronamic-pay-description">
 							<?php esc_html_e( 'A prefix makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
@@ -147,7 +151,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<?php esc_html_e( 'Transaction Description', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Transaction description that will be send with the payment. Use tags to customize the description.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Transaction description that will be send with the payment. Use tags to customize the description.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -188,7 +192,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 					<th scope="row">
 						<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<p>
@@ -276,7 +280,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 					<th scope="row">
 						<?php esc_html_e( 'Delay actions', 'pronamic_ideal' ); ?>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" data-tip="<?php esc_attr_e( 'Actions for which execution will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Actions for which execution will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
 						<p>
@@ -292,6 +296,8 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						$delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
 						$delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
 						$delay_moneybird                    = get_post_meta( $post_id, '_pronamic_pay_gf_delay_moneybird', true );
+						$delay_twilio                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_twilio', true );
+						$delay_dropbox                      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_dropbox', true );
 						$delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
 						$delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
 
@@ -337,6 +343,30 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									<label for="_pronamic_pay_gf_delay_moneybird">
 										<?php esc_html_e( 'Sending estimates and invoices with Moneybird', 'pronamic_ideal' ); ?>
+									</label>
+								</li>
+
+							<?php endif; ?>
+
+							<?php if ( class_exists( 'GFTwilio' ) ) : ?>
+
+								<li>
+									<input type="checkbox" name="_pronamic_pay_gf_delay_twilio" id="_pronamic_pay_gf_delay_twilio" value="true" <?php checked( $delay_twilio ); ?> />
+
+									<label for="_pronamic_pay_gf_delay_twilio">
+										<?php esc_html_e( 'Sending data to Twilio', 'pronamic_ideal' ); ?>
+									</label>
+								</li>
+
+							<?php endif; ?>
+
+							<?php if ( class_exists( 'GF_Dropbox' ) ) : ?>
+
+								<li>
+									<input type="checkbox" name="_pronamic_pay_gf_delay_dropbox" id="_pronamic_pay_gf_delay_dropbox" value="true" <?php checked( $delay_dropbox ); ?> />
+
+									<label for="_pronamic_pay_gf_delay_dropbox">
+										<?php esc_html_e( 'Uploading files to Dropbox', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
 
@@ -416,11 +446,11 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				<?php
 
 				$fields = array(
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS => __( 'Success', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL  => __( 'Cancelled', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED => __( 'Expired', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR   => __( 'Error', 'pronamic_ideal' ),
-					Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
+					Links::SUCCESS => __( 'Success', 'pronamic_ideal' ),
+					Links::CANCEL  => __( 'Cancelled', 'pronamic_ideal' ),
+					Links::EXPIRED => __( 'Expired', 'pronamic_ideal' ),
+					Links::ERROR   => __( 'Error', 'pronamic_ideal' ),
+					Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
 				);
 
 				foreach ( $fields as $name => $label ) :
@@ -517,6 +547,13 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<legend class="screen-reader-text">
 								<span><?php esc_html_e( 'Recurring amount', 'pronamic_ideal' ); ?></span>
 							</legend>
+
+							<label>
+								<input id="pronamic_pay_gf_subscription_amount_type_none" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="" <?php checked( $subscription_amount_type, '' ); ?> />
+								<?php esc_html_e( 'None', 'pronamic_ideal' ); ?>
+							</label>
+
+							<br />
 
 							<label>
 								<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $subscription_amount_type, 'total' ); ?> />
@@ -721,8 +758,8 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								$operators[] = '';
 							}
 
-							$operators[ Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS ]     = __( 'is', 'pronamic_ideal' );
-							$operators[ Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::OPERATOR_IS_NOT ] = __( 'is not', 'pronamic_ideal' );
+							$operators[ GravityForms::OPERATOR_IS ]     = __( 'is', 'pronamic_ideal' );
+							$operators[ GravityForms::OPERATOR_IS_NOT ] = __( 'is not', 'pronamic_ideal' );
 
 							foreach ( $operators as $value => $label ) {
 								$select_operator .= sprintf(

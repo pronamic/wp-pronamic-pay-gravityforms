@@ -1,16 +1,20 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use Pronamic\WordPress\Pay\Core\Statuses;
+
 /**
  * Title: WordPress pay extension Gravity Forms links
  * Description:
- * Copyright: Copyright (c) 2005 - 2017
+ * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
- * @version 1.6.7
- * @since 1.0.0
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.0
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_Links {
+class Links {
 	/**
 	 * Indicator for the open status link
 	 *
@@ -49,28 +53,28 @@ class Pronamic_WP_Pay_Extensions_GravityForms_Links {
 	/**
 	 * Link for payment status.
 	 *
-	 * @param Pronamic_WP_Pay_Statuses $payment_status
+	 * @param Statuses $payment_status
 	 *
 	 * @return string
 	 * @since 1.4.4
 	 */
 	public static function transform_status( $payment_status ) {
 		switch ( $payment_status ) {
-			case Pronamic_WP_Pay_Statuses::CANCELLED:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL;
+			case Statuses::CANCELLED:
+				return Links::CANCEL;
 
-			case Pronamic_WP_Pay_Statuses::EXPIRED:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::EXPIRED;
+			case Statuses::EXPIRED:
+				return Links::EXPIRED;
 
-			case Pronamic_WP_Pay_Statuses::FAILURE:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR;
+			case Statuses::FAILURE:
+				return Links::ERROR;
 
-			case Pronamic_WP_Pay_Statuses::SUCCESS:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS;
+			case Statuses::SUCCESS:
+				return Links::SUCCESS;
 
-			case Pronamic_WP_Pay_Statuses::OPEN:
+			case Statuses::OPEN:
 			default:
-				return Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN;
+				return Links::OPEN;
 		}
 	}
 }

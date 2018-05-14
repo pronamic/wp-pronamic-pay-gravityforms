@@ -1,16 +1,28 @@
 <?php
 
+namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
+
+use GFCommon;
+use Pronamic\WordPress\Money\Money;
+use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\CreditCard;
+use Pronamic\WordPress\Pay\Payments\Item;
+use Pronamic\WordPress\Pay\Payments\Items;
+use Pronamic\WordPress\Pay\Payments\PaymentData as Pay_PaymentData;
+use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use RGFormsModel;
+
 /**
  * Title: WordPress pay extension Gravity Forms payment data
  * Description:
- * Copyright: Copyright (c) 2005 - 2017
+ * Copyright: Copyright (c) 2005 - 2018
  * Company: Pronamic
  *
- * @author Remco Tolsma
- * @version 1.6.7
- * @since 1.0.1
+ * @author  Remco Tolsma
+ * @version 2.0.0
+ * @since   1.0.1
  */
-class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pay_PaymentData {
+class PaymentData extends Pay_PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
@@ -30,18 +42,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	/**
 	 * Pronamic iDEAL feed object
 	 *
-	 * @var Pronamic_WP_Pay_Extensions_GravityForms_PayFeed
+	 * @var PayFeed
 	 */
 	private $feed;
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Constructs and initialize an Gravity Forms iDEAL data proxy
 	 *
-	 * @param array $form
-	 * @param array $lead
-	 * @param Pronamic_WP_Pay_Extensions_GravityForms_PayFeed $feed
+	 * @param array   $form
+	 * @param array   $lead
+	 * @param PayFeed $feed
 	 */
 	public function __construct( $form, $lead, $feed ) {
 		parent::__construct();
@@ -51,13 +61,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$this->feed = $feed;
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get the field value of the specified field
 	 *
 	 * @param string $field_name
-	 * @return Ambigous <NULL, multitype:>
+	 *
+	 * @return null|string
 	 */
 	private function get_field_value( $field_name ) {
 		if ( ! isset( $this->feed->fields[ $field_name ] ) ) {
@@ -73,12 +82,11 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->lead[ $field_id ];
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get source indicator
 	 *
 	 * @see Pronamic_Pay_PaymentDataInterface::get_source()
+	 *
 	 * @return string
 	 */
 	public function get_source() {
@@ -88,18 +96,19 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	/**
 	 * Get source ID
 	 *
-	 * @see Pronamic_Pay_AbstractPaymentData::get_source_id()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_source_id()
+	 *
+	 * @return string
 	 */
 	public function get_source_id() {
 		return $this->lead['id'];
 	}
 
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get description
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_description()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_description()
+	 *
 	 * @return string
 	 */
 	public function get_description() {
@@ -117,12 +126,20 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	/**
 	 * Get order ID
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_order_id()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_order_id()
+	 *
 	 * @return string
 	 */
 	public function get_order_id() {
+		$prefix = $this->feed->entry_id_prefix;
+
 		// @see http://www.gravityhelp.com/documentation/page/Entry_Object#Standard
-		$order_id = $this->feed->entry_id_prefix . $this->lead['id'];
+		$order_id = $prefix . $this->lead['id'];
+
+		// If prefix is a merge tag, only use prefix as order ID.
+		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, 0, - 1 ) ) {
+			$order_id = GFCommon::replace_variables( $prefix, $this->form, $this->lead );
+		}
 
 		return $order_id;
 	}
@@ -130,11 +147,12 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	/**
 	 * Get items
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_items()
-	 * @return Pronamic_IDeal_Items
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_items()
+	 *
+	 * @return Items
 	 */
 	public function get_items() {
-		$items = new Pronamic_IDeal_Items();
+		$items = new Items();
 
 		$number = 0;
 
@@ -146,8 +164,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 			$price       = GFCommon::to_number( $product['price'] );
 			$quantity    = $product['quantity'];
 
-			$item = new Pronamic_IDeal_Item();
-			$item->setNumber( $number++ );
+			$item = new Item();
+			$item->setNumber( $number ++ );
 			$item->setDescription( $description );
 			$item->setPrice( $price );
 			$item->setQuantity( $quantity );
@@ -159,8 +177,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 					$description = $option['option_label'];
 					$price       = GFCommon::to_number( $option['price'] );
 
-					$item = new Pronamic_IDeal_Item();
-					$item->setNumber( $number++ );
+					$item = new Item();
+					$item->setNumber( $number ++ );
 					$item->setDescription( $description );
 					$item->setPrice( $price );
 					$item->setQuantity( $quantity ); // Product quantity
@@ -179,8 +197,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 				$price       = GFCommon::to_number( $shipping['price'] );
 				$quantity    = 1;
 
-				$item = new Pronamic_IDeal_Item();
-				$item->setNumber( $number++ );
+				$item = new Item();
+				$item->setNumber( $number ++ );
 				$item->setDescription( $description );
 				$item->setPrice( $price );
 				$item->setQuantity( $quantity );
@@ -214,7 +232,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 				$price    = GFCommon::to_number( $value );
 				$quantity = 1;
 
-				$item = new Pronamic_IDeal_Item();
+				$item = new Item();
 				$item->setNumber( $i );
 				$item->setDescription( $description );
 				$item->setQuantity( $quantity );
@@ -227,23 +245,16 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $items;
 	}
 
-	//////////////////////////////////////////////////
-	// Currency
-	//////////////////////////////////////////////////
-
 	/**
 	 * Get currency alphabetic code
 	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_currency_alphabetic_code()
+	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_currency_alphabetic_code()
+	 *
 	 * @return string
 	 */
 	public function get_currency_alphabetic_code() {
 		return GFCommon::get_currency();
 	}
-
-	//////////////////////////////////////////////////
-	// Customer
-	//////////////////////////////////////////////////
 
 	public function get_email() {
 		return $this->get_field_value( 'email' );
@@ -281,12 +292,8 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $this->get_field_value( 'telephone_number' );
 	}
 
-	//////////////////////////////////////////////////
-	// URL's
-	//////////////////////////////////////////////////
-
 	public function get_normal_return_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::OPEN );
+		$url = $this->feed->get_url( Links::OPEN );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_normal_return_url();
@@ -296,7 +303,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	}
 
 	public function get_cancel_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::CANCEL );
+		$url = $this->feed->get_url( Links::CANCEL );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_cancel_url();
@@ -306,7 +313,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	}
 
 	public function get_success_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::SUCCESS );
+		$url = $this->feed->get_url( Links::SUCCESS );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_success_url();
@@ -316,7 +323,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 	}
 
 	public function get_error_url() {
-		$url = $this->feed->get_url( Pronamic_WP_Pay_Extensions_GravityForms_Links::ERROR );
+		$url = $this->feed->get_url( Links::ERROR );
 
 		if ( empty( $url ) ) {
 			$url = parent::get_error_url();
@@ -325,21 +332,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $url;
 	}
 
-	//////////////////////////////////////////////////
-	// Payment method
-	//////////////////////////////////////////////////
-
 	public function get_payment_method() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_PaymentMethodsField::TYPE ) );
+		$fields = GFCommon::get_fields_by_type( $this->form, array( Fields::PAYMENT_METHODS_FIELD_TYPE ) );
 
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
 				$method = RGFormsModel::get_field_value( $field );
 
-				if ( ! $this->get_subscription() && Pronamic_WP_Pay_PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
+				if ( ! $this->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
 					// DIRECT_DEBIT_IDEAL can only be used for subscription payments.
 
-					$method = Pronamic_WP_Pay_PaymentMethods::IDEAL;
+					$method = PaymentMethods::IDEAL;
 				}
 
 				return $method;
@@ -347,23 +350,17 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		}
 	}
 
-	//////////////////////////////////////////////////
-	// Issuer
-	//////////////////////////////////////////////////
-
 	public function get_issuer_id() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( Pronamic_WP_Pay_Extensions_GravityForms_IssuersField::TYPE ) );
+		$fields = GFCommon::get_fields_by_type( $this->form, array( IssuersField::TYPE ) );
 
 		foreach ( $fields as $field ) {
-			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
-				return RGFormsModel::get_field_value( $field );
+			if ( RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
+				continue;
 			}
+
+			return RGFormsModel::get_field_value( $field );
 		}
 	}
-
-	//////////////////////////////////////////////////
-	// Creditcard
-	//////////////////////////////////////////////////
 
 	public function get_credit_card() {
 		$credit_card = null;
@@ -373,7 +370,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$credit_card_field = array_shift( $credit_card_fields );
 
 		if ( $credit_card_field ) {
-			$credit_card = new Pronamic_Pay_CreditCard();
+			$credit_card = new CreditCard();
 
 			// Number
 			$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );
@@ -407,22 +404,18 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		return $credit_card;
 	}
 
-	//////////////////////////////////////////////////
-	// Subscription
-	//////////////////////////////////////////////////
-
 	public function get_subscription() {
 		// Amount
 		$amount = 0;
 
 		switch ( $this->feed->subscription_amount_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
+			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
 				$items = $this->get_items();
 
-				$amount = $items->get_amount();
+				$amount = $items->get_amount()->get_amount();
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
+			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
 				$field_id = $this->feed->subscription_amount_field;
 
 				$product_fields = GFCommon::get_product_fields( $this->form, $this->lead );
@@ -444,7 +437,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$interval_period = 'D';
 
 		switch ( $this->feed->subscription_interval_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
+			case GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_interval_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
@@ -458,7 +451,7 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 				}
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
+			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
 				$interval        = $this->feed->subscription_interval;
 				$interval_period = $this->feed->subscription_interval_period;
 
@@ -469,29 +462,32 @@ class Pronamic_WP_Pay_Extensions_GravityForms_PaymentData extends Pronamic_WP_Pa
 		$frequency = '';
 
 		switch ( $this->feed->subscription_frequency_type ) {
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
-						$frequency = $this->lead[ $this->feed->subscription_frequency_field ];
+						$frequency = intval( $this->lead[ $this->feed->subscription_frequency_field ] );
 					}
 				}
 
 				break;
-			case Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
 				$frequency = $this->feed->subscription_frequency;
 
 				break;
 		}
 
-		$subscription                  = new Pronamic_Pay_Subscription();
+		$subscription                  = new Subscription();
 		$subscription->frequency       = $frequency;
 		$subscription->interval        = $interval;
 		$subscription->interval_period = $interval_period;
-		$subscription->amount          = $amount;
-		$subscription->currency        = $this->get_currency();
 		$subscription->description     = $this->get_description();
+
+		$subscription->set_amount( new Money(
+			$amount,
+			$this->get_currency_alphabetic_code()
+		) );
 
 		return $subscription;
 	}

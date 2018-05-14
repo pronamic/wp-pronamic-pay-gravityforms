@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.0.0] - 2018-05-14
+- Switched to PHP namespaces.
+
 ## [1.6.7] - 2017-12-12
 - Added support for delaying Sliced Invoices feed processing.
 - Filter payment method choices if not in form editor.
@@ -163,7 +166,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.7...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.0.0...HEAD
+[2.0.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.7...2.0.0
 [1.6.7]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.6...1.6.7
 [1.6.6]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.5...1.6.6
 [1.6.5]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.4...1.6.5

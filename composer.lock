@@ -1,23 +1,23 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "98575bdcd7daf8be22b71d51a50f953f",
+    "content-hash": "5bc91d9952c655894468514f9d7a3396",
     "packages": [
         {
             "name": "wp-pay/core",
-            "version": "1.3.14",
+            "version": "2.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/wp-pay/core.git",
-                "reference": "3330ae7993c1d79e1f1c8a498d8410cfc674f0d6"
+                "reference": "19f1669cacdc54cff404ce3024102bc13c8e4ed2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/wp-pay/core/zipball/3330ae7993c1d79e1f1c8a498d8410cfc674f0d6",
-                "reference": "3330ae7993c1d79e1f1c8a498d8410cfc674f0d6",
+                "url": "https://api.github.com/repos/wp-pay/core/zipball/19f1669cacdc54cff404ce3024102bc13c8e4ed2",
+                "reference": "19f1669cacdc54cff404ce3024102bc13c8e4ed2",
                 "shasum": ""
             },
             "require": {
@@ -33,13 +33,13 @@
             },
             "type": "library",
             "autoload": {
-                "classmap": [
-                    "src/"
-                ]
+                "psr-4": {
+                    "Pronamic\\WordPress\\Pay\\Core\\": "src/"
+                }
             },
             "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "GPL"
+                "GPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -65,7 +65,7 @@
                 "wordpress",
                 "wp"
             ],
-            "time": "2017-12-12T12:40:02+00:00"
+            "time": "2018-05-09T08:47:32+00:00"
         }
     ],
     "packages-dev": [

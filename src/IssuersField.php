@@ -14,7 +14,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 1.6.7
+ * @version 2.0.0
  * @since   1.4.7
  */
 class IssuersField extends GF_Field_Select {

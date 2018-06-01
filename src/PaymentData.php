@@ -19,7 +19,7 @@ use RGFormsModel;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.0.1
  * @since   1.0.1
  */
 class PaymentData extends Pay_PaymentData {
@@ -137,7 +137,7 @@ class PaymentData extends Pay_PaymentData {
 		$order_id = $prefix . $this->lead['id'];
 
 		// If prefix is a merge tag, only use prefix as order ID.
-		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, 0, - 1 ) ) {
+		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, -1 ) ) {
 			$order_id = GFCommon::replace_variables( $prefix, $this->form, $this->lead );
 		}
 

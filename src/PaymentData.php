@@ -165,10 +165,10 @@ class PaymentData extends Pay_PaymentData {
 			$quantity    = $product['quantity'];
 
 			$item = new Item();
-			$item->setNumber( $number ++ );
-			$item->setDescription( $description );
-			$item->setPrice( $price );
-			$item->setQuantity( $quantity );
+			$item->set_number( $number ++ );
+			$item->set_description( $description );
+			$item->set_price( $price );
+			$item->set_quantity( $quantity );
 
 			$items->addItem( $item );
 
@@ -178,10 +178,10 @@ class PaymentData extends Pay_PaymentData {
 					$price       = GFCommon::to_number( $option['price'] );
 
 					$item = new Item();
-					$item->setNumber( $number ++ );
-					$item->setDescription( $description );
-					$item->setPrice( $price );
-					$item->setQuantity( $quantity ); // Product quantity
+					$item->set_number( $number ++ );
+					$item->set_description( $description );
+					$item->set_price( $price );
+					$item->set_quantity( $quantity ); // Product quantity
 
 					$items->addItem( $item );
 				}
@@ -198,10 +198,10 @@ class PaymentData extends Pay_PaymentData {
 				$quantity    = 1;
 
 				$item = new Item();
-				$item->setNumber( $number ++ );
-				$item->setDescription( $description );
-				$item->setPrice( $price );
-				$item->setQuantity( $quantity );
+				$item->set_number( $number ++ );
+				$item->set_description( $description );
+				$item->set_price( $price );
+				$item->set_quantity( $quantity );
 
 				$items->addItem( $item );
 			}
@@ -233,10 +233,10 @@ class PaymentData extends Pay_PaymentData {
 				$quantity = 1;
 
 				$item = new Item();
-				$item->setNumber( $i );
-				$item->setDescription( $description );
-				$item->setQuantity( $quantity );
-				$item->setPrice( $price );
+				$item->set_number( $i );
+				$item->set_description( $description );
+				$item->set_price( $price );
+				$item->set_quantity( $quantity );
 
 				$items->addItem( $item );
 			}

@@ -297,6 +297,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						$delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
 						$delay_moneybird                    = get_post_meta( $post_id, '_pronamic_pay_gf_delay_moneybird', true );
 						$delay_twilio                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_twilio', true );
+						$delay_webhooks                     = get_post_meta( $post_id, '_pronamic_pay_gf_delay_webhooks', true );
 						$delay_dropbox                      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_dropbox', true );
 						$delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
 						$delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
@@ -355,6 +356,18 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									<label for="_pronamic_pay_gf_delay_twilio">
 										<?php esc_html_e( 'Sending data to Twilio', 'pronamic_ideal' ); ?>
+									</label>
+								</li>
+
+							<?php endif; ?>
+
+							<?php if ( class_exists( 'GF_Webhooks' ) ) : ?>
+
+								<li>
+									<input type="checkbox" name="_pronamic_pay_gf_delay_webhooks" id="_pronamic_pay_gf_delay_webhooks" value="true" <?php checked( $delay_webhooks ); ?> />
+
+									<label for="_pronamic_pay_gf_delay_webhook">
+										<?php esc_html_e( 'Sending a trigger to Webhooks', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
 

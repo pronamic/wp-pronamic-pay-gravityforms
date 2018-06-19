@@ -538,7 +538,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 			<table class="pronamic-pay-table-striped form-table pronamic-gf-subscription-tab">
 				<tr>
 					<th scope="row">
-						<label for="pronamic_pay_gf_subscription_amount">
+						<label>
 							<?php esc_html_e( 'Recurring amount', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
@@ -577,7 +577,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="pronamic_pay_gf_subscription_interval_type_fixed">
+						<label>
 							<?php esc_html_e( 'Interval', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
@@ -634,7 +634,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="pronamic_pay_gf_subscription_frequency_type_fixed">
+						<label>
 							<?php esc_html_e( 'Frequency', 'pronamic_ideal' ); ?>
 						</label>
 					</th>

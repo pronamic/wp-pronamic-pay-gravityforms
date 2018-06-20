@@ -458,6 +458,8 @@
 
 				$( element ).find( 'select.pronamic-pay-gf-subscription-interval-date-sync-settings' ).on( 'change', function() {
 					elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
+
+					elements.subscriptionIntervalDateType.trigger( 'change' );
 				} );
 
 				elements.subscriptionIntervalType.trigger( 'change' );

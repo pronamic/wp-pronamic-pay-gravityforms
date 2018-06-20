@@ -246,6 +246,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_interval_date'  => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_interval_date_day' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_interval_date_month' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_date_prorate' => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_subscription_interval_field' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_frequency_type' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_frequency'      => FILTER_SANITIZE_NUMBER_INT,

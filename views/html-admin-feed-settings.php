@@ -22,6 +22,7 @@ $subscription_interval_date_type    = get_post_meta( $post_id, '_pronamic_pay_gf
 $subscription_interval_date         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date', true );
 $subscription_interval_date_day     = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_day', true );
 $subscription_interval_date_month   = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_month', true );
+$subscription_interval_date_prorate = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_prorate', true );
 $subscription_interval_field        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
 $subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
 $subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
@@ -760,7 +761,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									<?php endfor; ?>
 
-									<!-- <option value="last" <?php selected( $subscription_interval_date, 'last' ); ?>><?php esc_html_e( 'Last', 'pronamic_ideal' ); ?></option> -->
+									 <option value="last" <?php selected( $subscription_interval_date, 'last' ); ?>><?php esc_html_e( 'Last', 'pronamic_ideal' ); ?></option>
 								</select>
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M">
@@ -777,6 +778,14 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 									<?php endfor; ?>
 								</select>
 							</label>
+
+							<div class="pronamic-pay-gf-subscription-interval-date-settings interval-date-sync">
+								<input type="checkbox" name="_pronamic_pay_gf_subscription_interval_date_prorate" id="pronamic_pay_gf_subscription_interval_date_prorate" value="true" <?php checked( $subscription_interval_date_prorate ); ?> />
+
+								<label for="pronamic_pay_gf_subscription_interval_date_prorate">
+									<?php esc_html_e( 'Prorate first payment amount', 'pronamic_ideal' ); ?>
+								</label>
+							</div>
 
 							<br />
 						</fieldset>

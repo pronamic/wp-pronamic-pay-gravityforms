@@ -433,8 +433,11 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		// Interval
-		$interval        = '';
-		$interval_period = 'D';
+		$interval            = '';
+		$interval_period     = 'D';
+		$interval_date       = '';
+		$interval_date_day   = '';
+		$interval_date_month = '';
 
 		switch ( $this->feed->subscription_interval_type ) {
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
@@ -452,8 +455,11 @@ class PaymentData extends Pay_PaymentData {
 
 				break;
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
-				$interval        = $this->feed->subscription_interval;
-				$interval_period = $this->feed->subscription_interval_period;
+				$interval            = $this->feed->subscription_interval;
+				$interval_period     = $this->feed->subscription_interval_period;
+				$interval_date       = $this->feed->subscription_interval_date;
+				$interval_date_day   = $this->feed->subscription_interval_date_day;
+				$interval_date_month = $this->feed->subscription_interval_date_month;
 
 				break;
 		}
@@ -478,11 +484,14 @@ class PaymentData extends Pay_PaymentData {
 				break;
 		}
 
-		$subscription                  = new Subscription();
-		$subscription->frequency       = $frequency;
-		$subscription->interval        = $interval;
-		$subscription->interval_period = $interval_period;
-		$subscription->description     = $this->get_description();
+		$subscription                      = new Subscription();
+		$subscription->frequency           = $frequency;
+		$subscription->interval            = $interval;
+		$subscription->interval_period     = $interval_period;
+		$subscription->interval_date       = $interval_date;
+		$subscription->interval_date_day   = $interval_date_day;
+		$subscription->interval_date_month = $interval_date_month;
+		$subscription->description         = $this->get_description();
 
 		$subscription->set_amount( new Money(
 			$amount,

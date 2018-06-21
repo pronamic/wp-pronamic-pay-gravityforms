@@ -737,7 +737,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 										<?php
 
-										$day_date = DateTime::createFromFormat( 'U', strtotime( 'next Monday + ' . $day . ' days' ) );
+										$day_date = DateTime::create_from_format( 'U', strtotime( 'next Monday + ' . $day . ' days' ) );
 
 										$day_value = ( $day + 1 );
 
@@ -753,7 +753,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 										<?php
 
-										$interval_date = DateTime::createFromFormat( 'j', $date );
+										$interval_date = DateTime::create_from_format( 'j', $date );
 
 										?>
 
@@ -771,7 +771,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-Y" id="pronamic_pay_gf_subscription_interval_date_month" name="_pronamic_pay_gf_subscription_interval_date_month">
 									<?php for ( $month = 1; $month <= 12; $month++ ) : ?>
 
-										<?php $month_date = DateTime::createFromFormat( '!m', $month ); ?>
+										<?php $month_date = DateTime::create_from_format( '!m', $month ); ?>
 
 										<option value="<?php echo esc_html( $month ); ?>" <?php selected( $subscription_interval_date_month, $month ); ?>><?php echo esc_html( $month_date->format_i18n( 'F' ) ); ?></option>
 

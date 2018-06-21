@@ -761,7 +761,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									<?php endfor; ?>
 
-									 <option value="last" <?php selected( $subscription_interval_date, 'last' ); ?>><?php esc_html_e( 'Last', 'pronamic_ideal' ); ?></option>
+									 <option value="last" <?php selected( $subscription_interval_date, 'last' ); ?>><?php esc_html_e( 'last', 'pronamic_ideal' ); ?></option>
 								</select>
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M">

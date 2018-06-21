@@ -395,7 +395,7 @@
 
 					var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
 
-					if ( 'fixed' != intervalType ) {
+					if ( 'fixed' !== intervalType ) {
 						elements.subscriptionIntervalPeriod.val( 'D' );
 
 						elements.subscriptionIntervalPeriod.trigger( 'change' );

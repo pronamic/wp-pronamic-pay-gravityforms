@@ -291,6 +291,10 @@ class PaymentData extends Pay_PaymentData {
 
 			if ( 'Y' === $subscription->interval_period && is_numeric( $interval_date_month ) ) {
 				$next_date->setDate( $next_date->format( 'Y' ), $interval_date_month, $next_date->format( 'd' ) );
+
+				if ( 'last' === $interval_date ) {
+					$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
+				}
 			}
 
 			$prorated_days_diff = $now->diff( $next_date )->days;

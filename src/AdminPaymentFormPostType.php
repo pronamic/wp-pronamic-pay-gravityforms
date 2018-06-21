@@ -284,6 +284,10 @@ class AdminPaymentFormPostType {
 			$definition['_pronamic_pay_gf_delay_twilio'] = FILTER_VALIDATE_BOOLEAN;
 		}
 
+		if ( class_exists( 'GF_Webhooks' ) ) {
+			$definition['_pronamic_pay_gf_delay_webhooks'] = FILTER_VALIDATE_BOOLEAN;
+		}
+
 		if ( class_exists( 'Sliced_Invoices_GF' ) ) {
 			$definition['_pronamic_pay_gf_delay_sliced_invoices'] = FILTER_VALIDATE_BOOLEAN;
 		}

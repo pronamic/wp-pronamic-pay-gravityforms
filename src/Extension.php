@@ -791,6 +791,19 @@ class Extension {
 				}
 			}
 
+			// Delay Webhooks
+			if ( $feed->delay_webhooks ) {
+				// @since unreleased
+				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				if ( function_exists( 'gf_webhooks' ) ) {
+					$addon = gf_webhooks();
+
+					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						$addon->maybe_process_feed( $entry, $form );
+					}
+				}
+			}
+
 			// Delay Sliced Invoices
 			if ( $feed->delay_sliced_invoices && Core_Util::class_method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
 				// @since unreleased

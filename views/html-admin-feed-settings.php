@@ -1,26 +1,32 @@
 <?php
 
+use Pronamic\WordPress\DateTime\DateTime;
 use Pronamic\WordPress\Pay\Admin\AdminModule;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
 
 $form_meta = RGFormsModel::get_form_meta( $form_id );
 
-$condition_enabled            = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-$condition_field_id           = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
-$condition_operator           = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
-$condition_value              = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
-$delay_notification_ids       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
-$links                        = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
-$subscription_amount_type     = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
-$subscription_amount_field    = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_field', true );
-$subscription_interval_type   = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_type', true );
-$subscription_interval        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval', true );
-$subscription_interval_period = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_period', true );
-$subscription_interval_field  = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
-$subscription_frequency_type  = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
-$subscription_frequency       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
-$subscription_frequency_field = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
+$condition_enabled                  = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
+$condition_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
+$condition_operator                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
+$condition_value                    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+$delay_notification_ids             = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
+$links                              = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
+$subscription_amount_type           = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
+$subscription_amount_field          = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_field', true );
+$subscription_interval_type         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_type', true );
+$subscription_interval              = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval', true );
+$subscription_interval_period       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_period', true );
+$subscription_interval_date_type    = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_type', true );
+$subscription_interval_date         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date', true );
+$subscription_interval_date_day     = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_day', true );
+$subscription_interval_date_month   = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_month', true );
+$subscription_interval_date_prorate = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_prorate', true );
+$subscription_interval_field        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
+$subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
+$subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
+$subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
 
 $feed                             = new stdClass();
 $feed->conditionEnabled           = $condition_enabled;
@@ -683,6 +689,115 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<select id="pronamic_pay_gf_subscription_frequency_field" name="_pronamic_pay_gf_subscription_frequency_field"></select>
 
 								<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+							</div>
+
+							<br />
+						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label>
+							<?php esc_html_e( 'Synchronized Payment Date', 'pronamic_ideal' ); ?>
+						</label>
+					</th>
+					<td>
+						<fieldset>
+							<legend class="screen-reader-text">
+								<span><?php esc_html_e( 'Synchronized Payment Date', 'pronamic_ideal' ); ?></span>
+							</legend>
+
+							<p>
+								<?php esc_html_e( 'Synchronized payment date allows recurring payments on a pre-defined day or date, instead of on expiration of the first period.', 'pronamic_ideal' ); ?>
+							</p>
+
+							<br />
+
+							<?php
+
+							if ( empty( $subscription_interval_date_type ) ) :
+
+								$subscription_interval_date_type = 'payment_date';
+
+							endif;
+
+							?>
+
+							<label>
+								<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $subscription_interval_date_type, 'payment_date' ); ?> />
+								<?php esc_html_e( 'Follow interval starting from first payment date', 'pronamic_ideal' ); ?>
+							</label>
+
+							<br />
+
+							<label>
+								<input id="pronamic_pay_gf_subscription_interval_date_type_field" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="sync" <?php checked( $subscription_interval_date_type, 'sync' ); ?> />
+
+								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-D">
+									<?php echo esc_html( _x( 'Synchronized payment date', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+								</span>
+
+								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W interval-Y">
+									<?php echo esc_html( _x( 'On', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+								</span>
+
+								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M">
+									<?php echo esc_html( _x( 'On the', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+								</span>
+
+								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W" id="pronamic_pay_gf_subscription_interval_date_day" name="_pronamic_pay_gf_subscription_interval_date_day">
+									<?php for ( $day = 0; $day <= 6; $day++ ) : ?>
+
+										<?php
+
+										$day_date = DateTime::create_from_format( 'U', strtotime( 'next Monday + ' . $day . ' days' ) );
+
+										$day_value = ( $day + 1 );
+
+										?>
+
+										<option value="<?php echo esc_html( $day_value ); ?>" <?php selected( $subscription_interval_date_day, $day_value ); ?>><?php echo esc_html( $day_date->format_i18n( 'l' ) ); ?></option>
+
+									<?php endfor; ?>
+								</select>
+
+								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M interval-Y" id="pronamic_pay_gf_subscription_interval_date" name="_pronamic_pay_gf_subscription_interval_date">
+									<?php for ( $date = 1; $date <= 27; $date++ ) : ?>
+
+										<?php
+
+										$interval_date = DateTime::create_from_format( 'j', $date );
+
+										?>
+
+										<option value="<?php echo esc_html( $date ); ?>" <?php selected( $subscription_interval_date, $date ); ?>><?php echo esc_html( $interval_date->format_i18n( 'j' ) ); ?></option>
+
+									<?php endfor; ?>
+
+									 <option value="last" <?php selected( $subscription_interval_date, 'last' ); ?>><?php esc_html_e( 'last', 'pronamic_ideal' ); ?></option>
+								</select>
+
+								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M">
+									<?php echo wp_kses( __( '<sup>th</sup> day of the month', 'pronamic_ideal' ), array( 'sup' => array() ) ); ?>
+								</span>
+
+								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-Y" id="pronamic_pay_gf_subscription_interval_date_month" name="_pronamic_pay_gf_subscription_interval_date_month">
+									<?php for ( $month = 1; $month <= 12; $month++ ) : ?>
+
+										<?php $month_date = DateTime::create_from_format( '!m', $month ); ?>
+
+										<option value="<?php echo esc_html( $month ); ?>" <?php selected( $subscription_interval_date_month, $month ); ?>><?php echo esc_html( $month_date->format_i18n( 'F' ) ); ?></option>
+
+									<?php endfor; ?>
+								</select>
+							</label>
+
+							<div class="pronamic-pay-gf-subscription-interval-date-settings interval-date-sync">
+								<input type="checkbox" name="_pronamic_pay_gf_subscription_interval_date_prorate" id="pronamic_pay_gf_subscription_interval_date_prorate" value="true" <?php checked( $subscription_interval_date_prorate ); ?> />
+
+								<label for="pronamic_pay_gf_subscription_interval_date_prorate">
+									<?php esc_html_e( 'Prorate first payment amount', 'pronamic_ideal' ); ?>
+								</label>
 							</div>
 
 							<br />

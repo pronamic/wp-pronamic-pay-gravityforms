@@ -40,10 +40,12 @@
 	},
 	"require-dev": {
 		"php-coveralls/php-coveralls": "^1.0",
-		"phpmd/phpmd": "^2.2.3",
-		"phpunit/phpunit": "^4.5",
 		"squizlabs/php_codesniffer": "^2.7",
-		"wp-coding-standards/wpcs": "^0.14.0",
-		"wimg/php-compatibility": "^8.0"
+		"wp-coding-standards/wpcs": "^0.14.1",
+		"phpmd/phpmd": "^2.4",
+		"phpunit/phpunit": "^4.8",
+		"wimg/php-compatibility": "^8.1",
+		"wp-phpunit/wp-phpunit": "^4.9",
+		"johnpbloch/wordpress": "^4.9"
 	}
 }

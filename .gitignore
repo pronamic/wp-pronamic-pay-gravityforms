@@ -13,7 +13,8 @@
 /node_modules/
 /npm-debug.log
 
-# WordPress content
+# WordPress
+/wordpress/
 /wp-content/
 
 # SASS

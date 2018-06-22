@@ -216,6 +216,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_form_id'                     => 'sanitize_text_field',
 			'_pronamic_pay_gf_config_id'                   => 'sanitize_text_field',
 			'_pronamic_pay_gf_entry_id_prefix'             => 'sanitize_text_field',
+			'_pronamic_pay_gf_order_id'                    => 'sanitize_text_field',
 			'_pronamic_pay_gf_transaction_description'     => 'sanitize_text_field',
 			'_pronamic_pay_gf_condition_enabled'           => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_condition_field_id'          => 'sanitize_text_field',

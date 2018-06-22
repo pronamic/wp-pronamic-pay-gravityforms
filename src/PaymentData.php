@@ -132,15 +132,17 @@ class PaymentData extends Pay_PaymentData {
 	 * @return string
 	 */
 	public function get_order_id() {
-		$prefix = $this->feed->entry_id_prefix;
+		$order_id = $this->feed->order_id;
 
-		// @see http://www.gravityhelp.com/documentation/page/Entry_Object#Standard
-		$order_id = $prefix . $this->lead['id'];
-
-		// If prefix is a merge tag, only use prefix as order ID.
-		if ( '{' === substr( $prefix, 0, 1 ) && '}' === substr( $prefix, -1 ) ) {
-			$order_id = GFCommon::replace_variables( $prefix, $this->form, $this->lead );
+		if ( ! empty( $this->feed->entry_id_prefix ) ) {
+			$order_id = $this->feed->entry_id_prefix . $order_id;
 		}
+
+		if ( ! GFCommon::has_merge_tag( $order_id ) ) {
+			$order_id .= '{entry_id}';
+		}
+
+		$order_id = GFCommon::replace_variables( $order_id, $this->form, $this->lead );
 
 		return $order_id;
 	}

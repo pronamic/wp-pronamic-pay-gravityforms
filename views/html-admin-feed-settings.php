@@ -28,6 +28,17 @@ $subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf
 $subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
 $subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
 
+$entry_id_prefix = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
+$order_id        = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
+
+if ( ! empty( $entry_id_prefix ) ) {
+	$order_id = $entry_id_prefix . $order_id;
+}
+
+if ( ! GFCommon::has_merge_tag( $order_id ) ) {
+	$order_id .= '{entry_id}';
+}
+
 $feed                             = new stdClass();
 $feed->conditionEnabled           = $condition_enabled;
 $feed->conditionFieldId           = $condition_field_id;
@@ -132,22 +143,61 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="_pronamic_pay_gf_entry_id_prefix">
-							<?php esc_html_e( 'Entry ID Prefix', 'pronamic_ideal' ); ?>
+						<label for="_pronamic_pay_gf_order_id">
+							<?php esc_html_e( 'Order ID', 'pronamic_ideal' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Prefix for the entry ID.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Order ID.', 'pronamic_ideal' ); ?>"></span>
 					</th>
 					<td>
-						<?php
+						<input name="_pronamic_pay_gf_entry_id_prefix" value="" type="hidden" />
 
-						$entry_id_prefix = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
-
-						?>
-						<input id="_pronamic_pay_gf_entry_id_prefix" name="_pronamic_pay_gf_entry_id_prefix" value="<?php echo esc_attr( $entry_id_prefix ); ?>" type="text" class="input-text regular-input" />
+						<input id="_pronamic_pay_gf_order_id" name="_pronamic_pay_gf_order_id" value="<?php echo esc_attr( $order_id ); ?>" placeholder="{entry_id}" type="text" class="input-text regular-input merge-tag-support mt-position-right mt-hide_all_fields" />
 
 						<span class="description pronamic-pay-description">
-							<?php esc_html_e( 'A prefix makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
+							<?php
+
+							echo wp_kses(
+								sprintf(
+									'%s %s',
+									__( 'Default:', 'pronamic_ideal' ),
+									sprintf(
+										'<code>%s</code>',
+										'{entry_id}'
+									)
+								),
+								array(
+									'code' => array(),
+								)
+							);
+
+							?>
+
+							<br />
+
+							<?php
+
+							echo wp_kses(
+								sprintf(
+									'%s %s',
+									__( 'Available tags:', 'pronamic_ideal' ),
+									sprintf(
+										'<code>%s</code> <code>%s</code> <code>%s</code>',
+										'{entry_id}',
+										'{form_id}',
+										'{form_title}'
+									)
+								),
+								array(
+									'code' => array(),
+								)
+							);
+
+							?>
+
+							<br />
+
+							<?php esc_html_e( 'An order ID makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
 						</span>
 					</td>
 				</tr>
@@ -165,9 +215,29 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						$transaction_description = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
 
 						?>
-						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
+						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" placeholder="{entry_id}" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
 
 						<span class="description pronamic-pay-description">
+							<?php
+
+							echo wp_kses(
+								sprintf(
+									'%s %s',
+									__( 'Default:', 'pronamic_ideal' ),
+									sprintf(
+										'<code>%s</code>',
+										'{entry_id}'
+									)
+								),
+								array(
+									'code' => array(),
+								)
+							);
+
+							?>
+
+							<br />
+
 							<?php
 
 							echo wp_kses(

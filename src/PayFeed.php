@@ -94,6 +94,7 @@ class PayFeed {
 		$this->form_id                            = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
 		$this->config_id                          = get_post_meta( $post_id, '_pronamic_pay_gf_config_id', true );
 		$this->entry_id_prefix                    = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
+		$this->order_id                           = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
 		$this->transaction_description            = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
 		$this->condition_enabled                  = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
 		$this->condition_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );

@@ -132,7 +132,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				</tr>
 				<tr>
 					<th scope="row">
-						<label for="_pronamic_pay_gf_order_id">
+						<label for="_pronamic_pay_gf_entry_id_prefix">
 							<?php esc_html_e( 'Entry ID Prefix', 'pronamic_ideal' ); ?>
 						</label>
 

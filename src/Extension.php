@@ -118,8 +118,8 @@ class Extension {
 	/**
 	 * Field create.
 	 *
-	 * @param \GF_Field $field     Field object.
-	 * @param array    $properties Field properties.
+	 * @param \GF_Field $field      Field object.
+	 * @param array     $properties Field properties.
 	 *
 	 * @return \GF_Field|IssuersField|PaymentMethodsField
 	 */

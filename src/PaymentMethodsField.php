@@ -35,7 +35,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Constructs and initializes payment methods field.
 	 *
-	 * @param array $properties
+	 * @param array $properties Field properties.
 	 */
 	public function __construct( $properties = array() ) {
 		parent::__construct( $properties );
@@ -49,12 +49,12 @@ class PaymentMethodsField extends GF_Field_Select {
 		 */
 		$this->inputs = null;
 
-		// Actions
+		// Actions.
 		if ( ! has_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) ) ) {
 			add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
 		}
 
-		// Admin
+		// Admin.
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
 
@@ -63,7 +63,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Choices
+		// Choices.
 		$this->enableChoiceValue = true;
 
 		if ( isset( $this->formId ) ) {
@@ -144,10 +144,10 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Gateway available payment methods.
 		$payment_methods = $this->get_gateway_payment_methods();
 
-		// Choices
+		// Choices.
 		$choices = array();
 
-		// Gravity Forms
+		// Gravity Forms.
 		if ( is_array( $this->choices ) ) {
 			foreach ( $this->choices as $choice ) {
 				$value = $choice['value'];
@@ -158,7 +158,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Built-in
+		// Built-in.
 		foreach ( $payment_methods as $value => $label ) {
 			// Only add built-in payment if it's not already set.
 			if ( ! isset( $choices[ $value ] ) ) {
@@ -171,20 +171,20 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Admin
+		// Admin.
 		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ) ) ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}
 
-		// Set choices
+		// Set choices.
 		$this->choices = array_values( $choices );
 	}
 
 	/**
 	 * Filter Gravity Forms selected choice.
 	 *
-	 * @param array $choice
+	 * @param array $choice Choice.
 	 *
 	 * @return boolean true if 'isSelected' is set and true, false otherwise.
 	 */
@@ -195,7 +195,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Unselect the specified choice.
 	 *
-	 * @param array $choice
+	 * @param array $choice Choice.
 	 *
 	 * @return array choice
 	 */
@@ -211,9 +211,9 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
 	 *
-	 * @param array  $form
-	 * @param string $value
-	 * @param array  $entry
+	 * @param array  $form  Form.
+	 * @param string $value Field value.
+	 * @param array  $entry Entry.
 	 *
 	 * @return string
 	 */

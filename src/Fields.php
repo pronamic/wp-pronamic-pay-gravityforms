@@ -30,10 +30,10 @@ class Fields {
 	 * Construct and intialize custom Gravity Forms fields.
 	 */
 	public function __construct() {
-		// Enable credit card field
+		// Enable credit card field.
 		add_filter( 'gform_enable_credit_card_field', '__return_true' );
 
-		// Register custom fields
+		// Register custom fields.
 		if ( Core_Util::class_method_exists( 'GF_Fields', 'register' ) ) {
 			GF_Fields::register( new IssuersField() );
 
@@ -43,7 +43,7 @@ class Fields {
 			}
 		}
 
-		// Add extra fields settings
+		// Add extra fields settings.
 		add_action( 'gform_field_standard_settings', array( $this, 'field_standard_settings' ), 10, 2 );
 	}
 
@@ -53,7 +53,7 @@ class Fields {
 	 * @see   https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
 	 * @since 1.4.7
 	 *
-	 * @param array $field_groups
+	 * @param array $field_groups Field groups.
 	 *
 	 * @return array
 	 */
@@ -74,8 +74,8 @@ class Fields {
 	 *
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L525
 	 *
-	 * @param int $position position of the field settings
-	 * @param int $form_id  current form ID
+	 * @param int $position Position of the field settings.
+	 * @param int $form_id  Form ID.
 	 */
 	public function field_standard_settings( $position, $form_id ) {
 		if ( 10 !== $position ) {

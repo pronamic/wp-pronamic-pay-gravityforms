@@ -60,17 +60,17 @@ class Extension {
 			return;
 		}
 
-		// Post types
+		// Post types.
 		$this->payment_form_post_type = new PaymentFormPostType();
 
 		// Actions
-		// Initialize hook, Gravity Forms uses the default priority (10)
+		// Initialize hook, Gravity Forms uses the default priority (10).
 		add_action( 'init', array( $this, 'init' ), 20 );
 
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
 
 		// Add-on
-		// The `class_exists` call is required to prevent strange errors on some hosting environments
+		// The `class_exists` call is required to prevent strange errors on some hosting environments.
 		if ( Core_Util::class_method_exists( 'GFForms', 'include_payment_addon_framework' ) ) {
 			GFForms::include_payment_addon_framework();
 
@@ -79,7 +79,7 @@ class Extension {
 			}
 		}
 
-		// Fields
+		// Fields.
 		$this->fields = new Fields();
 	}
 
@@ -87,7 +87,7 @@ class Extension {
 	 * Initialize
 	 */
 	public function init() {
-		// Admin
+		// Admin.
 		if ( is_admin() ) {
 			Admin::bootstrap();
 		} else {
@@ -108,7 +108,7 @@ class Extension {
 
 		add_filter( 'gform_currencies', array( __CLASS__, 'currencies' ), 10, 1 );
 
-		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled
+		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled.
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
 		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
 
@@ -118,10 +118,10 @@ class Extension {
 	/**
 	 * Field create.
 	 *
-	 * @param       $field
-	 * @param array $properties
+	 * @param \GF_Field $field     Field object.
+	 * @param array    $properties Field properties.
 	 *
-	 * @return IssuersField|PaymentMethodsField
+	 * @return \GF_Field|IssuersField|PaymentMethodsField
 	 */
 	public function field_create( $field, $properties ) {
 		/*
@@ -173,7 +173,7 @@ class Extension {
 
 			wp_enqueue_script( 'pronamic-pay-gravityforms' );
 
-			// Styles and scripts for Merge Tag button
+			// Styles and scripts for Merge Tag button.
 			wp_register_style( 'gform_admin', GFCommon::get_base_url() . '/css/admin.min.css' );
 
 			wp_enqueue_style( 'jquery-ui-styles' );
@@ -191,7 +191,7 @@ class Extension {
 	 *
 	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_scripts/
 	 *
-	 * @param array $scripts
+	 * @param array $scripts Scripts.
 	 *
 	 * @return array
 	 */
@@ -208,7 +208,7 @@ class Extension {
 	 *
 	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_styles/
 	 *
-	 * @param array $styles
+	 * @param array $styles Styles.
 	 *
 	 * @return array
 	 */
@@ -224,7 +224,7 @@ class Extension {
 	/**
 	 * Pre submssion
 	 *
-	 * @param array $form
+	 * @param array $form Form.
 	 */
 	public function pre_submission( $form ) {
 		$processor = new Processor( $form, $this );
@@ -233,7 +233,12 @@ class Extension {
 	}
 
 	/**
-	 * Source column
+	 * Source column.
+	 *
+	 * @param string  $text    Source text.
+	 * @param Payment $payment Payment.
+	 *
+	 * @return string
 	 */
 	public function source_text( $text, Payment $payment ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
@@ -251,8 +256,8 @@ class Extension {
 	/**
 	 * Source description.
 	 *
-	 * @param         $description
-	 * @param Payment $payment
+	 * @param string  $description Description.
+	 * @param Payment $payment     Payment.
 	 *
 	 * @return string
 	 */
@@ -263,8 +268,8 @@ class Extension {
 	/**
 	 * Source URL.
 	 *
-	 * @param         $url
-	 * @param Payment $payment
+	 * @param string  $url     Source URL.
+	 * @param Payment $payment Payment.
 	 *
 	 * @return string
 	 */
@@ -275,15 +280,15 @@ class Extension {
 	/**
 	 * Maybe update user role of the specified lead and feed
 	 *
-	 * @param array   $lead
-	 * @param PayFeed $feed
+	 * @param array   $lead Lead.
+	 * @param PayFeed $feed Payment feed.
 	 */
 	private function maybe_update_user_role( $lead, $feed ) {
 		$user = false;
 
-		// Gravity Forms User Registration Add-on
+		// Gravity Forms User Registration Add-on.
 		if ( class_exists( 'GF_User_Registration' ) ) {
-			// Version >= 3
+			// Version >= 3.
 			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
 		} elseif ( class_exists( 'GFUserData' ) ) {
 			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
@@ -308,8 +313,8 @@ class Extension {
 	 *
 	 * @since unreleased
 	 *
-	 * @param string  $url
-	 * @param Payment $payment
+	 * @param string  $url     Redirect URL.
+	 * @param Payment $payment Payment.
 	 *
 	 * @return string
 	 */
@@ -357,7 +362,7 @@ class Extension {
 				break;
 		}
 
-		// Process Gravity Forms confirmations if link type is confirmation
+		// Process Gravity Forms confirmations if link type is confirmation.
 		$link = Links::transform_status( $payment->status );
 
 		if ( isset( $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
@@ -390,8 +395,8 @@ class Extension {
 	/**
 	 * Update lead status of the specified payment
 	 *
-	 * @param Payment $payment
-	 * @param bool    $can_redirect
+	 * @param Payment $payment      Payment.
+	 * @param bool    $can_redirect Whether or not to redirect.
 	 */
 	public function update_status( Payment $payment, $can_redirect = false ) {
 		$lead_id = $payment->get_source_id();
@@ -451,9 +456,8 @@ class Extension {
 					$this->payment_action( $success_action, $lead, $action, PaymentStatuses::PAID );
 				}
 
+				// Fulfill order if the payment isn't approved already.
 				if ( ! Entry::is_payment_approved( $lead ) ) {
-					// Only fulfill order if the payment isn't approved already
-
 					if ( Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
 						$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
@@ -472,7 +476,7 @@ class Extension {
 	/**
 	 * Update lead status of the specified subscription
 	 *
-	 * @param Subscription $subscription
+	 * @param Subscription $subscription Subscription.
 	 */
 	public function subscription_update_status( Subscription $subscription ) {
 		$lead_id = $subscription->get_source_id();
@@ -518,7 +522,7 @@ class Extension {
 	/**
 	 * Send subscription renewal notice
 	 *
-	 * @param Subscription $subscription
+	 * @param Subscription $subscription Subscription.
 	 */
 	public function subscription_renewal_notice( Subscription $subscription ) {
 		if ( ! $this->addon ) {
@@ -563,9 +567,10 @@ class Extension {
 	 *     'note' => ''
 	 * );
 	 *
-	 * @param $lead
-	 * @param $action
-	 * @param $type
+	 * @param string $type           Payment action type.
+	 * @param array  $lead           Gravity Forms lead.
+	 * @param array  $action         Payment action.
+	 * @param string $payment_status Payment action status.
 	 *
 	 * @return bool
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.1.0.1/includes/addon/class-gf-payment-addon.php#L1133-L1172
@@ -578,7 +583,7 @@ class Extension {
 
 			$lead[ LeadProperties::PAYMENT_STATUS ] = $payment_status;
 
-			// Update payment status property of lead
+			// Update payment status property of lead.
 			GravityForms::update_entry_property(
 				$lead['id'],
 				LeadProperties::PAYMENT_STATUS,
@@ -655,7 +660,7 @@ class Extension {
 	/**
 	 * Fulfill order
 	 *
-	 * @param array $entry
+	 * @param array $entry Gravity Forms entry.
 	 */
 	public function fulfill_order( $entry ) {
 		$entry_id = rgar( $entry, 'id' );
@@ -670,14 +675,14 @@ class Extension {
 
 			$form = RGFormsModel::get_form_meta( $entry['form_id'] );
 
-			// Delay post creation
-			// @see https://github.com/wp-premium/gravityforms/blob/1.8.20.5/forms_model.php#L2383
-			// @see https://github.com/wp-premium/gravityformspaypal/blob/1.10.3/paypal.php#L2411-L2415
+			// Delay post creation.
+			// @link https://github.com/wp-premium/gravityforms/blob/1.8.20.5/forms_model.php#L2383.
+			// @link https://github.com/wp-premium/gravityformspaypal/blob/1.10.3/paypal.php#L2411-L2415.
 			if ( $feed->delay_post_creation ) {
 				RGFormsModel::create_post( $form, $entry );
 			}
 
-			// Delay ActiveCampaign
+			// Delay ActiveCampaign.
 			if ( $feed->delay_activecampaign_subscription ) {
 				// @since unreleased
 				// @see https://github.com/wp-premium/gravityformsactivecampaign/blob/1.4/activecampaign.php#L44-L46
@@ -691,8 +696,8 @@ class Extension {
 				}
 			}
 
-			// Delay Aweber
-			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197
+			// Delay Aweber.
+			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197.
 			if ( $feed->delay_aweber_subscription && Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
 				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
 
@@ -708,7 +713,7 @@ class Extension {
 				}
 			}
 
-			// Delay Campaign Monitor
+			// Delay Campaign Monitor.
 			if ( $feed->delay_campaignmonitor_subscription ) {
 				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
 				if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
@@ -716,8 +721,8 @@ class Extension {
 				}
 
 				// @since 1.3.0
-				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50.
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_campaignmonitor' ) ) {
 					$addon = gf_campaignmonitor();
 
@@ -727,16 +732,16 @@ class Extension {
 				}
 			}
 
-			// Delay Mailchimp
+			// Delay Mailchimp.
 			if ( $feed->delay_mailchimp_subscription ) {
-				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512
+				// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
 				if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
 					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 				}
 
 				// @since 1.3.0
-				// @see https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @link https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50.
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_mailchimp' ) ) {
 					$addon = gf_mailchimp();
 
@@ -746,16 +751,16 @@ class Extension {
 				}
 			}
 
-			// Delay Zapier
-			// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533
+			// Delay Zapier.
+			// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.
 			if ( $feed->delay_zapier && Core_Util::class_method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
 				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
 			}
 
-			// Delay Dropbox
+			// Delay Dropbox.
 			if ( $feed->delay_dropbox ) {
 				// @since unreleased
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_dropbox' ) ) {
 					$addon = gf_dropbox();
 
@@ -765,10 +770,10 @@ class Extension {
 				}
 			}
 
-			// Delay Moneybird
+			// Delay Moneybird.
 			if ( $feed->delay_moneybird ) {
 				// @since unreleased
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_moneybird' ) ) {
 					$addon = gf_moneybird();
 
@@ -778,10 +783,10 @@ class Extension {
 				}
 			}
 
-			// Delay Twilio
+			// Delay Twilio.
 			if ( $feed->delay_twilio ) {
 				// @since unreleased
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_twilio' ) ) {
 					$addon = gf_twilio();
 
@@ -791,10 +796,10 @@ class Extension {
 				}
 			}
 
-			// Delay Webhooks
+			// Delay Gravity Forms Webhooks Add-On.
 			if ( $feed->delay_webhooks ) {
 				// @since unreleased
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_webhooks' ) ) {
 					$addon = gf_webhooks();
 
@@ -804,12 +809,11 @@ class Extension {
 				}
 			}
 
-			// Delay Sliced Invoices
+			// Delay Sliced Invoices.
 			if ( $feed->delay_sliced_invoices && Core_Util::class_method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
 				// @since unreleased
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
-				// @see https://plugins.trac.wordpress.org/browser/sliced-invoices-gravity-forms/tags/1.10.0/class-sliced-invoices-gf.php#L10
-
+				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
+				// @link https://plugins.trac.wordpress.org/browser/sliced-invoices-gravity-forms/tags/1.10.0/class-sliced-invoices-gf.php#L10.
 				$addons = GFAddOn::get_registered_addons();
 
 				foreach ( $addons as $class ) {
@@ -826,7 +830,7 @@ class Extension {
 			}
 
 			// Delay user registration
-			// @see https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133
+			// @link https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133.
 			if ( $feed->delay_user_registration ) {
 				if ( function_exists( 'gf_user_registration' ) ) {
 					$addon = gf_user_registration();
@@ -839,8 +843,8 @@ class Extension {
 				}
 			}
 
-			// Delay notifications
-			// Determine if the feed has Gravity Form 1.7 Feed IDs
+			// Delay notifications.
+			// Determine if the feed has Gravity Form 1.7 Feed IDs.
 			if ( $feed->has_delayed_notifications() ) {
 				$delay_notification_ids = array();
 
@@ -861,17 +865,17 @@ class Extension {
 			}
 
 			if ( $feed->delay_admin_notification && Core_Util::class_method_exists( 'GFCommon', 'send_admin_notification' ) ) {
-				// https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1265-L1270
+				// @link https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1265-L1270.
 				GFCommon::send_admin_notification( $form, $entry );
 			}
 
 			if ( $feed->delay_user_notification && Core_Util::class_method_exists( 'GFCommon', 'send_user_notification' ) ) {
-				// https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1258-L1263
+				// @link https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1258-L1263.
 				GFCommon::send_user_notification( $form, $entry );
 			}
 		}
 
-		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action
+		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
 		do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}
 
@@ -929,9 +933,8 @@ class Extension {
 	/**
 	 * Get confirmations for lead based on payment status.
 	 *
-	 * @param        $lead
-	 *
-	 * @param string $payment_status
+	 * @param array  $lead           Lead.
+	 * @param string $payment_status Payment status.
 	 *
 	 * @return mixed
 	 */
@@ -946,7 +949,7 @@ class Extension {
 			require_once GFCommon::get_base_path() . '/form_display.php';
 		}
 
-		// Use only link confirmation if set
+		// Use only link confirmation if set.
 		if ( isset( $feed->links[ $link ]['confirmation_id'] ) && ! empty( $feed->links[ $link ]['confirmation_id'] ) ) {
 			$confirmation_id = $feed->links[ $link ]['confirmation_id'];
 
@@ -961,13 +964,13 @@ class Extension {
 	/**
 	 * Replace merge tags
 	 *
-	 * @param string  $text
-	 * @param array   $form
-	 * @param array   $entry
-	 * @param boolean $url_encode
-	 * @param boolean $esc_html
-	 * @param boolean $nl2br
-	 * @param string  $format
+	 * @param string      $text       The text in which merge tags are being processed.
+	 * @param array|false $form       The Form object if available or false.
+	 * @param array|false $entry      The Entry object if available or false.
+	 * @param boolean     $url_encode Indicates if the urlencode function should be applied.
+	 * @param boolean     $esc_html   Indicates if the esc_html function should be applied.
+	 * @param boolean     $nl2br      Indicates if the nl2br function should be applied.
+	 * @param string      $format     The format requested for the location the merge is being used. Possible values: html, text or url.
 	 *
 	 * @return string
 	 */

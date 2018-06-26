@@ -53,6 +53,16 @@ class IssuersField extends GF_Field_Select {
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );
 		}
+
+		// Set default display mode.
+		if ( ! isset( $this->pronamicPayDisplayMode ) ) {
+			$this->pronamicPayDisplayMode = 'select';
+		}
+
+		// Add display mode CSS classes.
+		if ( 'icons' === $this->pronamicPayDisplayMode ) {
+			$this->cssClass .= ' gf_list_2col pronamic_pay_display_icons';
+		}
 	}
 
 	/**
@@ -75,6 +85,7 @@ class IssuersField extends GF_Field_Select {
 			'css_class_setting',
 			'rules_setting',
 			'pronamic_pay_config_field_setting',
+			'pronamic_pay_display_field_setting',
 		);
 	}
 
@@ -168,6 +179,92 @@ class IssuersField extends GF_Field_Select {
 
 		// Input
 		$input = parent::get_field_input( $form, $value, $entry );
+
+		if ( ! is_admin() && 'icons' === $this->pronamicPayDisplayMode ) {
+
+			ob_start();
+
+			?>
+
+			<div class="ginput_container ginput_container_radio">
+				<ul class="gfield_radio input_<?php echo esc_attr( $this->formId ); ?>_<?php echo esc_attr( $this->id ); ?>">
+					<?php
+
+					// Icon filename replacements.
+					$replacements = array(
+						' bankiers' => '',
+						' bank'     => '',
+						' '         => '_',
+					);
+
+					foreach ( $this->choices as $choice ) {
+						$icon_file = strtr( strtolower( $choice['text'] ), $replacements );
+
+						if ( false !== stripos( $icon_file, 'test' ) || false !== stripos( $icon_file, 'simulation' ) ) {
+							$icon_file = 'test';
+						}
+
+						// Radio input.
+						printf(
+							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s"><img src="%5$s" alt="%4$s" /><span>%4$s</span></label></li>',
+							$this->formId,
+							$this->id,
+							$choice['value'],
+							$choice['text'],
+							plugins_url( 'images/issuers/' . $icon_file . '.png', Plugin::$file )
+						);
+					}
+
+					?>
+				</ul>
+			</div>
+
+			<style>
+			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio {
+				width: 265px;
+			}
+
+			.gform_wrapper .gfield.pronamic_pay_display_icons.gf_list_2col .gfield_radio li {
+				vertical-align: baseline;
+			}
+
+			.gform_wrapper .gfield.pronamic_pay_display_icons.gf_list_2col .gfield_radio li label {
+				max-width: 100%;
+
+				margin: 2px 2px 0 4px;
+			}
+
+			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li label span,
+			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li input[type="radio"] {
+				display: none;
+			}
+
+			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li img {
+				display: block;
+				width: 125px;
+				height: 60px;
+
+				padding: 1px;
+
+				border: 1px solid #bbb;
+
+				border-radius: 4px;
+			}
+
+			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li input[type="radio"]:checked ~ label img {
+				padding: 0;
+
+				border-width: 2px;
+				border-color: #555;
+			}
+			</style>
+
+			<?php
+
+			$input = ob_get_contents();
+
+			ob_clean();
+		}
 
 		if ( is_admin() ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );

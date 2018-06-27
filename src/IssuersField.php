@@ -60,8 +60,12 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		// Add display mode CSS classes.
-		if ( 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
-			$this->cssClass .= ' gf_list_2col pronamic_pay_display_icons';
+		if ( false === strpos( $this->cssClass, 'pronamic_pay_display_icons' ) && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+			$this->cssClass .= ' pronamic_pay_display_icons';
+		}
+
+		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
+			$this->cssClass .= ' gf_list_2col';
 		}
 	}
 
@@ -201,6 +205,11 @@ class IssuersField extends GF_Field_Select {
 
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
+						case 'icons-24':
+							$icon_suffix = '64';
+							$icon_size   = array( 24, 24 );
+
+							break;
 						case 'icons-64':
 							$icon_suffix = '64';
 							$icon_size   = array( 48, 48 );
@@ -260,6 +269,34 @@ class IssuersField extends GF_Field_Select {
 			<?php
 
 			switch ( $this->pronamicPayDisplayMode ) {
+				case 'icons-24':
+					?>
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						margin: 0;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						width: auto;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+						display: inline;
+						vertical-align: middle;
+
+						margin-right: 10px;
+
+						background-color: #fff;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+						display: inline-block;
+
+						margin-top: -6px;
+					}
+
+					<?php
+
+					break;
 				case 'icons-64':
 					?>
 					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {

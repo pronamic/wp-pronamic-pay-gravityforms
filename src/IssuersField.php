@@ -60,7 +60,7 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		// Add display mode CSS classes.
-		if ( 'icons' === $this->pronamicPayDisplayMode ) {
+		if ( 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
 			$this->cssClass .= ' gf_list_2col pronamic_pay_display_icons';
 		}
 	}
@@ -180,7 +180,9 @@ class IssuersField extends GF_Field_Select {
 		// Input
 		$input = parent::get_field_input( $form, $value, $entry );
 
-		if ( ! is_admin() && 'icons' === $this->pronamicPayDisplayMode ) {
+		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
+
+		if ( ! is_admin() && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
 
 			ob_start();
 
@@ -197,11 +199,24 @@ class IssuersField extends GF_Field_Select {
 						' '         => '_',
 					);
 
-					foreach ( $this->choices as $choice ) {
-						$icon_file = strtr( strtolower( $choice['text'] ), $replacements );
+					// Icon file and size.
+					switch ( $this->pronamicPayDisplayMode ) {
+						case 'icons-64':
+							$icon_suffix = '64';
+							$icon_size   = array( 48, 48 );
 
-						if ( false !== stripos( $icon_file, 'test' ) || false !== stripos( $icon_file, 'simulation' ) ) {
-							$icon_file = 'test';
+							break;
+						case 'icons-125':
+							$icon_suffix = '125';
+							$icon_size   = array( 125, 60 );
+					}
+
+					// Loop issuers.
+					foreach ( $this->choices as $choice ) {
+						$icon = strtr( strtolower( $choice['text'] ), $replacements ) . '-' . $icon_suffix;
+
+						if ( false !== stripos( $icon, 'test' ) || false !== stripos( $icon, 'simulation' ) ) {
+							$icon = 'test';
 						}
 
 						// Radio input.
@@ -211,7 +226,7 @@ class IssuersField extends GF_Field_Select {
 							$this->id,
 							$choice['value'],
 							$choice['text'],
-							plugins_url( 'images/issuers/' . $icon_file . '.png', Plugin::$file )
+							plugins_url( 'images/issuers/' . $icon . '.png', Plugin::$file )
 						);
 					}
 
@@ -220,43 +235,102 @@ class IssuersField extends GF_Field_Select {
 			</div>
 
 			<style>
-			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio {
-				width: 265px;
-			}
-
-			.gform_wrapper .gfield.pronamic_pay_display_icons.gf_list_2col .gfield_radio li {
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
 				vertical-align: baseline;
 			}
 
-			.gform_wrapper .gfield.pronamic_pay_display_icons.gf_list_2col .gfield_radio li label {
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+				display: block;
+
+				width: <?php echo esc_html( $icon_size[0] ); ?>px;
+				height: <?php echo esc_html( $icon_size[1] ); ?>px;
+			}
+
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
 				max-width: 100%;
+				width: 100%;
 
 				margin: 2px 2px 0 4px;
 			}
 
-			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li label span,
-			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li input[type="radio"] {
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
 				display: none;
 			}
 
-			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li img {
-				display: block;
-				width: 125px;
-				height: 60px;
+			<?php
 
-				padding: 1px;
+			switch ( $this->pronamicPayDisplayMode ) {
+				case 'icons-64':
+					?>
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+						width: <?php echo esc_html( ( $icon_size[0] * 2 ) + 100 ); ?>px;
+					}
 
-				border: 1px solid #bbb;
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+						text-align: center;
 
-				border-radius: 4px;
+						background: #fff;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover {
+						background: #efefef;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						margin: 0;
+
+						padding-bottom: 10px;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						font-weight: normal;
+						color: #bbb;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+						margin: 10px auto;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label span {
+						font-weight: bold;
+						color: #555;
+					}
+
+					<?php
+
+					break;
+				case 'icons-125':
+					?>
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+						width: <?php echo esc_html( ( $icon_size[0] * 2 ) + 10 ); ?>px;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+						display: none;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+						padding: 1px;
+
+						border: 1px solid #bbb;
+						border-radius: 4px;
+
+						background: #fff;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label img {
+						padding: 0;
+
+						border-width: 2px;
+						border-color: #555;
+					}
+
+					<?php
 			}
 
-			.gform_wrapper .gfield.pronamic_pay_display_icons .gfield_radio li input[type="radio"]:checked ~ label img {
-				padding: 0;
+			?>
 
-				border-width: 2px;
-				border-color: #555;
-			}
 			</style>
 
 			<?php

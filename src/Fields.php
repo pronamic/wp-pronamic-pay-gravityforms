@@ -123,7 +123,8 @@ class Fields {
 			<select id="pronamic_pay_display_field" onchange="SetFieldProperty( 'pronamicPayDisplayMode', jQuery( this ).val() );" class="fieldwidth-3">
 				<option value=""><?php esc_html_e( '— Use field default —', 'pronamic_ideal' ); ?></option>
 				<option value="select"><?php echo esc_html_x( 'Select', 'Field display mode', 'pronamic_ideal' ); ?></option>
-				<option value="icons"><?php echo esc_html_x( 'Icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
+				<option value="icons-125"><?php echo esc_html_x( 'Icons (large)', 'Field display mode', 'pronamic_ideal' ); ?></option>
+				<option value="icons-64"><?php echo esc_html_x( 'Icons (small)', 'Field display mode', 'pronamic_ideal' ); ?></option>
 			</select>
 		</li>
 		<?php

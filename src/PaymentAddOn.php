@@ -4,7 +4,6 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFAddOnFeedsTable;
 use GFPaymentAddOn;
-use Pronamic\WordPress\Pay\Plugin;
 use WP_Query;
 
 /**

@@ -69,6 +69,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 		 * Actions
 		 */
 		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ), 20 );
+
+		/*
+		 * Filters.
+		 */
+		add_filter( 'gform_admin_pre_render', array( $this, 'admin_pre_render' ), 10, 1 );
 	}
 
 	/**
@@ -129,6 +134,31 @@ class PaymentAddOn extends GFPaymentAddOn {
 		wp_safe_redirect( $url );
 
 		exit;
+	}
+
+	/**
+	 * Filter the form in admin.
+	 *
+	 * @param array $form Form.
+	 *
+	 * @return array
+	 */
+	public function admin_pre_render( $form ) {
+		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
+
+		$condition_field_ids = array();
+
+		foreach ( $feeds as $feed ) {
+			if ( empty( $feed->condition_field_id ) ) {
+				continue;
+			}
+
+			$condition_field_ids[] = $feed->condition_field_id;
+		}
+
+		$form['pronamic_pay_condition_field_ids'] = $condition_field_ids;
+
+		return $form;
 	}
 
 	/**

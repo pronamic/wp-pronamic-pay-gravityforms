@@ -613,6 +613,20 @@
 					} );
 				}
 			} );
+
+			// Filter conditional logic dependencies.
+			gform.addFilter( 'gform_has_conditional_logic_dependency', function( result, field_id, value ) {
+				if ( typeof form === 'undefined' ) {
+					return result;
+				}
+
+				// Check if field is used in a conditions of the payment feed(s).
+				if ( -1 !== $.inArray( field_id.toString(), form.pronamic_pay_condition_field_ids ) ) {
+					return true;
+				}
+
+				return result;
+			} );
 		}
 
 		// Action on load field settings

@@ -6,6 +6,7 @@ use GFCommon;
 use Pronamic\WordPress\DateTime\DateTime;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
 use Pronamic\WordPress\Pay\Payments\Item;
 use Pronamic\WordPress\Pay\Payments\Items;
@@ -513,7 +514,17 @@ class PaymentData extends Pay_PaymentData {
 					if ( isset( $this->lead[ $this->feed->subscription_interval_field ] ) ) {
 						$interval = $this->lead[ $this->feed->subscription_interval_field ];
 
-						if ( '0' === $interval ) {
+						$interval_period = Core_Util::string_to_interval_period( $interval );
+
+						// Default to interval period in days.
+						if ( null === $interval_period ) {
+							$interval_period = 'D';
+						}
+
+						$interval = intval( $interval );
+
+						// Do not start subscriptions for `0` interval.
+						if ( 0 === $interval ) {
 							return;
 						}
 					}

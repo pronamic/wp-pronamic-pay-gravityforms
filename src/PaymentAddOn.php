@@ -519,11 +519,28 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Delete feed
+	 * Delete feed.
 	 *
-	 * @param $feed_id
+	 * @param int $feed_id Feed ID.
 	 */
 	public function delete_feed( $feed_id ) {
 		wp_delete_post( $feed_id );
+	}
+
+	/**
+	 * Delete feeds.
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	public function delete_feeds( $form_id = null ) {
+		if ( null === $form_id ) {
+			return;
+		}
+
+		$feeds = $this->get_feeds( $form_id );
+
+		foreach ( $feeds as $feed ) {
+			$this->get_feed( $feed['ID'] );
+		}
 	}
 }

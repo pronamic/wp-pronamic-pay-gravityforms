@@ -161,6 +161,11 @@ class Admin {
 		);
 
 		$merge_tags[] = array(
+			'label' => __( 'Pronamic Subscription Amount', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_subscription_amount}',
+		);
+
+		$merge_tags[] = array(
 			'label' => __( 'Pronamic Subscription Cancel URL', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_cancel_url}',
 		);

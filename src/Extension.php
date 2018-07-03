@@ -975,6 +975,7 @@ class Extension {
 	 * @return string
 	 */
 	public function replace_merge_tags( $text, $form, $entry, $url_encode, $esc_html, $nl2br, $format ) {
+		$subscription_amount       = '';
 		$subscription_cancel_url   = '';
 		$subscription_renew_url    = '';
 		$subscription_renewal_date = '';
@@ -990,6 +991,7 @@ class Extension {
 				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment->getTimestamp() );
 			}
 
+			$subscription_amount     = $subscription->get_amount()->format_i18n();
 			$subscription_cancel_url = $subscription->get_cancel_url();
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}
@@ -1000,6 +1002,7 @@ class Extension {
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
 			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
+			'{pronamic_subscription_amount}'       => $subscription_amount,
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,
 			'{pronamic_subscription_renewal_date}' => $subscription_renewal_date,

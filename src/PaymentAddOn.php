@@ -219,6 +219,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 		return $feed_table;
 	}
 
+	/**
+	 * Get feeds.
+	 *
+	 * @param int|null $form_id Form ID.
+	 *
+	 * @return array Feeds.
+	 */
 	public function get_feeds( $form_id = null ) {
 		$query = new WP_Query( array(
 			'post_type'      => 'pronamic_pay_gf',
@@ -236,23 +243,59 @@ class PaymentAddOn extends GFPaymentAddOn {
 		foreach ( $query->posts as $post ) {
 			$post = (array) $post;
 
-			$post['id'] = $post['ID'];
+			$post = array_merge( $post, array(
+				'id'        => $post['ID'],
+				'form_id'   => get_post_meta( $post['ID'], '_pronamic_pay_gf_form_id', true ),
+				'is_active' => true,
+				'meta'      => array(
+					'post'            => $post,
+					'feed_name'       => $post['post_title'],
+					'transactionType' => 'product',
+				),
+			) );
 
 			// Is activated?
-			$post['is_active'] = true;
-
 			if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
 				$post['is_active'] = false;
 			}
-
-			$post['meta'] = array(
-				'transactionType' => 'product',
-			);
 
 			$posts[] = $post;
 		}
 
 		return $posts;
+	}
+
+	/**
+	 * Get feed.
+	 *
+	 * @param int|string $id Feed ID.
+	 *
+	 * @return false|array Feed or false if feed doesn't exist.
+	 */
+	public function get_feed( $id ) {
+		$post = get_post( $id, ARRAY_A );
+
+		if ( null === $post ) {
+			return false;
+		}
+
+		$post = array_merge( $post, array(
+			'id'        => $post['ID'],
+			'form_id'   => get_post_meta( $id, '_pronamic_pay_gf_form_id', true ),
+			'is_active' => true,
+			'meta'      => array(
+				'post'            => $post,
+				'feed_name'       => $post['post_title'],
+				'transactionType' => 'product',
+			),
+		) );
+
+		// Is activated?
+		if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
+			$post['is_active'] = false;
+		}
+
+		return $post;
 	}
 
 	/**
@@ -414,6 +457,65 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 */
 	public function update_feed_active( $feed_id, $is_active ) {
 		return update_post_meta( $feed_id, '_pronamic_pay_gf_feed_active', $is_active );
+	}
+
+	/**
+	 * Allow payment feeds to be duplicated.
+	 *
+	 * @param int|array $id The ID of the feed to be duplicated or the feed object when duplicating a form.
+	 *
+	 * @return boolean
+	 */
+	public function can_duplicate_feed( $id ) {
+		return true;
+	}
+
+	/**
+	 * Insert feed.
+	 *
+	 * @param string|int $form_id   Form ID.
+	 * @param bool       $is_active Whether or not the feed is activated.
+	 * @param array      $meta      Feed meta.
+	 *
+	 * @return int
+	 */
+	public function insert_feed( $form_id, $is_active, $meta ) {
+		// Original feed post is passed in meta through `get_feed()` method.
+		$original_feed = $meta['post'];
+
+		// Insert post.
+		$post_id = wp_insert_post( array(
+			'post_type'      => 'pronamic_pay_gf',
+			'post_title'     => $meta['feed_name'],
+			'post_status'    => 'publish',
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		) );
+
+		$original_meta = get_post_meta( $original_feed['ID'] );
+
+		foreach ( $original_meta as $meta_key => $meta_value ) {
+			$meta_value = array_shift( $meta_value );
+
+			if ( is_serialized( $meta_value ) ) {
+				$meta_value = unserialize( $meta_value );
+			}
+
+			switch ( $meta_key ) {
+				case '_pronamic_pay_gf_form_id':
+					$meta_value = $form_id;
+
+					break;
+				case '_pronamic_pay_gf_feed_active':
+					$meta_value = $is_active;
+
+					break;
+			}
+
+			update_post_meta( $post_id, $meta_key, $meta_value );
+		}
+
+		return $post_id;
 	}
 
 	/**

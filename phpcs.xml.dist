@@ -25,6 +25,8 @@
 		<!-- Exclude for wp_json_encode() function -->
 		<exclude name="WordPress.PHP.DiscouragedFunctions.DiscouragedWithAlternative" />
 
+		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize" />
+
 		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
 
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />

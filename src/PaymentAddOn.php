@@ -170,7 +170,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
-		if ( filter_has_var( INPUT_GET, 'fid' ) ) {
+		if ( $this->is_detail_page() ) {
 			require dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php';
 		} else {
 			$this->feed_list_page( $form );

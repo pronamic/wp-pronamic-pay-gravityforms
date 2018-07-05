@@ -42,14 +42,8 @@
 	</rule>
 
 	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query">
-		<exclude-pattern>/src/functions.php</exclude-pattern>
 		<exclude-pattern>/src/Admin.php</exclude-pattern>
 		<exclude-pattern>/src/AdminPaymentFormPostType.php</exclude-pattern>
 		<exclude-pattern>/src/PaymentAddOn.php</exclude-pattern>
-	</rule>
-
-	<rule ref="WordPress.VIP.DirectDatabaseQuery">
-		<!-- For now a direct database query is the most efficient way -->
-		<exclude-pattern>/src/functions.php</exclude-pattern>
 	</rule>
 </ruleset>

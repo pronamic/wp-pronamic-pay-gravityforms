@@ -30,8 +30,6 @@
 
 		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize" />
 
-		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
-
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />

@@ -307,7 +307,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 										'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
 										esc_attr( 'pronamic-pay-gf-notification-' . $id ),
 										esc_attr( $id ),
-										checked( in_array( $id, $delay_notification_ids ), true, false )
+										checked( in_array( $id, $delay_notification_ids, true ), true, false )
 									);
 
 									printf( ' ' );

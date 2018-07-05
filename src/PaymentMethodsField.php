@@ -172,7 +172,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		}
 
 		// Admin.
-		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ) ) ) {
+		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ), true ) ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}

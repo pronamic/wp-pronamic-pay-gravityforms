@@ -82,7 +82,7 @@ class Fields {
 			return;
 		}
 
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form_id );
+		$feeds = FeedsDB::get_feeds_by_form_id( $form_id );
 
 		if ( empty( $feeds ) ) {
 			return;

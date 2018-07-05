@@ -91,7 +91,7 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		if ( ! $gateway ) {
-			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
+			$feeds = FeedsDB::get_feeds_by_form_id( $this->formId );
 
 			foreach ( $feeds as $feed ) {
 				$gateway = Plugin::get_gateway( $feed->config_id );

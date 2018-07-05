@@ -331,7 +331,7 @@ class Extension {
 		$form_id = $lead['form_id'];
 
 		$form = RGFormsModel::get_form_meta( $form_id );
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return $url;
@@ -411,7 +411,7 @@ class Extension {
 		$form_id = $lead['form_id'];
 
 		$form = RGFormsModel::get_form_meta( $form_id );
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return;
@@ -488,7 +488,7 @@ class Extension {
 			return;
 		}
 
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return;
@@ -632,7 +632,7 @@ class Extension {
 
 				break;
 			case 'cancel_subscription':
-				$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead['id'] );
+				$feed = FeedsDB::get_feed_by_entry_id( $lead['id'] );
 
 				if ( ! isset( $action['note'] ) ) {
 					$action['note'] = sprintf( 'Subscription manually canceled.', 'pronamic_ideal' );
@@ -669,7 +669,7 @@ class Extension {
 		// Get entry with current payment status.
 		$entry = RGFormsModel::get_lead( $entry_id );
 
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $entry_id );
+		$feed = FeedsDB::get_feed_by_entry_id( $entry_id );
 
 		if ( null !== $feed ) {
 			$this->maybe_update_user_role( $entry, $feed );
@@ -942,7 +942,7 @@ class Extension {
 	public function get_confirmation( $lead, $payment_status = Statuses::OPEN ) {
 		$form = GFAPI::get_form( $lead['form_id'] );
 
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead['id'] );
+		$feed = FeedsDB::get_feed_by_entry_id( $lead['id'] );
 
 		$link = Links::transform_status( $payment_status );
 

@@ -104,7 +104,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	private function get_gateways() {
 		$gateways = array();
 
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
+		$feeds = FeedsDB::get_feeds_by_form_id( $this->formId );
 
 		// Get all config IDs.
 		$config_ids = wp_list_pluck( $feeds, 'config_id' );
@@ -227,7 +227,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		$input = parent::get_field_input( $form, $value, $entry );
 
 		if ( is_admin() ) {
-			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
+			$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(

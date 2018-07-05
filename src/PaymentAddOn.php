@@ -144,7 +144,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return array
 	 */
 	public function admin_pre_render( $form ) {
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
+		$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
 
 		$condition_field_ids = array();
 

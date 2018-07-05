@@ -95,7 +95,7 @@ class Processor {
 		$this->form_id   = isset( $form['id'] ) ? $form['id'] : null;
 
 		// Get payment feed by form ID
-		$this->feed = get_pronamic_gf_pay_conditioned_feed_by_form_id( $this->form_id );
+		$this->feed = FeedsDB::get_conditioned_feed_by_form_id( $this->form_id );
 
 		if ( null !== $this->feed ) {
 			$this->process = true;

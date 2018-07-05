@@ -17,8 +17,6 @@
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 
-		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
-
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Squiz.PHP.CommentedOutCode.Found" />
 
@@ -32,8 +30,6 @@
 
 		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize" />
 
-		<exclude name="WordPress.PHP.StrictInArray.MissingTrueStrict" />
-
 		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect" />
 		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
@@ -46,14 +42,8 @@
 	</rule>
 
 	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query">
-		<exclude-pattern>/src/functions.php</exclude-pattern>
 		<exclude-pattern>/src/Admin.php</exclude-pattern>
 		<exclude-pattern>/src/AdminPaymentFormPostType.php</exclude-pattern>
 		<exclude-pattern>/src/PaymentAddOn.php</exclude-pattern>
-	</rule>
-
-	<rule ref="WordPress.VIP.DirectDatabaseQuery">
-		<!-- For now a direct database query is the most efficient way -->
-		<exclude-pattern>/src/functions.php</exclude-pattern>
 	</rule>
 </ruleset>

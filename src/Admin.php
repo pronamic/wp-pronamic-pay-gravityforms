@@ -215,16 +215,9 @@ class Admin {
 	public static function ajax_get_form_data() {
 		$form_id = filter_input( INPUT_GET, 'formId', FILTER_SANITIZE_STRING );
 
-		$result          = new stdClass();
-		$result->success = true;
-		$result->data    = RGFormsModel::get_form_meta( $form_id );
+		$data = RGFormsModel::get_form_meta( $form_id );
 
-		// Output
-		header( 'Content-Type: application/json' );
-
-		echo wp_json_encode( $result );
-
-		die();
+		wp_send_json_success( $data );
 	}
 
 	/**

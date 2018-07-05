@@ -189,7 +189,7 @@ class Processor {
 			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 			remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
 
-			// @since 1.3.0
+			// @since 1.3.0 - AWeber subscription support.
 			// @see https://github.com/wp-premium/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
 			// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 			if ( function_exists( 'gf_aweber' ) ) {
@@ -204,7 +204,7 @@ class Processor {
 			// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 			remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
 
-			// @since 1.3.0
+			// @since 1.3.0 - Campaign Monitor subscription support.
 			// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50
 			// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 			if ( function_exists( 'gf_campaignmonitor' ) ) {
@@ -219,7 +219,7 @@ class Processor {
 			// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 			remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 
-			// @since 1.3.0
+			// @since 1.3.0 - MailChimp subscription support.
 			// @see https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50
 			// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 			if ( function_exists( 'gf_mailchimp' ) ) {

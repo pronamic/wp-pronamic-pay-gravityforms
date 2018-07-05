@@ -142,7 +142,6 @@ class IssuersField extends GF_Field_Select {
 				$this->choices[] = array(
 					'value' => $value,
 					'text'  => $label,
-					//'isSelected' => false,
 				);
 			}
 		}

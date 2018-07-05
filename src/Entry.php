@@ -27,9 +27,9 @@ class Entry {
 			$payment_status = $entry[ LeadProperties::PAYMENT_STATUS ];
 
 			$approved = in_array( $payment_status, array(
-				// @since 1.0.0
+				// @since 1.0.0 - Approved
 				PaymentStatuses::APPROVED,
-				// @since 1.2.3
+				// @since 1.2.3 - Paid
 				PaymentStatuses::PAID,
 			), true );
 		}

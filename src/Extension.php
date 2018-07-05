@@ -702,7 +702,7 @@ class Extension {
 			if ( $feed->delay_aweber_subscription && Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
 				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
 
-				// @since 1.3.0
+				// @since 1.3.0 - Aweber support.
 				// @see https://github.com/wp-premium/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
 				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
 				if ( function_exists( 'gf_aweber' ) ) {
@@ -721,7 +721,7 @@ class Extension {
 					call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
 				}
 
-				// @since 1.3.0
+				// @since 1.3.0 - Campaign Monitor support.
 				// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50.
 				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_campaignmonitor' ) ) {
@@ -733,14 +733,14 @@ class Extension {
 				}
 			}
 
-			// Delay Mailchimp.
+			// Delay MailChimp.
 			if ( $feed->delay_mailchimp_subscription ) {
 				// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
 				if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
 					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 				}
 
-				// @since 1.3.0
+				// @since 1.3.0 - MailChimp support
 				// @link https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50.
 				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
 				if ( function_exists( 'gf_mailchimp' ) ) {

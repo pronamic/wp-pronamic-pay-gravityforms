@@ -970,10 +970,10 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 							$select_operator .= '</select>';
 
-							// Select value
+							// Select value.
 							$select_value = '<select id="gf_ideal_condition_value" name="_pronamic_pay_gf_condition_value"></select>';
 
-							// Print
+							// Print select.
 							// @codingStandardsIgnoreStart
 							printf(
 								'%s %s %s',

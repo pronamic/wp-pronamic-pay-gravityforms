@@ -615,7 +615,7 @@
 			} );
 
 			// Filter conditional logic dependencies.
-			gform.addFilter( 'gform_has_conditional_logic_dependency', function( result, field_id, value ) {
+			gform.addFilter( 'gform_has_conditional_logic_dependency', function( result, field_id ) {
 				if ( typeof form === 'undefined' ) {
 					return result;
 				}

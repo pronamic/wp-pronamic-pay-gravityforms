@@ -631,13 +631,20 @@
 
 		// Action on load field settings
 		$( document ).on( 'gform_load_field_settings', function( e, field ) {
-			var $pronamicPayConfigField = $( '#pronamic_pay_config_field' );
+			var pronamicPayFieldSettings = {
+				'pronamic_pay_config_field':  'pronamicPayConfigId',
+				'pronamic_pay_display_field': 'pronamicPayDisplayMode'
+			};
 
-			if ( $pronamicPayConfigField.find( 'option[value="' + field.pronamicPayConfigId + '"]' ).length > 0 ) {
-				$pronamicPayConfigField.val( field.pronamicPayConfigId );
-			} else {
-				SetFieldProperty( 'pronamicPayConfigId', '' );
-			}
+			$.each( pronamicPayFieldSettings, function( id, property ) {
+				var $field = $( '#' + id );
+
+				if ( $field.find( 'option[value="' + field[ property ] + '"]' ).length > 0 ) {
+					$field.val( field[ property ] );
+				} else {
+					SetFieldProperty( property, '' );
+				}
+			} );
 		} );
 	} );
 } )( jQuery );

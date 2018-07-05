@@ -53,6 +53,20 @@ class IssuersField extends GF_Field_Select {
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );
 		}
+
+		// Set default display mode.
+		if ( ! isset( $this->pronamicPayDisplayMode ) ) {
+			$this->pronamicPayDisplayMode = 'select';
+		}
+
+		// Add display mode CSS classes.
+		if ( false === strpos( $this->cssClass, 'pronamic_pay_display_icons' ) && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+			$this->cssClass .= ' pronamic_pay_display_icons';
+		}
+
+		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
+			$this->cssClass .= ' gf_list_2col';
+		}
 	}
 
 	/**
@@ -75,6 +89,7 @@ class IssuersField extends GF_Field_Select {
 			'css_class_setting',
 			'rules_setting',
 			'pronamic_pay_config_field_setting',
+			'pronamic_pay_display_field_setting',
 		);
 	}
 
@@ -169,6 +184,199 @@ class IssuersField extends GF_Field_Select {
 
 		// Input
 		$input = parent::get_field_input( $form, $value, $entry );
+
+		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
+
+		if ( ! is_admin() && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+
+			ob_start();
+
+			?>
+
+			<div class="ginput_container ginput_container_radio">
+				<ul class="gfield_radio input_<?php echo esc_attr( $this->formId ); ?>_<?php echo esc_attr( $this->id ); ?>">
+					<?php
+
+					// Icon filename replacements.
+					$replacements = array(
+						' bankiers' => '',
+						' bank'     => '',
+						' '         => '_',
+					);
+
+					// Icon file and size.
+					switch ( $this->pronamicPayDisplayMode ) {
+						case 'icons-24':
+							$icon_suffix = '64';
+							$icon_size   = array( 24, 24 );
+
+							break;
+						case 'icons-64':
+							$icon_suffix = '64';
+							$icon_size   = array( 48, 48 );
+
+							break;
+						case 'icons-125':
+							$icon_suffix = '125';
+							$icon_size   = array( 125, 60 );
+					}
+
+					// Loop issuers.
+					foreach ( $this->choices as $choice ) {
+						$icon = strtr( strtolower( $choice['text'] ), $replacements ) . '-' . $icon_suffix;
+
+						if ( false !== stripos( $icon, 'test' ) || false !== stripos( $icon, 'simulation' ) ) {
+							$icon = 'test';
+						}
+
+						// Radio input.
+						printf(
+							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s"><img src="%5$s" alt="%4$s" /><span>%4$s</span></label></li>',
+							$this->formId,
+							$this->id,
+							$choice['value'],
+							$choice['text'],
+							plugins_url( 'images/issuers/' . $icon . '.png', Plugin::$file )
+						);
+					}
+
+					?>
+				</ul>
+			</div>
+
+			<style>
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+				vertical-align: baseline;
+			}
+
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+				display: block;
+
+				width: <?php echo esc_html( $icon_size[0] ); ?>px;
+				height: <?php echo esc_html( $icon_size[1] ); ?>px;
+			}
+
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+				max-width: 100%;
+				width: 100%;
+
+				margin: 2px 2px 0 4px;
+			}
+
+			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+				display: none;
+			}
+
+			<?php
+
+			switch ( $this->pronamicPayDisplayMode ) {
+				case 'icons-24':
+					?>
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						margin: 0;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						width: auto;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+						display: inline;
+						vertical-align: middle;
+
+						margin-right: 10px;
+
+						background-color: #fff;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+						display: inline-block;
+
+						margin-top: -6px;
+					}
+
+					<?php
+
+					break;
+				case 'icons-64':
+					?>
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+						width: <?php echo esc_html( ( $icon_size[0] * 2 ) + 100 ); ?>px;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+						text-align: center;
+
+						background: #fff;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover {
+						background: #efefef;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						margin: 0;
+
+						padding-bottom: 10px;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+						font-weight: normal;
+						color: #bbb;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+						margin: 10px auto;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label span {
+						font-weight: bold;
+						color: #555;
+					}
+
+					<?php
+
+					break;
+				case 'icons-125':
+					?>
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+						width: <?php echo esc_html( ( $icon_size[0] * 2 ) + 10 ); ?>px;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+						display: none;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+						padding: 1px;
+
+						border: 1px solid #bbb;
+						border-radius: 4px;
+
+						background: #fff;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label img {
+						padding: 0;
+
+						border-width: 2px;
+						border-color: #555;
+					}
+
+					<?php
+			}
+
+			?>
+
+			</style>
+
+			<?php
+
+			$input = ob_get_contents();
+
+			ob_clean();
+		}
 
 		if ( is_admin() ) {
 			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );

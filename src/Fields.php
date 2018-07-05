@@ -112,6 +112,22 @@ class Fields {
 				?>
 			</select>
 		</li>
+
+		<li class="pronamic_pay_display_field_setting field_setting">
+			<label for="pronamic_pay_display_field" class="section_label">
+				<?php esc_html_e( 'Display Mode', 'pronamic_ideal' ); ?>
+
+				<?php gform_tooltip( 'form_field_pronamic_pay_display' ); ?>
+			</label>
+
+			<select id="pronamic_pay_display_field" onchange="SetFieldProperty( 'pronamicPayDisplayMode', jQuery( this ).val() );" class="fieldwidth-3">
+				<option value=""><?php esc_html_e( '— Use field default —', 'pronamic_ideal' ); ?></option>
+				<option value="select"><?php echo esc_html_x( 'Select', 'Field display mode', 'pronamic_ideal' ); ?></option>
+				<option value="icons-24"><?php echo esc_html_x( 'List with icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
+				<option value="icons-64"><?php echo esc_html_x( 'Small icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
+				<option value="icons-125"><?php echo esc_html_x( 'Large icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
+			</select>
+		</li>
 		<?php
 	}
 }

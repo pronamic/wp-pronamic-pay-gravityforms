@@ -17,8 +17,6 @@
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 
-		<exclude name="PEAR.Functions.FunctionCallSignature.Indent" />
-
 		<exclude name="Squiz.Commenting" />
 		<exclude name="Squiz.PHP.CommentedOutCode.Found" />
 

@@ -68,25 +68,3 @@ function get_pronamic_gf_pay_feed_by_entry_id( $entry_id ) {
 
 	return null;
 }
-
-function get_pronamic_pay_gf_form_title( $form_id ) {
-	$title = null;
-
-	global $pronamic_pay_gf_form_titles;
-
-	if ( ! isset( $pronamic_pay_gf_form_titles ) ) {
-		global $wpdb;
-
-		$form_table_name = RGFormsModel::get_form_table_name();
-
-		$query = "SELECT id, title FROM $form_table_name WHERE is_active;";
-
-		$pronamic_pay_gf_form_titles = $wpdb->get_results( $query, OBJECT_K ); // WPCS: unprepared SQL OK
-	}
-
-	if ( isset( $pronamic_pay_gf_form_titles[ $form_id ] ) ) {
-		$title = $pronamic_pay_gf_form_titles[ $form_id ]->title;
-	}
-
-	return $title;
-}

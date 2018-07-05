@@ -66,7 +66,7 @@ class AdminPaymentFormPostType {
 							'page' => 'gf_edit_forms',
 							'id'   => $form_id,
 						), admin_url( 'admin.php' ) ) ),
-						esc_html( get_pronamic_pay_gf_form_title( $form_id ) )
+						esc_html( $form_id )
 					);
 				} else {
 					echo '—';

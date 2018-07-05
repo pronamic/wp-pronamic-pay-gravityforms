@@ -232,11 +232,11 @@ class IssuersField extends GF_Field_Select {
 						// Radio input.
 						printf(
 							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s"><img src="%5$s" alt="%4$s" /><span>%4$s</span></label></li>',
-							$this->formId,
-							$this->id,
-							$choice['value'],
-							$choice['text'],
-							plugins_url( 'images/issuers/' . $icon . '.png', Plugin::$file )
+							esc_attr( $this->formId ),
+							esc_attr( $this->id ),
+							esc_attr( $choice['value'] ),
+							esc_html( $choice['text'] ),
+							esc_url( plugins_url( 'images/issuers/' . $icon . '.png', Plugin::$file ) )
 						);
 					}
 

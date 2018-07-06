@@ -1153,6 +1153,7 @@ class Extension {
 					);
 				}
 
+				$actions[ $slug ]['active']                      = true;
 				$actions[ $slug ]['delayed_payment_integration'] = true;
 
 				if ( isset( $addon->delayed_payment_integration['option_label'] ) ) {

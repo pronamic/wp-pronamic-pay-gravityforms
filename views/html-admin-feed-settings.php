@@ -2,6 +2,7 @@
 
 use Pronamic\WordPress\DateTime\DateTime;
 use Pronamic\WordPress\Pay\Admin\AdminModule;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\Extension;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
 
@@ -365,21 +366,19 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 						<?php
 
-						$delay_post_creation                = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
-						$delay_activecamp_subscription      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_activecampaign_subscription', true );
-						$delay_aweber_subscription          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_aweber_subscription', true );
-						$delay_campaignmonitor_subscription = get_post_meta( $post_id, '_pronamic_pay_gf_delay_campaignmonitor_subscription', true );
-						$delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
-						$delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
-						$delay_moneybird                    = get_post_meta( $post_id, '_pronamic_pay_gf_delay_moneybird', true );
-						$delay_twilio                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_twilio', true );
-						$delay_webhooks                     = get_post_meta( $post_id, '_pronamic_pay_gf_delay_webhooks', true );
-						$delay_dropbox                      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_dropbox', true );
-						$delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
-						$delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
+						$delay_post_creation = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
+
+						$delay_actions = Extension::get_delay_actions();
+
+						$delay_actions = array_filter( $delay_actions, function( $action ) {
+							return $action['active'];
+						} );
+
+						foreach ( $delay_actions as $slug => $data ) {
+							$delay_actions[ $slug ]['delay'] = ( '1' === get_post_meta( $post_id, $delay_actions[ $slug ]['meta_key'], true ) );
+						}
 
 						?>
-
 						<ul>
 							<li>
 								<input type="checkbox" name="_pronamic_pay_gf_delay_post_creation" id="_pronamic_pay_gf_delay_post_creation" value="true" <?php checked( $delay_post_creation ); ?> />
@@ -389,137 +388,18 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								</label>
 							</li>
 
-							<?php if ( class_exists( 'GFUser' ) ) : ?>
+							<?php foreach ( $delay_actions as $slug => $action ) : ?>
 
 								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_user_registration" id="_pronamic_pay_gf_delay_user_registration" value="true" <?php checked( $delay_user_registration ); ?> />
+									<input type="checkbox" name="<?php echo esc_attr( $action['meta_key'] ); ?>" id="<?php echo esc_attr( $action['meta_key'] ); ?>" value="true" <?php checked( $action['delay'] ); ?> />
 
-									<label for="_pronamic_pay_gf_delay_user_registration">
-										<?php esc_html_e( 'Registering the user', 'pronamic_ideal' ); ?>
+									<label for="<?php echo esc_attr( $action['meta_key'] ); ?>">
+										<?php echo esc_html( $action['label'] ); ?>
 									</label>
 								</li>
 
-							<?php endif; ?>
+							<?php endforeach; ?>
 
-							<?php if ( class_exists( 'Sliced_Invoices_GF' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_sliced_invoices" id="_pronamic_pay_gf_delay_sliced_invoices" value="true" <?php checked( $delay_sliced_invoices ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_sliced_invoices">
-										<?php esc_html_e( 'Creating quotes and invoices with Sliced Invoices', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFMoneybird' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_moneybird" id="_pronamic_pay_gf_delay_moneybird" value="true" <?php checked( $delay_moneybird ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_moneybird">
-										<?php esc_html_e( 'Sending estimates and invoices with Moneybird', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFTwilio' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_twilio" id="_pronamic_pay_gf_delay_twilio" value="true" <?php checked( $delay_twilio ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_twilio">
-										<?php esc_html_e( 'Sending data to Twilio', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GF_Webhooks' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_webhooks" id="_pronamic_pay_gf_delay_webhooks" value="true" <?php checked( $delay_webhooks ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_webhook">
-										<?php esc_html_e( 'Sending a trigger to Webhooks', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GF_Dropbox' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_dropbox" id="_pronamic_pay_gf_delay_dropbox" value="true" <?php checked( $delay_dropbox ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_dropbox">
-										<?php esc_html_e( 'Uploading files to Dropbox', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFZapier' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_zapier" id="_pronamic_pay_gf_delay_zapier" value="true" <?php checked( $delay_zapier ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_zapier">
-										<?php esc_html_e( 'Sending data to Zapier', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFActiveCampaign' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_activecampaign_subscription" id="_pronamic_pay_gf_delay_activecampaign_subscription" value="true" <?php checked( $delay_activecamp_subscription ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_activecampaign_subscription">
-										<?php esc_html_e( 'Subscribing the user to ActiveCampaign', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFAWeber' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_aweber_subscription" id="_pronamic_pay_gf_delay_aweber_subscription" value="true" <?php checked( $delay_aweber_subscription ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_aweber_subscription">
-										<?php esc_html_e( 'Subscribing the user to AWeber', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFCampaignMonitor' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_campaignmonitor_subscription" id="_pronamic_pay_gf_delay_campaignmonitor_subscription" value="true" <?php checked( $delay_campaignmonitor_subscription ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_campaignmonitor_subscription">
-										<?php esc_html_e( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
-
-							<?php if ( class_exists( 'GFMailChimp' ) ) : ?>
-
-								<li>
-									<input type="checkbox" name="_pronamic_pay_gf_delay_mailchimp_subscription" id="_pronamic_pay_gf_delay_mailchimp_subscription" value="true" <?php checked( $delay_mailchimp_subscription ); ?> />
-
-									<label for="_pronamic_pay_gf_delay_mailchimp_subscription">
-										<?php esc_html_e( 'Subscribing the user to MailChimp', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-
-							<?php endif; ?>
 						</ul>
 					</td>
 				</tr>

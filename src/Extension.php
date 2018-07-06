@@ -1042,4 +1042,129 @@ class Extension {
 
 		return $currencies;
 	}
+
+	/**
+	 * Get delay actions based on active addons and built-in delay support.
+	 *
+	 * @return array
+	 */
+	public static function get_delay_actions() {
+		$actions = array(
+			'gravityformsactivecampaign'   => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'activecampaign_subscription',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Subscribing the user to ActiveCampaign', 'pronamic_ideal' ),
+			),
+			'gravityformsaweber'           => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'aweber_subscription',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
+				'delay_callback'              => function() {
+					// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
+					remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
+				},
+			),
+			'gravityformscampaignmonitor'  => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'campaignmonitor_subscription',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
+				'delay_callback'              => function() {
+					// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
+					remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
+				},
+			),
+			'gravityformsmailchimp'        => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'mailchimp_subscription',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
+				'delay_callback'              => function() {
+					// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
+					remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
+				},
+			),
+			'slicedinvoices'               => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'sliced_invoices',
+				'delayed_payment_integration' => false,
+				'label'                       => __( 'Creating quotes and invoices with Sliced Invoices', 'pronamic_ideal' ),
+			),
+			'gravityforms-moneybird'       => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'moneybird',
+				'delayed_payment_integration' => false,
+				'label'                       => __( 'Sending estimates and invoices with Moneybird', 'pronamic_ideal' ),
+			),
+			'gravityformstwilio'           => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'twilio',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Sending data to Twilio', 'pronamic_ideal' ),
+			),
+			'gravityformswebhooks'         => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'webhooks',
+				'delayed_payment_integration' => false,
+				'label'                       => __( 'Sending a trigger to Webhooks', 'pronamic_ideal' ),
+			),
+			'gravityformsdropbox'          => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'dropbox',
+				'delayed_payment_integration' => false,
+				'label'                       => __( 'Uploading files to Dropbox', 'pronamic_ideal' ),
+			),
+			'gravityformszapier'           => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'zapier',
+				'delayed_payment_integration' => false,
+				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),
+				'delay_callback'              => function() {
+					// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
+					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
+				},
+			),
+			'gravityformsuserregistration' => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'user_registration',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
+			),
+		);
+
+		$addons = GFAddOn::get_registered_addons();
+
+		foreach ( $addons as $class ) {
+			$addon = call_user_func( array( $class, 'get_instance' ) );
+
+			$slug = $addon->get_slug();
+
+			if ( isset( $actions[ $slug ] ) ) {
+				$actions[ $slug ]['addon']  = $addon;
+				$actions[ $slug ]['active'] = true;
+			}
+
+			if ( isset( $addon->delayed_payment_integration ) ) {
+				if ( ! isset( $actions[ $slug ] ) ) {
+					$actions[ $slug ] = array(
+						'meta_key_suffix' => $slug,
+					);
+				}
+
+				$actions[ $slug ]['delayed_payment_integration'] = true;
+
+				if ( isset( $addon->delayed_payment_integration['option_label'] ) ) {
+					$actions[ $slug ]['label'] = $addon->delayed_payment_integration['option_label'];									
+				}
+			}
+		}
+
+		foreach ( $actions as $slug => $data ) {
+			$actions[ $slug ]['meta_key'] = '_pronamic_pay_gf_delay_' . $data['meta_key_suffix'];
+		}
+
+		return $actions;
+	}
 }

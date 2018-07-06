@@ -254,48 +254,14 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 		);
 
-		if ( class_exists( 'GFActiveCampaign' ) ) {
-			$definition['_pronamic_pay_gf_delay_activecampaign_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
+		$delay_actions = Extension::get_delay_actions();
 
-		if ( class_exists( 'GFAWeber' ) ) {
-			$definition['_pronamic_pay_gf_delay_aweber_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
+		$delay_actions = array_filter( $delay_actions, function( $action ) {
+			return $action['active'];
+		} );
 
-		if ( class_exists( 'GFCampaignMonitor' ) ) {
-			$definition['_pronamic_pay_gf_delay_campaignmonitor_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFMailChimp' ) ) {
-			$definition['_pronamic_pay_gf_delay_mailchimp_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFUser' ) ) {
-			$definition['_pronamic_pay_gf_delay_user_registration'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFZapier' ) ) {
-			$definition['_pronamic_pay_gf_delay_zapier'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GF_Dropbox' ) ) {
-			$definition['_pronamic_pay_gf_delay_dropbox'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFMoneybird' ) ) {
-			$definition['_pronamic_pay_gf_delay_moneybird'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFTwilio' ) ) {
-			$definition['_pronamic_pay_gf_delay_twilio'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GF_Webhooks' ) ) {
-			$definition['_pronamic_pay_gf_delay_webhooks'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'Sliced_Invoices_GF' ) ) {
-			$definition['_pronamic_pay_gf_delay_sliced_invoices'] = FILTER_VALIDATE_BOOLEAN;
+		foreach ( $delay_actions as $action ) {
+			$definition[ $action['meta_key'] ] = FILTER_VALIDATE_BOOLEAN;
 		}
 
 		foreach ( $definition as $meta_key => $function ) {

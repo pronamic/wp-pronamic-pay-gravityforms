@@ -1007,11 +1007,6 @@ class Extension {
 				'meta_key_suffix'             => 'user_registration',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
-				'process_callback'            => function( $entry, $form ) {
-					if ( Core_Util::class_method_exists( 'GFUser', 'gf_create_user' ) ) {
-						call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
-					}
-				},
 			),
 		);
 

@@ -683,164 +683,17 @@ class Extension {
 				RGFormsModel::create_post( $form, $entry );
 			}
 
-			// Delay ActiveCampaign.
-			if ( $feed->delay_activecampaign_subscription ) {
-				// @since unreleased
-				// @see https://github.com/wp-premium/gravityformsactivecampaign/blob/1.4/activecampaign.php#L44-L46
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
-				if ( function_exists( 'gf_activecampaign' ) ) {
-					$addon = gf_activecampaign();
+			foreach ( $feed->delay_actions as $slug => $data ) {
+				if ( isset( $data['addon'] ) ) {
+					$addon = $data['addon'];
 
 					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
 						$addon->maybe_process_feed( $entry, $form );
 					}
 				}
-			}
 
-			// Delay Aweber.
-			// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L1167-L1197.
-			if ( $feed->delay_aweber_subscription && Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
-				call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
-
-				// @since 1.3.0 - Aweber support.
-				// @see https://github.com/wp-premium/gravityformsaweber/blob/2.2.1/aweber.php#L48-L50
-				// @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43
-				if ( function_exists( 'gf_aweber' ) ) {
-					$addon = gf_aweber();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay Campaign Monitor.
-			if ( $feed->delay_campaignmonitor_subscription ) {
-				// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
-				if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
-					call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
-				}
-
-				// @since 1.3.0 - Campaign Monitor support.
-				// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/3.3.2/campaignmonitor.php#L48-L50.
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				if ( function_exists( 'gf_campaignmonitor' ) ) {
-					$addon = gf_campaignmonitor();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay MailChimp.
-			if ( $feed->delay_mailchimp_subscription ) {
-				// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
-				if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
-					call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
-				}
-
-				// @since 1.3.0 - MailChimp support
-				// @link https://github.com/wp-premium/gravityformsmailchimp/blob/3.6.3/mailchimp.php#L48-L50.
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				if ( function_exists( 'gf_mailchimp' ) ) {
-					$addon = gf_mailchimp();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay Zapier.
-			// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.
-			if ( $feed->delay_zapier && Core_Util::class_method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
-				call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
-			}
-
-			// Delay Dropbox.
-			if ( $feed->delay_dropbox ) {
-				// @since unreleased
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				if ( function_exists( 'gf_dropbox' ) ) {
-					$addon = gf_dropbox();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay Moneybird.
-			if ( $feed->delay_moneybird ) {
-				// @since unreleased
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				if ( function_exists( 'gf_moneybird' ) ) {
-					$addon = gf_moneybird();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay Twilio.
-			if ( $feed->delay_twilio ) {
-				// @since unreleased
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				if ( function_exists( 'gf_twilio' ) ) {
-					$addon = gf_twilio();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay Gravity Forms Webhooks Add-On.
-			if ( $feed->delay_webhooks ) {
-				// @since unreleased
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				if ( function_exists( 'gf_webhooks' ) ) {
-					$addon = gf_webhooks();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay Sliced Invoices.
-			if ( $feed->delay_sliced_invoices && Core_Util::class_method_exists( 'GFAddOn', 'get_registered_addons' ) ) {
-				// @since unreleased
-				// @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-feed-addon.php#L43.
-				// @link https://plugins.trac.wordpress.org/browser/sliced-invoices-gravity-forms/tags/1.10.0/class-sliced-invoices-gf.php#L10.
-				$addons = GFAddOn::get_registered_addons();
-
-				foreach ( $addons as $class ) {
-					if ( 'Sliced_Invoices_GF' !== $class ) {
-						continue;
-					}
-
-					$addon = call_user_func( array( $class, 'get_instance' ) );
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				}
-			}
-
-			// Delay user registration
-			// @link https://github.com/wp-premium/gravityformsuserregistration/blob/2.0/userregistration.php#L2133.
-			if ( $feed->delay_user_registration ) {
-				if ( function_exists( 'gf_user_registration' ) ) {
-					$addon = gf_user_registration();
-
-					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
-						$addon->maybe_process_feed( $entry, $form );
-					}
-				} elseif ( Core_Util::class_method_exists( 'GFUser', 'gf_create_user' ) ) {
-					call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
+				if ( isset( $data['process_callback'] ) ) {
+					call_user_func( $data['process_callback'], $entry, $form );
 				}
 			}
 
@@ -1065,6 +918,11 @@ class Extension {
 					// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 					remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
 				},
+				'process_callback'            => function( $entry, $form ) {
+					if ( Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
+						call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
+					}
+				}
 			),
 			'gravityformscampaignmonitor'  => array(
 				'active'                      => false,
@@ -1075,6 +933,12 @@ class Extension {
 					// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 					remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
 				},
+				'process_callback'            => function( $entry, $form ) {
+					// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
+					if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
+						call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
+					}
+				}
 			),
 			'gravityformsmailchimp'        => array(
 				'active'                      => false,
@@ -1085,6 +949,12 @@ class Extension {
 					// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 					remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 				},
+				'process_callback'            => function( $entry, $form ) {
+					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
+					if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
+						call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+					}
+				}
 			),
 			'slicedinvoices'               => array(
 				'active'                      => false,
@@ -1125,12 +995,23 @@ class Extension {
 					// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
 					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
 				},
+				'process_callback'            => function( $entry, $form ) {
+					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.
+					if ( Core_Util::class_method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
+						call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
+					}
+				},
 			),
 			'gravityformsuserregistration' => array(
 				'active'                      => false,
 				'meta_key_suffix'             => 'user_registration',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
+				'process_callback'            => function( $entry, $form ) {
+					if ( Core_Util::class_method_exists( 'GFUser', 'gf_create_user' ) ) {
+						call_user_func( array( 'GFUser', 'gf_create_user' ), $entry, $form, false );
+					}
+				},
 			),
 		);
 

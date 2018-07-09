@@ -90,7 +90,7 @@ class PayFeed {
 		$this->id   = $post_id;
 		$this->post = get_post( $post_id );
 
-		// Load
+		// Load.
 		$this->form_id                            = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
 		$this->config_id                          = get_post_meta( $post_id, '_pronamic_pay_gf_config_id', true );
 		$this->entry_id_prefix                    = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
@@ -100,21 +100,30 @@ class PayFeed {
 		$this->condition_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
 		$this->condition_operator                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
 		$this->condition_value                    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+
+		// Delay actions.
 		$this->delay_admin_notification           = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
 		$this->delay_user_notification            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
 		$this->delay_post_creation                = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
-		$this->delay_activecampaign_subscription  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_activecampaign_subscription', true );
-		$this->delay_aweber_subscription          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_aweber_subscription', true );
-		$this->delay_campaignmonitor_subscription = get_post_meta( $post_id, '_pronamic_pay_gf_delay_campaignmonitor_subscription', true );
-		$this->delay_mailchimp_subscription       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_mailchimp_subscription', true );
-		$this->delay_sliced_invoices              = get_post_meta( $post_id, '_pronamic_pay_gf_delay_sliced_invoices', true );
-		$this->delay_moneybird                    = get_post_meta( $post_id, '_pronamic_pay_gf_delay_moneybird', true );
-		$this->delay_twilio                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_twilio', true );
-		$this->delay_webhooks                     = get_post_meta( $post_id, '_pronamic_pay_gf_delay_webhooks', true );
-		$this->delay_dropbox                      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_dropbox', true );
-		$this->delay_zapier                       = get_post_meta( $post_id, '_pronamic_pay_gf_delay_zapier', true );
-		$this->delay_user_registration            = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_registration', true );
+
+		$this->delay_actions = array();
+
+		$delay_actions = Extension::get_delay_actions();
+
+		$delay_actions = array_filter( $delay_actions, function( $action ) {
+			return $action['active'];
+		} );
+
+		foreach ( $delay_actions as $slug => $data ) {
+			if ( '1' === get_post_meta( $post_id, $data['meta_key'], true ) ) {
+				$this->delay_actions[ $slug ] = $data;
+			}
+		}
+
+		// Other.
 		$this->user_role_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
+
+		// Subscription.
 		$this->subscription_amount_type           = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
 		$this->subscription_amount_field          = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_field', true );
 		$this->subscription_interval_type         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_type', true );

@@ -922,7 +922,7 @@ class Extension {
 					if ( Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
 						call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
 					}
-				}
+				},
 			),
 			'gravityformscampaignmonitor'  => array(
 				'active'                      => false,
@@ -938,7 +938,7 @@ class Extension {
 					if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
 						call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
 					}
-				}
+				},
 			),
 			'gravityformsmailchimp'        => array(
 				'active'                      => false,
@@ -954,7 +954,7 @@ class Extension {
 					if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
 						call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
 					}
-				}
+				},
 			),
 			'slicedinvoices'               => array(
 				'active'                      => false,
@@ -1033,7 +1033,7 @@ class Extension {
 				$actions[ $slug ]['delayed_payment_integration'] = true;
 
 				if ( isset( $addon->delayed_payment_integration['option_label'] ) ) {
-					$actions[ $slug ]['label'] = $addon->delayed_payment_integration['option_label'];									
+					$actions[ $slug ]['label'] = $addon->delayed_payment_integration['option_label'];
 				}
 			}
 		}

@@ -246,6 +246,11 @@ class IssuersField extends GF_Field_Select {
 
 			<style>
 			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+				display: inline-block;
+				width: 50%;
+
+				margin: 0;
+
 				vertical-align: baseline;
 			}
 
@@ -257,6 +262,7 @@ class IssuersField extends GF_Field_Select {
 			}
 
 			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+				display: inline-block;
 				max-width: 100%;
 				width: 100%;
 
@@ -278,6 +284,10 @@ class IssuersField extends GF_Field_Select {
 
 					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
 						width: auto;
+					}
+
+					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+						display: inline-block;
 					}
 
 					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {

@@ -393,7 +393,7 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		if ( is_admin() ) {
-			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
+			$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
 
 			$new_feed_url = Admin::get_new_feed_url( $form['id'] );
 

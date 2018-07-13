@@ -16,6 +16,10 @@ use Pronamic\WordPress\Pay\Plugin;
  * @author  Remco Tolsma
  * @version 2.0.0
  * @since   1.4.7
+ *
+ * @property int   $pronamicPayConfigId Added by admin.js.
+ * @property int   $formId              https://github.com/wp-premium/gravityforms/blob/2.3.2/includes/fields/class-gf-field.php#L1044
+ * @property array $choices             https://github.com/wp-premium/gravityforms/search?q=%22%24this-%3Echoices%22
  */
 class IssuersField extends GF_Field_Select {
 	/**

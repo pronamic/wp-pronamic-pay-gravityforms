@@ -204,43 +204,67 @@ class IssuersField extends GF_Field_Select {
 					// Icon filename replacements.
 					$replacements = array(
 						' bankiers' => '',
-						' bank'     => '',
-						' '         => '_',
+						' '         => '-',
 					);
 
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$icon_suffix = '64';
-							$icon_size   = array( 24, 24 );
+							$dimensions = array( 24, 24 );
 
 							break;
 						case 'icons-64':
-							$icon_suffix = '64';
-							$icon_size   = array( 48, 48 );
+							$dimensions = array( 64, 64 );
 
 							break;
 						case 'icons-125':
-							$icon_suffix = '125';
-							$icon_size   = array( 125, 60 );
+						default:
+							$dimensions = array( 125, 60 );
 					}
+
+					$images_path = plugin_dir_path( Plugin::$file ) . 'images/';
 
 					// Loop issuers.
 					foreach ( $this->choices as $choice ) {
-						$icon = strtr( strtolower( $choice['text'] ), $replacements ) . '-' . $icon_suffix;
+						// Icon file name.
+						$issuer = strtr( strtolower( $choice['text'] ), $replacements );
 
-						if ( false !== stripos( $icon, 'test' ) || false !== stripos( $icon, 'simulation' ) ) {
-							$icon = 'test';
+						if ( false !== stripos( $issuer, 'test' ) || false !== stripos( $issuer, 'simulation' ) ) {
+							$issuer = 'test';
 						}
 
+						if ( ! is_dir( $images_path . $issuer ) && is_dir( $images_path . $issuer . '-bank' ) ) {
+							$issuer .= '-bank';
+						}
+
+						$icon_path = sprintf(
+							'%s/icon-%s.png',
+							$issuer,
+							implode( 'x', $dimensions )
+						);
+
 						// Radio input.
+						$label_content = sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
+
+						if ( file_exists( plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
+							$icon_url = plugins_url( 'images/' . $icon_path, Plugin::$file );
+
+							$label_content = sprintf(
+								'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
+								esc_html( $choice['text'] ),
+								esc_url( $icon_url ),
+								esc_url( str_replace( '.png', '@2x.png', $icon_url ) ),
+								esc_url( str_replace( '.png', '@3x.png', $icon_url ) ),
+								esc_url( str_replace( '.png', '@4x.png', $icon_url ) )
+							);
+						}
+
 						printf(
-							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s"><img src="%5$s" alt="%4$s" /><span>%4$s</span></label></li>',
+							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
 							esc_attr( $this->formId ),
 							esc_attr( $this->id ),
 							esc_attr( $choice['value'] ),
-							esc_html( $choice['text'] ),
-							esc_url( plugins_url( 'images/issuers/' . $icon . '.png', Plugin::$file ) )
+							$label_content
 						);
 					}
 
@@ -249,138 +273,183 @@ class IssuersField extends GF_Field_Select {
 			</div>
 
 			<style>
-			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
-				display: inline-block;
-				width: 50%;
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+					display: inline-block;
+					width: 50%;
 
-				margin: 0;
+					margin: 0;
 
-				vertical-align: baseline;
-			}
+					vertical-align: baseline;
+				}
 
-			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
-				display: block;
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+					display: block;
 
-				width: <?php echo esc_html( $icon_size[0] ); ?>px;
-				height: <?php echo esc_html( $icon_size[1] ); ?>px;
-			}
+					width: <?php echo esc_html( $dimensions[0] ); ?>px;
+					height: <?php echo esc_html( $dimensions[1] ); ?>px;
+				}
 
-			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
-				display: inline-block;
-				max-width: 100%;
-				width: 100%;
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					display: inline-block;
+					max-width: 100%;
+					width: 100%;
 
-				margin: 2px 2px 0 4px;
-			}
+					margin: 0;
+				}
 
-			.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
-				display: none;
-			}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+					display: none;
+				}
 
-			<?php
+				<?php
 
-			switch ( $this->pronamicPayDisplayMode ) {
-				case 'icons-24':
-					?>
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
-						margin: 0;
-					}
+				switch ( $this->pronamicPayDisplayMode ) {
+					case 'icons-24':
+						?>
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					margin: 0;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
-						width: auto;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					width: auto;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
-						display: inline-block;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+					display: inline-block;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
-						display: inline;
-						vertical-align: middle;
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+					display: inline;
+					vertical-align: middle;
 
-						margin-right: 10px;
+					margin-right: 10px;
+				}
 
-						background-color: #fff;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+					display: inline-block;
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
-						display: inline-block;
+					margin-top: 0;
+				}
 
-						margin-top: -6px;
-					}
+				<?php
 
-					<?php
+						break;
+					case 'icons-64':
+				?>
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+					width: <?php echo esc_html( ( 64 * 2 ) + 126 ); ?>px;
+				}
 
-					break;
-				case 'icons-64':
-					?>
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
-						width: <?php echo esc_html( ( $icon_size[0] * 2 ) + 100 ); ?>px;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+					text-align: center;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
-						text-align: center;
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					margin: 0;
 
-						background: #fff;
-					}
+					padding-bottom: 10px;
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover {
-						background: #efefef;
-					}
+					color: #bbb;
+					font-weight: normal;
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
-						margin: 0;
+					border-radius: 4px;
+				}
 
-						padding-bottom: 10px;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover label {
+					background: #efefef;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
-						font-weight: normal;
-						color: #bbb;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+					margin: 10px auto;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
-						margin: 10px auto;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li span {
+					display: table-cell;
+					width: 127px;
+					height: 105px;
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label span {
-						font-weight: bold;
-						color: #555;
-					}
+					padding: 2px;
 
-					<?php
+					text-align: center;
+					vertical-align: bottom;
 
-					break;
-				case 'icons-125':
-					?>
+					white-space: normal;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
-						width: <?php echo esc_html( ( $icon_size[0] * 2 ) + 10 ); ?>px;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img + span {
+					display: block;
+					height: auto;
+				}
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
-						display: none;
-					}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label {
+					font-weight: bold;
+					color: #555;
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
-						padding: 1px;
+					background: #efefef;
+				}
 
-						border: 1px solid #bbb;
-						border-radius: 4px;
+				<?php
 
-						background: #fff;
-					}
+						break;
+					case 'icons-125':
+				?>
 
-					.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label img {
-						padding: 0;
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+					width: <?php echo esc_html( ( 125 * 2 ) + 25 ); ?>px;
 
-						border-width: 2px;
-						border-color: #555;
-					}
+					font-size: 16px;
+				}
 
-					<?php
-			}
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+					float: left;
+					width: auto;
 
+					margin: 0 4px 4px 0;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					display: block;
+
+					height: 68px;
+
+					padding: 3px;
+
+					border: 1px solid #bbb;
+					border-radius: 4px;
+
+					background: #fff;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover label {
+					background: #efefef;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label {
+					padding: 2px;
+
+					border-width: 2px;
+					border-color: #555;
+
+					background: #efefef;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+					display: table-cell;
+					width: 125px;
+					height: 60px;
+
+					text-align: center;
+					vertical-align: middle;
+
+					white-space: normal;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label img + span {
+					display: none;
+				}
+
+				<?php
+				}
 			?>
 
 			</style>

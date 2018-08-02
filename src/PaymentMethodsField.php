@@ -317,7 +317,7 @@ class PaymentMethodsField extends GF_Field_Select {
 							esc_attr( $this->formId ),
 							esc_attr( $this->id ),
 							esc_attr( $choice['value'] ),
-							$label_content
+							wp_kses_post( $label_content )
 						);
 					}
 

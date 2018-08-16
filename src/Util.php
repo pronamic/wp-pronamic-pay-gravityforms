@@ -1,4 +1,12 @@
 <?php
+/**
+ * Util
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -18,8 +26,8 @@ class Util {
 	/**
 	 * Check if the iDEAL condition is true
 	 *
-	 * @param mixed $form
-	 * @param mixed $feed
+	 * @param mixed $form Gravity Form form.
+	 * @param mixed $feed Pay feed.
 	 *
 	 * @return bool
 	 */
@@ -38,14 +46,14 @@ class Util {
 
 		$field = RGFormsModel::get_field( $form, $feed->condition_field_id );
 
-		// Unknown field
+		// Unknown field.
 		if ( empty( $field ) ) {
 			return true;
 		}
 
 		$is_hidden = RGFormsModel::is_field_hidden( $form, $field, array() );
 
-		// Ignore condition if the field is hidden
+		// Ignore condition if the field is hidden.
 		if ( $is_hidden ) {
 			return false;
 		}

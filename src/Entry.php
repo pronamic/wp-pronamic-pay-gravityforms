@@ -1,4 +1,12 @@
 <?php
+/**
+ * Entry
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -16,7 +24,7 @@ class Entry {
 	/**
 	 * Check if the specified entry payment is approved
 	 *
-	 * @param array $entry
+	 * @param array $entry Gravity Forms entry.
 	 *
 	 * @return boolean true if payment is approved, false otherwise
 	 */
@@ -27,9 +35,9 @@ class Entry {
 			$payment_status = $entry[ LeadProperties::PAYMENT_STATUS ];
 
 			$approved = in_array( $payment_status, array(
-				// @since 1.0.0
+				// @since 1.0.0 - Approved
 				PaymentStatuses::APPROVED,
-				// @since 1.2.3
+				// @since 1.2.3 - Paid
 				PaymentStatuses::PAID,
 			), true );
 		}

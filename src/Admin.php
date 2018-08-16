@@ -1,4 +1,12 @@
 <?php
+/**
+ * Admin
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -17,36 +25,36 @@ use stdClass;
  */
 class Admin {
 	/**
-	 * Bootstrap
+	 * Bootstrap.
 	 */
 	public static function bootstrap() {
-		// Actions
+		// Actions.
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
 		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_entry' ) );
 
-		// Filters
+		// Filters.
 		add_filter( 'gform_addon_navigation', array( __CLASS__, 'addon_navigation' ) );
 
 		add_filter( 'gform_entry_info', array( __CLASS__, 'entry_info' ), 10, 2 );
 
 		add_filter( 'gform_custom_merge_tags', array( __CLASS__, 'custom_merge_tags' ), 10 );
 
-		// Actions - AJAX
+		// Actions - AJAX.
 		add_action( 'wp_ajax_gf_get_form_data', array( __CLASS__, 'ajax_get_form_data' ) );
 		add_action( 'wp_ajax_gf_dismiss_pronamic_pay_feeds_menu', array( __CLASS__, 'ajax_dismiss_feeds_menu' ) );
 	}
 
 	/**
-	 * Admin initialize
+	 * Admin initialize.
 	 */
 	public static function admin_init() {
 		new AdminPaymentFormPostType();
 	}
 
 	/**
-	 * Gravity Forms addon navigation
+	 * Gravity Forms addon navigation.
 	 *
-	 * @param array $menus Addon menu items
+	 * @param array $menus Addon menu items.
 	 *
 	 * @return array
 	 */
@@ -77,7 +85,7 @@ class Admin {
 	}
 
 	/**
-	 * Temporary feeds page
+	 * Temporary feeds page.
 	 *
 	 * @since unreleased
 	 */
@@ -95,9 +103,9 @@ class Admin {
 	}
 
 	/**
-	 * Add menu item to form settings
+	 * Add menu item to form settings.
 	 *
-	 * @param $menu_items array with form settings menu items
+	 * @param array $menu_items Array with form settings menu items.
 	 *
 	 * @return array
 	 */
@@ -114,8 +122,8 @@ class Admin {
 	/**
 	 * Render entry info of the specified form and lead
 	 *
-	 * @param string $form_id
-	 * @param array  $lead
+	 * @param string $form_id Gravity Forms form ID.
+	 * @param array  $lead    Gravity Forms lead/entry.
 	 */
 	public static function entry_info( $form_id, $lead ) {
 		$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
@@ -132,7 +140,10 @@ class Admin {
 	}
 
 	/**
-	 * Custom merge tags
+	 * Custom merge tags.
+	 *
+	 * @param array $merge_tags Array with merge tags.
+	 * @return array
 	 */
 	public static function custom_merge_tags( $merge_tags ) {
 		$merge_tags[] = array(
@@ -158,6 +169,11 @@ class Admin {
 		$merge_tags[] = array(
 			'label' => __( 'Pronamic Payment ID', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_id}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Subscription Amount', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_subscription_amount}',
 		);
 
 		$merge_tags[] = array(
@@ -210,16 +226,9 @@ class Admin {
 	public static function ajax_get_form_data() {
 		$form_id = filter_input( INPUT_GET, 'formId', FILTER_SANITIZE_STRING );
 
-		$result          = new stdClass();
-		$result->success = true;
-		$result->data    = RGFormsModel::get_form_meta( $form_id );
+		$data = RGFormsModel::get_form_meta( $form_id );
 
-		// Output
-		header( 'Content-Type: application/json' );
-
-		echo wp_json_encode( $result );
-
-		die();
+		wp_send_json_success( $data );
 	}
 
 	/**
@@ -227,8 +236,7 @@ class Admin {
 	 *
 	 * @since 1.6.3
 	 *
-	 * @param string $form_id
-	 *
+	 * @param string $form_id Gravity Forms form ID.
 	 * @return string
 	 */
 	public static function get_new_feed_url( $form_id ) {

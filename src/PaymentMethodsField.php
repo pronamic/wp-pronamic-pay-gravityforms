@@ -1,4 +1,12 @@
 <?php
+/**
+ * Payment methods field
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -16,6 +24,13 @@ use Pronamic\WordPress\Pay\Plugin;
  * @author  Remco Tolsma
  * @version 2.0.0
  * @since   1.4.7
+ *
+ * @property int        $pronamicPayConfigId Added by admin.js.
+ * @property string     $inputType           https://github.com/wp-premium/gravityforms/blob/2.3.2/includes/fields/class-gf-field.php#L769-L777
+ * @property array|null $inputs              https://github.com/wp-premium/gravityforms/blob/2.3.2/includes/fields/class-gf-field.php#L416-L423
+ * @property int        $formId              https://github.com/wp-premium/gravityforms/blob/2.3.2/includes/fields/class-gf-field.php#L1044
+ * @property bool       $enableChoiceValue   https://github.com/wp-premium/gravityforms/search?q=enableChoiceValue
+ * @property array      $choices             https://github.com/wp-premium/gravityforms/search?q=%22%24this-%3Echoices%22
  */
 class PaymentMethodsField extends GF_Field_Select {
 	/**
@@ -35,7 +50,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Constructs and initializes payment methods field.
 	 *
-	 * @param array $properties
+	 * @param array $properties Field properties.
 	 */
 	public function __construct( $properties = array() ) {
 		parent::__construct( $properties );
@@ -49,12 +64,12 @@ class PaymentMethodsField extends GF_Field_Select {
 		 */
 		$this->inputs = null;
 
-		// Actions
+		// Actions.
 		if ( ! has_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) ) ) {
 			add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
 		}
 
-		// Admin
+		// Admin.
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
 
@@ -63,11 +78,25 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Choices
+		// Choices.
 		$this->enableChoiceValue = true;
 
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );
+		}
+
+		// Set default display mode.
+		if ( ! isset( $this->pronamicPayDisplayMode ) ) {
+			$this->pronamicPayDisplayMode = 'select';
+		}
+
+		// Add display mode CSS classes.
+		if ( false === strpos( $this->cssClass, 'pronamic_pay_display_icons' ) && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+			$this->cssClass .= ' pronamic_pay_display_icons';
+		}
+
+		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
+			$this->cssClass .= ' gf_list_2col';
 		}
 	}
 
@@ -93,6 +122,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			'css_class_setting',
 			'rules_setting',
 			'pronamic_pay_config_field_setting',
+			'pronamic_pay_display_field_setting',
 		);
 	}
 
@@ -104,7 +134,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	private function get_gateways() {
 		$gateways = array();
 
-		$feeds = get_pronamic_gf_pay_feeds_by_form_id( $this->formId );
+		$feeds = FeedsDB::get_feeds_by_form_id( $this->formId );
 
 		// Get all config IDs.
 		$config_ids = wp_list_pluck( $feeds, 'config_id' );
@@ -144,10 +174,10 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Gateway available payment methods.
 		$payment_methods = $this->get_gateway_payment_methods();
 
-		// Choices
+		// Choices.
 		$choices = array();
 
-		// Gravity Forms
+		// Gravity Forms.
 		if ( is_array( $this->choices ) ) {
 			foreach ( $this->choices as $choice ) {
 				$value = $choice['value'];
@@ -158,7 +188,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Built-in
+		// Built-in.
 		foreach ( $payment_methods as $value => $label ) {
 			// Only add built-in payment if it's not already set.
 			if ( ! isset( $choices[ $value ] ) ) {
@@ -171,20 +201,20 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Admin
-		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ) ) ) {
+		// Admin.
+		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ), true ) ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}
 
-		// Set choices
+		// Set choices.
 		$this->choices = array_values( $choices );
 	}
 
 	/**
 	 * Filter Gravity Forms selected choice.
 	 *
-	 * @param array $choice
+	 * @param array $choice Choice.
 	 *
 	 * @return boolean true if 'isSelected' is set and true, false otherwise.
 	 */
@@ -195,7 +225,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Unselect the specified choice.
 	 *
-	 * @param array $choice
+	 * @param array $choice Choice.
 	 *
 	 * @return array choice
 	 */
@@ -211,9 +241,9 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
 	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
 	 *
-	 * @param array  $form
-	 * @param string $value
-	 * @param array  $entry
+	 * @param array  $form  Form.
+	 * @param string $value Field value.
+	 * @param array  $entry Entry.
 	 *
 	 * @return string
 	 */
@@ -226,8 +256,274 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Input.
 		$input = parent::get_field_input( $form, $value, $entry );
 
+		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
+
+		if ( ! is_admin() && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+
+			ob_start();
+
+			?>
+
+			<div class="ginput_container ginput_container_radio">
+				<ul class="gfield_radio input_<?php echo esc_attr( $this->formId ); ?>_<?php echo esc_attr( $this->id ); ?>">
+					<?php
+
+					// Icon filename replacements.
+					$replacements = array(
+						'_' => '-',
+						' ' => '-',
+					);
+
+					// Icon file and size.
+					switch ( $this->pronamicPayDisplayMode ) {
+						case 'icons-24':
+							$dimensions = array( 24, 24 );
+
+							break;
+						case 'icons-64':
+							$dimensions = array( 64, 64 );
+
+							break;
+						case 'icons-125':
+						default:
+							$dimensions = array( 125, 60 );
+					}
+
+					// Loop payment methods.
+					foreach ( $this->choices as $choice ) {
+						// Icon file name.
+						$payment_method = strtr( strtolower( $choice['value'] ), $replacements );
+
+						if ( false !== stripos( $payment_method, 'test' ) || false !== stripos( $payment_method, 'simulation' ) ) {
+							$payment_method = 'test';
+						}
+
+						$icon_path = sprintf(
+							'%s/icon-%s.png',
+							$payment_method,
+							implode( 'x', $dimensions )
+						);
+
+						// Radio input.
+						$label_content = sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
+
+						if ( file_exists( plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
+							$icon_url = plugins_url( 'images/' . $icon_path, Plugin::$file );
+
+							$label_content = sprintf(
+								'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
+								esc_html( $choice['text'] ),
+								esc_url( $icon_url ),
+								esc_url( str_replace( '.png', '@2x.png', $icon_url ) ),
+								esc_url( str_replace( '.png', '@3x.png', $icon_url ) ),
+								esc_url( str_replace( '.png', '@4x.png', $icon_url ) )
+							);
+						}
+
+						printf(
+							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
+							esc_attr( $this->formId ),
+							esc_attr( $this->id ),
+							esc_attr( $choice['value'] ),
+							wp_kses_post( $label_content )
+						);
+					}
+
+					?>
+				</ul>
+			</div>
+
+			<style>
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+					display: inline-block;
+					width: 50%;
+
+					margin: 0;
+
+					vertical-align: baseline;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+					display: block;
+
+					width: <?php echo esc_html( $dimensions[0] ); ?>px;
+					height: <?php echo esc_html( $dimensions[1] ); ?>px;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					display: inline-block;
+					max-width: 100%;
+					width: 100%;
+
+					margin: 0;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+					display: none;
+				}
+
+				<?php
+
+				switch ( $this->pronamicPayDisplayMode ) {
+					case 'icons-24':
+						?>
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					margin: 0;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					width: auto;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+					display: inline-block;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+					display: inline;
+					vertical-align: middle;
+
+					margin-right: 10px;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"] {
+					display: inline-block;
+
+					margin-top: 0;
+				}
+
+				<?php
+
+						break;
+					case 'icons-64':
+				?>
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+					width: <?php echo esc_html( ( 64 * 2 ) + 126 ); ?>px;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+					text-align: center;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					margin: 0;
+
+					padding-bottom: 10px;
+
+					color: #bbb;
+					font-weight: normal;
+
+					border-radius: 4px;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover label {
+					background: #efefef;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
+					margin: 10px auto;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li span {
+					display: table-cell;
+					width: 127px;
+					height: 105px;
+
+					padding: 2px;
+
+					text-align: center;
+					vertical-align: bottom;
+
+					white-space: normal;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img + span {
+					display: block;
+					height: auto;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label {
+					font-weight: bold;
+					color: #555;
+
+					background: #efefef;
+				}
+
+				<?php
+
+						break;
+					case 'icons-125':
+				?>
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
+					width: <?php echo esc_html( ( 125 * 2 ) + 25 ); ?>px;
+
+					font-size: 16px;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {
+					float: left;
+					width: auto;
+
+					margin: 0 4px 4px 0;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
+					display: block;
+
+					height: 68px;
+
+					padding: 3px;
+
+					border: 1px solid #bbb;
+					border-radius: 4px;
+
+					background: #fff;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li:hover label {
+					background: #efefef;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li input[type="radio"]:checked ~ label {
+					padding: 2px;
+
+					border-width: 2px;
+					border-color: #555;
+
+					background: #efefef;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label span {
+					display: table-cell;
+					width: 125px;
+					height: 60px;
+
+					text-align: center;
+					vertical-align: middle;
+
+					white-space: normal;
+				}
+
+				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label img + span {
+					display: none;
+				}
+
+				<?php
+				}
+			?>
+
+			</style>
+
+			<?php
+
+			$input = ob_get_contents();
+
+			ob_clean();
+		}
+
 		if ( is_admin() ) {
-			$feeds = get_pronamic_gf_pay_feeds_by_form_id( $form['id'] );
+			$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
 
 			if ( empty( $feeds ) ) {
 				$link = sprintf(

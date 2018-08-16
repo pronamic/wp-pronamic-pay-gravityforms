@@ -1,10 +1,17 @@
 <?php
+/**
+ * Payment add-on
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFAddOnFeedsTable;
 use GFPaymentAddOn;
-use Pronamic\WordPress\Pay\Plugin;
 use WP_Query;
 
 /**
@@ -18,24 +25,52 @@ use WP_Query;
  * @since   1.1.0
  */
 class PaymentAddOn extends GFPaymentAddOn {
+	/**
+	 * Slug.
+	 *
+	 * @var string
+	 */
 	const SLUG = 'pronamic_pay';
 
-	// Members plugin integration
-	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L21-L22
-	protected $_capabilities = array( 'gravityforms_pronamic_pay', 'gravityforms_pronamic_pay_uninstall' );
+	/**
+	 * Capabilities.
+	 *
+	 * @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L21-L22
+	 *
+	 * @var array
+	 */
+	protected $_capabilities = array(
+		'gravityforms_pronamic_pay',
+		'gravityforms_pronamic_pay_uninstall',
+	);
 
-	// Permissions
-	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L24-L27
+	/**
+	 * Capabilities settings page.
+	 *
+	 * @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L24-L27
+	 *
+	 * @var string
+	 */
 	protected $_capabilities_settings_page = 'gravityforms_pronamic_pay';
 
+	/**
+	 * Capabilities form settings.
+	 *
+	 * @var string
+	 */
 	protected $_capabilities_form_settings = 'gravityforms_pronamic_pay';
 
+	/**
+	 * Capabilities uninstall.
+	 *
+	 * @var string
+	 */
 	protected $_capabilities_uninstall = 'gravityforms_pronamic_pay_uninstall';
 
 	/**
 	 * Construct and initialize an Gravity Forms payment add-on
 	 *
-	 * @see   https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
 	 *
 	 * @since 1.3.0
 	 */
@@ -43,7 +78,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		parent::__construct();
 
 		/*
-		 * Slug
+		 * Slug.
 		 *
 		 * @var string URL-friendly identifier used for form settings, add-on settings, text domain localization...
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L24-L27
@@ -51,15 +86,15 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$this->_slug = self::SLUG;
 
 		/*
-	 	 * Title
+	 	 * Title.
 	 	 *
 	 	 * @var string Title of the plugin to be used on the settings page, form settings and plugins page. Example: 'Gravity Forms MailChimp Add-On'
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L40-L43
 		 */
-		$this->_title = __( 'WordPress Pay Add-On', 'pronamic_ideal' );
+		$this->_title = __( 'Pronamic Pay Add-On', 'pronamic_ideal' );
 
 		/*
-		 * Short title
+		 * Short title.
 		 *
 		 * @var string Short version of the plugin title to be used on menus and other places where a less verbose string is useful. Example: 'MailChimp'
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L44-L47
@@ -67,9 +102,14 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$this->_short_title = __( 'Pay', 'pronamic_ideal' );
 
 		/*
-		 * Actions
+		 * Actions.
 		 */
 		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ), 20 );
+
+		/*
+		 * Filters.
+		 */
+		add_filter( 'gform_admin_pre_render', array( $this, 'admin_pre_render' ), 10, 1 );
 	}
 
 	/**
@@ -133,15 +173,42 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Form settings page
+	 * Filter the form in admin.
+	 *
+	 * @param array $form Gravity Forms form.
+	 *
+	 * @return array
+	 */
+	public function admin_pre_render( $form ) {
+		$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
+
+		$condition_field_ids = array();
+
+		foreach ( $feeds as $feed ) {
+			if ( empty( $feed->condition_field_id ) ) {
+				continue;
+			}
+
+			$condition_field_ids[] = $feed->condition_field_id;
+		}
+
+		$form['pronamic_pay_condition_field_ids'] = $condition_field_ids;
+
+		return $form;
+	}
+
+	/**
+	 * Form settings page.
 	 *
 	 * @since 1.3.0
+	 *
+	 * @param array $form Gravity Forms form.
 	 */
 	public function form_settings( $form ) {
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
-		if ( filter_has_var( INPUT_GET, 'fid' ) ) {
+		if ( $this->is_detail_page() ) {
 			require dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php';
 		} else {
 			$this->feed_list_page( $form );
@@ -174,6 +241,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 		return $title;
 	}
 
+	/**
+	 * Get feed table.
+	 *
+	 * @param array $form Gravity Forms form.
+	 *
+	 * @return GFAddOnFeedsTable
+	 */
 	public function get_feed_table( $form ) {
 		$feeds                 = $this->get_feeds( rgar( $form, 'id' ) );
 		$columns               = $this->feed_list_columns();
@@ -190,6 +264,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 		return $feed_table;
 	}
 
+	/**
+	 * Get feeds.
+	 *
+	 * @param int|null $form_id Form ID.
+	 *
+	 * @return array Feeds.
+	 */
 	public function get_feeds( $form_id = null ) {
 		$query = new WP_Query( array(
 			'post_type'      => 'pronamic_pay_gf',
@@ -207,18 +288,21 @@ class PaymentAddOn extends GFPaymentAddOn {
 		foreach ( $query->posts as $post ) {
 			$post = (array) $post;
 
-			$post['id'] = $post['ID'];
+			$post = array_merge( $post, array(
+				'id'        => $post['ID'],
+				'form_id'   => get_post_meta( $post['ID'], '_pronamic_pay_gf_form_id', true ),
+				'is_active' => true,
+				'meta'      => array(
+					'post'            => $post,
+					'feed_name'       => $post['post_title'],
+					'transactionType' => 'product',
+				),
+			) );
 
 			// Is activated?
-			$post['is_active'] = true;
-
 			if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
 				$post['is_active'] = false;
 			}
-
-			$post['meta'] = array(
-				'transactionType' => 'product',
-			);
 
 			$posts[] = $post;
 		}
@@ -227,11 +311,44 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
+	 * Get feed.
+	 *
+	 * @param int|string $id Feed ID.
+	 *
+	 * @return false|array Feed or false if feed doesn't exist.
+	 */
+	public function get_feed( $id ) {
+		$post = get_post( $id, ARRAY_A );
+
+		if ( null === $post ) {
+			return false;
+		}
+
+		$post = array_merge( $post, array(
+			'id'        => $post['ID'],
+			'form_id'   => get_post_meta( $id, '_pronamic_pay_gf_form_id', true ),
+			'is_active' => true,
+			'meta'      => array(
+				'post'            => $post,
+				'feed_name'       => $post['post_title'],
+				'transactionType' => 'product',
+			),
+		) );
+
+		// Is activated?
+		if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
+			$post['is_active'] = false;
+		}
+
+		return $post;
+	}
+
+	/**
 	 * Is feed condition met?
 	 *
-	 * @param $feed
-	 * @param $form
-	 * @param $entry
+	 * @param array $feed  Feed.
+	 * @param array $form  Gravity Forms form.
+	 * @param array $entry Gravity Forms entry.
 	 *
 	 * @return bool
 	 */
@@ -255,7 +372,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Column name value.
 	 *
-	 * @param array $feed
+	 * @param array $feed Feed.
 	 *
 	 * @since unreleased
 	 */
@@ -278,7 +395,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Column transaction description value.
 	 *
-	 * @param  array $feed
+	 * @param array $feed Feed.
 	 *
 	 * @since unreleased
 	 */
@@ -291,7 +408,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Column configuration value.
 	 *
-	 * @param  array $feed
+	 * @param array $feed Feed.
 	 *
 	 * @since unreleased
 	 */
@@ -364,7 +481,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Ajax feed activation toggle
+	 * Ajax feed activation toggle.
 	 */
 	public function ajax_toggle_is_active() {
 		$feed_id   = filter_input( INPUT_POST, 'feed_id', FILTER_SANITIZE_STRING );
@@ -376,10 +493,10 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Activate feed
+	 * Activate feed.
 	 *
-	 * @param $feed_id
-	 * @param $is_active
+	 * @param string $feed_id   Feed ID.
+	 * @param bool   $is_active Is active flag.
 	 *
 	 * @return bool|int
 	 */
@@ -388,11 +505,87 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Delete feed
+	 * Allow payment feeds to be duplicated.
 	 *
-	 * @param $feed_id
+	 * @param int|array $id The ID of the feed to be duplicated or the feed object when duplicating a form.
+	 *
+	 * @return boolean
+	 */
+	public function can_duplicate_feed( $id ) {
+		return true;
+	}
+
+	/**
+	 * Insert feed.
+	 *
+	 * @param string|int $form_id   Form ID.
+	 * @param bool       $is_active Whether or not the feed is activated.
+	 * @param array      $meta      Feed meta.
+	 *
+	 * @return int
+	 */
+	public function insert_feed( $form_id, $is_active, $meta ) {
+		// Original feed post is passed in meta through `get_feed()` method.
+		$original_feed = $meta['post'];
+
+		// Insert post.
+		$post_id = wp_insert_post( array(
+			'post_type'      => 'pronamic_pay_gf',
+			'post_title'     => $meta['feed_name'],
+			'post_status'    => 'publish',
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		) );
+
+		$original_meta = get_post_meta( $original_feed['ID'] );
+
+		foreach ( $original_meta as $meta_key => $meta_value ) {
+			$meta_value = array_shift( $meta_value );
+
+			if ( is_serialized( $meta_value ) ) {
+				$meta_value = unserialize( $meta_value );
+			}
+
+			switch ( $meta_key ) {
+				case '_pronamic_pay_gf_form_id':
+					$meta_value = $form_id;
+
+					break;
+				case '_pronamic_pay_gf_feed_active':
+					$meta_value = $is_active;
+
+					break;
+			}
+
+			update_post_meta( $post_id, $meta_key, $meta_value );
+		}
+
+		return $post_id;
+	}
+
+	/**
+	 * Delete feed.
+	 *
+	 * @param int $feed_id Feed ID.
 	 */
 	public function delete_feed( $feed_id ) {
 		wp_delete_post( $feed_id );
+	}
+
+	/**
+	 * Delete feeds.
+	 *
+	 * @param int $form_id Form ID.
+	 */
+	public function delete_feeds( $form_id = null ) {
+		if ( null === $form_id ) {
+			return;
+		}
+
+		$feeds = $this->get_feeds( $form_id );
+
+		foreach ( $feeds as $feed ) {
+			$this->get_feed( $feed['ID'] );
+		}
 	}
 }

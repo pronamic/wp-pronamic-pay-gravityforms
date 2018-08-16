@@ -1,4 +1,12 @@
 <?php
+/**
+ * Admin payment form post type
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -18,7 +26,9 @@ use WP_Query;
  */
 class AdminPaymentFormPostType {
 	/**
-	 * Post type
+	 * Post type.
+	 *
+	 * @var string
 	 */
 	const POST_TYPE = 'pronamic_pay_gf';
 
@@ -41,6 +51,12 @@ class AdminPaymentFormPostType {
 		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_post' ) );
 	}
 
+	/**
+	 * Edit columns.
+	 *
+	 * @param array $columns Columns.
+	 * @return array
+	 */
 	public function edit_columns( $columns ) {
 		$columns = array(
 			'cb'                                      => '<input type="checkbox" />',
@@ -54,6 +70,12 @@ class AdminPaymentFormPostType {
 		return $columns;
 	}
 
+	/**
+	 * Custom columns.
+	 *
+	 * @param string $column  Column name.
+	 * @param int    $post_id Post ID.
+	 */
 	public function custom_columns( $column, $post_id ) {
 		switch ( $column ) {
 			case 'pronamic_pay_gf_form':
@@ -66,7 +88,7 @@ class AdminPaymentFormPostType {
 							'page' => 'gf_edit_forms',
 							'id'   => $form_id,
 						), admin_url( 'admin.php' ) ) ),
-						esc_html( get_pronamic_pay_gf_form_title( $form_id ) )
+						esc_html( $form_id )
 					);
 				} else {
 					echo '—';
@@ -140,13 +162,13 @@ class AdminPaymentFormPostType {
 	/**
 	 * When a new payment feed is created, filter the post data.
 	 *
-	 * @param array $data
-	 * @param array $postarr
+	 * @param array $data    Post data.
+	 * @param array $postarr Post array.
 	 *
 	 * @return array
 	 */
 	public function insert_post_data( $data, $postarr ) {
-		// Check if pay feed post type
+		// Check if pay feed post type.
 		if ( 'pronamic_pay_gf' !== $postarr['post_type'] ) {
 			return $data;
 		}
@@ -216,6 +238,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_form_id'                     => 'sanitize_text_field',
 			'_pronamic_pay_gf_config_id'                   => 'sanitize_text_field',
 			'_pronamic_pay_gf_entry_id_prefix'             => 'sanitize_text_field',
+			'_pronamic_pay_gf_order_id'                    => 'sanitize_text_field',
 			'_pronamic_pay_gf_transaction_description'     => 'sanitize_text_field',
 			'_pronamic_pay_gf_condition_enabled'           => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_condition_field_id'          => 'sanitize_text_field',
@@ -242,58 +265,33 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_interval_type'  => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_interval'       => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_interval_period' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_date_type' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_date'  => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_date_day' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_date_month' => 'sanitize_text_field',
+			'_pronamic_pay_gf_subscription_interval_date_prorate' => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_subscription_interval_field' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_frequency_type' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_frequency'      => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 		);
 
-		if ( class_exists( 'GFActiveCampaign' ) ) {
-			$definition['_pronamic_pay_gf_delay_activecampaign_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
+		$delay_actions = Extension::get_delay_actions();
 
-		if ( class_exists( 'GFAWeber' ) ) {
-			$definition['_pronamic_pay_gf_delay_aweber_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
+		$delay_actions = array_filter( $delay_actions, function( $action ) {
+			return $action['active'];
+		} );
 
-		if ( class_exists( 'GFCampaignMonitor' ) ) {
-			$definition['_pronamic_pay_gf_delay_campaignmonitor_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFMailChimp' ) ) {
-			$definition['_pronamic_pay_gf_delay_mailchimp_subscription'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFUser' ) ) {
-			$definition['_pronamic_pay_gf_delay_user_registration'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFZapier' ) ) {
-			$definition['_pronamic_pay_gf_delay_zapier'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GF_Dropbox' ) ) {
-			$definition['_pronamic_pay_gf_delay_dropbox'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFMoneybird' ) ) {
-			$definition['_pronamic_pay_gf_delay_moneybird'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'GFTwilio' ) ) {
-			$definition['_pronamic_pay_gf_delay_twilio'] = FILTER_VALIDATE_BOOLEAN;
-		}
-
-		if ( class_exists( 'Sliced_Invoices_GF' ) ) {
-			$definition['_pronamic_pay_gf_delay_sliced_invoices'] = FILTER_VALIDATE_BOOLEAN;
+		foreach ( $delay_actions as $action ) {
+			$definition[ $action['meta_key'] ] = FILTER_VALIDATE_BOOLEAN;
 		}
 
 		foreach ( $definition as $meta_key => $function ) {
 			$meta_value = null;
 
 			if ( 'sanitize_text_field' === $function ) {
-				if ( isset( $_POST[ $meta_key ] ) ) { // WPCS: input var OK
-					$meta_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) ); // WPCS: input var OK
+				if ( isset( $_POST[ $meta_key ] ) ) { // WPCS: input var OK.
+					$meta_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) ); // WPCS: input var OK.
 				}
 			} else {
 				$filter  = $function;
@@ -307,7 +305,7 @@ class AdminPaymentFormPostType {
 				$meta_value = filter_input( INPUT_POST, $meta_key, $filter, $options );
 			}
 
-			// Set link type if none selected, use URL if both are set
+			// Set link type if none selected, use URL if both are set.
 			if ( '_pronamic_pay_gf_links' === $meta_key ) {
 				foreach ( $meta_value as $status => $link ) {
 					if ( isset( $link['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $link['type'] ) {

@@ -6,7 +6,7 @@
 	/**
 	 * Gravity Forms pay feed editor
 	 */
-	var gravityFormsPayFeedEditor = function( element ) {
+	var GravityFormsPayFeedEditor = function( element ) {
 		var obj = this;
 		var $element = $( element );
 
@@ -32,6 +32,10 @@
 		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
 		elements.subscriptionInterval = $element.find( '#pronamic_pay_gf_subscription_interval' );
 		elements.subscriptionIntervalPeriod = $element.find( '#pronamic_pay_gf_subscription_interval_period' );
+		elements.subscriptionIntervalDateType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_date_type"]' );
+		elements.subscriptionIntervalDate = $element.find( '#pronamic_pay_gf_subscription_interval_date' );
+		elements.subscriptionIntervalDateDay = $element.find( '#pronamic_pay_gf_subscription_interval_date_day' );
+		elements.subscriptionIntervalDateMonth = $element.find( '#pronamic_pay_gf_subscription_interval_date_month' );
 		elements.subscriptionIntervalField = $element.find( '#pronamic_pay_gf_subscription_interval_field' );
 		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
 		elements.subscriptionFrequency = $element.find( '#pronamic_pay_gf_subscription_frequency' );
@@ -68,11 +72,10 @@
 
 			if ( gravityForm ) {
 				$.each( elements.confirmationSelectFields, function( index, field ) {
-					var linkName = $( field ).attr( 'data-pronamic-link-name' ),
-						isSelected = false;
+					var linkName = $( field ).attr( 'data-pronamic-link-name' );
 
 					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
-						isSelected = false;
+						var isSelected = false;
 
 						if ( 'object' === typeof feed.links ) {
 							isSelected = ( feed.links[ linkName ].confirmation_id === confirmation.id );
@@ -391,12 +394,75 @@
 
 					var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
 
+					if ( 'fixed' !== intervalType ) {
+						elements.subscriptionIntervalPeriod.val( 'D' );
+
+						elements.subscriptionIntervalPeriod.trigger( 'change' );
+					}
+
 					if ( intervalSettings.length > 0 ) {
 						intervalSettings.show();
 					}
 				} );
 
+				elements.subscriptionIntervalDateType.on( 'change', function() {
+					var intervalDateType = elements.subscriptionIntervalDateType.filter( ':checked' ).val();
+
+					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings' ).hide();
+
+					var intervalDateSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings.interval-date-' + intervalDateType );
+
+					if ( intervalDateSettings.length > 0 ) {
+						intervalDateSettings.show();
+					}
+				} );
+
+				elements.subscriptionIntervalPeriod.on( 'change', function() {
+					var intervalPeriod = elements.subscriptionIntervalPeriod.val();
+
+					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings' ).hide();
+
+					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings.interval-' + intervalPeriod ).show();
+
+					switch ( intervalPeriod ) {
+						case 'D' :
+							elements.subscriptionIntervalDateType.filter( '[value="payment_date"]' ).prop( 'checked', true );
+							elements.subscriptionIntervalDateType.attr( 'disabled', 'disabled' );
+							elements.subscriptionIntervalDate.val( '' );
+							elements.subscriptionIntervalDateDay.val( '' );
+							elements.subscriptionIntervalDateMonth.val( '' );
+
+							break;
+						case 'W' :
+							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+							elements.subscriptionIntervalDate.val( '' );
+							elements.subscriptionIntervalDateMonth.val( '' );
+
+							break;
+						case 'M' :
+							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+							elements.subscriptionIntervalDateDay.val( '' );
+							elements.subscriptionIntervalDateMonth.val( '' );
+
+							break;
+						case 'Y' :
+							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+							elements.subscriptionIntervalDateDay.val( '' );
+
+							break;
+					}
+
+					elements.subscriptionIntervalDateType.trigger( 'change' );
+				} );
+
+				$( element ).find( 'select.pronamic-pay-gf-subscription-interval-date-sync-settings' ).on( 'change', function() {
+					elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
+
+					elements.subscriptionIntervalDateType.trigger( 'change' );
+				} );
+
 				elements.subscriptionIntervalType.trigger( 'change' );
+				elements.subscriptionIntervalPeriod.trigger( 'change' );
 
 				// Frequency
 				$element = $( elements.subscriptionFrequencyField );
@@ -498,7 +564,7 @@
 				return;
 			}
 
-			var editor = new gravityFormsPayFeedEditor( this );
+			var editor = new GravityFormsPayFeedEditor( this );
 
 			$this.data( 'gf-pay-feed-editor', editor );
 		} );
@@ -546,17 +612,38 @@
 					} );
 				}
 			} );
+
+			// Filter conditional logic dependencies.
+			gform.addFilter( 'gform_has_conditional_logic_dependency', function( result, field_id ) {
+				if ( typeof form === 'undefined' ) {
+					return result;
+				}
+
+				// Check if field is used in a conditions of the payment feed(s).
+				if ( -1 !== $.inArray( field_id.toString(), form.pronamic_pay_condition_field_ids ) ) {
+					return true;
+				}
+
+				return result;
+			} );
 		}
 
 		// Action on load field settings
 		$( document ).on( 'gform_load_field_settings', function( e, field ) {
-			var $pronamicPayConfigField = $( '#pronamic_pay_config_field' );
+			var pronamicPayFieldSettings = {
+				'pronamic_pay_config_field':  'pronamicPayConfigId',
+				'pronamic_pay_display_field': 'pronamicPayDisplayMode'
+			};
 
-			if ( $pronamicPayConfigField.find( 'option[value="' + field.pronamicPayConfigId + '"]' ).length > 0 ) {
-				$pronamicPayConfigField.val( field.pronamicPayConfigId );
-			} else {
-				SetFieldProperty( 'pronamicPayConfigId', '' );
-			}
+			$.each( pronamicPayFieldSettings, function( id, property ) {
+				var $field = $( '#' + id );
+
+				if ( $field.find( 'option[value="' + field[ property ] + '"]' ).length > 0 ) {
+					$field.val( field[ property ] );
+				} else {
+					SetFieldProperty( property, '' );
+				}
+			} );
 		} );
 	} );
 } )( jQuery );

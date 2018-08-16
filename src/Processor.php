@@ -1,4 +1,12 @@
 <?php
+/**
+ * Processor
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -86,15 +94,15 @@ class Processor {
 	/**
 	 * Constructs and initalize an Gravity Forms payment form processor
 	 *
-	 * @param array     $form
-	 * @param Extension $extension
+	 * @param array     $form      Gravity Forms form.
+	 * @param Extension $extension Extension.
 	 */
 	public function __construct( array $form, Extension $extension ) {
 		$this->extension = $extension;
 		$this->form      = $form;
 		$this->form_id   = isset( $form['id'] ) ? $form['id'] : null;
 
-		// Get payment feed by form ID
+		// Get payment feed by form ID.
 		$this->feed = FeedsDB::get_conditioned_feed_by_form_id( $this->form_id );
 
 		if ( null !== $this->feed ) {
@@ -105,32 +113,33 @@ class Processor {
 	}
 
 	/**
-	 * Add hooks
+	 * Add hooks.
 	 */
 	private function add_hooks() {
 		/*
-		 * Pre submission
+		 * Pre submission.
 		 */
 		add_action( 'gform_pre_submission_' . $this->form_id, array( $this, 'pre_submission' ), 10, 1 );
 
 		/*
-		 * Handle submission
+		 * Handle submission.
 		 */
-		// Lead
+
+		// Lead.
 		add_action( 'gform_entry_post_save', array( $this, 'entry_post_save' ), 10, 2 );
 
-		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications)
+		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications).
 		add_filter( 'gform_disable_admin_notification_' . $this->form_id, array( $this, 'maybe_delay_admin_notification' ), 10, 3 );
 		add_filter( 'gform_disable_user_notification_' . $this->form_id, array( $this, 'maybe_delay_user_notification' ), 10, 3 );
 		add_filter( 'gform_disable_post_creation_' . $this->form_id, array( $this, 'maybe_delay_post_creation' ), 10, 3 );
 		add_filter( 'gform_disable_notification_' . $this->form_id, array( $this, 'maybe_delay_notification' ), 10, 4 );
 
-		// Confirmation (@see GFFormDisplay::handle_confirmation)
-		// @see http://www.gravityhelp.com/documentation/page/Gform_confirmation
+		// Confirmation (@see GFFormDisplay::handle_confirmation).
+		// @see http://www.gravityhelp.com/documentation/page/Gform_confirmation.
 		add_filter( 'gform_confirmation_' . $this->form_id, array( $this, 'confirmation' ), 10, 4 );
 
 		/*
-		 * After submission
+		 * After submission.
 		 */
 		add_action( 'gform_after_submission_' . $this->form_id, array( $this, 'after_submission' ), 10, 2 );
 
@@ -138,11 +147,11 @@ class Processor {
 	}
 
 	/**
-	 * Check if we are processing the passed in form
+	 * Check if we are processing the passed in form.
 	 *
-	 * @param array $form an Gravity Forms form array
+	 * @param array $form Gravity Forms form.
 	 *
-	 * @return boolean true if the passed in form is processed, false otherwise
+	 * @return bool True if the passed in form is processed, false otherwise.
 	 */
 	public function is_processing( $form ) {
 		$is_form = false;
@@ -157,20 +166,24 @@ class Processor {
 	}
 
 	/**
-	 * Pre submission
+	 * Pre submission.
+	 *
+	 * @param array $form Gravity Forms form.
 	 */
 	public function pre_submission( $form ) {
 		if ( ! $this->is_processing( $form ) ) {
 			return;
 		}
 
-		// Delay actions.
-
-		// The Add-Ons mainly use the 'gform_after_submission' to export entries, to delay this we have to remove these
-		// actions before this filter executes.
-
-		// @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103
-		// @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113
+		/*
+		 * Delay actions.
+		 *
+		 * The Add-Ons mainly use the 'gform_after_submission' to export entries, to delay this we have to remove these
+		 * actions before this filter executes.
+		 *
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103.
+		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113.
+		 */
 
 		foreach ( $this->feed->delay_actions as $slug => $data ) {
 			if ( isset( $data['addon'] ) ) {
@@ -184,10 +197,10 @@ class Processor {
 	}
 
 	/**
-	 * Entry post save
+	 * Entry post save.
 	 *
-	 * @param array $lead
-	 * @param array $form
+	 * @param array $lead Gravity Forms lead/entry.
+	 * @param array $form Gravity Forms form.
 	 *
 	 * @return array
 	 */
@@ -271,10 +284,10 @@ class Processor {
 	/**
 	 * Maybe delay notifications.
 	 *
-	 * @param bool  $is_disabled
-	 * @param array $notification
-	 * @param array $form
-	 * @param array $lead
+	 * @param bool  $is_disabled  Is disabled flag.
+	 * @param array $notification Gravity Forms notification.
+	 * @param array $form         Gravity Forms form.
+	 * @param array $lead         Gravity Forms lead/entry.
 	 *
 	 * @return bool
 	 */
@@ -289,9 +302,9 @@ class Processor {
 	/**
 	 * Maybe delay admin notification
 	 *
-	 * @param bool  $is_disabled
-	 * @param array $form
-	 * @param array $lead
+	 * @param bool  $is_disabled Is disabled flag.
+	 * @param array $form        Gravity Forms form.
+	 * @param array $lead        Gravity Forms lead/entry.
 	 *
 	 * @return boolean true if admin notification is disabled / delayed, false otherwise
 	 */
@@ -306,9 +319,9 @@ class Processor {
 	/**
 	 * Maybe delay user notification
 	 *
-	 * @param bool  $is_disabled
-	 * @param array $form
-	 * @param array $lead
+	 * @param bool  $is_disabled Is disabled flag.
+	 * @param array $form        Gravity Forms form.
+	 * @param array $lead        Gravity Forms lead/entry.
 	 *
 	 * @return boolean true if user notification is disabled / delayed, false otherwise
 	 */
@@ -321,11 +334,11 @@ class Processor {
 	}
 
 	/**
-	 * Maybe delay post creation
+	 * Maybe delay post creation.
 	 *
-	 * @param boolean $is_disabled
-	 * @param array   $form
-	 * @param array   $lead
+	 * @param boole $is_disabled Is disabled flag.
+	 * @param array $form        Gravity Forms form.
+	 * @param array $lead        Gravity Forms lead/entry.
 	 *
 	 * @return boolean true if post creation is disabled / delayed, false otherwise
 	 */
@@ -340,10 +353,10 @@ class Processor {
 	/**
 	 * Maybe delay feed.
 	 *
-	 * @param $is_delayed
-	 * @param $form
-	 * @param $entry
-	 * @param $slug
+	 * @param bool   $is_delayed Is delayed flag.
+	 * @param array  $form       Gravity Forms form.
+	 * @param array  $entry      Gravity Forms entry.
+	 * @param string $slug       Delay action slug.
 	 *
 	 * @return bool
 	 */
@@ -356,14 +369,14 @@ class Processor {
 	}
 
 	/**
-	 * Confirmation
+	 * Confirmation.
 	 *
 	 * @see http://www.gravityhelp.com/documentation/page/Gform_confirmation
 	 *
-	 * @param $confirmation
-	 * @param $form
-	 * @param $lead
-	 * @param $ajax
+	 * @param array $confirmation Gravity Forms confirmation.
+	 * @param array $form         Gravity Forms form.
+	 * @param array $lead         Gravity Forms lead/entry.
+	 * @param bool  $ajax         AJAX request flag.
 	 *
 	 * @return array|string
 	 */
@@ -395,10 +408,10 @@ class Processor {
 	}
 
 	/**
-	 * After submission
+	 * After submission.
 	 *
-	 * @param $lead
-	 * @param $form
+	 * @param array $lead Gravity Forms lead/entry.
+	 * @param array $form Gravity Forms form.
 	 */
 	public function after_submission( $lead, $form ) {
 

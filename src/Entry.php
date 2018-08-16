@@ -1,4 +1,12 @@
 <?php
+/**
+ * Entry
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -16,7 +24,7 @@ class Entry {
 	/**
 	 * Check if the specified entry payment is approved
 	 *
-	 * @param array $entry
+	 * @param array $entry Gravity Forms entry.
 	 *
 	 * @return boolean true if payment is approved, false otherwise
 	 */

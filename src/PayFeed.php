@@ -1,4 +1,12 @@
 <?php
+/**
+ * Pay feed
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -43,15 +51,22 @@ class PayFeed {
 	public $id;
 
 	/**
-	 * The payment post object
+	 * The payment post object.
+	 *
+	 * @var WP_Post
 	 */
 	public $post;
 
+	/**
+	 * Condition enabled flag.
+	 *
+	 * @var bool
+	 */
 	public $condition_enabled;
 
 	/**
 	 * Delay notification ID's contains an array of notification ID's wich
-	 * should be delayed till the payment is succesfull
+	 * should be delayed till the payment is succesfull.
 	 *
 	 * @since Gravity Forms 1.7
 	 * @var array
@@ -59,14 +74,14 @@ class PayFeed {
 	public $delay_notification_ids;
 
 	/**
-	 * Flag to delay the creation of an post till the the payment is succesfull
+	 * Flag to delay the creation of an post till the the payment is succesfull.
 	 *
 	 * @var boolean
 	 */
 	public $delay_post_creation;
 
 	/**
-	 * Flag to delay the creation of an post till the the payment is succesfull
+	 * Flag to delay the creation of an post till the the payment is succesfull.
 	 *
 	 * @deprecated Gravity Forms 1.7
 	 * @var boolean
@@ -74,7 +89,7 @@ class PayFeed {
 	public $delay_admin_notification;
 
 	/**
-	 * Flag to delay the creation of an post till the the payment is succesfull
+	 * Flag to delay the creation of an post till the the payment is succesfull.
 	 *
 	 * @deprecated Gravity Forms 1.7
 	 * @var boolean
@@ -82,9 +97,9 @@ class PayFeed {
 	public $delay_user_notification;
 
 	/**
-	 * Construct and initialize payment object
+	 * Construct and initialize payment object.
 	 *
-	 * @param int $post_id
+	 * @param int $post_id Post ID.
 	 */
 	public function __construct( $post_id ) {
 		$this->id   = $post_id;
@@ -139,15 +154,15 @@ class PayFeed {
 		$this->subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
 		$this->subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
 
-		// Delay notification IDs
+		// Delay notification IDs.
 		$ids                          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
 		$this->delay_notification_ids = is_array( $ids ) ? $ids : array();
 
-		// Fields
+		// Fields.
 		$fields       = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
 		$this->fields = is_array( $fields ) ? $fields : array();
 
-		// Links
+		// Links.
 		$links       = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
 		$this->links = is_array( $links ) ? $links : array();
 	}
@@ -155,7 +170,7 @@ class PayFeed {
 	/**
 	 * Get the URL of the specified name
 	 *
-	 * @param string $name
+	 * @param string $name Name.
 	 *
 	 * @return false|null|string
 	 */
@@ -165,7 +180,7 @@ class PayFeed {
 		if ( isset( $this->links[ $name ] ) ) {
 			$link = $this->links[ $name ];
 
-			// link is a standard class object, the type variable could not be defined
+			// link is a standard class object, the type variable could not be defined.
 			if ( isset( $link['type'] ) ) {
 				switch ( $link['type'] ) {
 					case self::LINK_TYPE_PAGE:

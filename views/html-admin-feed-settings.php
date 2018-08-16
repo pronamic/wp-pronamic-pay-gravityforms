@@ -1,4 +1,12 @@
 <?php
+/**
+ * Admin feed settings.
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 use Pronamic\WordPress\DateTime\DateTime;
 use Pronamic\WordPress\Pay\Admin\AdminModule;
@@ -824,10 +832,10 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						<div id="gf_ideal_condition_config">
 							<?php
 
-							// Select field
+							// Select field.
 							$select_field = '<select id="gf_ideal_condition_field_id" name="_pronamic_pay_gf_condition_field_id"></select>';
 
-							// Select operator
+							// Select operator.
 							$select_operator = '<select id="gf_ideal_condition_operator" name="_pronamic_pay_gf_condition_operator">';
 
 							$operators = array();
@@ -902,7 +910,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 				$_GET['id'] = $form_id;
 
-				printf( //xss ok
+				printf( // WPCS: XSS ok.
 					'<script type="text/javascript">
 					var form = %s;
 					%s

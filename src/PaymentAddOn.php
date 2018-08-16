@@ -1,4 +1,12 @@
 <?php
+/**
+ * Payment add-on
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -17,24 +25,52 @@ use WP_Query;
  * @since   1.1.0
  */
 class PaymentAddOn extends GFPaymentAddOn {
+	/**
+	 * Slug.
+	 *
+	 * @var string
+	 */
 	const SLUG = 'pronamic_pay';
 
-	// Members plugin integration
-	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L21-L22
-	protected $_capabilities = array( 'gravityforms_pronamic_pay', 'gravityforms_pronamic_pay_uninstall' );
+	/**
+	 * Capabilities.
+	 *
+	 * @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L21-L22
+	 *
+	 * @var array
+	 */
+	protected $_capabilities = array(
+		'gravityforms_pronamic_pay',
+		'gravityforms_pronamic_pay_uninstall',
+	);
 
-	// Permissions
-	// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L24-L27
+	/**
+	 * Capabilities settings page.
+	 *
+	 * @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L24-L27
+	 *
+	 * @var string
+	 */
 	protected $_capabilities_settings_page = 'gravityforms_pronamic_pay';
 
+	/**
+	 * Capabilities form settings.
+	 *
+	 * @var string
+	 */
 	protected $_capabilities_form_settings = 'gravityforms_pronamic_pay';
 
+	/**
+	 * Capabilities uninstall.
+	 *
+	 * @var string
+	 */
 	protected $_capabilities_uninstall = 'gravityforms_pronamic_pay_uninstall';
 
 	/**
 	 * Construct and initialize an Gravity Forms payment add-on
 	 *
-	 * @see   https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
+	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
 	 *
 	 * @since 1.3.0
 	 */
@@ -42,7 +78,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		parent::__construct();
 
 		/*
-		 * Slug
+		 * Slug.
 		 *
 		 * @var string URL-friendly identifier used for form settings, add-on settings, text domain localization...
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L24-L27
@@ -50,7 +86,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$this->_slug = self::SLUG;
 
 		/*
-	 	 * Title
+	 	 * Title.
 	 	 *
 	 	 * @var string Title of the plugin to be used on the settings page, form settings and plugins page. Example: 'Gravity Forms MailChimp Add-On'
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L40-L43
@@ -58,7 +94,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$this->_title = __( 'Pronamic Pay Add-On', 'pronamic_ideal' );
 
 		/*
-		 * Short title
+		 * Short title.
 		 *
 		 * @var string Short version of the plugin title to be used on menus and other places where a less verbose string is useful. Example: 'MailChimp'
 		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L44-L47
@@ -66,7 +102,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$this->_short_title = __( 'Pay', 'pronamic_ideal' );
 
 		/*
-		 * Actions
+		 * Actions.
 		 */
 		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ), 20 );
 
@@ -139,7 +175,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Filter the form in admin.
 	 *
-	 * @param array $form Form.
+	 * @param array $form Gravity Forms form.
 	 *
 	 * @return array
 	 */
@@ -162,9 +198,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Form settings page
+	 * Form settings page.
 	 *
 	 * @since 1.3.0
+	 *
+	 * @param array $form Gravity Forms form.
 	 */
 	public function form_settings( $form ) {
 		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
@@ -203,6 +241,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 		return $title;
 	}
 
+	/**
+	 * Get feed table.
+	 *
+	 * @param array $form Gravity Forms form.
+	 *
+	 * @return GFAddOnFeedsTable
+	 */
 	public function get_feed_table( $form ) {
 		$feeds                 = $this->get_feeds( rgar( $form, 'id' ) );
 		$columns               = $this->feed_list_columns();
@@ -301,9 +346,9 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Is feed condition met?
 	 *
-	 * @param $feed
-	 * @param $form
-	 * @param $entry
+	 * @param array $feed  Feed.
+	 * @param array $form  Gravity Forms form.
+	 * @param array $entry Gravity Forms entry.
 	 *
 	 * @return bool
 	 */
@@ -327,7 +372,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Column name value.
 	 *
-	 * @param array $feed
+	 * @param array $feed Feed.
 	 *
 	 * @since unreleased
 	 */
@@ -350,7 +395,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Column transaction description value.
 	 *
-	 * @param  array $feed
+	 * @param array $feed Feed.
 	 *
 	 * @since unreleased
 	 */
@@ -363,7 +408,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Column configuration value.
 	 *
-	 * @param  array $feed
+	 * @param array $feed Feed.
 	 *
 	 * @since unreleased
 	 */
@@ -436,7 +481,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Ajax feed activation toggle
+	 * Ajax feed activation toggle.
 	 */
 	public function ajax_toggle_is_active() {
 		$feed_id   = filter_input( INPUT_POST, 'feed_id', FILTER_SANITIZE_STRING );
@@ -448,10 +493,10 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Activate feed
+	 * Activate feed.
 	 *
-	 * @param $feed_id
-	 * @param $is_active
+	 * @param string $feed_id   Feed ID.
+	 * @param bool   $is_active Is active flag.
 	 *
 	 * @return bool|int
 	 */

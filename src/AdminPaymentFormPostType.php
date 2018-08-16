@@ -1,4 +1,12 @@
 <?php
+/**
+ * Admin payment form post type
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -18,7 +26,9 @@ use WP_Query;
  */
 class AdminPaymentFormPostType {
 	/**
-	 * Post type
+	 * Post type.
+	 *
+	 * @var string
 	 */
 	const POST_TYPE = 'pronamic_pay_gf';
 
@@ -41,6 +51,12 @@ class AdminPaymentFormPostType {
 		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_post' ) );
 	}
 
+	/**
+	 * Edit columns.
+	 *
+	 * @param array $columns Columns.
+	 * @return array
+	 */
 	public function edit_columns( $columns ) {
 		$columns = array(
 			'cb'                                      => '<input type="checkbox" />',
@@ -54,6 +70,12 @@ class AdminPaymentFormPostType {
 		return $columns;
 	}
 
+	/**
+	 * Custom columns.
+	 *
+	 * @param string $column  Column name.
+	 * @param int    $post_id Post ID.
+	 */
 	public function custom_columns( $column, $post_id ) {
 		switch ( $column ) {
 			case 'pronamic_pay_gf_form':
@@ -140,13 +162,13 @@ class AdminPaymentFormPostType {
 	/**
 	 * When a new payment feed is created, filter the post data.
 	 *
-	 * @param array $data
-	 * @param array $postarr
+	 * @param array $data    Post data.
+	 * @param array $postarr Post array.
 	 *
 	 * @return array
 	 */
 	public function insert_post_data( $data, $postarr ) {
-		// Check if pay feed post type
+		// Check if pay feed post type.
 		if ( 'pronamic_pay_gf' !== $postarr['post_type'] ) {
 			return $data;
 		}
@@ -268,8 +290,8 @@ class AdminPaymentFormPostType {
 			$meta_value = null;
 
 			if ( 'sanitize_text_field' === $function ) {
-				if ( isset( $_POST[ $meta_key ] ) ) { // WPCS: input var OK
-					$meta_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) ); // WPCS: input var OK
+				if ( isset( $_POST[ $meta_key ] ) ) { // WPCS: input var OK.
+					$meta_value = sanitize_text_field( wp_unslash( $_POST[ $meta_key ] ) ); // WPCS: input var OK.
 				}
 			} else {
 				$filter  = $function;
@@ -283,7 +305,7 @@ class AdminPaymentFormPostType {
 				$meta_value = filter_input( INPUT_POST, $meta_key, $filter, $options );
 			}
 
-			// Set link type if none selected, use URL if both are set
+			// Set link type if none selected, use URL if both are set.
 			if ( '_pronamic_pay_gf_links' === $meta_key ) {
 				foreach ( $meta_value as $status => $link ) {
 					if ( isset( $link['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $link['type'] ) {

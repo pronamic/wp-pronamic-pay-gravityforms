@@ -1,4 +1,12 @@
 <?php
+/**
+ * Feeds database
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -20,6 +28,9 @@ class FeedsDB {
 	 * Get feeds by form ID.
 	 *
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_feeds_by_form_id`.
+	 *
+	 * @param string $form_id Gravity Forms form ID.
+	 * @param array  $meta    Meta query array.
 	 */
 	public static function get_feeds_by_form_id( $form_id, $meta = array() ) {
 		$feeds = array();
@@ -51,6 +62,8 @@ class FeedsDB {
 	 * Get conditioned feed by form ID.
 	 *
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_conditioned_feed_by_form_id`.
+	 *
+	 * @param string $form_id Gravity Forms form ID.
 	 */
 	public static function get_conditioned_feed_by_form_id( $form_id ) {
 		$meta = array(
@@ -86,6 +99,8 @@ class FeedsDB {
 	 * Get feed by entry ID.
 	 *
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_feed_by_entry_id`.
+	 *
+	 * @param string $entry_id Gravity Forms entry ID.
 	 */
 	public static function get_feed_by_entry_id( $entry_id ) {
 		$feed_id = gform_get_meta( $entry_id, 'ideal_feed_id' );

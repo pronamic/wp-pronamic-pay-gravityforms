@@ -1,4 +1,12 @@
 <?php
+/**
+ * Payment form post type
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -18,14 +26,14 @@ class PaymentFormPostType {
 	 */
 	public function __construct() {
 		/**
-		 * Priority of the initial post types function should be set to < 10
+		 * Priority of the initial post types function should be set to < 10.
 		 *
 		 * @see https://core.trac.wordpress.org/ticket/28488
 		 * @see https://core.trac.wordpress.org/changeset/29318
 		 *
 		 * @see https://github.com/WordPress/WordPress/blob/4.0/wp-includes/post.php#L167
 		 */
-		add_action( 'init', array( $this, 'init' ), 0 ); // highest priority
+		add_action( 'init', array( $this, 'init' ), 0 ); // Highest priority.
 	}
 
 	/**

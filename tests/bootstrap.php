@@ -8,6 +8,9 @@
  * @package   Pronamic\WordPress\Pay\Extensions\MemberPress
  */
 
+/**
+ * Autoload.
+ */
 require_once __DIR__ . '/../vendor/autoload.php';
 
 require_once getenv( 'WP_PHPUNIT__DIR' ) . '/includes/functions.php';

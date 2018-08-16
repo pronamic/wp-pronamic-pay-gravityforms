@@ -1,4 +1,12 @@
 <?php
+/**
+ * Gravity Forms
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -96,21 +104,21 @@ class GravityForms {
 	const SUBSCRIPTION_FREQUENCY_UNLIMITED = 'unlimited';
 
 	/**
-	 * Check if Gravity Forms is active (Automattic/developer style)
+	 * Check if Gravity Forms is active (Automattic/developer style).
 	 *
 	 * @see https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/gravityforms.php?at=1.7.8#cl-95
 	 * @see https://github.com/Automattic/developer/blob/1.1.2/developer.php#L73
 	 *
-	 * @return boolean
+	 * @return bool
 	 */
 	public static function is_active() {
 		return class_exists( 'GFForms' );
 	}
 
 	/**
-	 * Update entry
+	 * Update entry.
 	 *
-	 * @param array $entry
+	 * @param array $entry Gravity Forms entry.
 	 */
 	public static function update_entry( $entry ) {
 		/*
@@ -128,11 +136,11 @@ class GravityForms {
 	}
 
 	/**
-	 * Update entry property
+	 * Update entry property.
 	 *
-	 * @param int    $entry_id Entry ID
-	 * @param string $property Name of the property to update
-	 * @param string $value    Value for the property
+	 * @param int    $entry_id Entry ID.
+	 * @param string $property Name of the property to update.
+	 * @param string $value    Value for the property.
 	 */
 	public static function update_entry_property( $entry_id, $property, $value ) {
 		if ( Core_Util::class_method_exists( 'GFAPI', 'update_entry_property' ) ) {
@@ -163,10 +171,10 @@ class GravityForms {
 	/**
 	 * Compare the current Gravity Forms version
 	 *
-	 * @param string $version
-	 * @param string $operator
+	 * @param string $version  Version.
+	 * @param string $operator Compare operator.
 	 *
-	 * @return bool|mixed
+	 * @return bool
 	 */
 	public static function version_compare( $version, $operator ) {
 		if ( class_exists( 'GFCommon' ) ) {

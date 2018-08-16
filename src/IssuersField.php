@@ -1,4 +1,12 @@
 <?php
+/**
+ * Issuers field
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -39,12 +47,12 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Constructs and initializes issuers field.
 	 *
-	 * @param $properties
+	 * @param array $properties Properties.
 	 */
 	public function __construct( $properties = array() ) {
 		parent::__construct( $properties );
 
-		// Actions
+		// Actions.
 		if ( ! has_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) ) ) {
 			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
 		}
@@ -53,7 +61,7 @@ class IssuersField extends GF_Field_Select {
 			$this->formId = filter_input( INPUT_POST, 'form_id', FILTER_SANITIZE_NUMBER_INT );
 		}
 
-		// Choices
+		// Choices.
 		if ( isset( $this->formId ) ) {
 			$this->set_choices( $this->formId );
 		}
@@ -133,7 +141,7 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Set the issuer choices for this issuers field.
 	 *
-	 * @param int $form_id
+	 * @param int $form_id Gravity Forms form ID.
 	 */
 	private function set_choices( $form_id ) {
 		$this->choices = array();
@@ -144,7 +152,7 @@ class IssuersField extends GF_Field_Select {
 			return;
 		}
 
-		// Always use iDEAL payment method for issuer field
+		// Always use iDEAL payment method for issuer field.
 		$gateway->set_payment_method( PaymentMethods::IDEAL );
 
 		$field = $gateway->get_issuer_field();
@@ -181,12 +189,12 @@ class IssuersField extends GF_Field_Select {
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		// Error handling
+		// Error handling.
 		if ( is_wp_error( $this->error ) ) {
 			return $this->error->get_error_message();
 		}
 
-		// Input
+		// Input.
 		$input = parent::get_field_input( $form, $value, $entry );
 
 		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
@@ -525,7 +533,7 @@ class IssuersField extends GF_Field_Select {
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
 	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
 	 *
-	 * @param $field_groups
+	 * @param array $field_groups Field groups.
 	 *
 	 * @return array
 	 */

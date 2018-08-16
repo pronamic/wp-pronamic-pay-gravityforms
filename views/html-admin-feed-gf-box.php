@@ -1,10 +1,21 @@
+<?php
+/**
+ * Admin feed Gravity Forms box.
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
+
+?>
 <form method="post" action="">
 	<?php
 
 	if ( filter_has_var( INPUT_GET, 'message' ) ) {
 		$message = filter_input( INPUT_GET, 'message', FILTER_SANITIZE_STRING );
 
-		// Notice
+		// Notice.
 		$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
 		$class = 'error';
 

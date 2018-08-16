@@ -1,4 +1,12 @@
 <?php
+/**
+ * Links test.
+ *
+ * @author    Pronamic <info@pronamic.eu>
+ * @copyright 2005-2018 Pronamic
+ * @license   GPL-3.0-or-later
+ * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
+ */
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
@@ -19,11 +27,19 @@ class LinksTest extends PHPUnit_Framework_TestCase {
 	 * Test.
 	 *
 	 * @dataProvider matrix_provider
+	 *
+	 * @param string $value    Value.
+	 * @param string $expected Expected value.
 	 */
 	public function test( $value, $expected ) {
 		$this->assertEquals( $expected, $value );
 	}
 
+	/**
+	 * Test provider.
+	 *
+	 * @return array
+	 */
 	public function matrix_provider() {
 		return array(
 			array( 'open', Links::OPEN ),

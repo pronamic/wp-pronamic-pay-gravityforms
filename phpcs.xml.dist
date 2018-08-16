@@ -8,6 +8,7 @@
 	<config name="testVersion" value="5.3-99.0" />
 
 	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>tests/wp-config.php</exclude-pattern>
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>wordpress/*</exclude-pattern>
 	<exclude-pattern>wp-content/*</exclude-pattern>
@@ -17,32 +18,16 @@
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 
-		<exclude name="Squiz.Commenting" />
+		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key" />
+		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_query" />
 
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 
 		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
 
-		<!-- Exclude for wp_json_encode() function -->
-		<exclude name="WordPress.PHP.DiscouragedFunctions.DiscouragedWithAlternative" />
-
 		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize" />
 
-		<exclude name="WordPress.VIP.RestrictedFunctions.get_posts" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_get_user_meta" />
-		<exclude name="WordPress.VIP.RestrictedFunctions.user_meta_update_user_meta" />
-        <exclude name="WordPress.VIP.RestrictedFunctions.wp_redirect_wp_redirect" />
-
-        <exclude name="WordPress.VIP.SlowDBQuery.slow_db_query_meta_key" />
-        <exclude name="WordPress.VIP.SlowDBQuery.slow_db_query_meta_query" />
-	</rule>
-
-	<rule ref="WordPress.VIP.SlowDBQuery.slow_db_query">
-		<exclude-pattern>/src/Admin.php</exclude-pattern>
-		<exclude-pattern>/src/AdminPaymentFormPostType.php</exclude-pattern>
-		<exclude-pattern>/src/PaymentAddOn.php</exclude-pattern>
+		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect" />
 	</rule>
 </ruleset>

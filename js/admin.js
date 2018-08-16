@@ -75,7 +75,7 @@
 					var linkName = $( field ).attr( 'data-pronamic-link-name' );
 
 					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
-						isSelected = false;
+						var isSelected = false;
 
 						if ( 'object' === typeof feed.links ) {
 							isSelected = ( feed.links[ linkName ].confirmation_id === confirmation.id );

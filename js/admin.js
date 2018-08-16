@@ -6,7 +6,7 @@
 	/**
 	 * Gravity Forms pay feed editor
 	 */
-	var gravityFormsPayFeedEditor = function( element ) {
+	var GravityFormsPayFeedEditor = function( element ) {
 		var obj = this;
 		var $element = $( element );
 
@@ -565,7 +565,7 @@
 				return;
 			}
 
-			var editor = new gravityFormsPayFeedEditor( this );
+			var editor = new GravityFormsPayFeedEditor( this );
 
 			$this.data( 'gf-pay-feed-editor', editor );
 		} );

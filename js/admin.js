@@ -72,8 +72,7 @@
 
 			if ( gravityForm ) {
 				$.each( elements.confirmationSelectFields, function( index, field ) {
-					var linkName = $( field ).attr( 'data-pronamic-link-name' ),
-						isSelected = false;
+					var linkName = $( field ).attr( 'data-pronamic-link-name' );
 
 					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
 						isSelected = false;

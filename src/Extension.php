@@ -173,17 +173,6 @@ class Extension {
 			wp_enqueue_style( 'pronamic-pay-gravityforms' );
 
 			wp_enqueue_script( 'pronamic-pay-gravityforms' );
-
-			// Styles and scripts for Merge Tag button.
-			wp_register_style( 'gform_admin', GFCommon::get_base_url() . '/css/admin.min.css' );
-
-			wp_enqueue_style( 'jquery-ui-styles' );
-
-			wp_enqueue_style( 'gform_admin' );
-
-			wp_enqueue_script( 'gform_gravityforms' );
-
-			wp_enqueue_script( 'gform_form_admin' );
 		}
 	}
 

@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.1] - 2018-08-28
+- The `add_pending_payment` action is no longer triggered for entries without pending payments.
+
 ## [2.1.0] - 2018-08-16
 - Added support for synchronized subscription payment dates.
 - Changed Entry ID prefix field to a Order ID field.
@@ -179,7 +182,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.0...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.1...HEAD
+[2.1.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.0...2.1.1
 [2.1.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.0.1...2.1.0
 [2.0.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/wp-pay-extensions/gravityforms/compare/1.6.7...2.0.0

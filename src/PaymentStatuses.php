@@ -19,7 +19,7 @@ use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.1
  * @since   1.0.0
  */
 class PaymentStatuses {
@@ -110,6 +110,7 @@ class PaymentStatuses {
 	/**
 	 * Transform a Pronamic Pay status to a Gravity Forms payment status.
 	 *
+	 * @since 2.1.1
 	 * @param string $status OmniKassa 2.0 status.
 	 * @return string|null
 	 */

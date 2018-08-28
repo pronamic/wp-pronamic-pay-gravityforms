@@ -265,8 +265,13 @@ class Processor {
 
 		GravityForms::update_entry( $lead );
 
-		// Add pending payment if no gateway errors occurred.
-		if ( ! $this->gateway->has_error() && PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
+		// Error handling.
+		if ( $this->gateway->has_error() ) {
+			return $lead;
+		}
+
+		// Pending payment.
+		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
 			// Add pending payment.
 			$action = array(
 				'id'             => $this->payment->get_id(),
@@ -278,6 +283,7 @@ class Processor {
 			$this->extension->payment_action( 'add_pending_payment', $lead, $action );
 		}
 
+		// Return lead.
 		return $lead;
 	}
 

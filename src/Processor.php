@@ -24,7 +24,7 @@ use WP_Error;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.1
  * @since   1.0.0
  */
 class Processor {
@@ -259,14 +259,19 @@ class Processor {
 		gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
 		gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
 
-		$lead[ LeadProperties::PAYMENT_STATUS ] = GravityForms::get_entry_property( $lead['id'], LeadProperties::PAYMENT_STATUS );
+		$lead[ LeadProperties::PAYMENT_STATUS ] = PaymentStatuses::transform( $this->payment->get_status() );
 		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_amount()->get_amount();
 		$lead[ LeadProperties::TRANSACTION_ID ] = $this->payment->get_transaction_id();
 
 		GravityForms::update_entry( $lead );
 
-		// Add pending payment if no gateway errors occurred.
-		if ( ! $this->gateway->has_error() ) {
+		// Error handling.
+		if ( $this->gateway->has_error() ) {
+			return $lead;
+		}
+
+		// Pending payment.
+		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
 			// Add pending payment.
 			$action = array(
 				'id'             => $this->payment->get_id(),
@@ -278,6 +283,7 @@ class Processor {
 			$this->extension->payment_action( 'add_pending_payment', $lead, $action );
 		}
 
+		// Return lead.
 		return $lead;
 	}
 

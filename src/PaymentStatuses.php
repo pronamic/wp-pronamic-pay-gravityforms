@@ -10,6 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
+use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
+
 /**
  * Title: WordPress pay extension Gravity Forms payment statuses
  * Description:
@@ -17,7 +19,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.1
  * @since   1.0.0
  */
 class PaymentStatuses {
@@ -104,4 +106,30 @@ class PaymentStatuses {
 	 * @var string
 	 */
 	const VOIDED = 'Voided';
+
+	/**
+	 * Transform a Pronamic Pay status to a Gravity Forms payment status.
+	 *
+	 * @since 2.1.1
+	 * @param string $status OmniKassa 2.0 status.
+	 * @return string|null
+	 */
+	public static function transform( $status ) {
+		switch ( $status ) {
+			case Core_Statuses::SUCCESS:
+				return self::PAID;
+			case Core_Statuses::CANCELLED:
+				return self::CANCELLED;
+			case Core_Statuses::EXPIRED:
+				return self::EXPIRED;
+			case Core_Statuses::FAILURE:
+				return self::FAILED;
+			case Core_Statuses::OPEN:
+				return self::PROCESSING;
+			case Core_Statuses::OPEN:
+				return self::PROCESSING;
+			default:
+				return null;
+		}
+	}
 }

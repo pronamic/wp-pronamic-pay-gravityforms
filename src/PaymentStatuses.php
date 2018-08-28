@@ -116,9 +116,9 @@ class PaymentStatuses {
 	public static function transform( $status ) {
 		switch ( $status ) {
 			case Core_Statuses::SUCCESS:
-				return self::PAID
+				return self::PAID;
 			case Core_Statuses::CANCELLED:
-				return self::CANCELLED
+				return self::CANCELLED;
 			case Core_Statuses::EXPIRED:
 				return self::EXPIRED;
 			case Core_Statuses::FAILURE:

@@ -144,6 +144,7 @@ class Processor {
 		add_action( 'gform_after_submission_' . $this->form_id, array( $this, 'after_submission' ), 10, 2 );
 
 		add_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, array( $this, 'maybe_delay_feed' ), 10, 4 );
+		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array( $this, 'maybe_delay_workflow' ), 10, 3 );
 	}
 
 	/**
@@ -372,6 +373,21 @@ class Processor {
 		}
 
 		return $is_delayed;
+	}
+
+	/**
+	 * Maybe delay workflow.
+	 *
+	 * @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4711-L4720
+	 *
+	 * @param bool  $is_delayed Indicates if processing of the workflow should be delayed.
+	 * @param array $entry      Gravity Forms entry.
+	 * @param array $form       Gravity Forms form.
+	 *
+	 * @return bool
+	 */
+	public function maybe_delay_workflow( $is_delayed, $entry, $form ) {
+		return $this->maybe_delay_feed( $is_delayed, $form, $entry, 'gravityflow' );
 	}
 
 	/**

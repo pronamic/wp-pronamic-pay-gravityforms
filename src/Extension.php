@@ -1005,6 +1005,23 @@ class Extension {
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
 			),
+			'gravityflow'                  => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'gravityflow',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Start the Workflow once payment has been received.', 'pronamic_ideal' ),
+				'delay_callback'              => function() {
+					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4711-L4720
+				},
+				'process_callback'            => function( $entry, $form ) {
+					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4730-L4746
+					if ( Core_Util::class_method_exists( 'Gravity_Flow', 'get_instance' ) ) {
+						$gravityflow = \Gravity_Flow::get_instance();
+
+						$gravityflow->process_workflow( $form, $entry['id'] );
+					}
+				},
+			)
 		);
 
 		$addons = GFAddOn::get_registered_addons();

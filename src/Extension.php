@@ -1014,24 +1014,22 @@ class Extension {
 
 			$slug = $addon->get_slug();
 
-			if ( isset( $actions[ $slug ] ) ) {
-				$actions[ $slug ]['addon']  = $addon;
-				$actions[ $slug ]['active'] = true;
-			}
-
 			if ( isset( $addon->delayed_payment_integration ) ) {
 				if ( ! isset( $actions[ $slug ] ) ) {
-					$actions[ $slug ] = array(
-						'meta_key_suffix' => $slug,
-					);
+					$actions[ $slug ] = array();
 				}
 
-				$actions[ $slug ]['active']                      = true;
+				$actions[ $slug ]['meta_key_suffix']             = $slug;
 				$actions[ $slug ]['delayed_payment_integration'] = true;
 
 				if ( isset( $addon->delayed_payment_integration['option_label'] ) ) {
 					$actions[ $slug ]['label'] = $addon->delayed_payment_integration['option_label'];
 				}
+			}
+
+			if ( isset( $actions[ $slug ] ) ) {
+				$actions[ $slug ]['addon']  = $addon;
+				$actions[ $slug ]['active'] = true;
 			}
 		}
 

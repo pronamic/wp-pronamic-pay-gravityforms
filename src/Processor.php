@@ -367,7 +367,7 @@ class Processor {
 	 * @return bool
 	 */
 	public function maybe_delay_feed( $is_delayed, $form, $entry, $slug ) {
-		if ( $this->is_processing( $form ) && isset( $this->delay_actions[ $slug ] ) && GFCommon::get_order_total( $form, $entry ) > 0 ) {
+		if ( $this->is_processing( $form ) && isset( $this->feed->delay_actions[ $slug ] ) && GFCommon::get_order_total( $form, $entry ) > 0 ) {
 			$is_delayed = true;
 		}
 

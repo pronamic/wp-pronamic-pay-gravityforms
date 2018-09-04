@@ -1021,7 +1021,7 @@ class Extension {
 						$gravityflow->process_workflow( $form, $entry['id'] );
 					}
 				},
-			)
+			),
 		);
 
 		$addons = GFAddOn::get_registered_addons();

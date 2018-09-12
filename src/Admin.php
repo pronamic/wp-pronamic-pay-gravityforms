@@ -20,7 +20,7 @@ use stdClass;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.0.0
  */
 class Admin {
@@ -207,12 +207,15 @@ class Admin {
 		$lead = RGFormsModel::get_lead( $lead_id );
 
 		if ( ! empty( $lead ) ) {
-			$url = add_query_arg( array(
-				'page' => 'gf_entries',
-				'view' => 'entry',
-				'id'   => $lead['form_id'],
-				'lid'  => $lead_id,
-			), admin_url( 'admin.php' ) );
+			$url = add_query_arg(
+				array(
+					'page' => 'gf_entries',
+					'view' => 'entry',
+					'id'   => $lead['form_id'],
+					'lid'  => $lead_id,
+				),
+				admin_url( 'admin.php' )
+			);
 
 			wp_safe_redirect( $url );
 
@@ -244,12 +247,15 @@ class Admin {
 			return add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
 		}
 
-		return add_query_arg( array(
-			'page'    => 'gf_edit_forms',
-			'view'    => 'settings',
-			'subview' => 'pronamic_pay',
-			'id'      => $form_id,
-			'fid'     => 0,
-		), admin_url( 'admin.php' ) );
+		return add_query_arg(
+			array(
+				'page'    => 'gf_edit_forms',
+				'view'    => 'settings',
+				'subview' => 'pronamic_pay',
+				'id'      => $form_id,
+				'fid'     => 0,
+			),
+			admin_url( 'admin.php' )
+		);
 	}
 }

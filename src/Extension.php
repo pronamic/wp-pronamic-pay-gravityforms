@@ -33,7 +33,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.0.0
  */
 class Extension {
@@ -1005,6 +1005,23 @@ class Extension {
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
 			),
+			'gravityflow'                  => array(
+				'active'                      => false,
+				'meta_key_suffix'             => 'gravityflow',
+				'delayed_payment_integration' => true,
+				'label'                       => __( 'Start the Workflow once payment has been received.', 'pronamic_ideal' ),
+				'delay_callback'              => function() {
+					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4711-L4720
+				},
+				'process_callback'            => function( $entry, $form ) {
+					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4730-L4746
+					if ( Core_Util::class_method_exists( 'Gravity_Flow', 'get_instance' ) ) {
+						$gravityflow = \Gravity_Flow::get_instance();
+
+						$gravityflow->process_workflow( $form, $entry['id'] );
+					}
+				},
+			),
 		);
 
 		$addons = GFAddOn::get_registered_addons();
@@ -1014,24 +1031,22 @@ class Extension {
 
 			$slug = $addon->get_slug();
 
-			if ( isset( $actions[ $slug ] ) ) {
-				$actions[ $slug ]['addon']  = $addon;
-				$actions[ $slug ]['active'] = true;
-			}
-
 			if ( isset( $addon->delayed_payment_integration ) ) {
 				if ( ! isset( $actions[ $slug ] ) ) {
-					$actions[ $slug ] = array(
-						'meta_key_suffix' => $slug,
-					);
+					$actions[ $slug ] = array();
 				}
 
-				$actions[ $slug ]['active']                      = true;
+				$actions[ $slug ]['meta_key_suffix']             = $slug;
 				$actions[ $slug ]['delayed_payment_integration'] = true;
 
 				if ( isset( $addon->delayed_payment_integration['option_label'] ) ) {
 					$actions[ $slug ]['label'] = $addon->delayed_payment_integration['option_label'];
 				}
+			}
+
+			if ( isset( $actions[ $slug ] ) ) {
+				$actions[ $slug ]['addon']  = $addon;
+				$actions[ $slug ]['active'] = true;
 			}
 		}
 

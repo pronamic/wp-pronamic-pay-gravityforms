@@ -17,7 +17,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.0.0
  */
 class Entry {
@@ -34,12 +34,16 @@ class Entry {
 		if ( isset( $entry[ LeadProperties::PAYMENT_STATUS ] ) ) {
 			$payment_status = $entry[ LeadProperties::PAYMENT_STATUS ];
 
-			$approved = in_array( $payment_status, array(
-				// @since 1.0.0 - Approved
-				PaymentStatuses::APPROVED,
-				// @since 1.2.3 - Paid
-				PaymentStatuses::PAID,
-			), true );
+			$approved = in_array(
+				$payment_status,
+				array(
+					// @since 1.0.0 - Approved
+					PaymentStatuses::APPROVED,
+					// @since 1.2.3 - Paid
+					PaymentStatuses::PAID,
+				),
+				true
+			);
 		}
 
 		return $approved;

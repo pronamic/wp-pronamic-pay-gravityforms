@@ -21,7 +21,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.0.0
  */
 class AdminPaymentFormPostType {
@@ -84,10 +84,15 @@ class AdminPaymentFormPostType {
 				if ( ! empty( $form_id ) ) {
 					printf(
 						'<a href="%s">%s</a>',
-						esc_attr( add_query_arg( array(
-							'page' => 'gf_edit_forms',
-							'id'   => $form_id,
-						), admin_url( 'admin.php' ) ) ),
+						esc_attr(
+							add_query_arg(
+								array(
+									'page' => 'gf_edit_forms',
+									'id'   => $form_id,
+								),
+								admin_url( 'admin.php' )
+							)
+						),
 						esc_html( $form_id )
 					);
 				} else {
@@ -144,15 +149,17 @@ class AdminPaymentFormPostType {
 	 * @param int $form_id The ID of the form being deleted.
 	 */
 	public function delete_payment_form( $form_id ) {
-		$query = new WP_Query( array(
-			'post_type'  => 'pronamic_pay_gf',
-			'meta_query' => array(
-				array(
-					'key'   => '_pronamic_pay_gf_form_id',
-					'value' => $form_id,
+		$query = new WP_Query(
+			array(
+				'post_type'  => 'pronamic_pay_gf',
+				'meta_query' => array(
+					array(
+						'key'   => '_pronamic_pay_gf_form_id',
+						'value' => $form_id,
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		foreach ( $query->posts as $post ) {
 			wp_delete_post( $post->ID, true );
@@ -278,9 +285,12 @@ class AdminPaymentFormPostType {
 
 		$delay_actions = Extension::get_delay_actions();
 
-		$delay_actions = array_filter( $delay_actions, function( $action ) {
-			return $action['active'];
-		} );
+		$delay_actions = array_filter(
+			$delay_actions,
+			function( $action ) {
+				return $action['active'];
+			}
+		);
 
 		foreach ( $delay_actions as $action ) {
 			$definition[ $action['meta_key'] ] = FILTER_VALIDATE_BOOLEAN;

@@ -30,4 +30,8 @@
 
 		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect" />
 	</rule>
+
+	<rule ref="WordPress.WP.GlobalVariablesOverride.OverrideProhibited">
+		<exclude-pattern>views/html-admin-feed-settings.php</exclude-pattern>
+	</rule>
 </ruleset>

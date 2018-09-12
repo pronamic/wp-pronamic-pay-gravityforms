@@ -30,11 +30,13 @@
 	<h1>
 		<?php
 
-		echo esc_html( sprintf(
-			/* translators: %s: Pronamic Pay version number, i.e. 4.7.0 */
-			__( 'Pronamic Pay v%s', 'pronamic_ideal' ),
-			pronamic_pay_plugin()->get_version()
-		) );
+		echo esc_html(
+			sprintf(
+				/* translators: %s: Pronamic Pay version number, i.e. 4.7.0 */
+				__( 'Pronamic Pay v%s', 'pronamic_ideal' ),
+				pronamic_pay_plugin()->get_version()
+			)
+		);
 
 		?>
 	</h1>

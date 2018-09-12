@@ -20,7 +20,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.0.0
  */
 class FeedsDB {
@@ -44,12 +44,14 @@ class FeedsDB {
 
 		$meta_query = array_merge( $meta_query, $meta );
 
-		$query = new WP_Query( array(
-			'fields'         => 'ids',
-			'post_type'      => 'pronamic_pay_gf',
-			'posts_per_page' => 50,
-			'meta_query'     => $meta_query,
-		) );
+		$query = new WP_Query(
+			array(
+				'fields'         => 'ids',
+				'post_type'      => 'pronamic_pay_gf',
+				'posts_per_page' => 50,
+				'meta_query'     => $meta_query,
+			)
+		);
 
 		foreach ( $query->posts as $post_id ) {
 			$feeds[] = new PayFeed( $post_id );

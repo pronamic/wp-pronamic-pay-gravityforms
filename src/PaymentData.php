@@ -29,7 +29,7 @@ use RGFormsModel;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.1
+ * @version 2.1.2
  * @since   1.0.1
  */
 class PaymentData extends Pay_PaymentData {
@@ -662,10 +662,12 @@ class PaymentData extends Pay_PaymentData {
 		$subscription->interval_date_month = $interval_date_month;
 		$subscription->description         = $this->get_description();
 
-		$subscription->set_amount( new Money(
-			$amount,
-			$this->get_currency_alphabetic_code()
-		) );
+		$subscription->set_amount(
+			new Money(
+				$amount,
+				$this->get_currency_alphabetic_code()
+			)
+		);
 
 		return $subscription;
 	}

@@ -21,7 +21,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.1.0
  */
 class PaymentAddOn extends GFPaymentAddOn {
@@ -149,23 +149,28 @@ class PaymentAddOn extends GFPaymentAddOn {
 			);
 		}
 
-		$post_id = wp_insert_post( array(
-			'ID'             => $post_id,
-			'post_type'      => 'pronamic_pay_gf',
-			'post_title'     => $post_title,
-			'post_status'    => 'publish',
-			'comment_status' => 'closed',
-			'ping_status'    => 'closed',
-		) );
+		$post_id = wp_insert_post(
+			array(
+				'ID'             => $post_id,
+				'post_type'      => 'pronamic_pay_gf',
+				'post_title'     => $post_title,
+				'post_status'    => 'publish',
+				'comment_status' => 'closed',
+				'ping_status'    => 'closed',
+			)
+		);
 
-		$url = add_query_arg( array(
-			'page'    => 'gf_edit_forms',
-			'view'    => 'settings',
-			'subview' => 'pronamic_pay',
-			'id'      => $form_id,
-			'fid'     => $post_id,
-			'message' => $post_id ? '1' : '0',
-		), 'admin.php' );
+		$url = add_query_arg(
+			array(
+				'page'    => 'gf_edit_forms',
+				'view'    => 'settings',
+				'subview' => 'pronamic_pay',
+				'id'      => $form_id,
+				'fid'     => $post_id,
+				'message' => $post_id ? '1' : '0',
+			),
+			'admin.php'
+		);
 
 		wp_safe_redirect( $url );
 
@@ -272,32 +277,37 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return array Feeds.
 	 */
 	public function get_feeds( $form_id = null ) {
-		$query = new WP_Query( array(
-			'post_type'      => 'pronamic_pay_gf',
-			'posts_per_page' => 50,
-			'meta_query'     => array(
-				array(
-					'key'   => '_pronamic_pay_gf_form_id',
-					'value' => $form_id,
+		$query = new WP_Query(
+			array(
+				'post_type'      => 'pronamic_pay_gf',
+				'posts_per_page' => 50,
+				'meta_query'     => array(
+					array(
+						'key'   => '_pronamic_pay_gf_form_id',
+						'value' => $form_id,
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		$posts = array();
 
 		foreach ( $query->posts as $post ) {
 			$post = (array) $post;
 
-			$post = array_merge( $post, array(
-				'id'        => $post['ID'],
-				'form_id'   => get_post_meta( $post['ID'], '_pronamic_pay_gf_form_id', true ),
-				'is_active' => true,
-				'meta'      => array(
-					'post'            => $post,
-					'feed_name'       => $post['post_title'],
-					'transactionType' => 'product',
-				),
-			) );
+			$post = array_merge(
+				$post,
+				array(
+					'id'        => $post['ID'],
+					'form_id'   => get_post_meta( $post['ID'], '_pronamic_pay_gf_form_id', true ),
+					'is_active' => true,
+					'meta'      => array(
+						'post'            => $post,
+						'feed_name'       => $post['post_title'],
+						'transactionType' => 'product',
+					),
+				)
+			);
 
 			// Is activated?
 			if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
@@ -324,16 +334,19 @@ class PaymentAddOn extends GFPaymentAddOn {
 			return false;
 		}
 
-		$post = array_merge( $post, array(
-			'id'        => $post['ID'],
-			'form_id'   => get_post_meta( $id, '_pronamic_pay_gf_form_id', true ),
-			'is_active' => true,
-			'meta'      => array(
-				'post'            => $post,
-				'feed_name'       => $post['post_title'],
-				'transactionType' => 'product',
-			),
-		) );
+		$post = array_merge(
+			$post,
+			array(
+				'id'        => $post['ID'],
+				'form_id'   => get_post_meta( $id, '_pronamic_pay_gf_form_id', true ),
+				'is_active' => true,
+				'meta'      => array(
+					'post'            => $post,
+					'feed_name'       => $post['post_title'],
+					'transactionType' => 'product',
+				),
+			)
+		);
 
 		// Is activated?
 		if ( '0' === get_post_meta( $post['id'], '_pronamic_pay_gf_feed_active', true ) ) {
@@ -448,16 +461,18 @@ class PaymentAddOn extends GFPaymentAddOn {
 	public function supported_notification_events( $form ) {
 		$form = (array) $form;
 
-		$query = new WP_Query( array(
-			'post_type'      => 'pronamic_pay_gf',
-			'posts_per_page' => 50,
-			'meta_query'     => array(
-				array(
-					'key'   => '_pronamic_pay_gf_form_id',
-					'value' => $form['id'],
+		$query = new WP_Query(
+			array(
+				'post_type'      => 'pronamic_pay_gf',
+				'posts_per_page' => 50,
+				'meta_query'     => array(
+					array(
+						'key'   => '_pronamic_pay_gf_form_id',
+						'value' => $form['id'],
+					),
 				),
-			),
-		) );
+			)
+		);
 
 		if ( ! $query->have_posts() ) {
 			return false;
@@ -529,13 +544,15 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$original_feed = $meta['post'];
 
 		// Insert post.
-		$post_id = wp_insert_post( array(
-			'post_type'      => 'pronamic_pay_gf',
-			'post_title'     => $meta['feed_name'],
-			'post_status'    => 'publish',
-			'comment_status' => 'closed',
-			'ping_status'    => 'closed',
-		) );
+		$post_id = wp_insert_post(
+			array(
+				'post_type'      => 'pronamic_pay_gf',
+				'post_title'     => $meta['feed_name'],
+				'post_status'    => 'publish',
+				'comment_status' => 'closed',
+				'ping_status'    => 'closed',
+			)
+		);
 
 		$original_meta = get_post_meta( $original_feed['ID'] );
 

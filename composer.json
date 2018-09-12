@@ -40,7 +40,7 @@
 	"require-dev": {
 		"php-coveralls/php-coveralls": "^1.0",
 		"squizlabs/php_codesniffer": "^2.7",
-		"wp-coding-standards/wpcs": "^1.0",
+		"wp-coding-standards/wpcs": "^1.1",
 		"phpmd/phpmd": "^2.4",
 		"phpunit/phpunit": "^4.8",
 		"wimg/php-compatibility": "^8.1",

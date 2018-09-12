@@ -19,7 +19,7 @@ use WP_Post;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.2
  * @since   1.4.4
  */
 class PayFeed {
@@ -127,9 +127,12 @@ class PayFeed {
 
 		$delay_actions = Extension::get_delay_actions();
 
-		$delay_actions = array_filter( $delay_actions, function( $action ) {
-			return $action['active'];
-		} );
+		$delay_actions = array_filter(
+			$delay_actions,
+			function( $action ) {
+				return $action['active'];
+			}
+		);
 
 		foreach ( $delay_actions as $slug => $data ) {
 			if ( '1' === get_post_meta( $post_id, $data['meta_key'], true ) ) {

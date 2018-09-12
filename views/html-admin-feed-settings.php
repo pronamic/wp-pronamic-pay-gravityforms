@@ -142,10 +142,12 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							$config_id = get_option( 'pronamic_pay_config_id' );
 						}
 
-						AdminModule::dropdown_configs( array(
-							'name'     => '_pronamic_pay_gf_config_id',
-							'selected' => $config_id,
-						) );
+						AdminModule::dropdown_configs(
+							array(
+								'name'     => '_pronamic_pay_gf_config_id',
+								'selected' => $config_id,
+							)
+						);
 
 						?>
 					</td>
@@ -378,9 +380,12 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 						$delay_actions = Extension::get_delay_actions();
 
-						$delay_actions = array_filter( $delay_actions, function( $action ) {
-							return $action['active'];
-						} );
+						$delay_actions = array_filter(
+							$delay_actions,
+							function( $action ) {
+								return $action['active'];
+							}
+						);
 
 						foreach ( $delay_actions as $slug => $data ) {
 							$delay_actions[ $slug ]['delay'] = ( '1' === get_post_meta( $post_id, $delay_actions[ $slug ]['meta_key'], true ) );
@@ -485,11 +490,13 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 								<?php
 
-								wp_dropdown_pages( array(
-									'selected'         => esc_attr( $page_id ),
-									'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
-									'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
-								) );
+								wp_dropdown_pages(
+									array(
+										'selected'         => esc_attr( $page_id ),
+										'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
+										'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
+									)
+								);
 
 								?>
 

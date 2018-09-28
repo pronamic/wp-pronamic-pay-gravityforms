@@ -22,7 +22,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.3
  * @since   1.4.7
  *
  * @property int        $pronamicPayConfigId Added by admin.js.
@@ -264,7 +264,7 @@ class PaymentMethodsField extends GF_Field_Select {
 
 			?>
 
-			<div class="ginput_container ginput_container_radio">
+			<div class="ginput_container ginput_container_radio gfield_trigger_change">
 				<ul class="gfield_radio input_<?php echo esc_attr( $this->formId ); ?>_<?php echo esc_attr( $this->id ); ?>">
 					<?php
 

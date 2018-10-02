@@ -663,13 +663,13 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Synchronized Payment Date', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Synchronized Payment Date', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<p>
@@ -699,7 +699,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<input id="pronamic_pay_gf_subscription_interval_date_type_field" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="sync" <?php checked( $subscription_interval_date_type, 'sync' ); ?> />
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-D">
-									<?php echo esc_html( _x( 'Synchronized payment date', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+									<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
 								</span>
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W interval-Y">

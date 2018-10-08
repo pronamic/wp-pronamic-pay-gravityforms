@@ -60,7 +60,7 @@ class IssuersField extends GF_Field_Select {
 		if (
 			! isset( $this->formId )
 				&&
-			defined( 'DOING_AJAX' ) && DOING_AJAX
+			wp_doing_ajax()
 				&&
 			filter_has_var( INPUT_POST, 'form_id' )
 				&&

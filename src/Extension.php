@@ -984,7 +984,7 @@ class Extension {
 				'label'                       => __( 'Uploading files to Dropbox', 'pronamic_ideal' ),
 			),
 			'gravityformszapier'           => array(
-				'active'                      => false,
+				'active'                      => class_exists( 'GFZapier' ),
 				'meta_key_suffix'             => 'zapier',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),

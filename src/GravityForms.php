@@ -106,8 +106,8 @@ class GravityForms {
 	/**
 	 * Check if Gravity Forms is active (Automattic/developer style).
 	 *
-	 * @see https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/gravityforms.php?at=1.7.8#cl-95
-	 * @see https://github.com/Automattic/developer/blob/1.1.2/developer.php#L73
+	 * @link https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/gravityforms.php?at=1.7.8#cl-95
+	 * @link https://github.com/Automattic/developer/blob/1.1.2/developer.php#L73
 	 *
 	 * @return bool
 	 */
@@ -124,9 +124,9 @@ class GravityForms {
 		/*
 		 * GFFormsModel::update_lead() is no longer in use since version 1.8.8! Instead use GFAPI::update_entry().
 		 *
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.13/forms_model.php#L587-L624
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.13/includes/api.php#L495-L654
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.13/forms_model.php#L587-L624
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.13/includes/api.php#L495-L654
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
 		 */
 		if ( Core_Util::class_method_exists( 'GFAPI', 'update_entry' ) ) {
 			GFAPI::update_entry( $entry );

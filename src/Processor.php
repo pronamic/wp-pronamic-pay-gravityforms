@@ -135,7 +135,7 @@ class Processor {
 		add_filter( 'gform_disable_notification_' . $this->form_id, array( $this, 'maybe_delay_notification' ), 10, 4 );
 
 		// Confirmation (@see GFFormDisplay::handle_confirmation).
-		// @see http://www.gravityhelp.com/documentation/page/Gform_confirmation.
+		// @link http://www.gravityhelp.com/documentation/page/Gform_confirmation.
 		add_filter( 'gform_confirmation_' . $this->form_id, array( $this, 'confirmation' ), 10, 4 );
 
 		/*
@@ -182,8 +182,8 @@ class Processor {
 		 * The Add-Ons mainly use the 'gform_after_submission' to export entries, to delay this we have to remove these
 		 * actions before this filter executes.
 		 *
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103.
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113.
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103.
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113.
 		 */
 
 		foreach ( $this->feed->delay_actions as $slug => $data ) {
@@ -393,7 +393,7 @@ class Processor {
 	/**
 	 * Confirmation.
 	 *
-	 * @see http://www.gravityhelp.com/documentation/page/Gform_confirmation
+	 * @link http://www.gravityhelp.com/documentation/page/Gform_confirmation
 	 *
 	 * @param array $confirmation Gravity Forms confirmation.
 	 * @param array $form         Gravity Forms form.

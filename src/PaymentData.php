@@ -36,7 +36,7 @@ class PaymentData extends Pay_PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
-	 * @see http://www.gravityhelp.com/documentation/page/Form_Object
+	 * @link http://www.gravityhelp.com/documentation/page/Form_Object
 	 * @var array
 	 */
 	private $form;
@@ -44,7 +44,7 @@ class PaymentData extends Pay_PaymentData {
 	/**
 	 * Gravity Forms entry object
 	 *
-	 * @see http://www.gravityhelp.com/documentation/page/Entry_Object
+	 * @link http://www.gravityhelp.com/documentation/page/Entry_Object
 	 * @var array
 	 */
 	private $lead;

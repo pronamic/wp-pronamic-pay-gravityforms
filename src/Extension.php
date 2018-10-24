@@ -364,7 +364,7 @@ class Extension {
 		$link = Links::transform_status( $payment->status );
 
 		if ( isset( $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-			$amount = $payment->get_amount()->get_amount();
+			$amount = $payment->get_total_amount()->get_amount();
 
 			if ( empty( $amount ) ) {
 				$confirmation = true;
@@ -419,7 +419,7 @@ class Extension {
 		$action = array(
 			'id'             => $payment->get_id(),
 			'transaction_id' => $payment->get_transaction_id(),
-			'amount'         => $payment->get_amount()->get_amount(),
+			'amount'         => $payment->get_total_amount()->get_amount(),
 			'entry_id'       => $lead['id'],
 		);
 

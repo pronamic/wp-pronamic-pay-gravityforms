@@ -251,6 +251,13 @@ class Processor {
 			$payment_method = PaymentMethods::IDEAL;
 		}
 
+		// Don't delay feed actions for free payments.
+		$amount = $data->get_amount()->get_amount();
+
+		if ( empty( $amount ) ) {
+			$this->feed->delay_actions = array();
+		}
+
 		// Start payment.
 		$this->payment = Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
 

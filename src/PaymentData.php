@@ -364,7 +364,14 @@ class PaymentData extends Pay_PaymentData {
 	 * @return string
 	 */
 	public function get_customer_name() {
-		return $this->get_field_value( 'first_name' ) . ' ' . $this->get_field_value( 'last_name' );
+		$parts = array(
+			$this->get_field_value( 'first_name' ),
+			$this->get_field_value( 'last_name' )
+		);
+
+		$name = array_filter( $parts );
+
+		return implode( ' ', $name );
 	}
 
 	/**
@@ -373,7 +380,14 @@ class PaymentData extends Pay_PaymentData {
 	 * @return string
 	 */
 	public function get_address() {
-		return $this->get_field_value( 'address1' ) . ' ' . $this->get_field_value( 'address2' );
+		$parts = array(
+			$this->get_field_value( 'address1' ),
+			$this->get_field_value( 'address2' )
+		);
+
+		$address = array_filter( $parts );
+
+		return implode( ' ', $address );
 	}
 
 	/**

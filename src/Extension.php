@@ -990,7 +990,7 @@ class Extension {
 				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
-					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
+					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.

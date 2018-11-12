@@ -127,10 +127,10 @@ class Extension {
 	/**
 	 * Field create.
 	 *
-	 * @param \GF_Field $field      Field object.
-	 * @param array     $properties Field properties.
+	 * @param GF_Field $field      Field object.
+	 * @param array    $properties Field properties.
 	 *
-	 * @return \GF_Field|IssuersField|PaymentMethodsField
+	 * @return GF_Field|IssuersField|PaymentMethodsField
 	 */
 	public function field_create( $field, $properties ) {
 		/*

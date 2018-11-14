@@ -367,7 +367,7 @@ class PaymentData extends Pay_PaymentData {
 	public function get_customer_name() {
 		$parts = array(
 			$this->get_field_value( 'first_name' ),
-			$this->get_field_value( 'last_name' )
+			$this->get_field_value( 'last_name' ),
 		);
 
 		$name = array_filter( $parts );
@@ -383,7 +383,7 @@ class PaymentData extends Pay_PaymentData {
 	public function get_address() {
 		$parts = array(
 			$this->get_field_value( 'address1' ),
-			$this->get_field_value( 'address2' )
+			$this->get_field_value( 'address2' ),
 		);
 
 		$address = array_filter( $parts );

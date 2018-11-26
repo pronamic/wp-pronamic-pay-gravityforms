@@ -183,7 +183,7 @@ class PaymentData extends Pay_PaymentData {
 			$item->set_price( $price );
 			$item->set_quantity( $quantity );
 
-			$items->addItem( $item );
+			$items->add_item( $item );
 
 			if ( isset( $product['options'] ) && is_array( $product['options'] ) ) {
 				foreach ( $product['options'] as $option ) {
@@ -196,7 +196,7 @@ class PaymentData extends Pay_PaymentData {
 					$item->set_price( $price );
 					$item->set_quantity( $quantity ); // Product quantity.
 
-					$items->addItem( $item );
+					$items->add_item( $item );
 				}
 			}
 		}
@@ -216,7 +216,7 @@ class PaymentData extends Pay_PaymentData {
 				$item->set_price( $price );
 				$item->set_quantity( $quantity );
 
-				$items->addItem( $item );
+				$items->add_item( $item );
 			}
 		}
 
@@ -251,7 +251,7 @@ class PaymentData extends Pay_PaymentData {
 				$item->set_price( $price );
 				$item->set_quantity( $quantity );
 
-				$items->addItem( $item );
+				$items->add_item( $item );
 			}
 		}
 

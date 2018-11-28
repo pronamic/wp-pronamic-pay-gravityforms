@@ -311,7 +311,7 @@ class PaymentData extends Pay_PaymentData {
 
 			$prorated_days_diff = $now->diff( $next_date )->days;
 
-			$amount_per_day = ( $amount->get_amount() / $days_diff );
+			$amount_per_day = ( $amount->get_value() / $days_diff );
 
 			$prorated_amount = ( $amount_per_day * $prorated_days_diff );
 
@@ -586,7 +586,7 @@ class PaymentData extends Pay_PaymentData {
 			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
 				$items = $this->get_items();
 
-				$amount = $items->get_amount()->get_amount();
+				$amount = $items->get_amount()->get_value();
 
 				break;
 			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:

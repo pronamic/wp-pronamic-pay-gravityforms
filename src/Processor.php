@@ -29,7 +29,7 @@ use WP_Error;
  */
 class Processor {
 	/**
-	 * The Pronamic iDEAL Gravity Forms extension
+	 * The Pronamic Pay Gravity Forms extension
 	 *
 	 * @var Extension
 	 */

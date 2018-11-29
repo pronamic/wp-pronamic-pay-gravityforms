@@ -51,7 +51,7 @@ class PaymentData extends Pay_PaymentData {
 	private $lead;
 
 	/**
-	 * Pronamic iDEAL feed object
+	 * Payment feed object
 	 *
 	 * @var PayFeed
 	 */

@@ -535,7 +535,7 @@ class Extension {
 			return;
 		}
 
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return;

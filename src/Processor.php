@@ -24,12 +24,12 @@ use WP_Error;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.4
  * @since   1.0.0
  */
 class Processor {
 	/**
-	 * The Pronamic iDEAL Gravity Forms extension
+	 * The Pronamic Pay Gravity Forms extension
 	 *
 	 * @var Extension
 	 */
@@ -135,7 +135,7 @@ class Processor {
 		add_filter( 'gform_disable_notification_' . $this->form_id, array( $this, 'maybe_delay_notification' ), 10, 4 );
 
 		// Confirmation (@see GFFormDisplay::handle_confirmation).
-		// @see http://www.gravityhelp.com/documentation/page/Gform_confirmation.
+		// @link http://www.gravityhelp.com/documentation/page/Gform_confirmation.
 		add_filter( 'gform_confirmation_' . $this->form_id, array( $this, 'confirmation' ), 10, 4 );
 
 		/*
@@ -182,8 +182,8 @@ class Processor {
 		 * The Add-Ons mainly use the 'gform_after_submission' to export entries, to delay this we have to remove these
 		 * actions before this filter executes.
 		 *
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103.
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113.
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L101-L103.
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.16/form_display.php#L111-L113.
 		 */
 
 		foreach ( $this->feed->delay_actions as $slug => $data ) {
@@ -251,6 +251,13 @@ class Processor {
 			$payment_method = PaymentMethods::IDEAL;
 		}
 
+		// Don't delay feed actions for free payments.
+		$amount = $data->get_amount()->get_value();
+
+		if ( empty( $amount ) ) {
+			$this->feed->delay_actions = array();
+		}
+
 		// Start payment.
 		$this->payment = Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
 
@@ -261,7 +268,7 @@ class Processor {
 		gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
 
 		$lead[ LeadProperties::PAYMENT_STATUS ] = PaymentStatuses::transform( $this->payment->get_status() );
-		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_amount()->get_amount();
+		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_total_amount()->get_value();
 		$lead[ LeadProperties::TRANSACTION_ID ] = $this->payment->get_transaction_id();
 
 		GravityForms::update_entry( $lead );
@@ -277,7 +284,7 @@ class Processor {
 			$action = array(
 				'id'             => $this->payment->get_id(),
 				'transaction_id' => $this->payment->get_transaction_id(),
-				'amount'         => $this->payment->get_amount()->get_amount(),
+				'amount'         => $this->payment->get_total_amount()->get_value(),
 				'entry_id'       => $lead['id'],
 			);
 
@@ -393,7 +400,7 @@ class Processor {
 	/**
 	 * Confirmation.
 	 *
-	 * @see http://www.gravityhelp.com/documentation/page/Gform_confirmation
+	 * @link http://www.gravityhelp.com/documentation/page/Gform_confirmation
 	 *
 	 * @param array $confirmation Gravity Forms confirmation.
 	 * @param array $form         Gravity Forms form.

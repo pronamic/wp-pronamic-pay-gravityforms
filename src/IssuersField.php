@@ -57,7 +57,17 @@ class IssuersField extends GF_Field_Select {
 			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
 		}
 
-		if ( ! isset( $this->formId ) && defined( 'DOING_AJAX' ) && DOING_AJAX && filter_has_var( INPUT_POST, 'form_id' ) && 'rg_add_field' === filter_input( INPUT_POST, 'action' ) && false !== strpos( filter_input( INPUT_POST, 'field' ), self::TYPE ) ) {
+		if (
+			! isset( $this->formId )
+				&&
+			wp_doing_ajax()
+				&&
+			filter_has_var( INPUT_POST, 'form_id' )
+				&&
+			'rg_add_field' === filter_input( INPUT_POST, 'action' )
+				&&
+			false !== strpos( filter_input( INPUT_POST, 'field' ), self::TYPE )
+		) {
 			$this->formId = filter_input( INPUT_POST, 'form_id', FILTER_SANITIZE_NUMBER_INT );
 		}
 
@@ -84,8 +94,8 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Get form editor field settings for this field.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
 	 * @return array
 	 */
 	public function get_form_editor_field_settings() {
@@ -506,8 +516,8 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Get form editor field title.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L106-L113
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field-select.php#L12-L14
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L106-L113
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field-select.php#L12-L14
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
@@ -517,7 +527,7 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Get form editor button.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L115-L129
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L115-L129
 	 * @return array
 	 */
 	public function get_form_editor_button() {
@@ -530,8 +540,8 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Add button.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
 	 *
 	 * @param array $field_groups Field groups.
 	 *
@@ -547,7 +557,7 @@ class IssuersField extends GF_Field_Select {
 	/**
 	 * Editor JavaScript default field values.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
 	 */
 	public static function editor_js_set_default_values() {
 		$label = __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' );

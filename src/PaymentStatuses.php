@@ -118,16 +118,20 @@ class PaymentStatuses {
 		switch ( $status ) {
 			case Core_Statuses::SUCCESS:
 				return self::PAID;
+
 			case Core_Statuses::CANCELLED:
 				return self::CANCELLED;
+
 			case Core_Statuses::EXPIRED:
 				return self::EXPIRED;
+
 			case Core_Statuses::FAILURE:
 				return self::FAILED;
+
+			case Core_Statuses::RESERVED:
 			case Core_Statuses::OPEN:
 				return self::PROCESSING;
-			case Core_Statuses::OPEN:
-				return self::PROCESSING;
+
 			default:
 				return null;
 		}

@@ -60,7 +60,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		 * this results in a `GF_Field_Checkbox` field with additional inputs, but we what
 		 * need is a payment methods field without additional inputs.
 		 *
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		$this->inputs = null;
 
@@ -103,8 +103,8 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Get form editor field settings for this field.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L16-L35
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L144-L151
 	 *
 	 * @return array
 	 */
@@ -238,8 +238,8 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Get the field input.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field.php#L182-L193
 	 *
 	 * @param array  $form  Form.
 	 * @param string $value Field value.
@@ -542,8 +542,8 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Get form editor field title.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L106-L113
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field-select.php#L12-L14
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L106-L113
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field-select.php#L12-L14
 	 *
 	 * @return string
 	 */
@@ -554,7 +554,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Get form editor button.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L115-L129
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L115-L129
 	 *
 	 * @return array
 	 */
@@ -568,8 +568,8 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Add button.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L2353-L2368
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-field.php#L617-L652
 	 *
 	 * @param array $field_groups Field groups.
 	 *
@@ -614,8 +614,8 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Editor JavaScript default field values.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/js/forms.js#L38-L43
 	 */
 	public function editor_js_set_default_values() {
 		?>

@@ -80,7 +80,7 @@ class Fields {
 	/**
 	 * Field standard settings.
 	 *
-	 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L525
+	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/form_detail.php#L525
 	 *
 	 * @param int $position Position of the field settings.
 	 * @param int $form_id  Form ID.

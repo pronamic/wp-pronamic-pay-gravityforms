@@ -33,7 +33,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.4
  * @since   1.0.0
  */
 class Extension {
@@ -127,10 +127,10 @@ class Extension {
 	/**
 	 * Field create.
 	 *
-	 * @param \GF_Field $field      Field object.
-	 * @param array     $properties Field properties.
+	 * @param GF_Field $field      Field object.
+	 * @param array    $properties Field properties.
 	 *
-	 * @return \GF_Field|IssuersField|PaymentMethodsField
+	 * @return GF_Field|IssuersField|PaymentMethodsField
 	 */
 	public function field_create( $field, $properties ) {
 		/*
@@ -138,7 +138,7 @@ class Extension {
 		 * this results in a `GF_Field_Checkbox` field, but we really need a payment methods
 		 * field.
 		 *
-		 * @see https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
+		 * @link https://github.com/wp-premium/gravityforms/blob/1.9.19/includes/fields/class-gf-fields.php#L60-L86
 		 */
 		switch ( $field->type ) {
 			case Fields::ISSUERS_FIELD_TYPE:
@@ -187,7 +187,7 @@ class Extension {
 	/**
 	 * Gravity Forms No Conflict scripts.
 	 *
-	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_scripts/
+	 * @link https://www.gravityhelp.com/documentation/article/gform_noconflict_scripts/
 	 *
 	 * @param array $scripts Scripts.
 	 *
@@ -204,7 +204,7 @@ class Extension {
 	/**
 	 * Gravity Forms No Conflict styles.
 	 *
-	 * @see https://www.gravityhelp.com/documentation/article/gform_noconflict_styles/
+	 * @link https://www.gravityhelp.com/documentation/article/gform_noconflict_styles/
 	 *
 	 * @param array $styles Styles.
 	 *
@@ -364,7 +364,7 @@ class Extension {
 		$link = Links::transform_status( $payment->status );
 
 		if ( isset( $feed->links[ $link ]['type'] ) && PayFeed::LINK_TYPE_CONFIRMATION === $feed->links[ $link ]['type'] ) {
-			$amount = $payment->get_amount()->get_amount();
+			$amount = $payment->get_total_amount()->get_value();
 
 			if ( empty( $amount ) ) {
 				$confirmation = true;
@@ -419,7 +419,7 @@ class Extension {
 		$action = array(
 			'id'             => $payment->get_id(),
 			'transaction_id' => $payment->get_transaction_id(),
-			'amount'         => $payment->get_amount()->get_amount(),
+			'amount'         => $payment->get_total_amount()->get_value(),
 			'entry_id'       => $lead['id'],
 		);
 
@@ -450,7 +450,7 @@ class Extension {
 				break;
 			case Statuses::SUCCESS:
 				if ( ! Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
-					// @see https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
+					// @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
 					$this->payment_action( $success_action, $lead, $action, PaymentStatuses::PAID );
 				}
 
@@ -499,7 +499,7 @@ class Extension {
 			'id'              => $subscription->get_id(),
 			'transaction_id'  => $subscription->get_transaction_id(),
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount()->get_amount(),
+			'amount'          => $subscription->get_amount()->get_value(),
 			'entry_id'        => $lead['id'],
 		);
 
@@ -535,7 +535,7 @@ class Extension {
 			return;
 		}
 
-		$feed = get_pronamic_gf_pay_feed_by_entry_id( $lead_id );
+		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return;
@@ -543,7 +543,7 @@ class Extension {
 
 		$action = array(
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount()->get_amount(),
+			'amount'          => $subscription->get_amount()->get_value(),
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
 		);
@@ -571,7 +571,7 @@ class Extension {
 	 * @param string $payment_status Payment action status.
 	 *
 	 * @return bool
-	 * @see https://github.com/wp-premium/gravityforms/blob/2.1.0.1/includes/addon/class-gf-payment-addon.php#L1133-L1172
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.1.0.1/includes/addon/class-gf-payment-addon.php#L1133-L1172
 	 */
 	public function payment_action( $type, $lead, $action, $payment_status = null ) {
 		if ( ! $this->addon ) {
@@ -711,7 +711,7 @@ class Extension {
 					$delay_notification_ids[] = $notification_id;
 				}
 
-				// @see https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/common.php?at=1.7.8#cl-1512
+				// @link https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/common.php?at=1.7.8#cl-1512
 				GFCommon::send_notifications( $delay_notification_ids, $form, $entry, true, 'form_submission' );
 			}
 
@@ -912,7 +912,7 @@ class Extension {
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
-					// @see https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
+					// @link https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 					remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
 				},
 				'process_callback'            => function( $entry, $form ) {
@@ -927,11 +927,11 @@ class Extension {
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
-					// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
+					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 					remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
 				},
 				'process_callback'            => function( $entry, $form ) {
-					// @see https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
+					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
 					if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
 						call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
 					}
@@ -943,7 +943,7 @@ class Extension {
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
-					// @see https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
+					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 					remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
 				},
 				'process_callback'            => function( $entry, $form ) {
@@ -984,13 +984,13 @@ class Extension {
 				'label'                       => __( 'Uploading files to Dropbox', 'pronamic_ideal' ),
 			),
 			'gravityformszapier'           => array(
-				'active'                      => false,
+				'active'                      => class_exists( 'GFZapier' ),
 				'meta_key_suffix'             => 'zapier',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
-					// @see https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
-					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10, 2 );
+					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
+					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.

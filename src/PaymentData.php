@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 use GFCommon;
 use Pronamic\WordPress\DateTime\DateTime;
 use Pronamic\WordPress\Money\Money;
+use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
@@ -29,14 +30,14 @@ use RGFormsModel;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.4
  * @since   1.0.1
  */
 class PaymentData extends Pay_PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
-	 * @see http://www.gravityhelp.com/documentation/page/Form_Object
+	 * @link http://www.gravityhelp.com/documentation/page/Form_Object
 	 * @var array
 	 */
 	private $form;
@@ -44,13 +45,13 @@ class PaymentData extends Pay_PaymentData {
 	/**
 	 * Gravity Forms entry object
 	 *
-	 * @see http://www.gravityhelp.com/documentation/page/Entry_Object
+	 * @link http://www.gravityhelp.com/documentation/page/Entry_Object
 	 * @var array
 	 */
 	private $lead;
 
 	/**
-	 * Pronamic iDEAL feed object
+	 * Payment feed object
 	 *
 	 * @var PayFeed
 	 */
@@ -182,7 +183,7 @@ class PaymentData extends Pay_PaymentData {
 			$item->set_price( $price );
 			$item->set_quantity( $quantity );
 
-			$items->addItem( $item );
+			$items->add_item( $item );
 
 			if ( isset( $product['options'] ) && is_array( $product['options'] ) ) {
 				foreach ( $product['options'] as $option ) {
@@ -195,7 +196,7 @@ class PaymentData extends Pay_PaymentData {
 					$item->set_price( $price );
 					$item->set_quantity( $quantity ); // Product quantity.
 
-					$items->addItem( $item );
+					$items->add_item( $item );
 				}
 			}
 		}
@@ -215,7 +216,7 @@ class PaymentData extends Pay_PaymentData {
 				$item->set_price( $price );
 				$item->set_quantity( $quantity );
 
-				$items->addItem( $item );
+				$items->add_item( $item );
 			}
 		}
 
@@ -250,7 +251,7 @@ class PaymentData extends Pay_PaymentData {
 				$item->set_price( $price );
 				$item->set_quantity( $quantity );
 
-				$items->addItem( $item );
+				$items->add_item( $item );
 			}
 		}
 
@@ -260,7 +261,7 @@ class PaymentData extends Pay_PaymentData {
 	/**
 	 * Get (prorated) amount.
 	 *
-	 * @return Money
+	 * @return TaxedMoney
 	 */
 	public function get_amount() {
 		$amount = parent::get_amount();
@@ -310,7 +311,7 @@ class PaymentData extends Pay_PaymentData {
 
 			$prorated_days_diff = $now->diff( $next_date )->days;
 
-			$amount_per_day = ( $amount->get_amount() / $days_diff );
+			$amount_per_day = ( $amount->get_value() / $days_diff );
 
 			$prorated_amount = ( $amount_per_day * $prorated_days_diff );
 
@@ -364,7 +365,14 @@ class PaymentData extends Pay_PaymentData {
 	 * @return string
 	 */
 	public function get_customer_name() {
-		return $this->get_field_value( 'first_name' ) . ' ' . $this->get_field_value( 'last_name' );
+		$parts = array(
+			$this->get_field_value( 'first_name' ),
+			$this->get_field_value( 'last_name' ),
+		);
+
+		$name = array_filter( $parts );
+
+		return implode( ' ', $name );
 	}
 
 	/**
@@ -373,7 +381,14 @@ class PaymentData extends Pay_PaymentData {
 	 * @return string
 	 */
 	public function get_address() {
-		return $this->get_field_value( 'address1' ) . ' ' . $this->get_field_value( 'address2' );
+		$parts = array(
+			$this->get_field_value( 'address1' ),
+			$this->get_field_value( 'address2' ),
+		);
+
+		$address = array_filter( $parts );
+
+		return implode( ' ', $address );
 	}
 
 	/**
@@ -571,7 +586,7 @@ class PaymentData extends Pay_PaymentData {
 			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
 				$items = $this->get_items();
 
-				$amount = $items->get_amount()->get_amount();
+				$amount = $items->get_amount()->get_value();
 
 				break;
 			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:

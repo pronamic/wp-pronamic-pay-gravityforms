@@ -24,7 +24,7 @@ use WP_Error;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.4
  * @since   1.0.0
  */
 class Processor {

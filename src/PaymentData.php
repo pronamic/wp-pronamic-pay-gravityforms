@@ -30,7 +30,7 @@ use RGFormsModel;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.4
  * @since   1.0.1
  */
 class PaymentData extends Pay_PaymentData {

@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.5] - 2018-12-13
+- Fixed unintended use of synchronized payment date setting for fixed intervals.
+
 ## [2.1.4] - 2018-12-12
 - Fix delayed feed action for Gravity Forms Zapier add-on.
 - Fix fatal error when sending renewal notices.

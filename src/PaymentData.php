@@ -30,7 +30,7 @@ use RGFormsModel;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.4
+ * @version 2.1.5
  * @since   1.0.1
  */
 class PaymentData extends Pay_PaymentData {
@@ -639,11 +639,14 @@ class PaymentData extends Pay_PaymentData {
 
 				break;
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
-				$interval            = $this->feed->subscription_interval;
-				$interval_period     = $this->feed->subscription_interval_period;
-				$interval_date       = $this->feed->subscription_interval_date;
-				$interval_date_day   = $this->feed->subscription_interval_date_day;
-				$interval_date_month = $this->feed->subscription_interval_date_month;
+				$interval        = $this->feed->subscription_interval;
+				$interval_period = $this->feed->subscription_interval_period;
+
+				if ( 'sync' === $this->feed->subscription_interval_date_type ) {
+					$interval_date       = $this->feed->subscription_interval_date;
+					$interval_date_day   = $this->feed->subscription_interval_date_day;
+					$interval_date_month = $this->feed->subscription_interval_date_month;
+				}
 
 				break;
 		}

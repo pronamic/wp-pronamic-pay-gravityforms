@@ -272,51 +272,57 @@ class PaymentData extends Pay_PaymentData {
 			return $amount;
 		}
 
+		if ( 'sync' !== $this->feed->subscription_interval_date_type ) {
+			return $amount;
+		}
+
+		if ( '1' !== $this->feed->subscription_interval_date_prorate ) {
+			return $amount;
+		}
+
 		// Prorate.
-		if ( '1' === $this->feed->subscription_interval_date_prorate ) {
-			$interval = $subscription->get_date_interval();
+		$interval = $subscription->get_date_interval();
 
-			$now = new DateTime();
+		$now = new DateTime();
 
-			$next_date = clone $now;
-			$next_date->add( $interval );
+		$next_date = clone $now;
+		$next_date->add( $interval );
 
-			$days_diff = $now->diff( $next_date )->days;
+		$days_diff = $now->diff( $next_date )->days;
 
-			$interval_date       = $subscription->get_interval_date();
-			$interval_date_day   = $subscription->get_interval_date_day();
-			$interval_date_month = $subscription->get_interval_date_month();
+		$interval_date       = $subscription->get_interval_date();
+		$interval_date_day   = $subscription->get_interval_date_day();
+		$interval_date_month = $subscription->get_interval_date_month();
 
-			if ( 'W' === $subscription->interval_period && is_numeric( $interval_date_day ) ) {
-				$days_delta = $interval_date_day - $next_date->format( 'w' );
+		if ( 'W' === $subscription->interval_period && is_numeric( $interval_date_day ) ) {
+			$days_delta = $interval_date_day - $next_date->format( 'w' );
 
-				$next_date->modify( sprintf( '+%s days', $days_delta ) );
-			}
+			$next_date->modify( sprintf( '+%s days', $days_delta ) );
+		}
 
-			if ( 'M' === $subscription->interval_period && is_numeric( $interval_date ) ) {
-				$next_date->setDate( $next_date->format( 'Y' ), $next_date->format( 'm' ), $interval_date );
-			}
+		if ( 'M' === $subscription->interval_period && is_numeric( $interval_date ) ) {
+			$next_date->setDate( $next_date->format( 'Y' ), $next_date->format( 'm' ), $interval_date );
+		}
 
-			if ( 'M' === $subscription->interval_period && 'last' === $interval_date ) {
+		if ( 'M' === $subscription->interval_period && 'last' === $interval_date ) {
+			$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
+		}
+
+		if ( 'Y' === $subscription->interval_period && is_numeric( $interval_date_month ) ) {
+			$next_date->setDate( $next_date->format( 'Y' ), $interval_date_month, $next_date->format( 'd' ) );
+
+			if ( 'last' === $interval_date ) {
 				$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
 			}
-
-			if ( 'Y' === $subscription->interval_period && is_numeric( $interval_date_month ) ) {
-				$next_date->setDate( $next_date->format( 'Y' ), $interval_date_month, $next_date->format( 'd' ) );
-
-				if ( 'last' === $interval_date ) {
-					$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
-				}
-			}
-
-			$prorated_days_diff = $now->diff( $next_date )->days;
-
-			$amount_per_day = ( $amount->get_value() / $days_diff );
-
-			$prorated_amount = ( $amount_per_day * $prorated_days_diff );
-
-			$amount->set_amount( $prorated_amount );
 		}
+
+		$prorated_days_diff = $now->diff( $next_date )->days;
+
+		$amount_per_day = ( $amount->get_value() / $days_diff );
+
+		$prorated_amount = ( $amount_per_day * $prorated_days_diff );
+
+		$amount->set_value( $prorated_amount );
 
 		return $amount;
 	}

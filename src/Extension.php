@@ -45,6 +45,13 @@ class Extension {
 	const SLUG = 'gravityformsideal';
 
 	/**
+	 * Payment add-on.
+	 *
+	 * @var PaymentAddOn
+	 */
+	private $addon;
+
+	/**
 	 * Bootstrap
 	 */
 	public static function bootstrap() {

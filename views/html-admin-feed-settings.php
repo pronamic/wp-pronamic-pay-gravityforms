@@ -780,8 +780,11 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 			<?php
 
 			$fields = array(
+				'prefix_name'      => __( 'Prefix Name', 'pronamic_ideal' ),
 				'first_name'       => __( 'First Name', 'pronamic_ideal' ),
+				'middle_name'      => __( 'Middle Name', 'pronamic_ideal' ),
 				'last_name'        => __( 'Last Name', 'pronamic_ideal' ),
+				'suffix_name'      => __( 'Suffix Name', 'pronamic_ideal' ),
 				'address1'         => __( 'Address', 'pronamic_ideal' ),
 				'address2'         => __( 'Address 2', 'pronamic_ideal' ),
 				'zip'              => __( 'Zip', 'pronamic_ideal' ),

@@ -79,7 +79,7 @@ class PaymentData extends Pay_PaymentData {
 	 *
 	 * @return null|string
 	 */
-	private function get_field_value( $field_name ) {
+	public function get_field_value( $field_name ) {
 		if ( ! isset( $this->feed->fields[ $field_name ] ) ) {
 			return null;
 		}

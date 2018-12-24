@@ -113,7 +113,7 @@ class Fields {
 					printf(
 						'<option value="%s">%s</option>',
 						esc_attr( $feed->config_id ),
-						get_the_title( $feed->config_id )
+						esc_html( get_the_title( $feed->config_id ) )
 					);
 				}
 

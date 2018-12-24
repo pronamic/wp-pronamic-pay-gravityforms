@@ -107,6 +107,7 @@ class IssuersField extends GF_Field_Select {
 			'label_placement_setting',
 			'admin_label_setting',
 			'size_setting',
+			'placeholder_setting',
 			'description_setting',
 			'css_class_setting',
 			'rules_setting',

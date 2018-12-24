@@ -118,6 +118,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			'admin_label_setting',
 			'size_setting',
 			'choices_setting',
+			'placeholder_setting',
 			'description_setting',
 			'css_class_setting',
 			'rules_setting',

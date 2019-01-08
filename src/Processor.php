@@ -269,11 +269,12 @@ class Processor {
 		// Payment.
 		$payment = new Payment();
 
-		$payment->title                  = sprintf(
-							/* translators: %s: title */
-							__( 'Payment for %s', 'pronamic_ideal' ),
-							$data->get_title()
-						   );
+		$payment->title = sprintf(
+			/* translators: %s: title */
+			__( 'Payment for %s', 'pronamic_ideal' ),
+			$data->get_title()
+		);
+
 		$payment->user_id                = $data->get_user_id();
 		$payment->config_id              = $this->feed->config_id;
 		$payment->order_id               = $data->get_order_id();

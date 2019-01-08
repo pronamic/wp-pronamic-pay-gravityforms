@@ -269,7 +269,11 @@ class Processor {
 		// Payment.
 		$payment = new Payment();
 
-		$payment->title                  = sprintf( __( 'Payment for %s', 'pronamic_ideal' ), $data->get_title() );
+		$payment->title                  = sprintf(
+							/* translators: %s: title */
+							__( 'Payment for %s', 'pronamic_ideal' ),
+							$data->get_title()
+						   );
 		$payment->user_id                = $data->get_user_id();
 		$payment->config_id              = $this->feed->config_id;
 		$payment->order_id               = $data->get_order_id();
@@ -309,7 +313,7 @@ class Processor {
 		$address = new Address();
 
 		$country_name = $data->get_field_value( 'country' );
-		$country_code = empty( $country_name ) ? null : GFCommon:: get_country_code( $country_name );
+		$country_code = empty( $country_name ) ? null : GFCommon::get_country_code( $country_name );
 
 		$address->set_name( $name );
 		$address->set_line_1( $data->get_field_value( 'address1' ) );
@@ -363,7 +367,7 @@ class Processor {
 							$line->set_quantity( 1 );
 
 							if ( array_key_exists( 'option_label', $option ) ) {
-								$line->set_name( $option['option_label'] );								
+								$line->set_name( $option['option_label'] );
 							}
 
 							if ( array_key_exists( 'price', $option ) ) {

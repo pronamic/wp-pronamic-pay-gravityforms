@@ -352,7 +352,13 @@ class Processor {
 					if ( array_key_exists( 'price', $product ) ) {
 						$value = GFCommon::to_number( $product['price'] );
 
-						$line->set_total_amount( new TaxedMoney( $value, $payment->get_currency() ) );
+						$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+
+						if ( array_key_exists( 'quantity', $product ) ) {
+							$value = ( $value * intval( $product['quantity'] ) );
+						}
+
+						$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
 					}
 
 					if ( array_key_exists( 'quantity', $product ) ) {
@@ -374,7 +380,9 @@ class Processor {
 							if ( array_key_exists( 'price', $option ) ) {
 								$value = GFCommon::to_number( $option['price'] );
 
-								$line->set_total_amount( new TaxedMoney( $value, $payment->get_currency() ) );
+								$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+
+								$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
 							}
 						}
 					}
@@ -401,7 +409,9 @@ class Processor {
 				if ( array_key_exists( 'price', $shipping ) ) {
 					$value = $shipping['price'];
 
-					$line->set_total_amount( new TaxedMoney( $value, $payment->get_currency() ) );
+					$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+
+					$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
 				}
 			}
 		}

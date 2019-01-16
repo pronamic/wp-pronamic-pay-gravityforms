@@ -63,7 +63,7 @@ class Links {
 	 *
 	 * @since 1.4.4
 	 *
-	 * @param strng $payment_status Payment status.
+	 * @param string $payment_status Payment status.
 	 * @return string
 	 */
 	public static function transform_status( $payment_status ) {

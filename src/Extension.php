@@ -510,7 +510,7 @@ class Extension {
 			'id'              => $subscription->get_id(),
 			'transaction_id'  => $subscription->get_transaction_id(),
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount()->get_value(),
+			'amount'          => $subscription->get_total_amount()->get_value(),
 			'entry_id'        => $lead['id'],
 		);
 
@@ -554,7 +554,7 @@ class Extension {
 
 		$action = array(
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_amount()->get_value(),
+			'amount'          => $subscription->get_total_amount()->get_value(),
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
 		);
@@ -853,7 +853,7 @@ class Extension {
 				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment->getTimestamp() );
 			}
 
-			$subscription_amount     = $subscription->get_amount()->format_i18n();
+			$subscription_amount     = $subscription->get_total_amount()->format_i18n();
 			$subscription_cancel_url = $subscription->get_cancel_url();
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}

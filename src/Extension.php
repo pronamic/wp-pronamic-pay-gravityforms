@@ -508,7 +508,6 @@ class Extension {
 
 		$action = array(
 			'id'              => $subscription->get_id(),
-			'transaction_id'  => $subscription->get_transaction_id(),
 			'subscription_id' => $subscription->get_id(),
 			'amount'          => $subscription->get_total_amount()->get_value(),
 			'entry_id'        => $lead['id'],

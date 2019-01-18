@@ -687,7 +687,7 @@ class PaymentData extends Pay_PaymentData {
 		$subscription->description         = $this->get_description();
 
 		$subscription->set_total_amount(
-			new Money(
+			new TaxedMoney(
 				$amount,
 				$this->get_currency_alphabetic_code()
 			)

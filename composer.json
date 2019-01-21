@@ -38,14 +38,16 @@
 		"wp-pay/core": "^2.0"
 	},
 	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
 		"php-coveralls/php-coveralls": "^1.0",
-		"squizlabs/php_codesniffer": "^2.7",
-		"wp-coding-standards/wpcs": "^1.1",
+		"phpcompatibility/php-compatibility": "^9.0",
+		"phpcompatibility/phpcompatibility-wp": "^2.0",
 		"phpmd/phpmd": "^2.4",
 		"phpunit/phpunit": "^4.8",
-		"wimg/php-compatibility": "^8.1",
-		"wp-phpunit/wp-phpunit": "^4.9",
-		"johnpbloch/wordpress": "^4.9",
+		"roots/wordpress": "^5.0",
+		"squizlabs/php_codesniffer": "^2.7",
+		"wp-coding-standards/wpcs": "^1.2",
+		"wp-phpunit/wp-phpunit": "^5.0",
 		"wp-premium/gravityforms": "^2.3"
 	}
 }

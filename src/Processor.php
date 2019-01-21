@@ -3,7 +3,7 @@
  * Processor
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2018 Pronamic
+ * @copyright 2005-2019 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -12,15 +12,23 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFAddOn;
 use GFCommon;
+use Pronamic\WordPress\Money\Currency;
+use Pronamic\WordPress\Money\Money;
+use Pronamic\WordPress\Money\TaxedMoney;
+use Pronamic\WordPress\Pay\Address;
+use Pronamic\WordPress\Pay\ContactName;
+use Pronamic\WordPress\Pay\Customer;
+use Pronamic\WordPress\Pay\Plugin;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
-use Pronamic\WordPress\Pay\Plugin;
+use Pronamic\WordPress\Pay\Payments\PaymentLines;
+use Pronamic\WordPress\Pay\Payments\PaymentLineType;
 use WP_Error;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
  * Description:
- * Copyright: Copyright (c) 2005 - 2018
+ * Copyright: 2005-2019 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -258,8 +266,158 @@ class Processor {
 			$this->feed->delay_actions = array();
 		}
 
-		// Start payment.
-		$this->payment = Plugin::start( $this->feed->config_id, $this->gateway, $data, $payment_method );
+		// Payment.
+		$payment = new Payment();
+
+		$payment->title = sprintf(
+			/* translators: %s: title */
+			__( 'Payment for %s', 'pronamic_ideal' ),
+			$data->get_title()
+		);
+
+		$payment->user_id                = $data->get_user_id();
+		$payment->config_id              = $this->feed->config_id;
+		$payment->order_id               = $data->get_order_id();
+		$payment->description            = $data->get_description();
+		$payment->source                 = $data->get_source();
+		$payment->source_id              = $data->get_source_id();
+		$payment->email                  = $data->get_email();
+		$payment->method                 = $payment_method;
+		$payment->issuer                 = $data->get_issuer( $payment_method );
+		$payment->analytics_client_id    = $data->get_analytics_client_id();
+		$payment->recurring              = $data->get_recurring();
+		$payment->subscription           = $data->get_subscription();
+		$payment->subscription_id        = $data->get_subscription_id();
+		$payment->subscription_source_id = $data->get_subscription_source_id();
+		$payment->set_total_amount( $data->get_amount() );
+		$payment->set_credit_card( $data->get_credit_card() );
+
+		// Name.
+		$name = new ContactName();
+
+		$name->set_prefix( $data->get_field_value( 'prefix_name' ) );
+		$name->set_first_name( $data->get_field_value( 'first_name' ) );
+		$name->set_middle_name( $data->get_field_value( 'middle_name' ) );
+		$name->set_last_name( $data->get_field_value( 'last_name' ) );
+		$name->set_suffix( $data->get_field_value( 'suffix_name' ) );
+
+		// Customer.
+		$customer = new Customer();
+
+		$customer->set_name( $name );
+		$customer->set_phone( $data->get_field_value( 'telephone_number' ) );
+		$customer->set_email( $data->get_field_value( 'email' ) );
+
+		$payment->set_customer( $customer );
+
+		// Address.
+		$address = new Address();
+
+		$country_name = $data->get_field_value( 'country' );
+		$country_code = empty( $country_name ) ? null : GFCommon::get_country_code( $country_name );
+
+		$address->set_name( $name );
+		$address->set_line_1( $data->get_field_value( 'address1' ) );
+		$address->set_line_2( $data->get_field_value( 'address2' ) );
+		$address->set_postal_code( $data->get_field_value( 'zip' ) );
+		$address->set_city( $data->get_field_value( 'city' ) );
+		$address->set_region( $data->get_field_value( 'state' ) );
+		$address->set_country_code( $country_code );
+		$address->set_country_name( $country_name );
+		$address->set_email( $data->get_field_value( 'email' ) );
+		$address->set_phone( $data->get_field_value( 'telephone_number' ) );
+
+		$payment->set_billing_address( $address );
+		$payment->set_shipping_address( $address );
+
+		// Lines.
+		$payment->lines = new PaymentLines();
+
+		$product_fields = GFCommon::get_product_fields( $form, $lead );
+
+		if ( is_array( $product_fields ) ) {
+			// Products.
+			if ( array_key_exists( 'products', $product_fields ) && is_array( $product_fields['products'] ) ) {
+				$products = $product_fields['products'];
+
+				foreach ( $products as $key => $product ) {
+					$line = $payment->lines->new_line();
+
+					$line->set_id( $key );
+
+					if ( array_key_exists( 'name', $product ) ) {
+						$line->set_name( $product['name'] );
+					}
+
+					if ( array_key_exists( 'price', $product ) ) {
+						$value = GFCommon::to_number( $product['price'] );
+
+						$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+
+						if ( array_key_exists( 'quantity', $product ) ) {
+							$value = ( $value * intval( $product['quantity'] ) );
+						}
+
+						$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+					}
+
+					if ( array_key_exists( 'quantity', $product ) ) {
+						$line->set_quantity( intval( $product['quantity'] ) );
+					}
+
+					if ( array_key_exists( 'options', $product ) && is_array( $product['options'] ) ) {
+						$options = $product['options'];
+
+						foreach ( $options as $option ) {
+							$line = $payment->lines->new_line();
+
+							$line->set_quantity( 1 );
+
+							if ( array_key_exists( 'option_label', $option ) ) {
+								$line->set_name( $option['option_label'] );
+							}
+
+							if ( array_key_exists( 'price', $option ) ) {
+								$value = GFCommon::to_number( $option['price'] );
+
+								$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+
+								$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+							}
+						}
+					}
+				}
+			}
+
+			// Shipping.
+			if ( array_key_exists( 'shipping', $product_fields ) && is_array( $product_fields['shipping'] ) ) {
+				$shipping = $product_fields['shipping'];
+
+				$line = $payment->lines->new_line();
+
+				$line->set_type( PaymentLineType::SHIPPING );
+				$line->set_quantity( 1 );
+
+				if ( array_key_exists( 'id', $shipping ) ) {
+					$line->set_id( $shipping['id'] );
+				}
+
+				if ( array_key_exists( 'name', $shipping ) ) {
+					$line->set_name( $shipping['name'] );
+				}
+
+				if ( array_key_exists( 'price', $shipping ) ) {
+					$value = $shipping['price'];
+
+					$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+
+					$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+				}
+			}
+		}
+
+		// Start.
+		$this->payment = Plugin::start_payment( $payment );
 
 		$this->error = $this->gateway->get_error();
 

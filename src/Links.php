@@ -3,7 +3,7 @@
  * Links
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2018 Pronamic
+ * @copyright 2005-2019 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -15,7 +15,7 @@ use Pronamic\WordPress\Pay\Core\Statuses;
 /**
  * Title: WordPress pay extension Gravity Forms links
  * Description:
- * Copyright: Copyright (c) 2005 - 2018
+ * Copyright: 2005-2019 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -63,7 +63,7 @@ class Links {
 	 *
 	 * @since 1.4.4
 	 *
-	 * @param strng $payment_status Payment status.
+	 * @param string $payment_status Payment status.
 	 * @return string
 	 */
 	public static function transform_status( $payment_status ) {

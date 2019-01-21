@@ -7,7 +7,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
-## [2.1.6] - 2018-01-21
+## [2.1.6] - 2019-01-21
 - Fixed fatal error in Gravity Forms recurring payments if plugin is not activated.
 - Fixed issue with prorating amount when synchronized payment dates are not enabled.
 - Enabled placeholder setting for issuers and payment methods field.

@@ -7,6 +7,13 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.6] - 2018-01-21
+- Fixed fatal error in Gravity Forms recurring payments if plugin is not activated.
+- Fixed issue with prorating amount when synchronized payment dates are not enabled.
+- Enabled placeholder setting for issuers and payment methods field.
+- Added extra field map options.
+- Added support for payment lines.
+
 ## [2.1.5] - 2018-12-13
 - Fixed unintended use of synchronized payment date setting for fixed intervals.
 
@@ -198,7 +205,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.4...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.6...HEAD
+[2.1.6]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.5...2.1.6
+[2.1.5]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.4...2.1.5
 [2.1.4]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.3...2.1.4
 [2.1.3]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.2...2.1.3
 [2.1.2]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.1...2.1.2

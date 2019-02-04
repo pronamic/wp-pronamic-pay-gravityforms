@@ -314,7 +314,11 @@ class Processor {
 		$address = new Address();
 
 		$country_name = $data->get_field_value( 'country' );
-		$country_code = empty( $country_name ) ? null : GFCommon::get_country_code( $country_name );
+		$country_code = GFCommon::get_country_code( $country_name );
+
+		if ( empty( $country_code ) ) {
+			$country_code = null;
+		}
 
 		$address->set_name( $name );
 		$address->set_line_1( $data->get_field_value( 'address1' ) );

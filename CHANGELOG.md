@@ -7,7 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
-## [2.1.6] - 2018-01-21
+## [2.1.7] - 2019-02-04
+- Prevent empty country code for unknown countries.
+
+## [2.1.6] - 2019-01-21
 - Fixed fatal error in Gravity Forms recurring payments if plugin is not activated.
 - Fixed issue with prorating amount when synchronized payment dates are not enabled.
 - Enabled placeholder setting for issuers and payment methods field.
@@ -205,7 +208,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.6...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.7...HEAD
+[2.1.7]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.5...2.1.6
 [2.1.5]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.4...2.1.5
 [2.1.4]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.3...2.1.4

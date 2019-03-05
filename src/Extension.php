@@ -761,6 +761,10 @@ class Extension {
 
 		$payment = get_pronamic_payment( $payment_id );
 
+		if ( null === $payment ) {
+			return;
+		}
+
 		$lead_id = $payment->get_source_id();
 
 		$lead = RGFormsModel::get_lead( $lead_id );

@@ -695,6 +695,14 @@ class Extension {
 					$addon = $data['addon'];
 
 					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						/*
+						 * Disable asynchronous feed processing for delayed actions.
+						 *
+						 * @link https://github.com/wp-premium/gravityforms/blob/2.4.7.3/includes/addon/class-gf-feed-addon.php#L1694
+						 * @link https://github.com/wp-premium/gravityforms/blob/2.4.7.3/includes/addon/class-gf-feed-addon.php#L455-L486
+						 */
+						add_filter( 'gform_is_feed_asynchronous_' . $form['id'], '__return_false' );
+
 						$addon->maybe_process_feed( $entry, $form );
 					}
 				}

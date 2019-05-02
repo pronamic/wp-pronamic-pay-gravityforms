@@ -514,6 +514,15 @@ class Extension {
 		);
 
 		switch ( $subscription->get_status() ) {
+			case Statuses::ACTIVE:
+				$action['note']   = __( 'Subscription manually activated.', 'pronamic_ideal' );
+
+				// Set amount to `0` to prevent incorrect revenue in reports.
+				$action['amount'] = 0;
+
+				$this->payment_action( 'add_subscription_payment', $lead, $action, PaymentStatuses::PAID );
+
+				break;
 			case Statuses::CANCELLED:
 				$this->payment_action( 'cancel_subscription', $lead, $action, PaymentStatuses::CANCELLED );
 

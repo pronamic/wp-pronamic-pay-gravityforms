@@ -642,7 +642,7 @@ class Extension {
 				$feed = FeedsDB::get_feed_by_entry_id( $lead['id'] );
 
 				if ( ! isset( $action['note'] ) ) {
-					$action['note'] = sprintf( 'Subscription manually canceled.', 'pronamic_ideal' );
+					$action['note'] = __( 'Subscription manually canceled.', 'pronamic_ideal' );
 				}
 
 				$result = $this->addon->cancel_subscription( $lead, $feed, $action['note'] );

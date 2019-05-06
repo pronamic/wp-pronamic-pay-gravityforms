@@ -204,7 +204,9 @@ class PaymentMethodsField extends GF_Field_Select {
 
 		// Admin.
 		// Page `form_settings` can be suffixed with subview, see https://github.com/wp-premium/gravityforms/blob/master/gravityforms.php#L2505-L2507.
-		if ( 'form_editor' !== GFForms::get_page() && 'form_settings' !== substr( GFForms::get_page(), 0, 13 ) ) {
+		$page = GFForms::get_page();
+
+		if ( $page && 'form_editor' !== $page && false === strpos( $page, 'form_settings' ) ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}

@@ -3,7 +3,7 @@
 <ruleset name="WordPress Pay Gravity Forms rules">
 	<config name="minimum_supported_wp_version" value="4.7" />
 
-	<config name="testVersion" value="5.3-99.0" />
+	<config name="testVersion" value="5.3-" />
 
 	<file>.</file>
 
@@ -12,12 +12,13 @@
 	<arg value="sp" />
 
 	<exclude-pattern>node_modules/*</exclude-pattern>
+	<exclude-pattern>tests/bootstrap.php</exclude-pattern>
 	<exclude-pattern>tests/wp-config.php</exclude-pattern>
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>wordpress/*</exclude-pattern>
-	<exclude-pattern>wp-content/*</exclude-pattern>
+	<exclude-pattern type="relative">^wp-content/*</exclude-pattern>
 
-	<rule ref="PHPCompatibility" />
+	<rule ref="PHPCompatibilityWP" />
 
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />

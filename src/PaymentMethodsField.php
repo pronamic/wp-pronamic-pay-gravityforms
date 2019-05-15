@@ -203,7 +203,10 @@ class PaymentMethodsField extends GF_Field_Select {
 		}
 
 		// Admin.
-		if ( ! in_array( GFForms::get_page(), array( 'form_editor', 'form_settings' ), true ) ) {
+		// Page `form_settings` can be suffixed with subview, see https://github.com/wp-premium/gravityforms/blob/master/gravityforms.php#L2505-L2507.
+		$page = GFForms::get_page();
+
+		if ( ! $page || ( 'form_editor' !== $page && false === strpos( $page, 'form_settings' ) ) ) {
 			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
 			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
 		}

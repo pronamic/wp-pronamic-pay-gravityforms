@@ -514,6 +514,17 @@ class Extension {
 		);
 
 		switch ( $subscription->get_status() ) {
+			case Statuses::ACTIVE:
+				if ( ! Entry::is_payment_active( $lead ) ) {
+					$action['note'] = __( 'Subscription manually activated.', 'pronamic_ideal' );
+
+					// Set amount to `0` to prevent incorrect revenue in reports.
+					$action['amount'] = 0;
+
+					$this->payment_action( 'add_subscription_payment', $lead, $action, PaymentStatuses::PAID );
+				}
+
+				break;
 			case Statuses::CANCELLED:
 				$this->payment_action( 'cancel_subscription', $lead, $action, PaymentStatuses::CANCELLED );
 
@@ -642,7 +653,7 @@ class Extension {
 				$feed = FeedsDB::get_feed_by_entry_id( $lead['id'] );
 
 				if ( ! isset( $action['note'] ) ) {
-					$action['note'] = sprintf( 'Subscription manually canceled.', 'pronamic_ideal' );
+					$action['note'] = __( 'Subscription manually canceled.', 'pronamic_ideal' );
 				}
 
 				$result = $this->addon->cancel_subscription( $lead, $feed, $action['note'] );
@@ -695,6 +706,14 @@ class Extension {
 					$addon = $data['addon'];
 
 					if ( method_exists( $addon, 'maybe_process_feed' ) ) {
+						/*
+						 * Disable asynchronous feed processing for delayed actions.
+						 *
+						 * @link https://github.com/wp-premium/gravityforms/blob/2.4.7.3/includes/addon/class-gf-feed-addon.php#L1694
+						 * @link https://github.com/wp-premium/gravityforms/blob/2.4.7.3/includes/addon/class-gf-feed-addon.php#L455-L486
+						 */
+						add_filter( 'gform_is_feed_asynchronous_' . $form['id'], '__return_false' );
+
 						$addon->maybe_process_feed( $entry, $form );
 					}
 				}
@@ -760,6 +779,10 @@ class Extension {
 		}
 
 		$payment = get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return;
+		}
 
 		$lead_id = $payment->get_source_id();
 

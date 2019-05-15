@@ -16,7 +16,7 @@
 
     <filter>
         <whitelist>
-            <directory>src</directory>
+            <directory suffix=".php">src</directory>
         </whitelist>
     </filter>
 

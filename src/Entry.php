@@ -48,4 +48,23 @@ class Entry {
 
 		return $approved;
 	}
+
+	/**
+	 * Check if the specified entry payment status is `Active`.
+	 *
+	 * @param array $entry Gravity Forms entry.
+	 *
+	 * @return boolean true if payment is active, false otherwise
+	 */
+	public static function is_payment_active( array $entry ) {
+		$active = false;
+
+		if ( isset( $entry[ LeadProperties::PAYMENT_STATUS ] ) ) {
+			$payment_status = $entry[ LeadProperties::PAYMENT_STATUS ];
+
+			$active = PaymentStatuses::ACTIVE === $payment_status;
+		}
+
+		return $active;
+	}
 }

@@ -7,6 +7,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.8] - 2019-05-15
+- Fix payment method field options deselected when saving from form settings subviews.
+- Update entry payment status when subscription is manually activated.
+- Disable asynchronous feed processing for delayed actions.
+
 ## [2.1.7] - 2019-02-04
 - Prevent empty country code for unknown countries.
 
@@ -208,7 +213,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.7...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.8...HEAD
+[2.1.8]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.7...2.1.8
 [2.1.7]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.5...2.1.6
 [2.1.5]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.4...2.1.5

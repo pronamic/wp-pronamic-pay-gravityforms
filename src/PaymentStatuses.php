@@ -59,13 +59,6 @@ class PaymentStatuses {
 	const FAILED = 'Failed';
 
 	/**
-	 * Payment status reversed
-	 *
-	 * @var string
-	 */
-	const REVERSED = 'Reversed';
-
-	/**
 	 * Payment status approved
 	 *
 	 * @var string

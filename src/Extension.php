@@ -483,6 +483,9 @@ class Extension {
 				break;
 			case Statuses::OPEN:
 			default:
+				if ( 'recurring' === $payment->recurring_type ) {
+					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
+				}
 		}
 	}
 
@@ -890,6 +893,7 @@ class Extension {
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
 			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
+			'{pronamic_subscription_payment_id}'   => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' ),
 			'{pronamic_subscription_amount}'       => $subscription_amount,
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,

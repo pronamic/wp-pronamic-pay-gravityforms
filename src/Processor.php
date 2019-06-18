@@ -195,8 +195,10 @@ class Processor {
 		 */
 
 		foreach ( $this->feed->delay_actions as $slug => $data ) {
-			if ( isset( $data['addon'] ) ) {
-				remove_filter( 'gform_entry_post_save', array( $data['addon'], 'maybe_process_feed' ), 10, 2 );
+			$delayed_payment_integration = ( isset( $data['delayed_payment_integration'] ) && true === $data['delayed_payment_integration'] );
+
+			if ( isset( $data['addon'] ) && ! $delayed_payment_integration ) {
+				remove_filter( 'gform_entry_post_save', array( $data['addon'], 'maybe_process_feed' ), 10 );
 			}
 
 			if ( isset( $data['delay_callback'] ) ) {

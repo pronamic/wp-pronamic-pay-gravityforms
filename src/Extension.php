@@ -21,6 +21,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Recurring;
 use Pronamic\WordPress\Pay\Core\Statuses;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
+use Pronamic\WordPress\Pay\Customer;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Subscriptions\Subscription;
 use RGFormsModel;
@@ -314,6 +315,75 @@ class Extension {
 			$value = GFCommon::get_selection_value( $value );
 
 			$user->set_role( $value );
+		}
+	}
+
+	/**
+	 * Maybe update payment user.
+	 *
+	 * @param array   $lead Lead.
+	 * @param PayFeed $feed Payment feed.
+	 *
+	 * @return void
+	 */
+	private function maybe_update_payment_user( $lead, $feed ) {
+		$user = false;
+
+		// Gravity Forms User Registration Add-on.
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			// Version >= 3.
+			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
+		} elseif ( class_exists( 'GFUserData' ) ) {
+			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
+		}
+
+		if ( false === $user ) {
+			return;
+		}
+
+		// Find payment.
+		$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
+
+		$payment = get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return;
+		}
+
+		// Update payment post author.
+		if ( null === $payment->get_customer() ) {
+			$payment->set_customer( new Customer() );
+		}
+
+		$payment->get_customer()->set_user_id( $user->ID );
+
+		$payment->save();
+
+		wp_update_post(
+			array(
+				'ID'          => $payment->get_id(),
+				'post_author' => $user->ID,
+			)
+		);
+
+		// Update subscription post author.
+		$subscription = $payment->get_subscription();
+
+		if ( null !== $subscription ) {
+			if ( null === $subscription->get_customer() ) {
+				$subscription->set_customer( new Customer() );
+			}
+
+			$subscription->get_customer()->set_user_id( $user->ID );
+
+			$subscription->save();
+
+			wp_update_post(
+				array(
+					'ID'          => $subscription->get_id(),
+					'post_author' => $user->ID,
+				)
+			);
 		}
 	}
 
@@ -698,6 +768,8 @@ class Extension {
 
 		if ( null !== $feed ) {
 			$this->maybe_update_user_role( $entry, $feed );
+
+			$this->maybe_update_payment_user( $entry, $feed );
 
 			$form = RGFormsModel::get_form_meta( $entry['form_id'] );
 

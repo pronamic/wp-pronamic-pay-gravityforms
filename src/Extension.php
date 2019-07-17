@@ -948,10 +948,10 @@ class Extension {
 		if ( ! empty( $subscription_id ) ) {
 			$subscription = get_pronamic_subscription( $subscription_id );
 
-			$next_payment = $subscription->get_next_payment_date();
+			$next_payment_date = $subscription->get_next_payment_date();
 
-			if ( $next_payment ) {
-				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment->getTimestamp() );
+			if ( $next_payment_date ) {
+				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment_date->getTimestamp() );
 			}
 
 			$subscription_amount     = $subscription->get_total_amount()->format_i18n();

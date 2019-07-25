@@ -539,16 +539,15 @@ class Extension {
 					$this->payment_action( $success_action, $lead, $action, PaymentStatuses::PAID );
 				}
 
-				// Fulfill order if the payment isn't approved already.
-				if ( ! Entry::is_payment_approved( $lead ) ) {
-					if ( Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
-						$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
+				// Create subscription.
+				if ( ! Entry::is_payment_approved( $lead ) && Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
+					$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
-						$this->payment_action( 'create_subscription', $lead, $action );
-					}
-
-					$this->fulfill_order( $lead );
+					$this->payment_action( 'create_subscription', $lead, $action );
 				}
+
+				// Fulfill order.
+				$this->fulfill_order( $lead );
 
 				break;
 			case Statuses::OPEN:
@@ -759,6 +758,11 @@ class Extension {
 	 * @param array $entry Gravity Forms entry.
 	 */
 	public function fulfill_order( $entry ) {
+		// Check if already fulfilled.
+		if ( Entry::is_fulfilled( $entry ) ) {
+			return;
+		}
+
 		$entry_id = rgar( $entry, 'id' );
 
 		// Get entry with current payment status.

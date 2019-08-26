@@ -86,9 +86,9 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$this->_slug = self::SLUG;
 
 		/*
-	 	 * Title.
-	 	 *
-	 	 * @var string Title of the plugin to be used on the settings page, form settings and plugins page. Example: 'Gravity Forms MailChimp Add-On'
+		 * Title.
+		 *
+		 * @var string Title of the plugin to be used on the settings page, form settings and plugins page. Example: 'Gravity Forms MailChimp Add-On'
 		 * @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-addon.php#L40-L43
 		 */
 		$this->_title = __( 'Pronamic Pay Add-On', 'pronamic_ideal' );

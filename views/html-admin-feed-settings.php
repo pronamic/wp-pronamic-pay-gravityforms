@@ -337,7 +337,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 						else :
 
-						?>
+							?>
 
 							<ul>
 								<li id="gf_ideal_delay_admin_notification_item">

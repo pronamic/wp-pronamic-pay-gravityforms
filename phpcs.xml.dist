@@ -23,17 +23,21 @@
 	<rule ref="WordPress">
 		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
 
+		<exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
+
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key" />
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_query" />
 
 		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
 		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 
-		<exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
+		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
 
 		<exclude name="WordPress.PHP.DiscouragedPHPFunctions.serialize_unserialize" />
 
 		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect" />
+
+		<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited" />
 	</rule>
 
 	<rule ref="WordPress.WP.GlobalVariablesOverride.OverrideProhibited">

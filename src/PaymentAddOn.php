@@ -443,9 +443,12 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @since unreleased
 	 */
 	public function feed_list_no_item_message() {
-		printf( // WPCS: XSS ok
-			/* translators: 1: <a href="new feed URL">, 2: </a> */
-			__( 'This form doesn\'t have any pay feeds. Let\'s go %1$screate one%2$s.', 'pronamic_ideal' ),
+		/* translators: 1: <a href="new feed URL">, 2: </a> */
+		$label = __( 'This form doesn\'t have any pay feeds. Let\'s go %1$screate one%2$s.', 'pronamic_ideal' );
+
+		printf(
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			$label,
 			'<a href="' . esc_url( add_query_arg( array( 'fid' => 0 ) ) ) . '">',
 			'</a>'
 		);

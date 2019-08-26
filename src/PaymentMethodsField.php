@@ -396,11 +396,11 @@ class PaymentMethodsField extends GF_Field_Select {
 					margin-top: 0;
 				}
 
-				<?php
+						<?php
 
 						break;
 					case 'icons-64':
-				?>
+						?>
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
 					width: <?php echo esc_html( ( 64 * 2 ) + 126 ); ?>px;
 				}
@@ -453,11 +453,11 @@ class PaymentMethodsField extends GF_Field_Select {
 					background: #efefef;
 				}
 
-				<?php
+						<?php
 
 						break;
 					case 'icons-125':
-				?>
+						?>
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
 					width: <?php echo esc_html( ( 125 * 2 ) + 25 ); ?>px;
@@ -513,9 +513,9 @@ class PaymentMethodsField extends GF_Field_Select {
 					display: none;
 				}
 
-				<?php
+						<?php
 				}
-			?>
+				?>
 
 			</style>
 

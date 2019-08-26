@@ -21,6 +21,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Recurring;
 use Pronamic\WordPress\Pay\Core\Statuses;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
+use Pronamic\WordPress\Pay\Customer;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Subscriptions\Subscription;
 use RGFormsModel;
@@ -318,6 +319,75 @@ class Extension {
 	}
 
 	/**
+	 * Maybe update payment user.
+	 *
+	 * @param array   $lead Lead.
+	 * @param PayFeed $feed Payment feed.
+	 *
+	 * @return void
+	 */
+	private function maybe_update_payment_user( $lead, $feed ) {
+		$user = false;
+
+		// Gravity Forms User Registration Add-on.
+		if ( class_exists( 'GF_User_Registration' ) ) {
+			// Version >= 3.
+			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
+		} elseif ( class_exists( 'GFUserData' ) ) {
+			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
+		}
+
+		if ( false === $user ) {
+			return;
+		}
+
+		// Find payment.
+		$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
+
+		$payment = get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return;
+		}
+
+		// Update payment post author.
+		if ( null === $payment->get_customer() ) {
+			$payment->set_customer( new Customer() );
+		}
+
+		$payment->get_customer()->set_user_id( $user->ID );
+
+		$payment->save();
+
+		wp_update_post(
+			array(
+				'ID'          => $payment->get_id(),
+				'post_author' => $user->ID,
+			)
+		);
+
+		// Update subscription post author.
+		$subscription = $payment->get_subscription();
+
+		if ( null !== $subscription ) {
+			if ( null === $subscription->get_customer() ) {
+				$subscription->set_customer( new Customer() );
+			}
+
+			$subscription->get_customer()->set_user_id( $user->ID );
+
+			$subscription->save();
+
+			wp_update_post(
+				array(
+					'ID'          => $subscription->get_id(),
+					'post_author' => $user->ID,
+				)
+			);
+		}
+	}
+
+	/**
 	 * Payment redirect URL filter.
 	 *
 	 * @since unreleased
@@ -459,26 +529,32 @@ class Extension {
 				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::FAILED );
 
 				break;
+			case Statuses::REFUNDED:
+				$this->payment_action( 'refund_payment', $lead, $action, PaymentStatuses::REFUNDED );
+
+				break;
 			case Statuses::SUCCESS:
 				if ( ! Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
 					$this->payment_action( $success_action, $lead, $action, PaymentStatuses::PAID );
 				}
 
-				// Fulfill order if the payment isn't approved already.
-				if ( ! Entry::is_payment_approved( $lead ) ) {
-					if ( Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
-						$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
+				// Create subscription.
+				if ( ! Entry::is_payment_approved( $lead ) && Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
+					$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
-						$this->payment_action( 'create_subscription', $lead, $action );
-					}
-
-					$this->fulfill_order( $lead );
+					$this->payment_action( 'create_subscription', $lead, $action );
 				}
+
+				// Fulfill order.
+				$this->fulfill_order( $lead );
 
 				break;
 			case Statuses::OPEN:
 			default:
+				if ( 'recurring' === $payment->recurring_type ) {
+					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
+				}
 		}
 	}
 
@@ -682,6 +758,11 @@ class Extension {
 	 * @param array $entry Gravity Forms entry.
 	 */
 	public function fulfill_order( $entry ) {
+		// Check if already fulfilled.
+		if ( Entry::is_fulfilled( $entry ) ) {
+			return;
+		}
+
 		$entry_id = rgar( $entry, 'id' );
 
 		// Get entry with current payment status.
@@ -691,6 +772,8 @@ class Extension {
 
 		if ( null !== $feed ) {
 			$this->maybe_update_user_role( $entry, $feed );
+
+			$this->maybe_update_payment_user( $entry, $feed );
 
 			$form = RGFormsModel::get_form_meta( $entry['form_id'] );
 
@@ -869,10 +952,10 @@ class Extension {
 		if ( ! empty( $subscription_id ) ) {
 			$subscription = get_pronamic_subscription( $subscription_id );
 
-			$next_payment = $subscription->get_next_payment_date();
+			$next_payment_date = $subscription->get_next_payment_date();
 
-			if ( $next_payment ) {
-				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment->getTimestamp() );
+			if ( $next_payment_date ) {
+				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment_date->getTimestamp() );
 			}
 
 			$subscription_amount     = $subscription->get_total_amount()->format_i18n();
@@ -886,6 +969,7 @@ class Extension {
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
 			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
+			'{pronamic_subscription_payment_id}'   => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' ),
 			'{pronamic_subscription_amount}'       => $subscription_amount,
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,

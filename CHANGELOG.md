@@ -7,6 +7,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.9] - 2019-08-26
+- Updated packages.
+- Removed non-existing Gravity Forms payment status `Reversed`.
+- Support `Refunded` status.
+- Added merge tag for Pronamic subscription payment ID.
+- Run `maybe_process_feed()` if add-on supports delayed payment integration (e.g. Gravity Forms User Registration).
+- Update post author and customer user ID for users registered through Gravity Forms User Registration add-on.
+- Renamed 'next payment' to 'next payment date'.
+- Fulfill orders only once.
+
 ## [2.1.8] - 2019-05-15
 - Fix payment method field options deselected when saving from form settings subviews.
 - Update entry payment status when subscription is manually activated.
@@ -213,7 +223,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.8...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.9...HEAD
+[2.1.9]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.8...2.1.9
 [2.1.8]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.7...2.1.8
 [2.1.7]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.6...2.1.7
 [2.1.6]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.5...2.1.6

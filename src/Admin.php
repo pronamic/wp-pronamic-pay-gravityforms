@@ -172,6 +172,11 @@ class Admin {
 		);
 
 		$merge_tags[] = array(
+			'label' => __( 'Pronamic Subscription Payment ID', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_subscription_payment_id}',
+		);
+
+		$merge_tags[] = array(
 			'label' => __( 'Pronamic Subscription Amount', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_amount}',
 		);

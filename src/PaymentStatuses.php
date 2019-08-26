@@ -59,13 +59,6 @@ class PaymentStatuses {
 	const FAILED = 'Failed';
 
 	/**
-	 * Payment status reversed
-	 *
-	 * @var string
-	 */
-	const REVERSED = 'Reversed';
-
-	/**
 	 * Payment status approved
 	 *
 	 * @var string
@@ -127,6 +120,9 @@ class PaymentStatuses {
 
 			case Core_Statuses::FAILURE:
 				return self::FAILED;
+
+			case Core_Statuses::REFUNDED:
+				return self::REFUNDED;
 
 			case Core_Statuses::RESERVED:
 			case Core_Statuses::OPEN:

@@ -337,7 +337,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 						else :
 
-						?>
+							?>
 
 							<ul>
 								<li id="gf_ideal_delay_admin_notification_item">
@@ -920,12 +920,13 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 				$_GET['id'] = $form_id;
 
-				printf( // WPCS: XSS ok.
+				printf(
 					'<script type="text/javascript">
 					var form = %s;
 					%s
 					</script>',
 					wp_json_encode( $js_form ),
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					GFCommon::gf_vars( false )
 				);
 

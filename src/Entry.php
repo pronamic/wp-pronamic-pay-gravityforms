@@ -22,6 +22,23 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
  */
 class Entry {
 	/**
+	 * Check if the entry has been fulfilled by this payment add-on.
+	 *
+	 * @param array $entry Gravity Forms entry.
+	 *
+	 * @return boolean true if fulfilled, false otherwise
+	 */
+	public static function is_fulfilled( array $entry ) {
+		$is_fulfilled = gform_get_meta( $entry['id'], 'pronamic_pay_is_fulfilled' );
+
+		if ( 1 === intval( $is_fulfilled ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Check if the specified entry payment is approved
 	 *
 	 * @param array $entry Gravity Forms entry.

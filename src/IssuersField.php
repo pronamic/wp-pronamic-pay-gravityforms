@@ -475,9 +475,7 @@ class IssuersField extends GF_Field_Select {
 
 			<?php
 
-			$input = ob_get_contents();
-
-			ob_clean();
+			$input = ob_get_clean();
 		}
 
 		if ( is_admin() ) {

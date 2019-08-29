@@ -263,7 +263,6 @@ class PaymentMethodsField extends GF_Field_Select {
 		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
 
 		if ( ! is_admin() && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
-
 			ob_start();
 
 			?>
@@ -521,9 +520,7 @@ class PaymentMethodsField extends GF_Field_Select {
 
 			<?php
 
-			$input = ob_get_contents();
-
-			ob_clean();
+			$input = ob_get_clean();
 		}
 
 		if ( is_admin() ) {

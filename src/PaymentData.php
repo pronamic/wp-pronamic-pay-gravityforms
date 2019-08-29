@@ -658,7 +658,7 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		// Frequency.
-		$frequency = '';
+		$frequency = null;
 
 		switch ( $this->feed->subscription_frequency_type ) {
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:

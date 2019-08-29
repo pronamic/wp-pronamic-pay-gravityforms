@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
--
+- Fix possible error with subscriptions "Uncaught Exception: DatePeriod::__construct(): This constructor accepts either...".
+- Improve GF Nested Forms compatibility.
 
 ## [2.1.9] - 2019-08-26
 - Updated packages.

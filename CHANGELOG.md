@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.10] - 2019-08-30
+- Fix possible error with subscriptions "Uncaught Exception: DatePeriod::__construct(): This constructor accepts either...".
+- Improve GF Nested Forms compatibility.
+
 ## [2.1.9] - 2019-08-26
 - Updated packages.
 - Removed non-existing Gravity Forms payment status `Reversed`.
@@ -223,7 +227,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.9...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.10...HEAD
+[2.1.10]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.9...2.1.10
 [2.1.9]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.8...2.1.9
 [2.1.8]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.7...2.1.8
 [2.1.7]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.6...2.1.7

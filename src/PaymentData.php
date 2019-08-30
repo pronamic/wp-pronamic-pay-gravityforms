@@ -30,7 +30,7 @@ use RGFormsModel;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.5
+ * @version 2.1.10
  * @since   1.0.1
  */
 class PaymentData extends Pay_PaymentData {
@@ -658,7 +658,7 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		// Frequency.
-		$frequency = '';
+		$frequency = null;
 
 		switch ( $this->feed->subscription_frequency_type ) {
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:

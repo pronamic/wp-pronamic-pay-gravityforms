@@ -22,7 +22,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.3
+ * @version 2.1.10
  * @since   1.4.7
  *
  * @property int        $pronamicPayConfigId Added by admin.js.

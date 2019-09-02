@@ -17,7 +17,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.11
  * @since   1.0.0
  */
 class Entry {

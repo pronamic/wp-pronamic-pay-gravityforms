@@ -838,6 +838,9 @@ class Extension {
 			}
 		}
 
+		// Store entry payment fulfillment in custom meta.
+		gform_update_meta( $entry_id, 'pronamic_pay_payment_fulfilled', true );
+
 		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
 		do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}

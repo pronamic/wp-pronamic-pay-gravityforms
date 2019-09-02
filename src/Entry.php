@@ -29,7 +29,7 @@ class Entry {
 	 * @return boolean true if fulfilled, false otherwise
 	 */
 	public static function is_fulfilled( array $entry ) {
-		$is_fulfilled = gform_get_meta( $entry['id'], 'pronamic_pay_is_fulfilled' );
+		$is_fulfilled = gform_get_meta( $entry['id'], 'pronamic_pay_payment_fulfilled' );
 
 		if ( 1 === intval( $is_fulfilled ) ) {
 			return true;

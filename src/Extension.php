@@ -56,19 +56,9 @@ class Extension {
 	 * Bootstrap
 	 */
 	public static function bootstrap() {
-		if ( ! GravityForms::is_active() ) {
-			return;
-		}
-
 		$extension = new Extension();
-		$extension->setup();
-	}
 
-	/**
-	 * Setup.
-	 */
-	public function setup() {
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+		add_action( 'plugins_loaded', array( $extension, 'plugins_loaded' ) );
 	}
 
 	/**

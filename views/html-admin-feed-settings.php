@@ -696,65 +696,162 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<br />
 
 							<label>
+								<?php
+
+								$allowed_html = array(
+									'select' => array(
+										'class' => true,
+										'id'    => true,
+										'name'  => true,
+									),
+									'option' => array(
+										'value'    => true,
+										'selected' => true,
+									),
+									'sup'    => array(),
+								);
+
+
+								/**
+								 * Locale.
+								 *
+								 * @link https://developer.wordpress.org/reference/classes/wp_locale/get_weekday/
+								 * @link https://github.com/WordPress/WordPress/blob/5.2/wp-includes/class-wp-locale.php#L121-L128
+								 */
+								global $wp_locale;
+
+								// Weekday options.
+								$weekdays = array(
+									1 => $wp_locale->get_weekday( 1 ),
+									2 => $wp_locale->get_weekday( 2 ),
+									3 => $wp_locale->get_weekday( 3 ),
+									4 => $wp_locale->get_weekday( 4 ),
+									5 => $wp_locale->get_weekday( 5 ),
+									6 => $wp_locale->get_weekday( 6 ),
+									7 => $wp_locale->get_weekday( 0 ),
+								);
+
+								$weekday_options_html = '';
+
+								foreach ( $weekdays as $day_value => $label ) {
+									$weekday_options_html .= sprintf(
+										'<option value="%s" %s>%s</option>',
+										esc_attr( $day_value ),
+										selected( $subscription_interval_date_day, $day_value, false ),
+										esc_html( $label )
+									);
+								}
+
+								// Monthday options.
+								$options = range( 1, 27 );
+
+								$options['last'] = __( 'last', 'pronamic_ideal' );
+
+								$monthday_options_html = '';
+
+								foreach ( $options as $value => $label ) {
+									$monthday_options_html .= sprintf(
+										'<option value="%s" %s>%s</option>',
+										esc_attr( $value ),
+										selected( $subscription_interval_date, $value, false ),
+										esc_html( $label )
+									);
+								}
+
+								// Month options.
+								$month_options_html = '';
+
+								foreach ( range( 1, 12 ) as $month_number ) {
+									$month_options_html .= sprintf(
+										'<option value="%s" %s>%s</option>',
+										esc_attr( $value ),
+										selected( $subscription_interval_date_month, $month_number, false ),
+										esc_html( $wp_locale->get_month( $month_number ) )
+									);
+								}
+
+								?>
 								<input id="pronamic_pay_gf_subscription_interval_date_type_field" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="sync" <?php checked( $subscription_interval_date_type, 'sync' ); ?> />
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-D">
 									<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
 								</span>
 
-								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W interval-Y">
-									<?php echo esc_html( _x( 'On', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W">
+									<?php
+
+									$select = sprintf(
+										'<select id="%s" name="%s">%s</select>',
+										esc_attr( 'pronamic_pay_gf_subscription_interval_date_day' ),
+										esc_attr( '_pronamic_pay_gf_subscription_interval_date_day' ),
+										$weekday_options_html
+									);
+
+									echo wp_kses(
+										sprintf(
+											/* translators: %s: <select> Weekday (Monday-Sunday). */
+											__( 'On %s', 'pronamic_ideal' ),
+											$select
+										),
+										$allowed_html
+									);
+
+									?>
+									<br />
 								</span>
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M">
-									<?php echo esc_html( _x( 'On the', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+									<?php
+
+									$select = sprintf(
+										'<select id="%s" name="%s">%s</select>',
+										esc_attr( 'pronamic_pay_gf_subscription_interval_date' ),
+										esc_attr( '_pronamic_pay_gf_subscription_interval_m_date' ),
+										$monthday_options_html
+									);
+
+									echo wp_kses(
+										sprintf(
+											/* translators: %s: <select> Monthday (1-27). */
+											__( 'On the %s <sup>th</sup> day of the month', 'pronamic_ideal' ),
+											$select
+										),
+										$allowed_html
+									);
+
+									?>
+									<br />
 								</span>
 
-								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W" id="pronamic_pay_gf_subscription_interval_date_day" name="_pronamic_pay_gf_subscription_interval_date_day">
-									<?php for ( $day = 0; $day <= 6; $day++ ) : ?>
+								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-Y">
+									<?php
 
-										<?php
+									$select_monthday = sprintf(
+										'<select id="%s" name="%s">%s</select>',
+										esc_attr( 'pronamic_pay_gf_subscription_interval_date' ),
+										esc_attr( '_pronamic_pay_gf_subscription_interval_y_date' ),
+										$monthday_options_html
+									);
 
-										$day_date = DateTime::create_from_format( 'U', strtotime( 'next Monday + ' . $day . ' days' ) );
+									$select_month = sprintf(
+										'<select id="%s" name="%s">%s</select>',
+										esc_attr( 'pronamic_pay_gf_subscription_interval_date_month' ),
+										esc_attr( '_pronamic_pay_gf_subscription_interval_date_month' ),
+										$month_options_html
+									);
 
-										$day_value = ( $day + 1 );
+									echo wp_kses(
+										sprintf(
+											/* translators: 1: <select> Monthday (1-27), 2: <select> Month (Jan-Dec). */
+											__( 'On %1$s %1$s', 'pronamic_ideal' ),
+											$select_monthday,
+											$select_month
+										),
+										$allowed_html
+									);
 
-										?>
-
-										<option value="<?php echo esc_html( $day_value ); ?>" <?php selected( $subscription_interval_date_day, $day_value ); ?>><?php echo esc_html( $day_date->format_i18n( 'l' ) ); ?></option>
-
-									<?php endfor; ?>
-								</select>
-
-								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M interval-Y" id="pronamic_pay_gf_subscription_interval_date" name="_pronamic_pay_gf_subscription_interval_date">
-									<?php for ( $date = 1; $date <= 27; $date++ ) : ?>
-
-										<?php
-
-										$interval_date = DateTime::create_from_format( 'j', $date );
-
-										?>
-
-										<option value="<?php echo esc_html( $date ); ?>" <?php selected( $subscription_interval_date, $date ); ?>><?php echo esc_html( $interval_date->format_i18n( 'j' ) ); ?></option>
-
-									<?php endfor; ?>
-
-									<option value="last" <?php selected( $subscription_interval_date, 'last' ); ?>><?php esc_html_e( 'last', 'pronamic_ideal' ); ?></option>
-								</select>
-
-								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-M">
-									<?php echo wp_kses( __( '<sup>th</sup> day of the month', 'pronamic_ideal' ), array( 'sup' => array() ) ); ?>
+									?>
 								</span>
-
-								<select class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-Y" id="pronamic_pay_gf_subscription_interval_date_month" name="_pronamic_pay_gf_subscription_interval_date_month">
-									<?php for ( $month = 1; $month <= 12; $month++ ) : ?>
-
-										<?php $month_date = DateTime::create_from_format( '!m', $month ); ?>
-
-										<option value="<?php echo esc_html( $month ); ?>" <?php selected( $subscription_interval_date_month, $month ); ?>><?php echo esc_html( $month_date->format_i18n( 'F' ) ); ?></option>
-
-									<?php endfor; ?>
-								</select>
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-interval-date-settings interval-date-sync">
@@ -764,8 +861,6 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 									<?php esc_html_e( 'Prorate first payment amount', 'pronamic_ideal' ); ?>
 								</label>
 							</div>
-
-							<br />
 						</fieldset>
 					</td>
 				</tr>

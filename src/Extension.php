@@ -19,7 +19,7 @@ use GFForms;
 use GFUserData;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Recurring;
-use Pronamic\WordPress\Pay\Core\Statuses;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Customer;
 use Pronamic\WordPress\Pay\Payments\Payment;
@@ -408,23 +408,23 @@ class Extension {
 		$data = new PaymentData( $form, $lead, $feed );
 
 		switch ( $payment->status ) {
-			case Statuses::CANCELLED:
+			case PaymentStatus::CANCELLED:
 				$url = $data->get_cancel_url();
 
 				break;
-			case Statuses::EXPIRED:
+			case PaymentStatus::EXPIRED:
 				$url = $feed->get_url( Links::EXPIRED );
 
 				break;
-			case Statuses::FAILURE:
+			case PaymentStatus::FAILURE:
 				$url = $data->get_error_url();
 
 				break;
-			case Statuses::SUCCESS:
+			case PaymentStatus::SUCCESS:
 				$url = $data->get_success_url();
 
 				break;
-			case Statuses::OPEN:
+			case PaymentStatus::OPEN:
 			default:
 				$url = $data->get_normal_return_url();
 
@@ -507,23 +507,23 @@ class Extension {
 		}
 
 		switch ( $payment->status ) {
-			case Statuses::CANCELLED:
+			case PaymentStatus::CANCELLED:
 				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::CANCELLED );
 
 				break;
-			case Statuses::EXPIRED:
+			case PaymentStatus::EXPIRED:
 				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::EXPIRED );
 
 				break;
-			case Statuses::FAILURE:
+			case PaymentStatus::FAILURE:
 				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::FAILED );
 
 				break;
-			case Statuses::REFUNDED:
+			case PaymentStatus::REFUNDED:
 				$this->payment_action( 'refund_payment', $lead, $action, PaymentStatuses::REFUNDED );
 
 				break;
-			case Statuses::SUCCESS:
+			case PaymentStatus::SUCCESS:
 				if ( ! Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
 					$this->payment_action( $success_action, $lead, $action, PaymentStatuses::PAID );
@@ -540,7 +540,7 @@ class Extension {
 				$this->fulfill_order( $lead );
 
 				break;
-			case Statuses::OPEN:
+			case PaymentStatus::OPEN:
 			default:
 				if ( 'recurring' === $payment->recurring_type ) {
 					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
@@ -580,7 +580,7 @@ class Extension {
 		);
 
 		switch ( $subscription->get_status() ) {
-			case Statuses::ACTIVE:
+			case PaymentStatus::ACTIVE:
 				if ( ! Entry::is_payment_active( $lead ) ) {
 					$action['note'] = __( 'Subscription manually activated.', 'pronamic_ideal' );
 
@@ -591,12 +591,12 @@ class Extension {
 				}
 
 				break;
-			case Statuses::CANCELLED:
+			case PaymentStatus::CANCELLED:
 				$this->payment_action( 'cancel_subscription', $lead, $action, PaymentStatuses::CANCELLED );
 
 				break;
-			case Statuses::EXPIRED:
-			case Statuses::COMPLETED:
+			case PaymentStatus::EXPIRED:
+			case PaymentStatus::COMPLETED:
 				// @todo are we sure an 'expired subscription' is the same as the Pronamic\WordPress\Pay\Core\Statuses::COMPLETED status?
 				$this->payment_action( 'expire_subscription', $lead, $action, PaymentStatuses::EXPIRED );
 
@@ -898,7 +898,7 @@ class Extension {
 	 *
 	 * @return mixed
 	 */
-	public function get_confirmation( $lead, $payment_status = Statuses::OPEN ) {
+	public function get_confirmation( $lead, $payment_status = PaymentStatus::OPEN ) {
 		$form = GFAPI::get_form( $lead['form_id'] );
 
 		$feed = FeedsDB::get_feed_by_entry_id( $lead['id'] );

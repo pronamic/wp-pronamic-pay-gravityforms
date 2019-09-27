@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
-use Pronamic\WordPress\Pay\Core\Statuses as Core_Statuses;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus as Core_Statuses;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment statuses

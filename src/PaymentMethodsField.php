@@ -48,6 +48,13 @@ class PaymentMethodsField extends GF_Field_Select {
 	public $type = Fields::PAYMENT_METHODS_FIELD_TYPE;
 
 	/**
+	 * Error
+	 *
+	 * @var null|\Pronamic\WordPress\Pay\PayException
+	 */
+	protected $error = null;
+
+	/**
 	 * Constructs and initializes payment methods field.
 	 *
 	 * @param array $properties Field properties.
@@ -147,7 +154,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		if ( isset( $this->pronamicPayConfigId ) && in_array( $this->pronamicPayConfigId, $config_ids, true ) ) {
 			$gateway = Plugin::get_gateway( $this->pronamicPayConfigId );
 
-			if ( $gateway ) {
+			if ( null !== $gateway ) {
 				$gateways[] = $gateway;
 			}
 		}
@@ -253,8 +260,8 @@ class PaymentMethodsField extends GF_Field_Select {
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
 		// Error handling.
-		if ( is_wp_error( $this->error ) ) {
-			return $this->error->get_error_message();
+		if ( $this->error instanceof \Pronamic\WordPress\Pay\PayException ) {
+			return $this->error->get_message();
 		}
 
 		// Input.
@@ -594,11 +601,15 @@ class PaymentMethodsField extends GF_Field_Select {
 		$payment_methods = array();
 
 		foreach ( $gateways as $gateway ) {
-			$options = $gateway->get_payment_method_field_options( false );
+			try {
+				$options = $gateway->get_payment_method_field_options( false );
 
-			$payment_methods = array_merge( $payment_methods, $options );
+				$payment_methods = array_merge( $payment_methods, $options );
+			} catch ( \Pronamic\WordPress\Pay\PayException $e ) {
+				$this->error = $e;
 
-			$this->error = $gateway->get_error();
+				continue;
+			}
 		}
 
 		if ( empty( $payment_methods ) ) {

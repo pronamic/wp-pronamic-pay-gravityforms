@@ -45,13 +45,6 @@ class IssuersField extends GF_Field_Select {
 	public $type = Fields::ISSUERS_FIELD_TYPE;
 
 	/**
-	 * Error
-	 *
-	 * @var null|\Pronamic\WordPress\Pay\PayException
-	 */
-	protected $error = null;
-
-	/**
 	 * Constructs and initializes issuers field.
 	 *
 	 * @param array $properties Properties.
@@ -142,11 +135,7 @@ class IssuersField extends GF_Field_Select {
 				$gateway = Plugin::get_gateway( $feed->config_id );
 
 				if ( $gateway ) {
-					try {
-						$issuers = $gateway->get_transient_issuers();
-					} catch ( \Pronamic\WordPress\Pay\GatewayException $e ) {
-						continue;
-					}
+					$issuers = $gateway->get_transient_issuers();
 
 					if ( empty( $issuers ) ) {
 						continue;
@@ -177,15 +166,12 @@ class IssuersField extends GF_Field_Select {
 		// Always use iDEAL payment method for issuer field.
 		$gateway->set_payment_method( PaymentMethods::IDEAL );
 
-		try {
-			$field = $gateway->get_issuer_field();
-		} catch ( \Pronamic\WordPress\Pay\GatewayException $e ) {
-			$this->error = $e;
+		$field = $gateway->get_issuer_field();
 
-			return;
-		}
+		$this->error = $gateway->get_error();
 
-		if ( null === $field ) {
+		// @todo What todo if error?
+		if ( ! $field || is_wp_error( $this->error ) ) {
 			return;
 		}
 
@@ -215,8 +201,8 @@ class IssuersField extends GF_Field_Select {
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
 		// Error handling.
-		if ( $this->error instanceof \Pronamic\WordPress\Pay\PayException ) {
-			return $this->error->get_message();
+		if ( is_wp_error( $this->error ) ) {
+			return $this->error->get_error_message();
 		}
 
 		// Input.

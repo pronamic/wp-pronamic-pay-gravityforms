@@ -35,7 +35,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.11
+ * @version 2.1.12
  * @since   1.0.0
  */
 class Extension {

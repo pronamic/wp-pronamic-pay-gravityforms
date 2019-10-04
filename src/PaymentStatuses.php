@@ -19,7 +19,7 @@ use Pronamic\WordPress\Pay\Payments\PaymentStatus as Core_Statuses;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.1
+ * @version 2.1.12
  * @since   1.0.0
  */
 class PaymentStatuses {

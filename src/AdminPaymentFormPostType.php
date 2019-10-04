@@ -345,6 +345,19 @@ class AdminPaymentFormPostType {
 				}
 			}
 
+			if ( '_pronamic_pay_gf_subscription_interval_date' === $meta_key ) {
+				$period = filter_input( INPUT_POST, '_pronamic_pay_gf_subscription_interval_period', FILTER_SANITIZE_STRING );
+
+				switch ( $period ) {
+					case 'M':
+						$meta_value = filter_input( INPUT_POST, '_pronamic_pay_gf_subscription_interval_m_date', FILTER_SANITIZE_STRING );
+						break;
+					case 'Y':
+						$meta_value = filter_input( INPUT_POST, '_pronamic_pay_gf_subscription_interval_y_date', FILTER_SANITIZE_STRING );
+						break;
+				}
+			}
+
 			if ( isset( $meta_value ) && '' !== $meta_value ) {
 				update_post_meta( $post_id, $meta_key, $meta_value );
 			} else {

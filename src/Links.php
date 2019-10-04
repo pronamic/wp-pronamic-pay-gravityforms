@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
-use Pronamic\WordPress\Pay\Core\Statuses;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 
 /**
  * Title: WordPress pay extension Gravity Forms links
@@ -19,7 +19,7 @@ use Pronamic\WordPress\Pay\Core\Statuses;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.0.0
+ * @version 2.1.12
  * @since   1.0.0
  */
 class Links {
@@ -68,15 +68,15 @@ class Links {
 	 */
 	public static function transform_status( $payment_status ) {
 		switch ( $payment_status ) {
-			case Statuses::CANCELLED:
+			case PaymentStatus::CANCELLED:
 				return self::CANCEL;
-			case Statuses::EXPIRED:
+			case PaymentStatus::EXPIRED:
 				return self::EXPIRED;
-			case Statuses::FAILURE:
+			case PaymentStatus::FAILURE:
 				return self::ERROR;
-			case Statuses::SUCCESS:
+			case PaymentStatus::SUCCESS:
 				return self::SUCCESS;
-			case Statuses::OPEN:
+			case PaymentStatus::OPEN:
 			default:
 				return self::OPEN;
 		}

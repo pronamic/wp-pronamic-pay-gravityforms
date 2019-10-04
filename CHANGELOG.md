@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.12] - 2019-10-04
+- Improved RTL support in 'Synchronized payment date' settings fields.
+- Fixed loading extension in multisite when plugin is network activated and Gravity Forms is activated per site.
+
 ## [2.1.11] - 2019-09-02
 - Fix entry payment fulfillment.
 
@@ -230,7 +234,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.11...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.12...HEAD
+[2.1.12]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.11...2.1.12
 [2.1.11]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.10...2.1.11
 [2.1.10]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.9...2.1.10
 [2.1.9]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.8...2.1.9

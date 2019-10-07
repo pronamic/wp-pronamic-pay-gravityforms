@@ -843,7 +843,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 									echo wp_kses(
 										sprintf(
 											/* translators: 1: <select> Monthday (1-27), 2: <select> Month (Jan-Dec). */
-											__( 'On %1$s %1$s', 'pronamic_ideal' ),
+											__( 'On %1$s %2$s', 'pronamic_ideal' ),
 											$select_monthday,
 											$select_month
 										),

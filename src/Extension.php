@@ -957,13 +957,64 @@ class Extension {
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}
 
+		$payment_id              = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' );
+		$subscription_payment_id = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' );
+
+		/**
+		 * Bank transfer recipient details.
+		 */
+		// Use bank transfer details from last subscription payment if available.
+		$payment = \get_pronamic_payment( $subscription_payment_id );
+
+		if ( null === $payment ) {
+			$payment = \get_pronamic_payment( $payment_id );
+		}
+
+		$bank_transfer_recipient = $payment->get_bank_transfer_recipient_details();
+
+		$bank_transfer_recipient_reference      = '';
+		$bank_transfer_recipient_bank_name      = '';
+		$bank_transfer_recipient_name           = '';
+		$bank_transfer_recipient_iban           = '';
+		$bank_transfer_recipient_bic            = '';
+		$bank_transfer_recipient_city           = '';
+		$bank_transfer_recipient_country        = '';
+		$bank_transfer_recipient_account_number = '';
+
+		if ( null !== $bank_transfer_recipient ) {
+			// Bank transfer reference.
+			$bank_transfer_recipient_reference = \strval( $bank_transfer_recipient->get_reference() );
+
+			// Bank account.
+			$bank_account = $bank_transfer_recipient->get_bank_account();
+
+			if ( null !== $bank_account ) {
+				$bank_transfer_recipient_bank_name      = \strval( $bank_account->get_bank_name() );
+				$bank_transfer_recipient_name           = \strval( $bank_account->get_name() );
+				$bank_transfer_recipient_iban           = \strval( $bank_account->get_iban() );
+				$bank_transfer_recipient_bic            = \strval( $bank_account->get_bic() );
+				$bank_transfer_recipient_city           = \strval( $bank_account->get_city() );
+				$bank_transfer_recipient_country        = \strval( $bank_account->get_country() );
+				$bank_transfer_recipient_account_number = \strval( $bank_account->get_account_number() );
+			}
+		}
+
+		// Replacements.
 		$replacements = array(
 			'{payment_status}'                     => rgar( $entry, 'payment_status' ),
 			'{payment_date}'                       => rgar( $entry, 'payment_date' ),
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
-			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
-			'{pronamic_subscription_payment_id}'   => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' ),
+			'{pronamic_payment_id}'                => $payment_id,
+			'{pronamic_payment_bank_transfer_recipient_reference}' => $bank_transfer_recipient_reference,
+			'{pronamic_payment_bank_transfer_recipient_bank_name}' => $bank_transfer_recipient_bank_name,
+			'{pronamic_payment_bank_transfer_recipient_name}' => $bank_transfer_recipient_name,
+			'{pronamic_payment_bank_transfer_recipient_iban}' => $bank_transfer_recipient_iban,
+			'{pronamic_payment_bank_transfer_recipient_bic}' => $bank_transfer_recipient_bic,
+			'{pronamic_payment_bank_transfer_recipient_city}' => $bank_transfer_recipient_city,
+			'{pronamic_payment_bank_transfer_recipient_country}' => $bank_transfer_recipient_country,
+			'{pronamic_payment_bank_transfer_recipient_account_number}' => $bank_transfer_recipient_account_number,
+			'{pronamic_subscription_payment_id}'   => $subscription_payment_id,
 			'{pronamic_subscription_amount}'       => $subscription_amount,
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,

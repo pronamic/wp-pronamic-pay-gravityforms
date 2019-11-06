@@ -970,8 +970,6 @@ class Extension {
 			$payment = \get_pronamic_payment( $payment_id );
 		}
 
-		$bank_transfer_recipient = $payment->get_bank_transfer_recipient_details();
-
 		$bank_transfer_recipient_reference      = '';
 		$bank_transfer_recipient_bank_name      = '';
 		$bank_transfer_recipient_name           = '';
@@ -981,21 +979,25 @@ class Extension {
 		$bank_transfer_recipient_country        = '';
 		$bank_transfer_recipient_account_number = '';
 
-		if ( null !== $bank_transfer_recipient ) {
-			// Bank transfer reference.
-			$bank_transfer_recipient_reference = \strval( $bank_transfer_recipient->get_reference() );
+		if ( null !== $payment ) {
+			$bank_transfer_recipient = $payment->get_bank_transfer_recipient_details();
 
-			// Bank account.
-			$bank_account = $bank_transfer_recipient->get_bank_account();
+			if ( null !== $bank_transfer_recipient ) {
+				// Bank transfer reference.
+				$bank_transfer_recipient_reference = \strval( $bank_transfer_recipient->get_reference() );
 
-			if ( null !== $bank_account ) {
-				$bank_transfer_recipient_bank_name      = \strval( $bank_account->get_bank_name() );
-				$bank_transfer_recipient_name           = \strval( $bank_account->get_name() );
-				$bank_transfer_recipient_iban           = \strval( $bank_account->get_iban() );
-				$bank_transfer_recipient_bic            = \strval( $bank_account->get_bic() );
-				$bank_transfer_recipient_city           = \strval( $bank_account->get_city() );
-				$bank_transfer_recipient_country        = \strval( $bank_account->get_country() );
-				$bank_transfer_recipient_account_number = \strval( $bank_account->get_account_number() );
+				// Bank account.
+				$bank_account = $bank_transfer_recipient->get_bank_account();
+
+				if ( null !== $bank_account ) {
+					$bank_transfer_recipient_bank_name      = \strval( $bank_account->get_bank_name() );
+					$bank_transfer_recipient_name           = \strval( $bank_account->get_name() );
+					$bank_transfer_recipient_iban           = \strval( $bank_account->get_iban() );
+					$bank_transfer_recipient_bic            = \strval( $bank_account->get_bic() );
+					$bank_transfer_recipient_city           = \strval( $bank_account->get_city() );
+					$bank_transfer_recipient_country        = \strval( $bank_account->get_country() );
+					$bank_transfer_recipient_account_number = \strval( $bank_account->get_account_number() );
+				}
 			}
 		}
 

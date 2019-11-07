@@ -116,7 +116,13 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @link    https://docs.gravityforms.com/gform_gf_field_create/
 	 */
 	public function field_create( $field, $properties ) {
-		if ( $this->type === $field->type ) {
+		// Check field type.
+		if ( $this->type !== $field->type ) {
+			return $field;
+		}
+
+		// Check field object class.
+		if ( ! ( $field instanceof \Pronamic\WordPress\Pay\Extensions\GravityForms\PaymentMethodsField ) ) {
 			$field = new self( $properties );
 		}
 

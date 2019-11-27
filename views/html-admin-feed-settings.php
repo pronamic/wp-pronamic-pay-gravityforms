@@ -743,7 +743,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								}
 
 								// Monthday options.
-								$options = array_combine( range( 1, 27), range( 1, 27 ) );
+								$options = array_combine( range( 1, 27 ), range( 1, 27 ) );
 
 								$options['last'] = __( 'last', 'pronamic_ideal' );
 

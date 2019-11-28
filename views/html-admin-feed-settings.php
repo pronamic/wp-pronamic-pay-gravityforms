@@ -658,6 +658,14 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 							<br />
 						</fieldset>
+
+						<span class="description pronamic-pay-description">
+							<?php
+
+							esc_html_e( 'The number of frequency times excludes the first payment.', 'pronamic_ideal' );
+
+							?>
+						</span>
 					</td>
 				</tr>
 				<tr>

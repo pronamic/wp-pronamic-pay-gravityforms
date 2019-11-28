@@ -113,6 +113,9 @@ class Extension {
 		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
 		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
 		add_filter( 'pronamic_payment_source_url_' . self::SLUG, array( $this, 'source_url' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
 
 		add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
@@ -276,6 +279,51 @@ class Extension {
 	 */
 	public function source_url( $url, Payment $payment ) {
 		return add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
+	}
+
+	/**
+	 * Subscription source text.
+	 *
+	 * @param string       $text         Source text.
+	 * @param Subscription $subscription Subscription.
+	 *
+	 * @return string
+	 */
+	public function subscription_source_text( $text, Subscription $subscription ) {
+		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
+
+		$text .= sprintf(
+			'<a href="%s">%s</a>',
+			add_query_arg( array( 'pronamic_gf_lid' => $subscription->get_source_id() ), admin_url( 'admin.php' ) ),
+			/* translators: %s: source id  */
+			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
+		);
+
+		return $text;
+	}
+
+	/**
+	 * Subscription source description.
+	 *
+	 * @param string       $description  Description.
+	 * @param Subscription $subscription Subscription.
+	 *
+	 * @return string
+	 */
+	public function subscription_source_description( $description, Subscription $subscription ) {
+		return __( 'Gravity Forms Entry', 'pronamic_ideal' );
+	}
+
+	/**
+	 * Subscription source URL.
+	 *
+	 * @param string       $url          Source URL.
+	 * @param Subscription $subscription Subscription.
+	 *
+	 * @return string
+	 */
+	public function subscription_source_url( $url, Subscription $subscription ) {
+		return add_query_arg( 'pronamic_gf_lid', $subscription->get_source_id(), admin_url( 'admin.php' ) );
 	}
 
 	/**

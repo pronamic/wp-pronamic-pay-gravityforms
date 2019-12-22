@@ -1,6 +1,6 @@
 {
   "name": "gravityforms",
-  "version": "2.1.13",
+  "version": "2.1.14",
   "description": "Gravity Forms driver for the WordPress payment processing library.",
   "repository": {
     "type": "git",

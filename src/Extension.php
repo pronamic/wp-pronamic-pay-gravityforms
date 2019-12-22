@@ -35,7 +35,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.12
+ * @version 2.1.14
  * @since   1.0.0
  */
 class Extension {
@@ -113,6 +113,9 @@ class Extension {
 		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
 		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
 		add_filter( 'pronamic_payment_source_url_' . self::SLUG, array( $this, 'source_url' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
 
 		add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 
@@ -276,6 +279,51 @@ class Extension {
 	 */
 	public function source_url( $url, Payment $payment ) {
 		return add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
+	}
+
+	/**
+	 * Subscription source text.
+	 *
+	 * @param string       $text         Source text.
+	 * @param Subscription $subscription Subscription.
+	 *
+	 * @return string
+	 */
+	public function subscription_source_text( $text, Subscription $subscription ) {
+		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
+
+		$text .= sprintf(
+			'<a href="%s">%s</a>',
+			add_query_arg( array( 'pronamic_gf_lid' => $subscription->get_source_id() ), admin_url( 'admin.php' ) ),
+			/* translators: %s: source id  */
+			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
+		);
+
+		return $text;
+	}
+
+	/**
+	 * Subscription source description.
+	 *
+	 * @param string       $description  Description.
+	 * @param Subscription $subscription Subscription.
+	 *
+	 * @return string
+	 */
+	public function subscription_source_description( $description, Subscription $subscription ) {
+		return __( 'Gravity Forms Entry', 'pronamic_ideal' );
+	}
+
+	/**
+	 * Subscription source URL.
+	 *
+	 * @param string       $url          Source URL.
+	 * @param Subscription $subscription Subscription.
+	 *
+	 * @return string
+	 */
+	public function subscription_source_url( $url, Subscription $subscription ) {
+		return add_query_arg( 'pronamic_gf_lid', $subscription->get_source_id(), admin_url( 'admin.php' ) );
 	}
 
 	/**
@@ -957,13 +1005,66 @@ class Extension {
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}
 
+		$payment_id              = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' );
+		$subscription_payment_id = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' );
+
+		/**
+		 * Bank transfer recipient details.
+		 */
+		// Use bank transfer details from last subscription payment if available.
+		$payment = \get_pronamic_payment( $subscription_payment_id );
+
+		if ( null === $payment ) {
+			$payment = \get_pronamic_payment( $payment_id );
+		}
+
+		$bank_transfer_recipient_reference      = '';
+		$bank_transfer_recipient_bank_name      = '';
+		$bank_transfer_recipient_name           = '';
+		$bank_transfer_recipient_iban           = '';
+		$bank_transfer_recipient_bic            = '';
+		$bank_transfer_recipient_city           = '';
+		$bank_transfer_recipient_country        = '';
+		$bank_transfer_recipient_account_number = '';
+
+		if ( null !== $payment ) {
+			$bank_transfer_recipient = $payment->get_bank_transfer_recipient_details();
+
+			if ( null !== $bank_transfer_recipient ) {
+				// Bank transfer reference.
+				$bank_transfer_recipient_reference = \strval( $bank_transfer_recipient->get_reference() );
+
+				// Bank account.
+				$bank_account = $bank_transfer_recipient->get_bank_account();
+
+				if ( null !== $bank_account ) {
+					$bank_transfer_recipient_bank_name      = \strval( $bank_account->get_bank_name() );
+					$bank_transfer_recipient_name           = \strval( $bank_account->get_name() );
+					$bank_transfer_recipient_iban           = \strval( $bank_account->get_iban() );
+					$bank_transfer_recipient_bic            = \strval( $bank_account->get_bic() );
+					$bank_transfer_recipient_city           = \strval( $bank_account->get_city() );
+					$bank_transfer_recipient_country        = \strval( $bank_account->get_country() );
+					$bank_transfer_recipient_account_number = \strval( $bank_account->get_account_number() );
+				}
+			}
+		}
+
+		// Replacements.
 		$replacements = array(
 			'{payment_status}'                     => rgar( $entry, 'payment_status' ),
 			'{payment_date}'                       => rgar( $entry, 'payment_date' ),
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
-			'{pronamic_payment_id}'                => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' ),
-			'{pronamic_subscription_payment_id}'   => gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' ),
+			'{pronamic_payment_id}'                => $payment_id,
+			'{pronamic_payment_bank_transfer_recipient_reference}' => $bank_transfer_recipient_reference,
+			'{pronamic_payment_bank_transfer_recipient_bank_name}' => $bank_transfer_recipient_bank_name,
+			'{pronamic_payment_bank_transfer_recipient_name}' => $bank_transfer_recipient_name,
+			'{pronamic_payment_bank_transfer_recipient_iban}' => $bank_transfer_recipient_iban,
+			'{pronamic_payment_bank_transfer_recipient_bic}' => $bank_transfer_recipient_bic,
+			'{pronamic_payment_bank_transfer_recipient_city}' => $bank_transfer_recipient_city,
+			'{pronamic_payment_bank_transfer_recipient_country}' => $bank_transfer_recipient_country,
+			'{pronamic_payment_bank_transfer_recipient_account_number}' => $bank_transfer_recipient_account_number,
+			'{pronamic_subscription_payment_id}'   => $subscription_payment_id,
 			'{pronamic_subscription_amount}'       => $subscription_amount,
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,

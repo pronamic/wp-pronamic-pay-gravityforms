@@ -22,7 +22,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.10
+ * @version 2.1.14
  * @since   1.4.7
  *
  * @property int        $pronamicPayConfigId Added by admin.js.
@@ -69,6 +69,11 @@ class PaymentMethodsField extends GF_Field_Select {
 			add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
 		}
 
+		// Filters.
+		if ( ! has_filter( 'gform_gf_field_create', array( $this, 'field_create' ) ) ) {
+			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+		}
+
 		// Admin.
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
@@ -98,6 +103,30 @@ class PaymentMethodsField extends GF_Field_Select {
 		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
 			$this->cssClass .= ' gf_list_2col';
 		}
+	}
+
+	/**
+	 * Filter the GF_Field object after it is created.
+	 *
+	 * @param \GF_Field $field      A field object.
+	 * @param array     $properties An array of field properties used to generate the field object.
+	 *
+	 * @return \GF_Field
+	 *
+	 * @link    https://docs.gravityforms.com/gform_gf_field_create/
+	 */
+	public function field_create( $field, $properties ) {
+		// Check field type.
+		if ( $this->type !== $field->type ) {
+			return $field;
+		}
+
+		// Check field object class.
+		if ( ! ( $field instanceof \Pronamic\WordPress\Pay\Extensions\GravityForms\PaymentMethodsField ) ) {
+			$field = new self( $properties );
+		}
+
+		return $field;
 	}
 
 	/**

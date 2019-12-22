@@ -658,6 +658,14 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 							<br />
 						</fieldset>
+
+						<span class="description pronamic-pay-description">
+							<?php
+
+							esc_html_e( 'The number of frequency times excludes the first payment.', 'pronamic_ideal' );
+
+							?>
+						</span>
 					</td>
 				</tr>
 				<tr>
@@ -743,7 +751,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								}
 
 								// Monthday options.
-								$options = range( 1, 27 );
+								$options = array_combine( range( 1, 27 ), range( 1, 27 ) );
 
 								$options['last'] = __( 'last', 'pronamic_ideal' );
 
@@ -764,7 +772,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								foreach ( range( 1, 12 ) as $month_number ) {
 									$month_options_html .= sprintf(
 										'<option value="%s" %s>%s</option>',
-										esc_attr( $value ),
+										esc_attr( $month_number ),
 										selected( $subscription_interval_date_month, $month_number, false ),
 										esc_html( $wp_locale->get_month( $month_number ) )
 									);

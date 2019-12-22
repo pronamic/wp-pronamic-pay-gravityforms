@@ -20,7 +20,7 @@ use stdClass;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.1.14
  * @since   1.0.0
  */
 class Admin {
@@ -146,6 +146,7 @@ class Admin {
 	 * @return array
 	 */
 	public static function custom_merge_tags( $merge_tags ) {
+		// Payment.
 		$merge_tags[] = array(
 			'label' => __( 'Payment Status', 'pronamic_ideal' ),
 			'tag'   => '{payment_status}',
@@ -171,6 +172,48 @@ class Admin {
 			'tag'   => '{pronamic_payment_id}',
 		);
 
+		// Bank transfer.
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient reference', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_reference}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient bank name', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_bank_name}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient name', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_name}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient IBAN', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_iban}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient BIC', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_bic}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient city', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_city}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient country', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_country}',
+		);
+
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic bank transfer recipient account number', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_payment_bank_transfer_recipient_account_number}',
+		);
+
+		// Subscription.
 		$merge_tags[] = array(
 			'label' => __( 'Pronamic Subscription Payment ID', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_payment_id}',

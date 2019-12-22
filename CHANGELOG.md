@@ -7,6 +7,14 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.14] - 2019-12-22
+- Added merge tags for bank transfer recipient details.
+- Added notice about subscription frequency being in addition to the first payment.
+- Fixed synchronized payment date monthday and month settings.
+- Improved error handling with exceptions.
+- Improved payment method field creation.
+- Updated subscription source details.
+
 ## [2.1.13] - 2019-10-07
 - Fixed subscription interval date settings field.
 
@@ -237,7 +245,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.13...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.14...HEAD
+[2.1.14]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.13...2.1.14
 [2.1.13]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.12...2.1.13
 [2.1.12]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.11...2.1.12
 [2.1.11]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.10...2.1.11

@@ -23,7 +23,6 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
-use WP_Error;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
@@ -32,7 +31,7 @@ use WP_Error;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.4
+ * @version 2.1.14
  * @since   1.0.0
  */
 class Processor {
@@ -88,7 +87,7 @@ class Processor {
 	/**
 	 * Error
 	 *
-	 * @var WP_Error
+	 * @var \Pronamic\WordPress\Pay\PayException
 	 */
 	private $error;
 
@@ -423,9 +422,13 @@ class Processor {
 		}
 
 		// Start.
-		$this->payment = Plugin::start_payment( $payment );
+		try {
+			$this->payment = Plugin::start_payment( $payment );
+		} catch ( \Exception $e ) {
+			$this->payment = $payment;
 
-		$this->error = $this->gateway->get_error();
+			$this->error = $e;
+		}
 
 		// Update entry meta.
 		gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
@@ -436,11 +439,6 @@ class Processor {
 		$lead[ LeadProperties::TRANSACTION_ID ] = $this->payment->get_transaction_id();
 
 		GravityForms::update_entry( $lead );
-
-		// Error handling.
-		if ( $this->gateway->has_error() ) {
-			return $lead;
-		}
 
 		// Pending payment.
 		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
@@ -584,14 +582,10 @@ class Processor {
 
 		$confirmation = array( 'redirect' => $this->payment->get_pay_redirect_url() );
 
-		if ( is_wp_error( $this->error ) ) {
+		if ( $this->error instanceof \Exception ) {
 			$html  = '<ul>';
 			$html .= '<li>' . Plugin::get_default_error_message() . '</li>';
-
-			foreach ( $this->error->get_error_messages() as $message ) {
-				$html .= '<li>' . $message . '</li>';
-			}
-
+			$html .= '<li>' . $this->error->getMessage() . '</li>';
 			$html .= '</ul>';
 
 			$confirmation = $html;

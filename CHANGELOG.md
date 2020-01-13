@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
--
+- Fixed subscription start with zero interval days.
 
 ## [2.1.14] - 2019-12-22
 - Added merge tags for bank transfer recipient details.

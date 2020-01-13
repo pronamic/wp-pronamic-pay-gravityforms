@@ -609,7 +609,7 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		if ( 0 === $amount ) {
-			return;
+			return null;
 		}
 
 		// Interval.
@@ -633,14 +633,14 @@ class PaymentData extends Pay_PaymentData {
 						if ( null === $interval_period ) {
 							$interval_period = 'D';
 						}
-
-						$interval = intval( $interval );
-
-						// Do not start subscriptions for `0` interval.
-						if ( 0 === $interval ) {
-							return;
-						}
 					}
+				}
+
+				$interval = intval( $interval );
+
+				// Do not start subscriptions for `0` interval.
+				if ( 0 === $interval ) {
+					return null;
 				}
 
 				break;

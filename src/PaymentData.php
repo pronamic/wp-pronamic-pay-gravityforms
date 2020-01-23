@@ -316,13 +316,14 @@ class PaymentData extends Pay_PaymentData {
 			}
 		}
 
+		// Prorate subscription amount.
+		$amount = $amount->subtract( $subscription->get_total_amount() );
+
 		$prorated_days_diff = $now->diff( $next_date )->days;
 
-		$amount_per_day = ( $amount->get_value() / $days_diff );
+		$prorated_amount = $subscription->get_total_amount()->divide( $days_diff )->multiply( $prorated_days_diff );
 
-		$prorated_amount = ( $amount_per_day * $prorated_days_diff );
-
-		$amount->set_value( $prorated_amount );
+		$amount = $amount->add( $prorated_amount );
 
 		return $amount;
 	}

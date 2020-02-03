@@ -7,6 +7,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.1.15] - 2020-02-03
+- Only prorate subscription amount when form field has been set for recurring amount.
+- Fixed incorrect currency with multi-currency add-on.
+- Fixed starting subscriptions with zero interval days.
+
 ## [2.1.14] - 2019-12-22
 - Added merge tags for bank transfer recipient details.
 - Added notice about subscription frequency being in addition to the first payment.
@@ -245,7 +250,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.14...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.15...HEAD
+[2.1.15]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.14...2.1.15
 [2.1.14]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.13...2.1.14
 [2.1.13]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.12...2.1.13
 [2.1.12]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.11...2.1.12

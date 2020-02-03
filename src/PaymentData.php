@@ -3,7 +3,7 @@
  * Payment data
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2019 Pronamic
+ * @copyright 2005-2020 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -26,7 +26,7 @@ use RGFormsModel;
 /**
  * Title: WordPress pay extension Gravity Forms payment data
  * Description:
- * Copyright: 2005-2019 Pronamic
+ * Copyright: 2005-2020 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -316,13 +316,14 @@ class PaymentData extends Pay_PaymentData {
 			}
 		}
 
+		// Prorate subscription amount.
+		$amount = $amount->subtract( $subscription->get_total_amount() );
+
 		$prorated_days_diff = $now->diff( $next_date )->days;
 
-		$amount_per_day = ( $amount->get_value() / $days_diff );
+		$prorated_amount = $subscription->get_total_amount()->divide( $days_diff )->multiply( $prorated_days_diff );
 
-		$prorated_amount = ( $amount_per_day * $prorated_days_diff );
-
-		$amount->set_value( $prorated_amount );
+		$amount = $amount->add( $prorated_amount );
 
 		return $amount;
 	}
@@ -335,6 +336,10 @@ class PaymentData extends Pay_PaymentData {
 	 * @return string
 	 */
 	public function get_currency_alphabetic_code() {
+		if ( isset( $this->lead['currency'] ) ) {
+			return $this->lead['currency'];
+		}
+
 		return GFCommon::get_currency();
 	}
 
@@ -609,7 +614,7 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		if ( 0 === $amount ) {
-			return;
+			return null;
 		}
 
 		// Interval.
@@ -633,14 +638,14 @@ class PaymentData extends Pay_PaymentData {
 						if ( null === $interval_period ) {
 							$interval_period = 'D';
 						}
-
-						$interval = intval( $interval );
-
-						// Do not start subscriptions for `0` interval.
-						if ( 0 === $interval ) {
-							return;
-						}
 					}
+				}
+
+				$interval = intval( $interval );
+
+				// Do not start subscriptions for `0` interval.
+				if ( 0 === $interval ) {
+					return null;
 				}
 
 				break;

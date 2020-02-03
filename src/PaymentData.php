@@ -337,7 +337,7 @@ class PaymentData extends Pay_PaymentData {
 	 */
 	public function get_currency_alphabetic_code() {
 		if ( isset( $this->lead['currency'] ) ) {
-			return $this->lead[ 'currency' ];
+			return $this->lead['currency'];
 		}
 
 		return GFCommon::get_currency();

@@ -507,7 +507,7 @@ class PaymentData extends Pay_PaymentData {
 		$fields = GFCommon::get_fields_by_type( $this->form, array( Fields::PAYMENT_METHODS_FIELD_TYPE ) );
 
 		foreach ( $fields as $field ) {
-			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
+			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 				$method = RGFormsModel::get_field_value( $field );
 
 				if ( ! $this->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {

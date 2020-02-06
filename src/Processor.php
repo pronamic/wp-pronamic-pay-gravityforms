@@ -256,7 +256,7 @@ class Processor {
 		// Set payment method to iDEAL if issuer ID is set.
 		$payment_method = $data->get_payment_method();
 
-		if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
+		if ( null === $payment_method && null !== $data->get_issuer_id() ) {
 			$payment_method = PaymentMethods::IDEAL;
 		}
 

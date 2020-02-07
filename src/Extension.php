@@ -38,7 +38,7 @@ use WP_User;
  * @version 2.1.14
  * @since   1.0.0
  */
-class Extension {
+class Extension extends \Pronamic\WordPress\Pay\AbstractPluginIntegration {
 	/**
 	 * Slug
 	 *
@@ -52,15 +52,6 @@ class Extension {
 	 * @var PaymentAddOn
 	 */
 	private $addon;
-
-	/**
-	 * Bootstrap
-	 */
-	public static function bootstrap() {
-		$extension = new Extension();
-
-		add_action( 'plugins_loaded', array( $extension, 'plugins_loaded' ) );
-	}
 
 	/**
 	 * Plugins loaded

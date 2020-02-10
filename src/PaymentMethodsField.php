@@ -353,11 +353,12 @@ class PaymentMethodsField extends GF_Field_Select {
 						}
 
 						printf(
-							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
+							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" %5$s/> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
 							esc_attr( $this->formId ),
 							esc_attr( $this->id ),
 							esc_attr( $choice['value'] ),
-							wp_kses_post( $label_content )
+							wp_kses_post( $label_content ),
+							\checked( $choice['value'], $value, false )
 						);
 					}
 

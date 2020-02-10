@@ -395,7 +395,7 @@ class Processor {
 			}
 
 			// Shipping.
-			if ( array_key_exists( 'shipping', $product_fields ) && is_array( $product_fields['shipping'] ) ) {
+			if ( array_key_exists( 'shipping', $product_fields ) && is_array( $product_fields['shipping'] ) && array_key_exists( 'price', $product_fields['shipping'] ) && false !== $product_fields['shipping']['price'] ) {
 				$shipping = $product_fields['shipping'];
 
 				$line = $payment->lines->new_line();

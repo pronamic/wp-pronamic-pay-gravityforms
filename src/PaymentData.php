@@ -439,6 +439,24 @@ class PaymentData extends Pay_PaymentData {
 	}
 
 	/**
+	 * Get consumer bank details name.
+	 *
+	 * @return string
+	 */
+	public function get_consumer_bank_details_name() {
+		return $this->get_field_value( 'consumer_bank_details_name' );
+	}
+
+	/**
+	 * Get consumer bank details IBAN.
+	 *
+	 * @return string
+	 */
+	public function get_consumer_bank_details_iban() {
+		return $this->get_field_value( 'consumer_bank_details_iban' );
+	}
+
+	/**
 	 * Get normal return URL.
 	 *
 	 * @return false|null|string

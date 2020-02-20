@@ -67,8 +67,8 @@ class PayFeed {
 	public $condition_enabled;
 
 	/**
-	 * Delay notification ID's contains an array of notification ID's wich
-	 * should be delayed till the payment is succesfull.
+	 * Delay notification ID's contains an array of notification ID's which
+	 * should be delayed till the payment is successful.
 	 *
 	 * @since Gravity Forms 1.7
 	 * @var array
@@ -76,14 +76,14 @@ class PayFeed {
 	public $delay_notification_ids;
 
 	/**
-	 * Flag to delay the creation of an post till the the payment is succesfull.
+	 * Flag to delay the creation of an post till the the payment is successful.
 	 *
 	 * @var boolean
 	 */
 	public $delay_post_creation;
 
 	/**
-	 * Flag to delay the creation of an post till the the payment is succesfull.
+	 * Flag to delay the creation of an post till the the payment is successful.
 	 *
 	 * @deprecated Gravity Forms 1.7
 	 * @var boolean
@@ -91,7 +91,7 @@ class PayFeed {
 	public $delay_admin_notification;
 
 	/**
-	 * Flag to delay the creation of an post till the the payment is succesfull.
+	 * Flag to delay the creation of an post till the the payment is successful.
 	 *
 	 * @deprecated Gravity Forms 1.7
 	 * @var boolean

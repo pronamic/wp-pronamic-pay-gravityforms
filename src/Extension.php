@@ -58,7 +58,7 @@ class Extension extends \Pronamic\WordPress\Pay\AbstractPluginIntegration {
 	 */
 	public function plugins_loaded() {
 		// Gravity Forms version 1.0 is required.
-		if ( GravityForms::version_compare( '1.0', '<' ) ) {
+		if ( ! GravityForms::version_compare( '1.0', '>=' ) ) {
 			return;
 		}
 

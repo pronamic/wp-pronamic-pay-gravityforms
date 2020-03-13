@@ -17,6 +17,7 @@ use GFCommon;
 use GFFormDisplay;
 use GFForms;
 use GFUserData;
+use Pronamic\WordPress\Pay\AbstractPluginIntegration;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Recurring;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
@@ -35,10 +36,10 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.14
+ * @version 2.2.0
  * @since   1.0.0
  */
-class Extension extends \Pronamic\WordPress\Pay\AbstractPluginIntegration {
+class Extension extends AbstractPluginIntegration {
 	/**
 	 * Slug
 	 *
@@ -54,11 +55,30 @@ class Extension extends \Pronamic\WordPress\Pay\AbstractPluginIntegration {
 	private $addon;
 
 	/**
-	 * Plugins loaded
+	 * Construct Gravity Forms plugin integration.
 	 */
-	public function plugins_loaded() {
-		// Gravity Forms version 1.0 is required.
-		if ( ! GravityForms::version_compare( '1.0', '>=' ) ) {
+	public function __construct() {
+		parent::__construct();
+
+		// Dependencies.
+		$dependencies = $this->get_dependencies();
+
+		$dependencies->add( new GravityFormsDependency() );
+	}
+
+	/**
+	 * Setup plugin integration.
+	 *
+	 * @return void
+	 */
+	public function setup() {
+		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
+		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
+
+		// Check if dependencies are met and integration is active.
+		if ( ! $this->is_active() ) {
 			return;
 		}
 
@@ -96,17 +116,13 @@ class Extension extends \Pronamic\WordPress\Pay\AbstractPluginIntegration {
 			add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
 		}
 
+		add_filter( 'pronamic_payment_source_url_' . self::SLUG, array( $this, 'source_url' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
 		add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
 		add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
 		add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
 		add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
 		add_filter( 'pronamic_pay_subscription_amount_editable_' . self::SLUG, '__return_true' );
-		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
-		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
-		add_filter( 'pronamic_payment_source_url_' . self::SLUG, array( $this, 'source_url' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
 
 		add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
 

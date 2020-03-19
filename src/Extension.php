@@ -1132,7 +1132,7 @@ class Extension extends AbstractPluginIntegration {
 				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
-					remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
+					\remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					if ( Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
@@ -1147,7 +1147,7 @@ class Extension extends AbstractPluginIntegration {
 				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
-					remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
+					\remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
@@ -1163,7 +1163,7 @@ class Extension extends AbstractPluginIntegration {
 				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
-					remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
+					\remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.

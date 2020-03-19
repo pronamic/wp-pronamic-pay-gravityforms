@@ -231,15 +231,6 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		}
 
-		// Admin.
-		// Page `form_settings` can be suffixed with subview, see https://github.com/wp-premium/gravityforms/blob/master/gravityforms.php#L2505-L2507.
-		$page = GFForms::get_page();
-
-		if ( ! $page || ( 'form_editor' !== $page && false === strpos( $page, 'form_settings' ) ) ) {
-			$choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
-			$choices = array_map( array( $this, 'unselect_choice' ), $choices );
-		}
-
 		// Set choices.
 		$this->choices = array_values( $choices );
 	}
@@ -285,6 +276,14 @@ class PaymentMethodsField extends GF_Field_Select {
 		if ( is_wp_error( $this->error ) ) {
 			return $this->error->get_error_message();
 		}
+
+		// Filter choices for display.
+		$choices = $this->choices;
+
+		$display_choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
+		$display_choices = array_map( array( $this, 'unselect_choice' ), $display_choices );
+
+		$this->choices = \array_values( $display_choices );
 
 		// Input.
 		$input = parent::get_field_input( $form, $value, $entry );
@@ -353,11 +352,12 @@ class PaymentMethodsField extends GF_Field_Select {
 						}
 
 						printf(
-							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" /> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
+							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" %5$s/> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
 							esc_attr( $this->formId ),
 							esc_attr( $this->id ),
 							esc_attr( $choice['value'] ),
-							wp_kses_post( $label_content )
+							wp_kses_post( $label_content ),
+							\checked( $choice['value'], $value, false )
 						);
 					}
 
@@ -551,6 +551,9 @@ class PaymentMethodsField extends GF_Field_Select {
 
 			$input = ob_get_clean();
 		}
+
+		// Reset choices.
+		$this->choices = $choices;
 
 		if ( is_admin() ) {
 			$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );

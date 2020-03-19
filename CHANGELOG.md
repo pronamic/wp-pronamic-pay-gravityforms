@@ -7,6 +7,15 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.2.0] - 2020-03-19
+- Added consumer bank details name and IBAN field settings.
+- Fixed adding payment line for shipping costs only when shipping field is being used.
+- Fixed dynamically setting selected payment method.
+- Fixed feed activation toggle.
+- Improved field visibility check with entry.
+- Improved payment methods field choices in field input (fixes compatibility with `Gravity Forms Entries in Excel` plugin).
+- Extension extends abstract plugin integration with dependency.
+
 ## [2.1.15] - 2020-02-03
 - Only prorate subscription amount when form field has been set for recurring amount.
 - Fixed incorrect currency with multi-currency add-on.
@@ -250,7 +259,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.15...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.2.0...HEAD
+[2.2.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.15...2.2.0
 [2.1.15]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.14...2.1.15
 [2.1.14]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.13...2.1.14
 [2.1.13]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.12...2.1.13

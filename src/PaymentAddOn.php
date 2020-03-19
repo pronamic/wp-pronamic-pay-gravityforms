@@ -499,18 +499,6 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
-	 * Ajax feed activation toggle.
-	 */
-	public function ajax_toggle_is_active() {
-		$feed_id   = filter_input( INPUT_POST, 'feed_id', FILTER_SANITIZE_STRING );
-		$is_active = filter_input( INPUT_POST, 'is_active', FILTER_SANITIZE_NUMBER_INT );
-
-		$this->update_feed_active( $feed_id, $is_active );
-
-		die();
-	}
-
-	/**
 	 * Activate feed.
 	 *
 	 * @param string $feed_id   Feed ID.

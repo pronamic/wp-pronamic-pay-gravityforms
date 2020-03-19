@@ -16,6 +16,7 @@ use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Address;
+use Pronamic\WordPress\Pay\Banks\BankAccountDetails;
 use Pronamic\WordPress\Pay\ContactName;
 use Pronamic\WordPress\Pay\Customer;
 use Pronamic\WordPress\Pay\Plugin;
@@ -256,7 +257,7 @@ class Processor {
 		// Set payment method to iDEAL if issuer ID is set.
 		$payment_method = $data->get_payment_method();
 
-		if ( null === $data->get_payment_method() && null !== $data->get_issuer_id() ) {
+		if ( null === $payment_method && null !== $data->get_issuer_id() ) {
 			$payment_method = PaymentMethods::IDEAL;
 		}
 
@@ -335,6 +336,14 @@ class Processor {
 		$payment->set_billing_address( $address );
 		$payment->set_shipping_address( $address );
 
+		// Consumer bank details.
+		$consumer_bank_details = new BankAccountDetails();
+
+		$consumer_bank_details->set_name( $data->get_consumer_bank_details_name() );
+		$consumer_bank_details->set_iban( $data->get_consumer_bank_details_iban() );
+
+		$payment->set_consumer_bank_details( $consumer_bank_details );
+
 		// Lines.
 		$payment->lines = new PaymentLines();
 
@@ -395,7 +404,7 @@ class Processor {
 			}
 
 			// Shipping.
-			if ( array_key_exists( 'shipping', $product_fields ) && is_array( $product_fields['shipping'] ) ) {
+			if ( array_key_exists( 'shipping', $product_fields ) && is_array( $product_fields['shipping'] ) && array_key_exists( 'price', $product_fields['shipping'] ) && false !== $product_fields['shipping']['price'] ) {
 				$shipping = $product_fields['shipping'];
 
 				$line = $payment->lines->new_line();

@@ -1449,6 +1449,10 @@ class Extension extends AbstractPluginIntegration {
 
 		$entry = RGFormsModel::get_lead( $entry_id );
 
+		if ( false === $entry ) {
+			return null;
+		}
+
 		return $entry;
 	}
 }

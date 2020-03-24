@@ -134,6 +134,9 @@ class Extension extends AbstractPluginIntegration {
 
 		add_filter( 'gform_currencies', array( __CLASS__, 'currencies' ), 10, 1 );
 
+		\add_filter( 'gform_form_args', array( $this, 'maybe_prepopulate_form' ), 10, 1 );
+		\add_filter( 'gform_pre_render', array( $this, 'allow_field_prepopulation' ), 10, 3 );
+
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled.
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
 		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
@@ -1060,6 +1063,19 @@ class Extension extends AbstractPluginIntegration {
 			}
 		}
 
+		// Pay again URL.
+		$pay_again_url = '';
+
+		if ( null !== $payment ) {
+			$pay_again_url = \add_query_arg(
+				array(
+					'pay_again' => $payment->get_id(),
+					'key'       => $payment->key,
+				),
+				rgar( $entry, 'source_url' )
+			);
+		}
+
 		// Replacements.
 		$replacements = array(
 			'{payment_status}'                     => rgar( $entry, 'payment_status' ),
@@ -1067,6 +1083,7 @@ class Extension extends AbstractPluginIntegration {
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
 			'{pronamic_payment_id}'                => $payment_id,
+			'{pronamic_pay_again_url}'             => $pay_again_url,
 			'{pronamic_payment_bank_transfer_recipient_reference}' => $bank_transfer_recipient_reference,
 			'{pronamic_payment_bank_transfer_recipient_bank_name}' => $bank_transfer_recipient_bank_name,
 			'{pronamic_payment_bank_transfer_recipient_name}' => $bank_transfer_recipient_name,
@@ -1278,5 +1295,133 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Maybe pre-populate form.
+	 *
+	 * @param array $args Form arguments.
+	 * @return array
+	 */
+	public function maybe_prepopulate_form( $args ) {
+		// Check empty field values.
+		if ( isset( $args['field_values'] ) && ! empty( $args['field_values'] ) ) {
+			return $args;
+		}
+
+		// Get payment retry entry.
+		$entry = $this->get_payment_retry_entry();
+
+		if ( null === $entry ) {
+			return $args;
+		}
+
+		// Set field values.
+		$field_values = array();
+
+		foreach ( $entry as $key => $value ) {
+			$is_numeric   = \is_numeric( $key );
+			$contains_dot = ( false !== \strpos( $key, '.' ) );
+
+			if ( ! $is_numeric && ! $contains_dot ) {
+				continue;
+			}
+
+			$input_id = sprintf( 'input_%s', $key );
+			$input_id = \str_replace( '.', '_', $input_id );
+
+			$field_values[ $input_id ] = $value;
+		}
+
+		$args['field_values'] = $field_values;
+
+		return $args;
+	}
+
+	/**
+	 * Allow field pre-population.
+	 *
+	 * @param array $form Form.
+	 * @return array
+	 */
+	public function allow_field_prepopulation( $form ) {
+		// Get payment retry entry.
+		$entry = $this->get_payment_retry_entry();
+
+		if ( null === $entry ) {
+			return $form;
+		}
+
+		// Allow field pre-population.
+		foreach ( $form['fields'] as &$field ) {
+			$input_name = sprintf( 'input_%s', $field->id );
+			$input_name = \str_replace( '.', '_', $input_name );
+
+			$field->allowsPrepopulate = true;
+			$field->inputName         = $input_name;
+
+			// Field inputs.
+			if ( \is_array( $field['inputs'] ) ) {
+				$new_inputs = $field['inputs'];
+
+				foreach ( $new_inputs as &$input ) {
+					$input_name = sprintf( 'input_%s', $input['id'] );
+					$input_name = \str_replace( '.', '_', $input_name );
+
+					$input['name'] = $input_name;
+				}
+
+				$field['inputs'] = $new_inputs;
+			}
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Get payment retry entry.
+	 *
+	 * @return null|array
+	 */
+	public function get_payment_retry_entry() {
+		if ( ! \filter_has_var( \INPUT_GET, 'pay_again' ) ) {
+			return null;
+		}
+
+		if ( ! \filter_has_var( \INPUT_GET, 'key' ) ) {
+			return null;
+		}
+
+		// Check payment.
+		$payment_id = \filter_input( \INPUT_GET, 'pay_again', \FILTER_SANITIZE_NUMBER_INT );
+
+		$payment = \get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return null;
+		}
+
+		// Check Gravity Forms source.
+		if ( self::SLUG !== $payment->get_source() ) {
+			return null;
+		}
+
+		// Check if payment key is valid.
+		$key = filter_input( INPUT_GET, 'key', FILTER_SANITIZE_STRING );
+
+		if ( empty( $payment->key ) ) {
+			return null;
+		}
+
+		if ( $key !== $payment->key ) {
+			return null;
+		}
+
+		// Get entry.
+		$entry_id = $payment->get_source_id();
+
+		$entry = RGFormsModel::get_lead( $entry_id );
+
+		return $entry;
 	}
 }

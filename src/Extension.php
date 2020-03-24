@@ -262,8 +262,10 @@ class Extension extends AbstractPluginIntegration {
 	public function source_text( $text, Payment $payment ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
+		$entry = RGFormsModel::get_lead( $payment->get_source_id() );
+
 		$text .= sprintf(
-			'<a href="%s">%s</a>',
+			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
 			add_query_arg( array( 'pronamic_gf_lid' => $payment->get_source_id() ), admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
@@ -293,7 +295,18 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function source_url( $url, Payment $payment ) {
-		return add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
+		$entry = RGFormsModel::get_lead( $payment->get_source_id() );
+
+		if ( false !== $entry ) {
+			$url = add_query_arg(
+				array(
+					'pronamic_gf_lid' => $payment->get_source_id(),
+				),
+				admin_url( 'admin.php' )
+			);
+		}
+
+		return $url;
 	}
 
 	/**
@@ -307,8 +320,10 @@ class Extension extends AbstractPluginIntegration {
 	public function subscription_source_text( $text, Subscription $subscription ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
+		$entry = RGFormsModel::get_lead( $subscription->get_source_id() );
+
 		$text .= sprintf(
-			'<a href="%s">%s</a>',
+			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
 			add_query_arg( array( 'pronamic_gf_lid' => $subscription->get_source_id() ), admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
@@ -338,7 +353,18 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function subscription_source_url( $url, Subscription $subscription ) {
-		return add_query_arg( 'pronamic_gf_lid', $subscription->get_source_id(), admin_url( 'admin.php' ) );
+		$entry = RGFormsModel::get_lead( $subscription->get_source_id() );
+
+		if ( false !== $entry ) {
+			$url = add_query_arg(
+				array(
+					'pronamic_gf_lid' => $subscription->get_source_id(),
+				),
+				admin_url( 'admin.php' )
+			);
+		}
+
+		return $url;
 	}
 
 	/**

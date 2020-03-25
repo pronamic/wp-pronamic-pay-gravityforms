@@ -915,11 +915,24 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						<td>
 							<?php
 
+							$auto_option_label = '';
+
+							if ( in_array( $name, array( 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name' ), true ) ) :
+								$auto_option_label = __( '— From first name field —', 'pronamic_ideal' );
+							elseif ( in_array( $name, array( 'address1', 'address2', 'zip', 'city', 'state', 'country' ), true ) ) :
+								$auto_option_label = __( '— From first address field —', 'pronamic_ideal' );
+							elseif ( 'telephone_number' === $name ) :
+								$auto_option_label = __( '— First phone field —', 'pronamic_ideal' );
+							elseif ( 'email' === $name ) :
+								$auto_option_label = __( '— First email address field —', 'pronamic_ideal' );
+							endif;
+
 							printf(
-								'<select id="%s" name="%s" data-gateway-field-name="%s" class="field-select"><select>',
+								'<select id="%s" name="%s" data-gateway-field-name="%s" data-auto-option-label="%s" class="field-select"><select>',
 								esc_attr( 'gf_ideal_fields_' . $name ),
 								esc_attr( '_pronamic_pay_gf_fields[' . $name . ']' ),
-								esc_attr( $name )
+								esc_attr( $name ),
+								esc_attr( $auto_option_label )
 							);
 
 							?>

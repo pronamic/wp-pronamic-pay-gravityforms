@@ -510,6 +510,19 @@
 
 					var name = $element.data( 'gateway-field-name' );
 
+					// Auto detect option.
+					var auto_option_label = $element.data( 'auto-option-label' );
+
+					if ( '' !== auto_option_label ) {
+						$( '<option>' )
+							.attr( 'value', 'auto' )
+							.text( auto_option_label )
+							/* jshint eqeqeq: false */
+							.prop( 'selected', feed.fields[name] == 'auto' )
+							/* jshint eqeqeq: true */
+							.appendTo( $element );
+					}
+
 					$( '<option>' ).appendTo( $element );
 
 					$.each( obj.getInputs(), function( key, input ) {

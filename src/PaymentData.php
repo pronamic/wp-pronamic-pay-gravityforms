@@ -86,6 +86,14 @@ class PaymentData extends Pay_PaymentData {
 
 		$field_id = $this->feed->fields[ $field_name ];
 
+		if ( 'auto' === $field_id ) {
+			$field_id = Util::get_detected_field_id( $field_name, $this->form, $this->lead );
+		}
+
+		if ( null === $field_id ) {
+			return null;
+		}
+
 		if ( ! isset( $this->lead[ $field_id ] ) ) {
 			return null;
 		}

@@ -78,6 +78,13 @@ class PaymentMethodsField extends GF_Field_Select {
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
 
+			/*
+			 * Inputs property must be iterable.
+			 *
+			 * @link https://github.com/wp-premium/gravityforms/blob/2.4.17/common.php#L804-L805
+			 */
+			$this->inputs = array();
+
 			if ( empty( $this->formId ) && 'gf_edit_forms' === filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) ) {
 				$this->formId = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 			}

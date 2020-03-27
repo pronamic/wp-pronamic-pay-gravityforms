@@ -208,6 +208,13 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @param int $form_id Form ID.
 	 */
 	private function set_choices( $form_id ) {
+		// Prevent HTTP requests in forms list.
+		if ( \doing_filter( 'gform_form_actions' ) ) {
+			$this->choices = array();
+
+			return;
+		}
+
 		// Gateway available payment methods.
 		$payment_methods = $this->get_gateway_payment_methods();
 

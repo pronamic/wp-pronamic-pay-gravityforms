@@ -157,6 +157,11 @@ class IssuersField extends GF_Field_Select {
 	private function set_choices( $form_id ) {
 		$this->choices = array();
 
+		// Prevent HTTP requests in forms list.
+		if ( \doing_filter( 'gform_form_actions' ) ) {
+			return;
+		}
+
 		$gateway = $this->get_gateway();
 
 		if ( ! $gateway ) {

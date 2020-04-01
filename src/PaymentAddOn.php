@@ -462,23 +462,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return array
 	 */
 	public function supported_notification_events( $form ) {
-		$form = (array) $form;
+		$events = array();
 
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'pronamic_pay_gf',
-				'posts_per_page' => 50,
-				'meta_query'     => array(
-					array(
-						'key'   => '_pronamic_pay_gf_form_id',
-						'value' => $form['id'],
-					),
-				),
-			)
-		);
-
-		if ( ! $query->have_posts() ) {
-			return array();
+		// Check if form has feeds for this add-on.
+		if ( ! $this->has_feed( $form['id'] ) ) {
+			return $events;
 		}
 
 		$events = array(

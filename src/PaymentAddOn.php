@@ -478,7 +478,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		);
 
 		if ( ! $query->have_posts() ) {
-			return false;
+			return array();
 		}
 
 		$events = array(

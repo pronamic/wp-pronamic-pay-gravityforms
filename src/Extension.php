@@ -1091,7 +1091,7 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		// Pay again URL.
-		$pay_again_url = '';
+		$pay_again_url = \rgar( $entry, 'source_url' );
 
 		if ( null !== $payment ) {
 			$pay_again_url = \add_query_arg(

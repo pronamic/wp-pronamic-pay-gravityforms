@@ -17,12 +17,6 @@
 		elements.formId = $element.find( '#_pronamic_pay_gf_form_id' );
 		elements.configId = $element.find( '#gf_ideal_config_id' );
 		elements.delayPostCreationItem = $element.find( '#gf_ideal_delay_post_creation_item' );
-		elements.conditionEnabled = $element.find( '#gf_ideal_condition_enabled' );
-		elements.conditionConfig = $element.find( '#gf_ideal_condition_config' );
-		elements.conditionFieldId = $element.find( '#gf_ideal_condition_field_id' );
-		elements.conditionOperator = $element.find( '#gf_ideal_condition_operator' );
-		elements.conditionValue = $element.find( '#gf_ideal_condition_value' );
-		elements.conditionMessage = $element.find( '#gf_ideal_condition_message' );
 		elements.confirmationSelectFields = $element.find( '.gf_ideal_confirmation_select' );
 		elements.userRoleFieldId = $element.find( '#gf_ideal_user_role_field_id' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
@@ -91,103 +85,6 @@
 					});
 				} );
 			}
-		};
-
-		/**
-		 * Toggle condition config
-		 */
-		this.toggleConditionConfig = function() {
-			var options = elements.conditionFieldId.find( 'option' );
-
-			if ( 1 >= options.length ) {
-				elements.conditionConfig.fadeOut( 'fast' );
-				elements.conditionEnabled.before( elements.conditionConfig );
-				elements.conditionMessage.show();
-				elements.conditionEnabled.val( 0 );
-			} else {
-				elements.conditionConfig.fadeIn( 'fast' );
-				elements.conditionEnabled.after( elements.conditionConfig );
-				elements.conditionMessage.hide();
-				elements.conditionEnabled.val( 1 );
-			}
-		};
-
-		/**
-		 * Update condition fields
-		 */
-		this.updateConditionFields = function() {
-			elements.conditionFieldId.empty();
-			$( '<option>' ).appendTo( elements.conditionFieldId );
-
-			if ( gravityForm ) {
-				$.each( gravityForm.fields, function( key, field ) {
-					var type = field.inputType ? field.inputType : field.type;
-	
-					var index = $.inArray( type, [ 'checkbox', 'radio', 'select' ] );
-					if ( index >= 0 ) {
-						var label = field.adminLabel ? field.adminLabel : field.label;
-
-						$( '<option>' )
-							.attr( 'value', field.id )
-							.text (label )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', ( 1 == feed.conditionEnabled && feed.conditionFieldId == field.id ) )
-							/* jshint eqeqeq: true */
-							.appendTo( elements.conditionFieldId );
-					}
-				});
-				
-				elements.conditionOperator.val( feed.conditionOperator );
-			}
-		};
-
-		/**
-		 * Update condition values
-		 */
-		this.updateConditionValues = function() {
-			var id	= elements.conditionFieldId.val();
-			var field = obj.getFieldById( id );
-			
-			elements.conditionValue.empty();
-			$( '<option>' ).appendTo( elements.conditionValue );
-
-			if ( ! field ) {
-				elements.conditionOperator.prop( 'disabled', true );
-				elements.conditionValue.prop( 'disabled', true );
-			} else {
-				elements.conditionOperator.removeProp( 'disabled' );
-				elements.conditionValue.removeProp( 'disabled' );
-			}
-
-			if ( field && field.choices ) {
-				$.each( field.choices, function( key, choice ) {
-					var value = choice.value ? choice.value : choice.text;
-
-					$( '<option>' )
-						.attr( 'value', value )
-						.text( choice.text )
-						.appendTo( elements.conditionValue );
-				} );
-				
-				elements.conditionValue.val( feed.conditionValue );
-			}
-		};
-
-		/**
-		 * Get field by the specified id
-		 */
-		this.getFieldById = function( id ) {
-			if ( gravityForm ) {
-				for ( var i = 0; i < gravityForm.fields.length; i++ ) {
-					/* jshint eqeqeq: false */
-					if ( gravityForm.fields[ i ].id == id ) {
-						return gravityForm.fields[ i ];
-					}
-					/* jshint eqeqeq: true */
-				}
-			}
-			
-			return null;
 		};
 
 		/**
@@ -547,9 +444,6 @@
 			obj.updateConfigFields();
 			obj.updateDelayPostCreationItem();
 			obj.updateConfirmationFields();
-			obj.updateConditionFields();
-			obj.toggleConditionConfig();
-			obj.updateConditionValues();
 			obj.updateUserRoleFields();
 			obj.updateSubscriptionFields();
 			obj.updateSelectFields();
@@ -561,10 +455,7 @@
 
 		elements.formId.change( obj.changeForm );
 		elements.configId.change( obj.updateConfigFields );
-		elements.conditionFieldId.change( obj.updateConditionValues );
 	};
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * jQuery plugin - Gravity Forms pay feed editor
@@ -582,8 +473,6 @@
 			$this.data( 'gf-pay-feed-editor', editor );
 		} );
 	};
-
-	//////////////////////////////////////////////////
 
 	/**
 	 * Ready

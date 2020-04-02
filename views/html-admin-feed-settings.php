@@ -8,18 +8,15 @@
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
 
-use Pronamic\WordPress\DateTime\DateTime;
 use Pronamic\WordPress\Pay\Admin\AdminModule;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Extension;
-use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed;
 
 $form_meta = RGFormsModel::get_form_meta( $form_id );
 
 $condition_enabled                  = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-$condition_field_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
-$condition_operator                 = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
-$condition_value                    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+$conditional_logic_object           = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
 $delay_notification_ids             = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
 $links                              = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
 $subscription_amount_type           = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
@@ -48,11 +45,11 @@ if ( ! GFCommon::has_merge_tag( $order_id ) ) {
 	$order_id .= '{entry_id}';
 }
 
+$pay_feed = new PayFeed( $post_id );
+
 $feed                             = new stdClass();
 $feed->conditionEnabled           = $condition_enabled;
-$feed->conditionFieldId           = $condition_field_id;
-$feed->conditionOperator          = $condition_operator;
-$feed->conditionValue             = $condition_value;
+$feed->conditionalLogicObject     = $pay_feed->conditional_logic_object;
 $feed->delayNotificationIds       = $delay_notification_ids;
 $feed->fields                     = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
 $feed->userRoleFieldId            = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
@@ -953,61 +950,52 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				<tr>
 					<th scope="row">
 						<label for="gf_ideal_condition_field_id">
-							<?php esc_html_e( 'Condition', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Conditional Logic', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<div id="gf_ideal_condition_config">
+							<script type="text/javascript">
+								function GetConditionalLogicFields () {
+									<?php
+
+									$conditional_logic_fields = array();
+
+									foreach ( \GF_Fields::get_all() as $gf_field ) {
+										if ( ! $gf_field->is_conditional_logic_supported() ) {
+											continue;
+										}
+
+										$conditional_logic_fields[] = $gf_field->type;
+									}
+
+									printf(
+										'return %s;',
+										\wp_json_encode( $conditional_logic_fields )
+									);
+
+									?>
+								}
+							</script>
+
 							<?php
 
-							// Select field.
-							$select_field = '<select id="gf_ideal_condition_field_id" name="_pronamic_pay_gf_condition_field_id"></select>';
-
-							// Select operator.
-							$select_operator = '<select id="gf_ideal_condition_operator" name="_pronamic_pay_gf_condition_operator">';
-
-							$operators = array();
-
-							if ( false === $condition_operator ) {
-								$operators[] = '';
-							}
-
-							$operators[ GravityForms::OPERATOR_IS ]     = __( 'is', 'pronamic_ideal' );
-							$operators[ GravityForms::OPERATOR_IS_NOT ] = __( 'is not', 'pronamic_ideal' );
-
-							foreach ( $operators as $value => $label ) {
-								$select_operator .= sprintf(
-									'<option value="%s" %s>%s</option>',
-									esc_attr( $value ),
-									selected( $condition_operator, $value, false ),
-									esc_html( $label )
-								);
-							}
-
-							$select_operator .= '</select>';
-
-							// Select value.
-							$select_value = '<select id="gf_ideal_condition_value" name="_pronamic_pay_gf_condition_value"></select>';
-
-							// Print select.
-							// @codingStandardsIgnoreStart
-							printf(
-								'%s %s %s',
-								$select_field,
-								$select_operator,
-								$select_value
+							$field = array(
+								'name'  => 'conditionalLogic',
+								'label' => __( 'Conditional Logic', 'pronamic_ideal' ),
+								'type'  => 'feed_condition',
 							);
-							// @codingStandardsIgnoreEnd
+
+							$this->settings_feed_condition( $field );
 
 							?>
 						</div>
 
-						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden" value="<?php echo esc_attr( $condition_enabled ); ?>" />
+						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden"
+							value="<?php echo esc_attr( $condition_enabled ); ?>"/>
 
 						<span class="description pronamic-pay-description">
-							<?php esc_html_e( 'Set a condition to only use the gateway if the entry matches the condition.', 'pronamic_ideal' ); ?>
-
-							<span id="gf_ideal_condition_message" class="description pronamic-pay-description"><?php esc_html_e( 'To create a condition, your form must contain a drop down, checkbox or multiple choice field.', 'pronamic_ideal' ); ?></span>
+							<?php esc_html_e( 'Set conditional logic to only use this gateway if the entry matches the condition(s).', 'pronamic_ideal' ); ?>
 						</span>
 					</td>
 				</tr>

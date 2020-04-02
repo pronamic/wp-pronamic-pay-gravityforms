@@ -19,7 +19,7 @@ use WP_Post;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.3.0
  * @since   1.4.4
  */
 class PayFeed {
@@ -65,6 +65,13 @@ class PayFeed {
 	 * @var bool
 	 */
 	public $condition_enabled;
+
+	/**
+	 * Conditional logic object.
+	 *
+	 * @var null|array
+	 */
+	public $conditional_logic_object;
 
 	/**
 	 * Delay notification ID's contains an array of notification ID's which
@@ -113,10 +120,39 @@ class PayFeed {
 		$this->entry_id_prefix         = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
 		$this->order_id                = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
 		$this->transaction_description = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
-		$this->condition_enabled       = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-		$this->condition_field_id      = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
-		$this->condition_operator      = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
-		$this->condition_value         = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+
+		// Conditional logic.
+		$this->condition_enabled        = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
+		$this->conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
+
+		// Legacy condition for backwards compatibility.
+		if ( empty( $this->conditional_logic_object ) ) {
+			$condition_field_id = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
+			$condition_operator = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
+			$condition_value    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+
+			$this->conditional_logic_object = null;
+
+			if ( ! empty( $condition_field_id ) && ! empty( $condition_operator ) && ! empty( $condition_value ) ) {
+				$this->conditional_logic_object = array(
+					'conditionalLogic' => array(
+						'actionType' => 'show',
+						'logicType'  => 'all',
+						'rules'      => array(
+							array(
+								'fieldId'  => $condition_field_id,
+								'operator' => ( GravityForms::OPERATOR_IS === $condition_operator ? 'is' : 'isnot' ),
+								'value'    => $condition_value,
+							),
+						),
+					),
+				);
+			}
+		}
+
+		if ( ! is_array( $this->conditional_logic_object ) ) {
+			$this->conditional_logic_object = \json_decode( $this->conditional_logic_object, true );
+		}
 
 		// Delay actions.
 		$this->delay_admin_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );

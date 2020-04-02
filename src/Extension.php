@@ -36,7 +36,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.2.0
+ * @version 2.3.0
  * @since   1.0.0
  */
 class Extension extends AbstractPluginIntegration {
@@ -52,7 +52,7 @@ class Extension extends AbstractPluginIntegration {
 	 *
 	 * @var PaymentAddOn
 	 */
-	private $addon;
+	public $addon;
 
 	/**
 	 * Construct Gravity Forms plugin integration.

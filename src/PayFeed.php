@@ -120,17 +120,20 @@ class PayFeed {
 		$this->entry_id_prefix         = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
 		$this->order_id                = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
 		$this->transaction_description = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
+		$this->condition_enabled       = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
 
 		// Conditional logic.
-		$this->condition_enabled        = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-
 		$conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
 
 		if ( ! empty( $conditional_logic_object ) ) {
 			$this->conditional_logic_object = \json_decode( $conditional_logic_object, true );
 		}
 
-		// Legacy condition for backwards compatibility.
+		/*
+		 * Legacy condition for backwards compatibility.
+		 *
+		 * @since 2.3.0
+		 */
 		if ( null === $this->conditional_logic_object ) {
 			$condition_field_id = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
 			$condition_operator = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );

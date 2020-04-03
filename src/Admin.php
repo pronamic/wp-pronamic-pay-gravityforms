@@ -172,6 +172,11 @@ class Admin {
 			'tag'   => '{pronamic_payment_id}',
 		);
 
+		$merge_tags[] = array(
+			'label' => __( 'Pronamic Pay Again URL', 'pronamic_ideal' ),
+			'tag'   => '{pronamic_pay_again_url}',
+		);
+
 		// Bank transfer.
 		$merge_tags[] = array(
 			'label' => __( 'Pronamic bank transfer recipient reference', 'pronamic_ideal' ),

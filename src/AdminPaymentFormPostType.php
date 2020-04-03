@@ -21,7 +21,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.3.0
  * @since   1.0.0
  */
 class AdminPaymentFormPostType {
@@ -247,10 +247,6 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_entry_id_prefix'             => 'sanitize_text_field',
 			'_pronamic_pay_gf_order_id'                    => 'sanitize_text_field',
 			'_pronamic_pay_gf_transaction_description'     => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_enabled'           => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_condition_field_id'          => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_operator'          => 'sanitize_text_field',
-			'_pronamic_pay_gf_condition_value'             => 'sanitize_text_field',
 			'_pronamic_pay_gf_delay_admin_notification'    => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_delay_user_notification'     => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_delay_notification_ids'      => array(
@@ -281,6 +277,9 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_frequency_type' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_frequency'      => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
+
+			// Feed conditions.
+			'_gaddon_setting_feed_condition_conditional_logic_object' => 'sanitize_text_field',
 		);
 
 		$delay_actions = Extension::get_delay_actions();
@@ -363,13 +362,20 @@ class AdminPaymentFormPostType {
 			} else {
 				delete_post_meta( $post_id, $meta_key );
 			}
+
+			if ( '_gaddon_setting_feed_condition_conditional_logic_object' === $meta_key ) {
+				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id' );
+				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_operator' );
+				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_value' );
+			}
 		}
 
-		if ( filter_has_var( INPUT_POST, '_pronamic_pay_gf_condition_field_id' ) ) {
-			if ( '' !== filter_input( INPUT_POST, '_pronamic_pay_gf_condition_field_id' ) ) {
-				update_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
+		// Enable conditional logic.
+		if ( \filter_has_var( \INPUT_POST, '_gaddon_setting_feed_condition_conditional_logic' ) ) {
+			if ( false !== \filter_input( \INPUT_POST, '_gaddon_setting_feed_condition_conditional_logic', \FILTER_VALIDATE_BOOLEAN ) ) {
+				\update_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
 			} else {
-				delete_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled' );
+				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled' );
 			}
 		}
 

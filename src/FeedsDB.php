@@ -10,7 +10,6 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
-use RGFormsModel;
 use WP_Query;
 
 /**
@@ -20,7 +19,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.3.0
  * @since   1.0.0
  */
 class FeedsDB {
@@ -31,6 +30,7 @@ class FeedsDB {
 	 *
 	 * @param string $form_id Gravity Forms form ID.
 	 * @param array  $meta    Meta query array.
+	 * @return array
 	 */
 	public static function get_feeds_by_form_id( $form_id, $meta = array() ) {
 		$feeds = array();
@@ -66,8 +66,9 @@ class FeedsDB {
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_conditioned_feed_by_form_id`.
 	 *
 	 * @param int $form_id Gravity Forms form ID.
+	 * @return null|array
 	 */
-	public static function get_conditioned_feed_by_form_id( $form_id ) {
+	public static function get_active_feeds_by_form_id( $form_id ) {
 		$meta = array(
 			array(
 				'relation' => 'OR',
@@ -85,13 +86,7 @@ class FeedsDB {
 		$feeds = self::get_feeds_by_form_id( $form_id, $meta );
 
 		if ( ! empty( $feeds ) ) {
-			$form = RGFormsModel::get_form_meta( $form_id );
-
-			foreach ( $feeds as $feed ) {
-				if ( Util::is_condition_true( $form, $feed ) ) {
-					return $feed;
-				}
-			}
+			return $feeds;
 		}
 
 		return null;
@@ -103,6 +98,7 @@ class FeedsDB {
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_feed_by_entry_id`.
 	 *
 	 * @param string $entry_id Gravity Forms entry ID.
+	 * @return null|PayFeed
 	 */
 	public static function get_feed_by_entry_id( $entry_id ) {
 		$feed_id = gform_get_meta( $entry_id, 'ideal_feed_id' );

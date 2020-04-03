@@ -21,7 +21,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.2
+ * @version 2.3.0
  * @since   1.1.0
  */
 class PaymentAddOn extends GFPaymentAddOn {
@@ -214,6 +214,15 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
 		if ( $this->is_detail_page() ) {
+			$feed = new PayFeed( $post_id );
+
+			$this->set_settings(
+				array(
+					'feed_condition_conditional_logic' => $feed->condition_enabled,
+					'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
+				)
+			);
+
 			require dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php';
 		} else {
 			$this->feed_list_page( $form );
@@ -366,7 +375,18 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return bool
 	 */
 	public function is_feed_condition_met( $feed, $form, $entry ) {
-		return Util::is_condition_true( $form, $feed );
+		$pay_feed = new PayFeed( $feed['ID'] );
+
+		if ( ! \array_key_exists( 'meta', $feed ) ) {
+			$feed['meta'] = array();
+		}
+
+		$feed['meta'] = array(
+			'feed_condition_conditional_logic'        => $pay_feed->condition_enabled,
+			'feed_condition_conditional_logic_object' => $pay_feed->conditional_logic_object,
+		);
+
+		return parent::is_feed_condition_met( $feed, $form, $entry );
 	}
 
 	/**
@@ -462,23 +482,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return array
 	 */
 	public function supported_notification_events( $form ) {
-		$form = (array) $form;
+		$events = array();
 
-		$query = new WP_Query(
-			array(
-				'post_type'      => 'pronamic_pay_gf',
-				'posts_per_page' => 50,
-				'meta_query'     => array(
-					array(
-						'key'   => '_pronamic_pay_gf_form_id',
-						'value' => $form['id'],
-					),
-				),
-			)
-		);
-
-		if ( ! $query->have_posts() ) {
-			return false;
+		// Check if form has feeds for this add-on.
+		if ( ! $this->has_feed( $form['id'] ) ) {
+			return $events;
 		}
 
 		$events = array(

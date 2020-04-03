@@ -36,7 +36,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.2.0
+ * @version 2.3.0
  * @since   1.0.0
  */
 class Extension extends AbstractPluginIntegration {
@@ -52,13 +52,17 @@ class Extension extends AbstractPluginIntegration {
 	 *
 	 * @var PaymentAddOn
 	 */
-	private $addon;
+	public $addon;
 
 	/**
 	 * Construct Gravity Forms plugin integration.
 	 */
 	public function __construct() {
-		parent::__construct();
+		parent::__construct(
+			array(
+				'name' => __( 'Gravity Forms', 'pronamic_ideal' ),
+			)
+		);
 
 		// Dependencies.
 		$dependencies = $this->get_dependencies();
@@ -72,15 +76,16 @@ class Extension extends AbstractPluginIntegration {
 	 * @return void
 	 */
 	public function setup() {
-		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
 		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
 		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
 
 		// Check if dependencies are met and integration is active.
 		if ( ! $this->is_active() ) {
 			return;
 		}
+
+		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
 
 		// Post types.
 		$this->payment_form_post_type = new PaymentFormPostType();
@@ -129,6 +134,9 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
 
 		add_filter( 'gform_currencies', array( __CLASS__, 'currencies' ), 10, 1 );
+
+		\add_filter( 'gform_form_args', array( $this, 'maybe_prepopulate_form' ), 10, 1 );
+		\add_filter( 'gform_pre_render', array( $this, 'allow_field_prepopulation' ), 10, 3 );
 
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled.
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
@@ -254,8 +262,10 @@ class Extension extends AbstractPluginIntegration {
 	public function source_text( $text, Payment $payment ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
+		$entry = RGFormsModel::get_lead( $payment->get_source_id() );
+
 		$text .= sprintf(
-			'<a href="%s">%s</a>',
+			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
 			add_query_arg( array( 'pronamic_gf_lid' => $payment->get_source_id() ), admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
@@ -285,7 +295,18 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function source_url( $url, Payment $payment ) {
-		return add_query_arg( 'pronamic_gf_lid', $payment->get_source_id(), admin_url( 'admin.php' ) );
+		$entry = RGFormsModel::get_lead( $payment->get_source_id() );
+
+		if ( false !== $entry ) {
+			$url = add_query_arg(
+				array(
+					'pronamic_gf_lid' => $payment->get_source_id(),
+				),
+				admin_url( 'admin.php' )
+			);
+		}
+
+		return $url;
 	}
 
 	/**
@@ -299,8 +320,10 @@ class Extension extends AbstractPluginIntegration {
 	public function subscription_source_text( $text, Subscription $subscription ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
+		$entry = RGFormsModel::get_lead( $subscription->get_source_id() );
+
 		$text .= sprintf(
-			'<a href="%s">%s</a>',
+			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
 			add_query_arg( array( 'pronamic_gf_lid' => $subscription->get_source_id() ), admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
@@ -330,7 +353,18 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function subscription_source_url( $url, Subscription $subscription ) {
-		return add_query_arg( 'pronamic_gf_lid', $subscription->get_source_id(), admin_url( 'admin.php' ) );
+		$entry = RGFormsModel::get_lead( $subscription->get_source_id() );
+
+		if ( false !== $entry ) {
+			$url = add_query_arg(
+				array(
+					'pronamic_gf_lid' => $subscription->get_source_id(),
+				),
+				admin_url( 'admin.php' )
+			);
+		}
+
+		return $url;
 	}
 
 	/**
@@ -1056,6 +1090,19 @@ class Extension extends AbstractPluginIntegration {
 			}
 		}
 
+		// Pay again URL.
+		$pay_again_url = \rgar( $entry, 'source_url' );
+
+		if ( null !== $payment ) {
+			$pay_again_url = \add_query_arg(
+				array(
+					'pay_again' => $payment->get_id(),
+					'key'       => $payment->key,
+				),
+				rgar( $entry, 'source_url' )
+			);
+		}
+
 		// Replacements.
 		$replacements = array(
 			'{payment_status}'                     => rgar( $entry, 'payment_status' ),
@@ -1063,6 +1110,7 @@ class Extension extends AbstractPluginIntegration {
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
 			'{payment_amount}'                     => GFCommon::to_money( rgar( $entry, 'payment_amount' ), rgar( $entry, 'currency' ) ),
 			'{pronamic_payment_id}'                => $payment_id,
+			'{pronamic_pay_again_url}'             => $pay_again_url,
 			'{pronamic_payment_bank_transfer_recipient_reference}' => $bank_transfer_recipient_reference,
 			'{pronamic_payment_bank_transfer_recipient_bank_name}' => $bank_transfer_recipient_bank_name,
 			'{pronamic_payment_bank_transfer_recipient_name}' => $bank_transfer_recipient_name,
@@ -1132,7 +1180,7 @@ class Extension extends AbstractPluginIntegration {
 				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
-					remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10, 2 );
+					\remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					if ( Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
@@ -1147,7 +1195,7 @@ class Extension extends AbstractPluginIntegration {
 				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
-					remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10, 2 );
+					\remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
@@ -1163,7 +1211,7 @@ class Extension extends AbstractPluginIntegration {
 				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
-					remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10, 2 );
+					\remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
@@ -1274,5 +1322,137 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		return $actions;
+	}
+
+	/**
+	 * Maybe pre-populate form.
+	 *
+	 * @param array $args Form arguments.
+	 * @return array
+	 */
+	public function maybe_prepopulate_form( $args ) {
+		// Check empty field values.
+		if ( isset( $args['field_values'] ) && ! empty( $args['field_values'] ) ) {
+			return $args;
+		}
+
+		// Get payment retry entry.
+		$entry = $this->get_payment_retry_entry();
+
+		if ( null === $entry ) {
+			return $args;
+		}
+
+		// Set field values.
+		$field_values = array();
+
+		foreach ( $entry as $key => $value ) {
+			$is_numeric   = \is_numeric( $key );
+			$contains_dot = ( false !== \strpos( $key, '.' ) );
+
+			if ( ! $is_numeric && ! $contains_dot ) {
+				continue;
+			}
+
+			$input_id = sprintf( 'input_%s', $key );
+			$input_id = \str_replace( '.', '_', $input_id );
+
+			$field_values[ $input_id ] = $value;
+		}
+
+		$args['field_values'] = $field_values;
+
+		return $args;
+	}
+
+	/**
+	 * Allow field pre-population.
+	 *
+	 * @param array $form Form.
+	 * @return array
+	 */
+	public function allow_field_prepopulation( $form ) {
+		// Get payment retry entry.
+		$entry = $this->get_payment_retry_entry();
+
+		if ( null === $entry ) {
+			return $form;
+		}
+
+		// Allow field pre-population.
+		foreach ( $form['fields'] as &$field ) {
+			$input_name = sprintf( 'input_%s', $field->id );
+			$input_name = \str_replace( '.', '_', $input_name );
+
+			$field->allowsPrepopulate = true;
+			$field->inputName         = $input_name;
+
+			// Field inputs.
+			if ( \is_array( $field['inputs'] ) ) {
+				$new_inputs = $field['inputs'];
+
+				foreach ( $new_inputs as &$input ) {
+					$input_name = sprintf( 'input_%s', $input['id'] );
+					$input_name = \str_replace( '.', '_', $input_name );
+
+					$input['name'] = $input_name;
+				}
+
+				$field['inputs'] = $new_inputs;
+			}
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Get payment retry entry.
+	 *
+	 * @return null|array
+	 */
+	public function get_payment_retry_entry() {
+		if ( ! \filter_has_var( \INPUT_GET, 'pay_again' ) ) {
+			return null;
+		}
+
+		if ( ! \filter_has_var( \INPUT_GET, 'key' ) ) {
+			return null;
+		}
+
+		// Check payment.
+		$payment_id = \filter_input( \INPUT_GET, 'pay_again', \FILTER_SANITIZE_NUMBER_INT );
+
+		$payment = \get_pronamic_payment( $payment_id );
+
+		if ( null === $payment ) {
+			return null;
+		}
+
+		// Check Gravity Forms source.
+		if ( self::SLUG !== $payment->get_source() ) {
+			return null;
+		}
+
+		// Check if payment key is valid.
+		$key = filter_input( INPUT_GET, 'key', FILTER_SANITIZE_STRING );
+
+		if ( empty( $payment->key ) ) {
+			return null;
+		}
+
+		if ( $key !== $payment->key ) {
+			return null;
+		}
+
+		// Get entry.
+		$entry_id = $payment->get_source_id();
+
+		$entry = RGFormsModel::get_lead( $entry_id );
+
+		if ( false === $entry ) {
+			return null;
+		}
+
+		return $entry;
 	}
 }

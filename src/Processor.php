@@ -10,11 +10,9 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
-use GFAddOn;
 use GFCommon;
-use Pronamic\WordPress\Money\Currency;
-use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Money\TaxedMoney;
+use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
 use Pronamic\WordPress\Pay\Address;
 use Pronamic\WordPress\Pay\Banks\BankAccountDetails;
 use Pronamic\WordPress\Pay\ContactName;
@@ -32,7 +30,7 @@ use Pronamic\WordPress\Pay\Payments\PaymentLineType;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.14
+ * @version 2.3.0
  * @since   1.0.0
  */
 class Processor {
@@ -53,51 +51,37 @@ class Processor {
 	/**
 	 * The Gravity Forms form ID
 	 *
-	 * @var string
+	 * @var null|string
 	 */
 	private $form_id;
 
 	/**
-	 * Process flag
-	 *
-	 * @var boolean
-	 */
-	private $process;
-
-	/**
 	 * Payment feed
 	 *
-	 * @var PayFeed
+	 * @var null|PayFeed
 	 */
 	private $feed;
 
 	/**
 	 * Gateway
 	 *
-	 * @var Payment
+	 * @var null|AbstractGatewayIntegration
 	 */
 	private $gateway;
 
 	/**
 	 * Payment
 	 *
-	 * @var Payment
+	 * @var null|Payment
 	 */
 	private $payment;
 
 	/**
 	 * Error
 	 *
-	 * @var \Pronamic\WordPress\Pay\PayException
+	 * @var null|\Exception
 	 */
 	private $error;
-
-	/**
-	 * Is entry created?
-	 *
-	 * @var boolean
-	 */
-	private $entry_created;
 
 	/**
 	 * Constructs and initalize an Gravity Forms payment form processor
@@ -110,13 +94,27 @@ class Processor {
 		$this->form      = $form;
 		$this->form_id   = isset( $form['id'] ) ? $form['id'] : null;
 
-		// Get payment feed by form ID.
-		$this->feed = FeedsDB::get_conditioned_feed_by_form_id( $this->form_id );
+		// Determine payment feed for processing.
+		$feeds = FeedsDB::get_active_feeds_by_form_id( $this->form_id );
 
-		if ( null !== $this->feed ) {
-			$this->process = true;
+		$entry = array();
+
+		foreach ( $feeds as $feed ) {
+			$gf_feed = $extension->addon->get_feed( $feed->id );
+
+			if ( false === $gf_feed ) {
+				continue;
+			}
+
+			if ( ! $extension->addon->is_feed_condition_met( $gf_feed, $form, $entry ) ) {
+				continue;
+			}
+
+			$this->feed = $feed;
 
 			$this->add_hooks();
+
+			break;
 		}
 	}
 
@@ -124,11 +122,6 @@ class Processor {
 	 * Add hooks.
 	 */
 	private function add_hooks() {
-		/*
-		 * Pre submission.
-		 */
-		add_action( 'gform_pre_submission_' . $this->form_id, array( $this, 'pre_submission' ), 10, 1 );
-
 		/*
 		 * Handle submission.
 		 */
@@ -169,7 +162,7 @@ class Processor {
 			$is_form = ( absint( $this->form_id ) === absint( $form['id'] ) );
 		}
 
-		$is_processing = $this->process && $is_form;
+		$is_processing = ( null !== $this->feed ) && $is_form;
 
 		return $is_processing;
 	}
@@ -178,6 +171,7 @@ class Processor {
 	 * Pre submission.
 	 *
 	 * @param array $form Gravity Forms form.
+	 * @return void
 	 */
 	public function pre_submission( $form ) {
 		if ( ! $this->is_processing( $form ) ) {

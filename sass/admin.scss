@@ -84,4 +84,11 @@ $white: #fff;
 	.pronamic-pay-description {
 		display: block;
 	}
+
+	// Status pages tab.
+	&.pronamic-gf-links-tab {
+		fieldset {
+			line-height: 2.75em;
+		}
+	}
 }

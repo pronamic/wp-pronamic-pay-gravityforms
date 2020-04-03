@@ -78,6 +78,13 @@ class PaymentMethodsField extends GF_Field_Select {
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
 
+			/*
+			 * Inputs property must be iterable.
+			 *
+			 * @link https://github.com/wp-premium/gravityforms/blob/2.4.17/common.php#L804-L805
+			 */
+			$this->inputs = array();
+
 			if ( empty( $this->formId ) && 'gf_edit_forms' === filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) ) {
 				$this->formId = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
 			}
@@ -201,6 +208,13 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @param int $form_id Form ID.
 	 */
 	private function set_choices( $form_id ) {
+		// Prevent HTTP requests in forms list.
+		if ( \doing_filter( 'gform_form_actions' ) ) {
+			$this->choices = array();
+
+			return;
+		}
+
 		// Gateway available payment methods.
 		$payment_methods = $this->get_gateway_payment_methods();
 

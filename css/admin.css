@@ -51,3 +51,7 @@
 .form-table .pronamic-pay-description {
   display: block;
 }
+/* line 90, ../sass/admin.scss */
+.form-table.pronamic-gf-links-tab fieldset {
+  line-height: 2.75em;
+}

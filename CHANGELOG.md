@@ -7,6 +7,13 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.3.0] - 2020-04-03
+- Added payment feed fields settings to auto detect first visible field of type in entry.
+- Added `pronamic_pay_again_url` merge tag, which can be used to pre-populate form after failed payment.
+- Fixed "Warning: Invalid argument supplied for foreach()" in calculation variables select.
+- Improved payment feed conditions with support for all fields and multiple rules.
+- Improved forms list performance.
+
 ## [2.2.0] - 2020-03-19
 - Added consumer bank details name and IBAN field settings.
 - Fixed adding payment line for shipping costs only when shipping field is being used.
@@ -259,7 +266,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.2.0...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.3.0...HEAD
+[2.3.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.15...2.2.0
 [2.1.15]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.14...2.1.15
 [2.1.14]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.13...2.1.14

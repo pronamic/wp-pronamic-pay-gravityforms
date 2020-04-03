@@ -375,18 +375,16 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return bool
 	 */
 	public function is_feed_condition_met( $feed, $form, $entry ) {
-		if ( is_array( $feed ) ) {
-			$pay_feed = new PayFeed( $feed['ID'] );
+		$pay_feed = new PayFeed( $feed['ID'] );
 
-			if ( ! \array_key_exists( 'meta', $feed ) ) {
-				$feed['meta'] = array();
-			}
-
-			$feed['meta'] = array(
-				'feed_condition_conditional_logic'        => $pay_feed->condition_enabled,
-				'feed_condition_conditional_logic_object' => $pay_feed->conditional_logic_object,
-			);
+		if ( ! \array_key_exists( 'meta', $feed ) ) {
+			$feed['meta'] = array();
 		}
+
+		$feed['meta'] = array(
+			'feed_condition_conditional_logic'        => $pay_feed->condition_enabled,
+			'feed_condition_conditional_logic_object' => $pay_feed->conditional_logic_object,
+		);
 
 		return parent::is_feed_condition_met( $feed, $form, $entry );
 	}

@@ -12,6 +12,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
 use Pronamic\WordPress\Money\TaxedMoney;
+use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
 use Pronamic\WordPress\Pay\Address;
 use Pronamic\WordPress\Pay\Banks\BankAccountDetails;
 use Pronamic\WordPress\Pay\ContactName;
@@ -50,7 +51,7 @@ class Processor {
 	/**
 	 * The Gravity Forms form ID
 	 *
-	 * @var string
+	 * @var null|string
 	 */
 	private $form_id;
 
@@ -64,21 +65,21 @@ class Processor {
 	/**
 	 * Gateway
 	 *
-	 * @var Payment
+	 * @var null|AbstractGatewayIntegration
 	 */
 	private $gateway;
 
 	/**
 	 * Payment
 	 *
-	 * @var Payment
+	 * @var null|Payment
 	 */
 	private $payment;
 
 	/**
 	 * Error
 	 *
-	 * @var \Exception
+	 * @var null|\Exception
 	 */
 	private $error;
 
@@ -100,6 +101,10 @@ class Processor {
 
 		foreach ( $feeds as $feed ) {
 			$gf_feed = $extension->addon->get_feed( $feed->id );
+
+			if ( false === $gf_feed ) {
+				continue;
+			}
 
 			if ( ! $extension->addon->is_feed_condition_met( $gf_feed, $form, $entry ) ) {
 				continue;

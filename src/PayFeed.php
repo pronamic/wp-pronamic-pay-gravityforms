@@ -123,15 +123,18 @@ class PayFeed {
 
 		// Conditional logic.
 		$this->condition_enabled        = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-		$this->conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
+
+		$conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
+
+		if ( ! empty( $conditional_logic_object ) ) {
+			$this->conditional_logic_object = \json_decode( $conditional_logic_object, true );
+		}
 
 		// Legacy condition for backwards compatibility.
-		if ( empty( $this->conditional_logic_object ) ) {
+		if ( null === $this->conditional_logic_object ) {
 			$condition_field_id = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
 			$condition_operator = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
 			$condition_value    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
-
-			$this->conditional_logic_object = null;
 
 			if ( ! empty( $condition_field_id ) && ! empty( $condition_operator ) && ! empty( $condition_value ) ) {
 				$this->conditional_logic_object = array(
@@ -148,10 +151,6 @@ class PayFeed {
 					),
 				);
 			}
-		}
-
-		if ( ! is_array( $this->conditional_logic_object ) ) {
-			$this->conditional_logic_object = \json_decode( $this->conditional_logic_object, true );
 		}
 
 		// Delay actions.

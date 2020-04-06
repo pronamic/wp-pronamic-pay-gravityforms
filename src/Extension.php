@@ -60,7 +60,8 @@ class Extension extends AbstractPluginIntegration {
 	public function __construct() {
 		parent::__construct(
 			array(
-				'name' => __( 'Gravity Forms', 'pronamic_ideal' ),
+				'name'    => __( 'Gravity Forms', 'pronamic_ideal' ),
+				'version' => '2.3.0',
 			)
 		);
 
@@ -188,14 +189,14 @@ class Extension extends AbstractPluginIntegration {
 				'pronamic-pay-gravityforms',
 				plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
 				array(),
-				'1.4.8'
+				$this->get_version()
 			);
 
 			wp_register_script(
 				'pronamic-pay-gravityforms',
 				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
 				array( 'jquery' ),
-				'1.4.8',
+				$this->get_version(),
 				true
 			);
 

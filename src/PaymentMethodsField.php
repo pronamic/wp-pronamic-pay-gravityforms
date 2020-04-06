@@ -604,7 +604,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
 		$use_text = true;
 
-		return parent::get_value_entry_detail( $value, $currency, $use_text, $format , $media );
+		return parent::get_value_entry_detail( $value, $currency, $use_text, $format, $media );
 	}
 
 	/**

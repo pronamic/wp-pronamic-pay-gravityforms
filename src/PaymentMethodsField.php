@@ -610,13 +610,17 @@ class PaymentMethodsField extends GF_Field_Select {
 	/**
 	 * Get field value.
 	 *
-	 * @param string|array $value Field value.
-	 * @param array        $entry Entry.
-	 * @param GF_Field     $field Field.
+	 * @param string|array  $value Field value.
+	 * @param array         $entry Entry.
+	 * @param GF_Field|null $field Field.
 	 *
 	 * @return string|array
 	 */
 	public function get_field_value( $value, $entry, $field ) {
+		if ( ! \is_object( $field ) ) {
+			return $value;
+		}
+
 		if ( self::TYPE !== $field->type ) {
 			return $value;
 		}

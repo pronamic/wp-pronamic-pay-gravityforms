@@ -85,11 +85,7 @@ class FeedsDB {
 
 		$feeds = self::get_feeds_by_form_id( $form_id, $meta );
 
-		if ( ! empty( $feeds ) ) {
-			return $feeds;
-		}
-
-		return null;
+		return $feeds;
 	}
 
 	/**

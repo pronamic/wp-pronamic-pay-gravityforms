@@ -66,7 +66,7 @@ class FeedsDB {
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_conditioned_feed_by_form_id`.
 	 *
 	 * @param int $form_id Gravity Forms form ID.
-	 * @return null|array
+	 * @return array
 	 */
 	public static function get_active_feeds_by_form_id( $form_id ) {
 		$meta = array(

@@ -19,7 +19,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.3.0
+ * @version 2.3.1
  * @since   1.0.0
  */
 class FeedsDB {
@@ -66,7 +66,7 @@ class FeedsDB {
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_conditioned_feed_by_form_id`.
 	 *
 	 * @param int $form_id Gravity Forms form ID.
-	 * @return null|array
+	 * @return array
 	 */
 	public static function get_active_feeds_by_form_id( $form_id ) {
 		$meta = array(
@@ -85,11 +85,7 @@ class FeedsDB {
 
 		$feeds = self::get_feeds_by_form_id( $form_id, $meta );
 
-		if ( ! empty( $feeds ) ) {
-			return $feeds;
-		}
-
-		return null;
+		return $feeds;
 	}
 
 	/**

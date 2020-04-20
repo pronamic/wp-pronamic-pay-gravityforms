@@ -10,8 +10,8 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
+use GF_Field;
 use GF_Field_Select;
-use GFForms;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
 
@@ -22,7 +22,7 @@ use Pronamic\WordPress\Pay\Plugin;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.1.14
+ * @version 2.3.1
  * @since   1.4.7
  *
  * @property int        $pronamicPayConfigId Added by admin.js.
@@ -72,6 +72,10 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Filters.
 		if ( ! has_filter( 'gform_gf_field_create', array( $this, 'field_create' ) ) ) {
 			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+		}
+
+		if ( ! has_filter( 'gform_get_field_value', array( $this, 'get_field_value' ) ) ) {
+			add_filter( 'gform_get_field_value', array( $this, 'get_field_value' ), 10, 3 );
 		}
 
 		// Admin.
@@ -584,6 +588,51 @@ class PaymentMethodsField extends GF_Field_Select {
 		}
 
 		return $input;
+	}
+
+	/**
+	 * Get value entry detail.
+	 *
+	 * @param array|string $value    Value.
+	 * @param string       $currency Currency.
+	 * @param bool         $use_text Use text from choices.
+	 * @param string       $format   Format.
+	 * @param string       $media    Media.
+	 *
+	 * @return string
+	 */
+	public function get_value_entry_detail( $value, $currency = '', $use_text = false, $format = 'html', $media = 'screen' ) {
+		$use_text = true;
+
+		return parent::get_value_entry_detail( $value, $currency, $use_text, $format, $media );
+	}
+
+	/**
+	 * Get field value.
+	 *
+	 * @param string|array  $value Field value.
+	 * @param array         $entry Entry.
+	 * @param GF_Field|null $field Field.
+	 *
+	 * @return string|array
+	 */
+	public function get_field_value( $value, $entry, $field ) {
+		if ( ! \is_object( $field ) ) {
+			return $value;
+		}
+
+		if ( self::TYPE !== $field->type ) {
+			return $value;
+		}
+
+		// Check if already a string value.
+		if ( ! \is_array( $value ) ) {
+			return $value;
+		}
+
+		$value = \array_shift( $value );
+
+		return $value;
 	}
 
 	/**

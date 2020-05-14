@@ -1322,6 +1322,30 @@ class Extension extends AbstractPluginIntegration {
 			$actions[ $slug ]['meta_key'] = '_pronamic_pay_gf_delay_' . $data['meta_key_suffix'];
 		}
 
+		/**
+		 * Filters the delay actions to display on the payment feed settings page and to process.
+		 *
+		 * @since 2.4.0
+		 *
+		 * @link https://github.com/wp-premium/gravityforms/blob/2.4.17/print-entry.php#L148-L163
+		 * @link https://github.com/phpDocumentor/phpDocumentor/issues/1712
+		 *
+		 * @param array $actions {
+		 *
+		 *     Delay action.
+		 *
+		 *     @var null|\GFAddon $addon                       Optional reference to a Gravity Forms add-on object.
+		 *     @var bool          $active                      Boolean flag to indicate the delay action can be enabled (add-on active).
+		 *     @var string        $meta_key                    Post meta key used to store meta value if the delay action is enabled.
+		 *     @var bool          $delayed_payment_integration Boolean flag to indicate the delay action is defined by a delayed payment integration.
+		 *     @var string        $label                       The label to show on the payment feed settings page.
+		 *     @var callable      $delay_callback              Callback function which can be used to remove actions/filters to delay actions.
+		 *     @var callable      $process_callback            Callback function to process the delay action.
+		 *
+		 * }
+		 */
+		$actions = \apply_filters( 'pronamic_pay_gravityforms_delay_actions', $actions );
+
 		return $actions;
 	}
 

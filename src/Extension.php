@@ -777,6 +777,15 @@ class Extension extends AbstractPluginIntegration {
 			$action['payment_status'] = $payment_status;
 		}
 
+		/*
+		 * Prevent empty formatted amount in entry notes.
+		 *
+		 * @link https://github.com/wp-premium/gravityforms/blob/2.4.17/includes/addon/class-gf-payment-addon.php#L3628
+		 */
+		if ( '0' === (string) $action['amount'] ) {
+			$action['amount'] = '0.00';
+		}
+
 		$action['type'] = $type;
 
 		$result = false;

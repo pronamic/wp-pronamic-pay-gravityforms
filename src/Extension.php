@@ -36,7 +36,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.3.1
+ * @version 2.4.0
  * @since   1.0.0
  */
 class Extension extends AbstractPluginIntegration {

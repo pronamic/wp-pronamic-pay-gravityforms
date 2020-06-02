@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.4.0] - 2020-06-02
+- Add filter `pronamic_pay_gravityforms_delay_actions` for delayed actions.
+- Fix empty formatted amount in entry notes if value is `0`.
+
 ## [2.3.1] - 2020-04-20
 - Fixed PHP notices and warnings.
 - Use integration version number for scripts and styles.
@@ -270,7 +274,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.3.1...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.0...HEAD
+[2.4.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.3.1...2.4.0
 [2.3.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.3.0...2.3.1
 [2.3.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.2.0...2.3.0
 [2.2.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.1.15...2.2.0

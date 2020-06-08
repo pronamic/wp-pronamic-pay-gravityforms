@@ -895,6 +895,8 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				'email'                      => __( 'Email', 'pronamic_ideal' ),
 				'consumer_bank_details_name' => __( 'Account Holder Name', 'pronamic_ideal' ),
 				'consumer_bank_details_iban' => __( 'Account IBAN', 'pronamic_ideal' ),
+				'company_name'               => __( 'Company Name', 'pronamic_ideal' ),
+				'vat_number'                 => __( 'VAT Number', 'pronamic_ideal' ),
 			);
 
 			?>

@@ -1,38 +1,38 @@
-/* line 8, ../sass/admin.scss */
+/* line 8, ../scss/admin.scss */
 #tab_pronamic_pay h3 .dashicons.fa- {
   font-size: inherit;
   width: auto;
   height: auto;
 }
 
-/* line 18, ../sass/admin.scss */
+/* line 18, ../scss/admin.scss */
 #titlediv + #gf-pay-feed-editor {
   margin-top: 1em;
 }
 
-/* line 24, ../sass/admin.scss */
+/* line 24, ../scss/admin.scss */
 #gf-pay-feed-editor .form-table ul {
   margin: 10px 0 0;
 }
-/* line 30, ../sass/admin.scss */
+/* line 30, ../scss/admin.scss */
 #gf-pay-feed-editor .pronamic-pay-tab .pronamic-pay-tab-block {
   background: #fff;
 }
-/* line 36, ../sass/admin.scss */
+/* line 36, ../scss/admin.scss */
 #gf-pay-feed-editor .pronamic-pay-tab .pronamic-pay-table-striped tr:not(.even) {
   background: #fff;
 }
-/* line 42, ../sass/admin.scss */
+/* line 42, ../scss/admin.scss */
 #gf-pay-feed-editor .pronamic-pay-tab input + select {
   vertical-align: initial;
 }
-/* line 49, ../sass/admin.scss */
+/* line 49, ../scss/admin.scss */
 #gf-pay-feed-editor .pronamic-gf-subscription-tab fieldset > div {
   margin-bottom: -1em;
   margin-left: 2em;
 }
 
-/* line 59, ../sass/admin.scss */
+/* line 59, ../scss/admin.scss */
 .gforms_edit_form .ideal-edit-link {
   display: none;
   float: right;
@@ -41,17 +41,17 @@
   height: 16px;
   text-decoration: none;
 }
-/* line 75, ../sass/admin.scss */
+/* line 75, ../scss/admin.scss */
 .gforms_edit_form .field_hover .ideal-edit-link,
 .gforms_edit_form .field_selected .ideal-edit-link {
   display: block;
 }
 
-/* line 84, ../sass/admin.scss */
+/* line 84, ../scss/admin.scss */
 .form-table .pronamic-pay-description {
   display: block;
 }
-/* line 90, ../sass/admin.scss */
+/* line 90, ../scss/admin.scss */
 .form-table.pronamic-gf-links-tab fieldset {
   line-height: 2.75em;
 }

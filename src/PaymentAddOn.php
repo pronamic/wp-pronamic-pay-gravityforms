@@ -180,11 +180,15 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Filter the form in admin.
 	 *
-	 * @param array $form Gravity Forms form.
+	 * @param array|null $form Gravity Forms form.
 	 *
 	 * @return array
 	 */
 	public function admin_pre_render( $form ) {
+		if ( null === $form ) {
+			return $form;
+		}
+
 		$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
 
 		$condition_field_ids = array();

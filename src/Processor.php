@@ -30,7 +30,7 @@ use Pronamic\WordPress\Pay\Payments\PaymentLineType;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.3.0
+ * @version 2.4.1
  * @since   1.0.0
  */
 class Processor {

@@ -81,7 +81,7 @@ module.exports = function( grunt ) {
 				configFile: '.sass-lint.yml'
 			},
 			target: [
-				'sass/**/*.scss'
+				'scss/**/*.scss'
 			]
 		},
 
@@ -89,7 +89,7 @@ module.exports = function( grunt ) {
 		compass: {
 			build: {
 				options: {
-					sassDir: 'sass',
+					sassDir: 'scss',
 					cssDir: 'css'
 				}
 			}

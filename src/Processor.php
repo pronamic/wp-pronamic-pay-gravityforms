@@ -30,7 +30,7 @@ use Pronamic\WordPress\Pay\Payments\PaymentLineType;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.3.0
+ * @version 2.4.1
  * @since   1.0.0
  */
 class Processor {
@@ -306,6 +306,14 @@ class Processor {
 
 		$payment->set_customer( $customer );
 
+		// Company Name.
+		$company_name = $data->get_field_value( 'company_name' );
+
+		$customer->set_company_name( $company_name );
+
+		// VAT Number.
+		$customer->set_vat_number( $data->get_field_value( 'vat_number' ) );
+
 		// Address.
 		$address = new Address();
 
@@ -317,6 +325,7 @@ class Processor {
 		}
 
 		$address->set_name( $name );
+		$address->set_company_name( $company_name );
 		$address->set_line_1( $data->get_field_value( 'address1' ) );
 		$address->set_line_2( $data->get_field_value( 'address2' ) );
 		$address->set_postal_code( $data->get_field_value( 'zip' ) );

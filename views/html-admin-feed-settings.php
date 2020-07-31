@@ -794,7 +794,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									echo wp_kses(
 										sprintf(
-											/* translators: %s: <select> Weekday (Monday-Sunday). */
+											/* translators: %s: input HTML */
 											__( 'On %s', 'pronamic_ideal' ),
 											$select
 										),

@@ -266,7 +266,7 @@ class Processor {
 		$payment = new Payment();
 
 		$payment->title = sprintf(
-			/* translators: %s: title */
+			/* translators: %s: payment data title */
 			__( 'Payment for %s', 'pronamic_ideal' ),
 			$data->get_title()
 		);

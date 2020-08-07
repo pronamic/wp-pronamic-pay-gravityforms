@@ -21,6 +21,8 @@ use Pronamic\WordPress\Pay\Payments\Item;
 use Pronamic\WordPress\Pay\Payments\Items;
 use Pronamic\WordPress\Pay\Payments\PaymentData as Pay_PaymentData;
 use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
+use Pronamic\WordPress\Pay\Subscriptions\ProratingRule;
 use RGFormsModel;
 
 /**
@@ -708,15 +710,69 @@ class PaymentData extends Pay_PaymentData {
 				break;
 		}
 
-		$subscription                      = new Subscription();
-		$subscription->frequency           = $frequency;
-		$subscription->interval            = $interval;
-		$subscription->interval_period     = $interval_period;
-		$subscription->interval_date       = $interval_date;
-		$subscription->interval_date_day   = $interval_date_day;
-		$subscription->interval_date_month = $interval_date_month;
-		$subscription->description         = $this->get_description();
+		// Subscription.
+		$subscription = new Subscription();
 
+		$subscription->description = $this->get_description();
+
+		// Proration phase.
+		$amount = parent::get_amount();
+
+		$start_date = new \DateTimeImmutable();
+
+		if ( 'sync' === $this->feed->subscription_interval_date_type ) {
+			$next_date = $start_date->add( new \DateInterval( 'P' . $interval . $interval_period ) );
+
+			$proration_rule = new ProratingRule( $interval_period );
+
+			switch ( $interval_period ) {
+				case 'D':
+					break;
+				case 'W':
+					$proration_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date ) );
+					break;
+				case 'M':
+					$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+					break;
+				case 'Y':
+					$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+					$proration_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
+			}
+
+			$align_date = $proration_rule->get_date( $start_date );
+
+			$regular_difference   = $start_date->diff( $next_date, true );
+			$proration_difference = $start_date->diff( $align_date, true );
+
+			$proration_amount = clone $amount;
+
+			if ( '1' === $this->feed->subscription_interval_date_prorate ) {
+				$proration_amount = $proration_amount->divide( $regular_difference->days )->multiply( $proration_difference->days );
+			}
+
+			$proration_phase = SubscriptionPhaseBuilder::new()
+				->with_start_date( $start_date )
+				->with_amount( $proration_amount )
+				->with_interval( $proration_difference->days, 'D' )
+				->with_number_recurrences( 1 )
+				->with_proration()
+				->create();
+
+			$subscription->phases[] = $proration_phase;
+
+			$start_date = $proration_phase->get_end_date();
+		}
+
+		$regular_phase = SubscriptionPhaseBuilder::new()
+			->with_start_date( $start_date )
+			->with_amount( $amount )
+			->with_interval( $interval, $interval_period )
+			->with_number_recurrences( $subscription->frequency )
+			->create();
+
+		$subscription->phases[] = $regular_phase;
+
+		// Total amount.
 		$subscription->set_total_amount(
 			new TaxedMoney(
 				$amount,

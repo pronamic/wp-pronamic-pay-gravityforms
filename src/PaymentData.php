@@ -718,11 +718,14 @@ class PaymentData extends Pay_PaymentData {
 		// Proration phase.
 		$amount = parent::get_amount();
 
-		$start_date = new \DateTimeImmutable();
+		$regular_phase = SubscriptionPhaseBuilder::new()
+			->with_start_date( new \DateTimeImmutable() )
+			->with_amount( $amount )
+			->with_interval( $interval, $interval_period )
+			->with_number_recurrences( $subscription->frequency )
+			->create();
 
 		if ( 'sync' === $this->feed->subscription_interval_date_type ) {
-			$next_date = $start_date->add( new \DateInterval( 'P' . $interval . $interval_period ) );
-
 			$proration_rule = new ProratingRule( $interval_period );
 
 			switch ( $interval_period ) {
@@ -741,34 +744,10 @@ class PaymentData extends Pay_PaymentData {
 
 			$align_date = $proration_rule->get_date( $start_date );
 
-			$regular_difference   = $start_date->diff( $next_date, true );
-			$proration_difference = $start_date->diff( $align_date, true );
-
-			$proration_amount = clone $amount;
-
-			if ( '1' === $this->feed->subscription_interval_date_prorate ) {
-				$proration_amount = $proration_amount->divide( $regular_difference->days )->multiply( $proration_difference->days );
-			}
-
-			$proration_phase = SubscriptionPhaseBuilder::new()
-				->with_start_date( $start_date )
-				->with_amount( $proration_amount )
-				->with_interval( $proration_difference->days, 'D' )
-				->with_number_recurrences( 1 )
-				->with_proration()
-				->create();
+			$proration_phase = SubscriptionPhase::prorate( $regular_phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
 
 			$subscription->phases[] = $proration_phase;
-
-			$start_date = $proration_phase->get_end_date();
 		}
-
-		$regular_phase = SubscriptionPhaseBuilder::new()
-			->with_start_date( $start_date )
-			->with_amount( $amount )
-			->with_interval( $interval, $interval_period )
-			->with_number_recurrences( $subscription->frequency )
-			->create();
 
 		$subscription->phases[] = $regular_phase;
 

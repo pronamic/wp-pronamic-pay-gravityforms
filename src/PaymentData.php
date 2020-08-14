@@ -722,7 +722,7 @@ class PaymentData extends Pay_PaymentData {
 			->with_start_date( new \DateTimeImmutable() )
 			->with_amount( $amount )
 			->with_interval( $interval, $interval_period )
-			->with_number_recurrences( $subscription->frequency )
+			->with_total_periods( $subscription->frequency )
 			->create();
 
 		if ( 'sync' === $this->feed->subscription_interval_date_type ) {

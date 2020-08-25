@@ -78,6 +78,14 @@ class PaymentMethodsField extends GF_Field_Select {
 			add_filter( 'gform_get_field_value', array( $this, 'get_field_value' ), 10, 3 );
 		}
 
+		if ( ! has_filter( 'gform_form_update_meta', array( __CLASS__, 'form_update_meta' ) ) ) {
+			add_filter( 'gform_form_update_meta', array( __CLASS__, 'form_update_meta' ), 10, 3 );
+		}
+
+		if ( ! has_filter( 'gform_pre_render', array( __CLASS__, 'form_pre_render' ) ) ) {
+			add_filter( 'gform_pre_render', array( __CLASS__, 'form_pre_render' ), 10, 3 );
+		}
+
 		// Admin.
 		if ( is_admin() ) {
 			$this->inputType = 'checkbox';
@@ -260,7 +268,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	 *
 	 * @return boolean true if 'isSelected' is set and true, false otherwise.
 	 */
-	public function filter_choice_is_selected( $choice ) {
+	public static function filter_choice_is_selected( $choice ) {
 		return is_array( $choice ) && isset( $choice['isSelected'] ) && $choice['isSelected'];
 	}
 
@@ -298,10 +306,21 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Filter choices for display.
 		$choices = $this->choices;
 
-		$display_choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
-		$display_choices = array_map( array( $this, 'unselect_choice' ), $display_choices );
+		$display_choices = $choices;
 
-		$this->choices = \array_values( $display_choices );
+		if ( \is_admin() && 'gf_edit_forms' === \filter_input( \INPUT_GET, 'page', \FILTER_SANITIZE_STRING ) ) {
+			$display_choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
+		}
+
+		// Make first item selected.
+		\array_walk(
+			$display_choices,
+			function ( &$item, $key ) {
+				$item['isSelected'] = ( 0 === $key );
+			}
+		);
+
+		$this->choices = $display_choices;
 
 		// Input.
 		$input = parent::get_field_input( $form, $value, $entry );
@@ -633,6 +652,62 @@ class PaymentMethodsField extends GF_Field_Select {
 		$value = \array_shift( $value );
 
 		return $value;
+	}
+
+	/**
+	 * Filter form update meta.
+	 *
+	 * @param array<mixed> $form_meta Form meta.
+	 * @param int          $form_id   Form id.
+	 * @param string       $meta_name Meta name.
+	 *
+	 * @return array<mixed>
+	 */
+	public static function form_update_meta( $form_meta, $form_id, $meta_name ) {
+		if ( 'display_meta' === $meta_name ) {
+			foreach ( $form_meta['fields'] as &$field ) {
+				if ( self::TYPE !== $field['type'] ) {
+					continue;
+				}
+
+				$field->inputType = 'select';
+			}
+		}
+
+		return $form_meta;
+	}
+
+	/**
+	 * Form pre render.
+	 *
+	 * @param array<string, mixed> $form         Form.
+	 * @param bool                 $ajax         Whether or not to use AJAX.
+	 * @param array                $field_values Field values.
+	 * @return array<string, mixed>
+	 */
+	public static function form_pre_render( $form, $ajax, $field_values ) {
+		foreach ( $form['fields'] as $key => &$field ) {
+			// Check field type.
+			if ( self::TYPE !== $field->type ) {
+				continue;
+			}
+
+			// Remove unselected choices.
+			$display_choices = array_filter( $field['choices'], array( __CLASS__, 'filter_choice_is_selected' ) );
+
+			// Set first item as selected.
+			\array_walk(
+				$display_choices,
+				function ( &$item, $key ) {
+					$item['isSelected'] = ( 0 === $key );
+				}
+			);
+
+			// Set field choices.
+			$field['choices'] = $display_choices;
+		}
+
+		return $form;
 	}
 
 	/**

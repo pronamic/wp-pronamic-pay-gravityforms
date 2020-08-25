@@ -309,7 +309,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		$display_choices = $choices;
 
 		if ( \is_admin() && 'gf_edit_forms' === \filter_input( \INPUT_GET, 'page', \FILTER_SANITIZE_STRING ) ) {
-			$display_choices = array_filter( $choices, array( $this, 'filter_choice_is_selected' ) );
+			$display_choices = array_filter( $choices, array( __CLASS__, 'filter_choice_is_selected' ) );
 		}
 
 		// Make first item selected.
@@ -320,7 +320,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 		);
 
-		$this->choices = $display_choices;
+		$this->choices = \array_values( $display_choices );
 
 		// Input.
 		$input = parent::get_field_input( $form, $value, $entry );

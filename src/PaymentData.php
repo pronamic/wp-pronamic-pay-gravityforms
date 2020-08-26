@@ -718,7 +718,7 @@ class PaymentData extends Pay_PaymentData {
 		// Proration phase.
 		$amount = parent::get_amount();
 
-		$regular_phase = SubscriptionPhaseBuilder::new()
+		$regular_phase = ( new SubscriptionPhaseBuilder() )
 			->with_start_date( new \DateTimeImmutable() )
 			->with_amount( $amount )
 			->with_interval( $interval, $interval_period )

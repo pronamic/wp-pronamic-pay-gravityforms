@@ -21,6 +21,7 @@ use Pronamic\WordPress\Pay\Payments\Item;
 use Pronamic\WordPress\Pay\Payments\Items;
 use Pronamic\WordPress\Pay\Payments\PaymentData as Pay_PaymentData;
 use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
 use Pronamic\WordPress\Pay\Subscriptions\ProratingRule;
 use RGFormsModel;
@@ -266,76 +267,6 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		return $items;
-	}
-
-	/**
-	 * Get (prorated) amount.
-	 *
-	 * @return TaxedMoney
-	 */
-	public function get_amount() {
-		$amount = parent::get_amount();
-
-		$subscription = $this->get_subscription();
-
-		if ( ! $subscription ) {
-			return $amount;
-		}
-
-		if ( 'sync' !== $this->feed->subscription_interval_date_type ) {
-			return $amount;
-		}
-
-		if ( '1' !== $this->feed->subscription_interval_date_prorate ) {
-			return $amount;
-		}
-
-		// Prorate.
-		$interval = $subscription->get_date_interval();
-
-		$now = new DateTime();
-
-		$next_date = clone $now;
-		$next_date->add( $interval );
-
-		$days_diff = $now->diff( $next_date )->days;
-
-		$interval_date       = $subscription->get_interval_date();
-		$interval_date_day   = $subscription->get_interval_date_day();
-		$interval_date_month = $subscription->get_interval_date_month();
-
-		if ( 'W' === $subscription->interval_period && is_numeric( $interval_date_day ) ) {
-			$days_delta = $interval_date_day - $next_date->format( 'w' );
-
-			$next_date->modify( sprintf( '+%s days', $days_delta ) );
-		}
-
-		if ( 'M' === $subscription->interval_period && is_numeric( $interval_date ) ) {
-			$next_date->setDate( $next_date->format( 'Y' ), $next_date->format( 'm' ), $interval_date );
-		}
-
-		if ( 'M' === $subscription->interval_period && 'last' === $interval_date ) {
-			$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
-		}
-
-		if ( 'Y' === $subscription->interval_period && is_numeric( $interval_date_month ) ) {
-			$next_date->setDate( $next_date->format( 'Y' ), $interval_date_month, $next_date->format( 'd' ) );
-
-			if ( 'last' === $interval_date ) {
-				$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
-			}
-		}
-
-		// Prorate subscription amount.
-		$amount = $amount->subtract( $subscription->get_total_amount() );
-
-		$prorated_days_diff = $now->diff( $next_date )->days;
-
-		$prorated_amount = $subscription->get_total_amount()->divide( $days_diff )->multiply( $prorated_days_diff );
-
-		$amount = $amount->add( $prorated_amount );
-
-		return $amount;
 	}
 
 	/**
@@ -716,10 +647,12 @@ class PaymentData extends Pay_PaymentData {
 		$subscription->description = $this->get_description();
 
 		// Proration phase.
-		$amount = parent::get_amount();
+		$start_date = new \DateTimeImmutable();
+
+		$amount = $this->get_amount();
 
 		$regular_phase = ( new SubscriptionPhaseBuilder() )
-			->with_start_date( new \DateTimeImmutable() )
+			->with_start_date( $start_date )
 			->with_amount( $amount )
 			->with_interval( $interval, $interval_period )
 			->with_total_periods( $subscription->frequency )
@@ -752,12 +685,7 @@ class PaymentData extends Pay_PaymentData {
 		$subscription->add_phase( $regular_phase );
 
 		// Total amount.
-		$subscription->set_total_amount(
-			new TaxedMoney(
-				$amount,
-				$this->get_currency_alphabetic_code()
-			)
-		);
+		$subscription->set_total_amount( $amount );
 
 		return $subscription;
 	}

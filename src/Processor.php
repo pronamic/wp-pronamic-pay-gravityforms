@@ -273,7 +273,6 @@ class Processor {
 		$payment->email                  = $data->get_field_value( 'email' );
 		$payment->method                 = $payment_method;
 		$payment->issuer                 = $data->get_issuer( $payment_method );
-		$payment->analytics_client_id    = $data->get_analytics_client_id();
 
 		// Credit Card.
 		$payment->set_credit_card( $data->get_credit_card() );

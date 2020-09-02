@@ -250,7 +250,6 @@ class Processor {
 		$payment->config_id   = $this->feed->config_id;
 		$payment->order_id    = $data->get_order_id();
 		$payment->description = $data->get_description();
-		$payment->email       = $data->get_field_value( 'email' );
 		$payment->method      = $payment_method;
 		$payment->issuer      = $data->get_issuer( $payment_method );
 

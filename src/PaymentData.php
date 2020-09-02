@@ -17,9 +17,6 @@ use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
-use Pronamic\WordPress\Pay\Payments\Item;
-use Pronamic\WordPress\Pay\Payments\Items;
-use Pronamic\WordPress\Pay\Payments\PaymentData as Pay_PaymentData;
 use Pronamic\WordPress\Pay\Subscriptions\Subscription;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
@@ -36,7 +33,7 @@ use RGFormsModel;
  * @version 2.1.10
  * @since   1.0.1
  */
-class PaymentData extends Pay_PaymentData {
+class PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
@@ -68,8 +65,6 @@ class PaymentData extends Pay_PaymentData {
 	 * @param PayFeed $feed Pay feed.
 	 */
 	public function __construct( $form, $lead, $feed ) {
-		parent::__construct();
-
 		$this->form = $form;
 		$this->lead = $lead;
 		$this->feed = $feed;
@@ -102,17 +97,6 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		return $this->lead[ $field_id ];
-	}
-
-	/**
-	 * Get source ID
-	 *
-	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_source_id()
-	 *
-	 * @return string
-	 */
-	public function get_source_id() {
-		return $this->lead['id'];
 	}
 
 	/**

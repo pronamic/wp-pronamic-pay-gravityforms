@@ -231,23 +231,6 @@ class Processor {
 		// Payment data.
 		$data = new PaymentData( $form, $lead, $this->feed );
 
-		// Does payment data contain any items?
-		$items = $data->get_items();
-
-		if ( 0 === iterator_count( $items ) ) {
-			return $lead;
-		}
-
-		// Update entry meta.
-		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
-		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
-
-		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
-		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
-		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
-
-		GravityForms::update_entry( $lead );
-
 		// Set payment method to iDEAL if issuer ID is set.
 		$payment_method = $data->get_payment_method();
 
@@ -261,7 +244,7 @@ class Processor {
 		$payment->title = sprintf(
 			/* translators: %s: payment data title */
 			__( 'Payment for %s', 'pronamic_ideal' ),
-			$data->get_title()
+			$data->get_description()
 		);
 
 		$payment->config_id   = $this->feed->config_id;
@@ -424,9 +407,14 @@ class Processor {
 		}
 
 		/**
-		 * @todo Should we do somehting with 'donation'?
+		 * @todo Should we do something with 'donation'?
 		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/src/PaymentData.php#L231-L264
 		 */
+
+		// Does payment contain any lines?
+		if ( 0 === count( $payment->lines ) ) {
+			return $lead;
+		}
 
 		// Total amount.
 		$payment->set_total_amount( $payment->lines->get_amount() );
@@ -437,6 +425,40 @@ class Processor {
 		if ( empty( $amount ) ) {
 			$this->feed->delay_actions = array();
 		}
+
+		/**
+		 * Subscription.
+		 *
+		 * As soon as a recurring amount is set, we create a subscription.
+		 */
+		if ( ! empty( $this->feed->subscription_amount_type ) ) {
+			$subscription = new Subscription();
+
+			$subscription->description = $payment->get_description();
+			$subscription->set_total_amount( $payment->get_total_amount() );
+
+			switch ( $this->feed->subscription_amount_type ) {
+				case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
+
+					break;
+				case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
+					/**
+					 * @todo Should we build specific payment lines and derive the amount from it?
+					 */
+
+					break;
+			}
+		}
+
+		// Update entry meta.
+		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
+		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
+
+		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
+		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
+		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
+
+		GravityForms::update_entry( $lead );
 
 		// Start.
 		try {

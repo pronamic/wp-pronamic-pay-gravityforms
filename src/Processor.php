@@ -264,7 +264,6 @@ class Processor {
 			$data->get_title()
 		);
 
-		$payment->user_id     = $data->get_user_id();
 		$payment->config_id   = $this->feed->config_id;
 		$payment->order_id    = $data->get_order_id();
 		$payment->description = $data->get_description();

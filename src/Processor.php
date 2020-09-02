@@ -255,13 +255,6 @@ class Processor {
 			$payment_method = PaymentMethods::IDEAL;
 		}
 
-		// Don't delay feed actions for free payments.
-		$amount = $data->get_amount()->get_value();
-
-		if ( empty( $amount ) ) {
-			$this->feed->delay_actions = array();
-		}
-
 		// Payment.
 		$payment = new Payment();
 
@@ -275,17 +268,14 @@ class Processor {
 		$payment->config_id              = $this->feed->config_id;
 		$payment->order_id               = $data->get_order_id();
 		$payment->description            = $data->get_description();
-		$payment->source                 = $data->get_source();
+		$payment->source                 = 'gravityformsideal';
 		$payment->source_id              = $data->get_source_id();
-		$payment->email                  = $data->get_email();
+		$payment->email                  = $data->get_field_value( 'email' );
 		$payment->method                 = $payment_method;
 		$payment->issuer                 = $data->get_issuer( $payment_method );
 		$payment->analytics_client_id    = $data->get_analytics_client_id();
-		$payment->recurring              = $data->get_recurring();
-		$payment->subscription           = $data->get_subscription();
-		$payment->subscription_id        = $data->get_subscription_id();
-		$payment->subscription_source_id = $data->get_subscription_source_id();
-		$payment->set_total_amount( $data->get_amount() );
+
+		// Credit Card.
 		$payment->set_credit_card( $data->get_credit_card() );
 
 		// Name.
@@ -342,8 +332,8 @@ class Processor {
 		// Consumer bank details.
 		$consumer_bank_details = new BankAccountDetails();
 
-		$consumer_bank_details->set_name( $data->get_consumer_bank_details_name() );
-		$consumer_bank_details->set_iban( $data->get_consumer_bank_details_iban() );
+		$consumer_bank_details->set_name( $data->get_field_value( 'consumer_bank_details_name' ) );
+		$consumer_bank_details->set_iban( $data->get_field_value( 'consumer_bank_details_iban' ) );
 
 		$payment->set_consumer_bank_details( $consumer_bank_details );
 
@@ -431,6 +421,21 @@ class Processor {
 					$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
 				}
 			}
+		}
+
+		/**
+		 * @todo Should we do somehting with 'donation'?
+		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/src/PaymentData.php#L231-L264
+		 */
+
+		// Total amount.
+		$payment->set_total_amount( $payment->lines->get_amount() );
+
+		// Don't delay feed actions for free payments.
+		$amount = $payment->get_total_amount()->get_value();
+
+		if ( empty( $amount ) ) {
+			$this->feed->delay_actions = array();
 		}
 
 		// Start.

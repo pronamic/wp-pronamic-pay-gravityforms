@@ -487,39 +487,39 @@ class Extension extends AbstractPluginIntegration {
 			return $url;
 		}
 
-		$form_id = $lead['form_id'];
-
-		$form = RGFormsModel::get_form_meta( $form_id );
 		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return $url;
 		}
 
-		$data = new PaymentData( $form, $lead, $feed );
+		$new_url = null;
 
 		switch ( $payment->status ) {
 			case PaymentStatus::CANCELLED:
-				$url = $data->get_cancel_url();
+				$new_url = $feed->get_url( Links::CANCEL );
 
 				break;
 			case PaymentStatus::EXPIRED:
-				$url = $feed->get_url( Links::EXPIRED );
+				$new_url = $feed->get_url( Links::EXPIRED );
 
 				break;
 			case PaymentStatus::FAILURE:
-				$url = $data->get_error_url();
+				$new_url = $feed->get_url( Links::ERROR );
 
 				break;
 			case PaymentStatus::SUCCESS:
-				$url = $data->get_success_url();
+				$new_url = $feed->get_url( Links::SUCCESS );
 
 				break;
 			case PaymentStatus::OPEN:
-			default:
-				$url = $data->get_normal_return_url();
+				$new_url = $feed->get_url( Links::OPEN );
 
 				break;
+		}
+
+		if ( null !== $new_url ) {
+			$url = $new_url;
 		}
 
 		// Process Gravity Forms confirmations if link type is confirmation.

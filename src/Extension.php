@@ -585,8 +585,8 @@ class Extension extends AbstractPluginIntegration {
 			'entry_id'       => $lead['id'],
 		);
 
-		if ( $data->get_subscription() ) {
-			$action['subscription_id'] = $payment->get_subscription_id();
+		if ( null !== $payment->subscription ) {
+			$action['subscription_id'] = $payment->subscription->get_id();
 		}
 
 		$success_action = 'complete_payment';

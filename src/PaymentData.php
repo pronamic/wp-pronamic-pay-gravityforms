@@ -243,44 +243,32 @@ class PaymentData {
 	}
 
 	/**
-	 * Get subscription.
+	 * Get frequency.
 	 *
-	 * @return Subscription|null
+	 * @return int|null
 	 */
-	public function get_subscription() {
-		// Amount.
-		$amount = 0;
+	public function get_subscription_frequency() {
+		switch ( $this->feed->subscription_frequency_type ) {
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
+				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
-		switch ( $this->feed->subscription_amount_type ) {
-			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
-				$items = $this->get_items();
-
-				$amount = $items->get_amount()->get_value();
-
-				break;
-			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
-				$field_id = $this->feed->subscription_amount_field;
-
-				$product_fields = GFCommon::get_product_fields( $this->form, $this->lead );
-
-				if ( isset( $product_fields['products'][ $field_id ] ) ) {
-					$amount  = GFCommon::to_number( $product_fields['products'][ $field_id ]['price'] );
-					$amount *= $product_fields['products'][ $field_id ]['quantity'];
+				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
+						return intval( $this->lead[ $this->feed->subscription_frequency_field ] );
+					}
 				}
-
-				break;
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
+				return $this->feed->subscription_frequency;
+			default:
+				return null;
 		}
+	}
 
-		if ( 0 === $amount ) {
-			return null;
-		}
-
-		// Interval.
-		$interval            = '';
-		$interval_period     = 'D';
-		$interval_date       = '';
-		$interval_date_day   = '';
-		$interval_date_month = '';
+	public function get_subscription_interval() {
+		$interval = (object) array(
+			'unit'  => 'D',
+			'value' => null,
+		);
 
 		switch ( $this->feed->subscription_interval_type ) {
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
@@ -288,104 +276,27 @@ class PaymentData {
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_interval_field ] ) ) {
-						$interval = $this->lead[ $this->feed->subscription_interval_field ];
+						$interval->value = $this->lead[ $this->feed->subscription_interval_field ];
 
-						$interval_period = Core_Util::string_to_interval_period( $interval );
+						$interval->unit = Core_Util::string_to_interval_period( $interval );
 
 						// Default to interval period in days.
-						if ( null === $interval_period ) {
-							$interval_period = 'D';
+						if ( null === $interval->unit ) {
+							$interval->unit = 'D';
 						}
 					}
 				}
 
-				$interval = intval( $interval );
+				$interval->value = \intval( $interval );
 
-				// Do not start subscriptions for `0` interval.
-				if ( 0 === $interval ) {
-					return null;
-				}
-
-				break;
+				return $interval;
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
-				$interval        = $this->feed->subscription_interval;
-				$interval_period = $this->feed->subscription_interval_period;
+				$interval->value = $this->feed->subscription_interval;
+				$interval->unit  = $this->feed->subscription_interval_period;
 
-				if ( 'sync' === $this->feed->subscription_interval_date_type ) {
-					$interval_date       = $this->feed->subscription_interval_date;
-					$interval_date_day   = $this->feed->subscription_interval_date_day;
-					$interval_date_month = $this->feed->subscription_interval_date_month;
-				}
-
-				break;
+				return $interval;
+			default:
+				return $interval;
 		}
-
-		// Frequency.
-		$frequency = null;
-
-		switch ( $this->feed->subscription_frequency_type ) {
-			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
-				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
-
-				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
-					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
-						$frequency = intval( $this->lead[ $this->feed->subscription_frequency_field ] );
-					}
-				}
-
-				break;
-			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
-				$frequency = $this->feed->subscription_frequency;
-
-				break;
-		}
-
-		// Subscription.
-		$subscription = new Subscription();
-
-		$subscription->description = $this->get_description();
-
-		// Proration phase.
-		$start_date = new \DateTimeImmutable();
-
-		$amount = $this->get_amount();
-
-		$regular_phase = ( new SubscriptionPhaseBuilder() )
-			->with_start_date( $start_date )
-			->with_amount( $amount )
-			->with_interval( $interval, $interval_period )
-			->with_total_periods( $subscription->frequency )
-			->create();
-
-		if ( 'sync' === $this->feed->subscription_interval_date_type ) {
-			$proration_rule = new ProratingRule( $interval_period );
-
-			switch ( $interval_period ) {
-				case 'D':
-					break;
-				case 'W':
-					$proration_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date ) );
-					break;
-				case 'M':
-					$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
-					break;
-				case 'Y':
-					$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
-					$proration_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
-			}
-
-			$align_date = $proration_rule->get_date( $start_date );
-
-			$proration_phase = SubscriptionPhase::prorate( $regular_phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
-
-			$subscription->add_phase( $proration_phase );
-		}
-
-		$subscription->add_phase( $regular_phase );
-
-		// Total amount.
-		$subscription->set_total_amount( $amount );
-
-		return $subscription;
 	}
 }

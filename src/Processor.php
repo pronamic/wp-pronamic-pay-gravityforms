@@ -23,6 +23,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
+use Pronamic\WordPress\Pay\Subscriptions\Subscription;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
@@ -232,13 +233,6 @@ class Processor {
 		// Payment data.
 		$data = new PaymentData( $form, $lead, $this->feed );
 
-		// Set payment method to iDEAL if issuer ID is set.
-		$payment_method = $data->get_payment_method();
-
-		if ( null === $payment_method && null !== $data->get_issuer_id() ) {
-			$payment_method = PaymentMethods::IDEAL;
-		}
-
 		// Payment.
 		$payment = new Payment();
 
@@ -251,8 +245,8 @@ class Processor {
 		$payment->config_id   = $this->feed->config_id;
 		$payment->order_id    = $data->get_order_id();
 		$payment->description = $data->get_description();
-		$payment->method      = $payment_method;
-		$payment->issuer      = $data->get_issuer( $payment_method );
+		$payment->method      = $data->get_payment_method();
+		$payment->issuer      = $data->get_issuer_id();
 
 		// Currency.
 		$currency = Currency::get_instance( $data->get_currency_alphabetic_code() );
@@ -326,6 +320,12 @@ class Processor {
 		// Lines.
 		$payment->lines = new PaymentLines();
 
+		$subscription_lines = new PaymentLines();
+
+		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
+			$subscription_lines = $payment->lines;
+		}
+
 		$product_fields = GFCommon::get_product_fields( $form, $lead );
 
 		if ( is_array( $product_fields ) ) {
@@ -334,7 +334,13 @@ class Processor {
 				$products = $product_fields['products'];
 
 				foreach ( $products as $key => $product ) {
+					$key = \strval( $key );
+
+					$product_lines = array();
+
 					$line = $payment->lines->new_line();
+
+					$product_lines[] = $line;
 
 					$line->set_id( $key );
 
@@ -364,6 +370,8 @@ class Processor {
 						foreach ( $options as $option ) {
 							$line = $payment->lines->new_line();
 
+							$product_lines[] = $line;
+
 							$line->set_quantity( 1 );
 
 							if ( array_key_exists( 'option_label', $option ) ) {
@@ -377,6 +385,18 @@ class Processor {
 
 								$line->set_total_amount( new TaxedMoney( $value, $currency ) );
 							}
+						}
+					}
+
+					if ( 
+						GravityForms::SUBSCRIPTION_AMOUNT_FIELD === $this->feed->subscription_amount_type
+							&&
+						$key === $this->feed->subscription_amount_field ) 
+					{
+						$subscription_lines = new PaymentLines();
+
+						foreach ( $product_lines as $line ) {
+							$subscription_lines->add_line( $line );
 						}
 					}
 				}
@@ -434,23 +454,53 @@ class Processor {
 		 *
 		 * As soon as a recurring amount is set, we create a subscription.
 		 */
-		if ( ! empty( $this->feed->subscription_amount_type ) ) {
+		$interval = $data->get_subscription_interval();
+
+		if ( $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
 			$subscription = new Subscription();
 
 			$subscription->description = $payment->get_description();
-			$subscription->set_total_amount( $payment->get_total_amount() );
 
-			switch ( $this->feed->subscription_amount_type ) {
-				case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
+			$subscription->lines = $subscription_lines;
 
-					break;
-				case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
-					/**
-					 * @todo Should we build specific payment lines and derive the amount from it?
-					 */
+			$subscription->set_total_amount( $subscription_lines->get_amount() );
 
-					break;
+			$start_date = new \DateTimeImmutable();
+
+			$regular_phase = ( new SubscriptionPhaseBuilder() )
+				->with_start_date( $start_date )
+				->with_amount( $subscription_lines->get_amount() )
+				->with_interval( $interval->value, $interval->unit )
+				->with_total_periods( $data->get_subscription_frequency() )
+				->create();
+
+			if ( 'sync' === $this->feed->subscription_interval_date_type ) {
+				$proration_rule = new ProratingRule( $interval->unit );
+
+				switch ( $interval->unit ) {
+					case 'D':
+						break;
+					case 'W':
+						$proration_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date ) );
+						break;
+					case 'M':
+						$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+						break;
+					case 'Y':
+						$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+						$proration_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
+				}
+
+				$align_date = $proration_rule->get_date( $start_date );
+
+				$proration_phase = SubscriptionPhase::prorate( $regular_phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
+
+				$subscription->add_phase( $proration_phase );
 			}
+
+			$subscription->add_phase( $regular_phase );
+
+			$payment->subscription = $subscription;
 		}
 
 		// Update entry meta.

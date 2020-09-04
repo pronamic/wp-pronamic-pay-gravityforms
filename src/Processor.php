@@ -462,8 +462,6 @@ class Processor {
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
 			$subscription = new Subscription();
 
-			$subscription->description = $payment->get_description();
-
 			$subscription->lines = $subscription_lines;
 
 			$subscription->set_total_amount( $subscription_lines->get_amount() );

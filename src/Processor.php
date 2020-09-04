@@ -391,11 +391,11 @@ class Processor {
 						}
 					}
 
-					if ( 
+					if (
 						GravityForms::SUBSCRIPTION_AMOUNT_FIELD === $this->feed->subscription_amount_type
 							&&
-						$key === $this->feed->subscription_amount_field ) 
-					{
+						$key === $this->feed->subscription_amount_field
+					) {
 						$subscription_lines = new PaymentLines();
 
 						foreach ( $product_lines as $line ) {

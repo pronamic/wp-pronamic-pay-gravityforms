@@ -23,7 +23,10 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
+use Pronamic\WordPress\Pay\Subscriptions\ProratingRule;
 use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
@@ -456,7 +459,7 @@ class Processor {
 		 */
 		$interval = $data->get_subscription_interval();
 
-		if ( $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
+		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
 			$subscription = new Subscription();
 
 			$subscription->description = $payment->get_description();
@@ -501,6 +504,11 @@ class Processor {
 			$subscription->add_phase( $regular_phase );
 
 			$payment->subscription = $subscription;
+		}
+
+		// Use iDEAL instead of 'Direct Debit (mandate via iDEAL)' without subscription.
+		if ( null === $payment->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_method() ) {
+			$payment->method = PaymentMethods::IDEAL;
 		}
 
 		// Update entry meta.

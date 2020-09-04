@@ -168,11 +168,6 @@ class PaymentData {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 				$method = RGFormsModel::get_field_value( $field );
 
-				if ( ! $this->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
-					// DIRECT_DEBIT_IDEAL can only be used for subscription payments.
-					$method = PaymentMethods::IDEAL;
-				}
-
 				return $method;
 			}
 		}
@@ -257,13 +252,20 @@ class PaymentData {
 						return intval( $this->lead[ $this->feed->subscription_frequency_field ] );
 					}
 				}
+
+				break;
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
 				return $this->feed->subscription_frequency;
-			default:
-				return null;
 		}
+
+		return null;
 	}
 
+	/**
+	 * Get subscription interval.
+	 *
+	 * @return object
+	 */
 	public function get_subscription_interval() {
 		$interval = (object) array(
 			'unit'  => 'D',
@@ -276,22 +278,23 @@ class PaymentData {
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_interval_field ] ) ) {
-						$interval->value = $this->lead[ $this->feed->subscription_interval_field ];
+						$value = $this->lead[ $this->feed->subscription_interval_field ];
 
-						$interval->unit = Core_Util::string_to_interval_period( $interval );
+						// Interval value.
+						$interval->value = \intval( $value );
 
-						// Default to interval period in days.
-						if ( null === $interval->unit ) {
-							$interval->unit = 'D';
+						// Interval unit.
+						$unit = Core_Util::string_to_interval_period( $value );
+
+						if ( null !== $unit ) {
+							$interval->unit = $unit;
 						}
 					}
 				}
 
-				$interval->value = \intval( $interval );
-
 				return $interval;
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
-				$interval->value = $this->feed->subscription_interval;
+				$interval->value = \intval( $this->feed->subscription_interval );
 				$interval->unit  = $this->feed->subscription_interval_period;
 
 				return $interval;

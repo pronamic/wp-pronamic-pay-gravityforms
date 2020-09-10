@@ -460,6 +460,8 @@ class Processor {
 		$interval = $data->get_subscription_interval();
 
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
+			$payment->subscription_source_id = $lead['id'];
+
 			$subscription = new Subscription();
 
 			$subscription->lines = $subscription_lines;

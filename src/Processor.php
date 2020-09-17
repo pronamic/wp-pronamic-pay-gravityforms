@@ -473,7 +473,7 @@ class Processor {
 			$regular_phase = ( new SubscriptionPhaseBuilder() )
 				->with_start_date( $start_date )
 				->with_amount( $subscription_lines->get_amount() )
-				->with_interval( $interval->value, $interval->unit )
+				->with_interval( 'P' . $interval->value . $interval->unit )
 				->with_total_periods( $data->get_subscription_frequency() )
 				->create();
 
@@ -502,6 +502,8 @@ class Processor {
 			}
 
 			$subscription->add_phase( $regular_phase );
+
+			$subscription->next_period();
 
 			$payment->subscription = $subscription;
 		}

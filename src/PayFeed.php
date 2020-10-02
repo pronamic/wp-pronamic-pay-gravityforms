@@ -197,6 +197,20 @@ class PayFeed {
 		$this->subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
 		$this->subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
 
+		if ( empty( $this->subscription_interval_date_type ) ) {
+			$this->subscription_interval_date_type = 'payment_date';
+		}
+
+		/**
+		 * In version 2.5 the 'last' monthday option was removed.
+		 *
+		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/views/html-admin-feed-settings.php#L753
+		 * @link https://github.com/wp-pay/core/issues/17
+		 */
+		if ( 'last' === $this->subscription_interval_date ) {
+			$this->subscription_interval_date = 28;
+		}
+
 		// Delay notification IDs.
 		$ids                          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
 		$this->delay_notification_ids = is_array( $ids ) ? $ids : array();

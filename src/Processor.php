@@ -24,7 +24,7 @@ use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
 use Pronamic\WordPress\Pay\Subscriptions\ProratingRule;
-use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionBuilder;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
 
@@ -464,21 +464,22 @@ class Processor {
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
 			$payment->subscription_source_id = $lead['id'];
 
-			$subscription = new Subscription();
-
-			$subscription->lines = $subscription_lines;
-
-			$subscription->set_total_amount( $subscription_lines->get_amount() );
-
+			// Phase.
 			$start_date = new \DateTimeImmutable();
 
-			$regular_phase = ( new SubscriptionPhaseBuilder() )
+			$phase = ( new SubscriptionPhaseBuilder() )
 				->with_start_date( $start_date )
 				->with_amount( $subscription_lines->get_amount() )
 				->with_interval( 'P' . $interval->value . $interval->unit )
 				->with_total_periods( $data->get_subscription_frequency() )
 				->create();
 
+			// Build subscription.
+			$subscription = ( new SubscriptionBuilder() )
+				->with_lines( $subscription_lines )
+				->create();
+
+			// Proration.
 			if ( 'sync' === $this->feed->subscription_interval_date_type ) {
 				$proration_rule = new ProratingRule( $interval->unit );
 
@@ -498,14 +499,14 @@ class Processor {
 
 				$align_date = $proration_rule->get_date( $start_date );
 
-				$proration_phase = SubscriptionPhase::prorate( $regular_phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
+				$proration_phase = SubscriptionPhase::prorate( $phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
 
 				$subscription->add_phase( $proration_phase );
 			}
 
-			$subscription->add_phase( $regular_phase );
+			$subscription->add_phase( $phase );
 
-			$subscription->next_period();
+			$payment->add_period( $subscription->new_period() );
 
 			$payment->subscription = $subscription;
 		}

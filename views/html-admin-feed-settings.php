@@ -692,7 +692,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							</legend>
 
 							<p>
-								<?php 
+								<?php
 
 								/* translators: nl: Een vaste abonnementsperiode zorgt ervoor dat de periodes van alle verkochte abonnementen op één lijn liggen. */
 								esc_html_e( 'A fixed subscription period ensures that periods of all sold subscriptions are aligned.', 'pronamic_ideal' );
@@ -702,11 +702,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 							<br />
 
-							<?php
-
-
-							?>
-
+							
 							<label>
 								<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $subscription_interval_date_type, 'payment_date' ); ?> />
 								<?php esc_html_e( 'Entry Date', 'pronamic_ideal' ); ?>
@@ -875,7 +871,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<input type="checkbox" name="_pronamic_pay_gf_subscription_interval_date_prorate" id="pronamic_pay_gf_subscription_interval_date_prorate" value="true" <?php checked( $subscription_interval_date_prorate ); ?> />
 
 								<label for="pronamic_pay_gf_subscription_interval_date_prorate">
-									<?php 
+									<?php
 
 									/* translators: nl: Bereken bedrag uitlijingsperiode pro rata. */
 									esc_html_e( 'Prorate the amount of the alignment period.', 'pronamic_ideal' );

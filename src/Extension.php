@@ -663,10 +663,20 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
+		// Get amount from current phase.
+		$amount = null;
+
+		$current_phase = $subscription->get_current_phase();
+
+		if ( null !== $current_phase ) {
+			$amount = $current_phase->get_amount()->get_value();
+		}
+
+		// Action.
 		$action = array(
 			'id'              => $subscription->get_id(),
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_total_amount()->get_value(),
+			'amount'          => $amount,
 			'entry_id'        => $lead['id'],
 		);
 
@@ -719,9 +729,18 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
+		// Get amount from current phase.
+		$amount = null;
+
+		$current_phase = $subscription->get_current_phase();
+
+		if ( null !== $current_phase ) {
+			$amount = $current_phase->get_amount()->get_value();
+		}
+
 		$action = array(
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_total_amount()->get_value(),
+			'amount'          => $amount,
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
 		);
@@ -1051,7 +1070,15 @@ class Extension extends AbstractPluginIntegration {
 				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment_date->getTimestamp() );
 			}
 
-			$subscription_amount     = $subscription->get_total_amount()->format_i18n();
+			// Get amount from current phase.
+			$current_phase = $subscription->get_current_phase();
+
+			$subscription_amount = null;
+
+			if ( null !== $current_phase ) {
+				$subscription_amount = $current_phase->get_amount()->format_i18n();
+			}
+
 			$subscription_cancel_url = $subscription->get_cancel_url();
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}

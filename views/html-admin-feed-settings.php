@@ -34,6 +34,20 @@ $subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf
 $subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
 $subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
 
+if ( empty( $subscription_interval_date_type ) ) {
+	$subscription_interval_date_type = 'payment_date';
+}
+
+/**
+ * In version 2.5 the 'last' monthday option was removed.
+ *
+ * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/views/html-admin-feed-settings.php#L753
+ * @link https://github.com/wp-pay/core/issues/17
+ */
+if ( 'last' === $subscription_interval_date ) {
+	$subscription_interval_date = 28;
+}
+
 $entry_id_prefix = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
 $order_id        = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
 
@@ -668,34 +682,34 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<p>
-								<?php esc_html_e( 'Synchronized payment date allows recurring payments on a pre-defined day or date, instead of on expiration of the first period.', 'pronamic_ideal' ); ?>
+								<?php 
+
+								/* translators: nl: Een vaste abonnementsperiode zorgt ervoor dat de periodes van alle verkochte abonnementen op één lijn liggen. */
+								esc_html_e( 'A fixed subscription period ensures that periods of all sold subscriptions are aligned.', 'pronamic_ideal' );
+
+								?>
 							</p>
 
 							<br />
 
 							<?php
 
-							if ( empty( $subscription_interval_date_type ) ) :
-
-								$subscription_interval_date_type = 'payment_date';
-
-							endif;
 
 							?>
 
 							<label>
 								<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $subscription_interval_date_type, 'payment_date' ); ?> />
-								<?php esc_html_e( 'Follow interval starting from first payment date', 'pronamic_ideal' ); ?>
+								<?php esc_html_e( 'Entry Date', 'pronamic_ideal' ); ?>
 							</label>
 
 							<br />
@@ -748,18 +762,16 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								}
 
 								// Monthday options.
-								$options = array_combine( range( 1, 27 ), range( 1, 27 ) );
-
-								$options['last'] = __( 'last', 'pronamic_ideal' );
+								$monthdays = range( 1, 28 );
 
 								$monthday_options_html = '';
 
-								foreach ( $options as $value => $label ) {
+								foreach ( $monthdays as $value ) {
 									$monthday_options_html .= sprintf(
 										'<option value="%s" %s>%s</option>',
 										esc_attr( $value ),
 										selected( $subscription_interval_date, $value, false ),
-										esc_html( $label )
+										esc_html( $value )
 									);
 								}
 
@@ -779,7 +791,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<input id="pronamic_pay_gf_subscription_interval_date_type_field" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="sync" <?php checked( $subscription_interval_date_type, 'sync' ); ?> />
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-D">
-									<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'Not Available', 'pronamic_ideal' ); ?>
 								</span>
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W">
@@ -863,7 +875,12 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 								<input type="checkbox" name="_pronamic_pay_gf_subscription_interval_date_prorate" id="pronamic_pay_gf_subscription_interval_date_prorate" value="true" <?php checked( $subscription_interval_date_prorate ); ?> />
 
 								<label for="pronamic_pay_gf_subscription_interval_date_prorate">
-									<?php esc_html_e( 'Prorate first payment amount', 'pronamic_ideal' ); ?>
+									<?php 
+
+									/* translators: nl: Bereken bedrag uitlijingsperiode pro rata. */
+									esc_html_e( 'Prorate the amount of the alignment period.', 'pronamic_ideal' );
+
+									?>
 								</label>
 							</div>
 						</fieldset>

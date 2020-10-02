@@ -702,7 +702,6 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 							<br />
 
-							
 							<label>
 								<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $subscription_interval_date_type, 'payment_date' ); ?> />
 								<?php esc_html_e( 'Entry Date', 'pronamic_ideal' ); ?>

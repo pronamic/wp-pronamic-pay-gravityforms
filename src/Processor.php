@@ -433,6 +433,8 @@ class Processor {
 		}
 
 		/**
+		 * Donation.
+		 *
 		 * @todo Should we do something with 'donation'?
 		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/src/PaymentData.php#L231-L264
 		 */

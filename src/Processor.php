@@ -499,9 +499,9 @@ class Processor {
 
 				$align_date = $proration_rule->get_date( $start_date );
 
-				$proration_phase = SubscriptionPhase::prorate( $phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
+				$alignment_phase = SubscriptionPhase::align( $phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
 
-				$subscription->add_phase( $proration_phase );
+				$subscription->add_phase( $alignment_phase );
 			}
 
 			$subscription->add_phase( $phase );

@@ -325,10 +325,6 @@ class Processor {
 
 		$subscription_lines = new PaymentLines();
 
-		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
-			$subscription_lines = $payment->lines;
-		}
-
 		$product_fields = GFCommon::get_product_fields( $form, $lead );
 
 		if ( is_array( $product_fields ) ) {
@@ -396,8 +392,6 @@ class Processor {
 							&&
 						$key === $this->feed->subscription_amount_field
 					) {
-						$subscription_lines = new PaymentLines();
-
 						foreach ( $product_lines as $line ) {
 							$subscription_lines->add_line( $line );
 						}
@@ -444,21 +438,17 @@ class Processor {
 			return $lead;
 		}
 
-		// Total amount.
-		$payment->set_total_amount( $payment->lines->get_amount() );
-
-		// Don't delay feed actions for free payments.
-		$amount = $payment->get_total_amount()->get_value();
-
-		if ( empty( $amount ) ) {
-			$this->feed->delay_actions = array();
-		}
-
 		/**
 		 * Subscription.
 		 *
 		 * As soon as a recurring amount is set, we create a subscription.
 		 */
+		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
+			foreach ( $payment->lines as $line ) {
+				$subscription_lines->add_line( $line );
+			}
+		}
+
 		$interval = $data->get_subscription_interval();
 
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
@@ -499,9 +489,42 @@ class Processor {
 
 				$align_date = $proration_rule->get_date( $start_date );
 
-				$alignment_phase = SubscriptionPhase::align( $phase, $align_date, ( '1' === $this->feed->subscription_interval_date_prorate ) );
+				$alignment_phase = SubscriptionPhase::align( $phase, $align_date );
+
+				$alignment_rate = $alignment_phase->get_alignment_rate();
 
 				$subscription->add_phase( $alignment_phase );
+
+				if ( '1' === $this->feed->subscription_interval_date_prorate && null !== $alignment_rate ) {
+					$new_lines = new PaymentLines();
+
+					$subscription_lines_array = $subscription_lines->get_array();
+
+					foreach ( $payment->lines as $line ) {
+						$new_line = $line;
+
+						if ( in_array( $line, $subscription_lines_array, true ) ) {
+							$new_line = clone $new_line;
+
+							$total_amount = $new_line->get_total_amount();
+							$total_amount = $total_amount->multiply( $alignment_rate );
+
+							$new_line->set_total_amount( $total_amount );
+
+							$unit_price = $new_line->get_unit_price();
+
+							if ( null !== $unit_price ) {
+								$unit_price = $unit_price->multiply( $alignment_rate );
+							}
+
+							$new_line->set_unit_price( $unit_price );
+						}
+
+						$new_lines->add_line( $new_line );
+					}
+
+					$payment->lines = $new_lines;
+				}
 			}
 
 			$subscription->add_phase( $phase );
@@ -509,6 +532,16 @@ class Processor {
 			$payment->add_period( $subscription->new_period() );
 
 			$payment->subscription = $subscription;
+		}
+
+		// Total amount.
+		$payment->set_total_amount( $payment->lines->get_amount() );
+
+		// Don't delay feed actions for free payments.
+		$amount = $payment->get_total_amount()->get_value();
+
+		if ( empty( $amount ) ) {
+			$this->feed->delay_actions = array();
 		}
 
 		// Use iDEAL instead of 'Direct Debit (mandate via iDEAL)' without subscription.

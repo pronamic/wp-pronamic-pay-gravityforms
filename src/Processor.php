@@ -24,9 +24,9 @@ use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
 use Pronamic\WordPress\Pay\Subscriptions\AlignmentRule;
-use Pronamic\WordPress\Pay\Subscriptions\SubscriptionBuilder;
+use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionInterval;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
-use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
@@ -454,20 +454,24 @@ class Processor {
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
 			$payment->subscription_source_id = $lead['id'];
 
+			// Build subscription.
+			$subscription = new Subscription();
+
+			$subscription->lines = $subscription_lines;
+
 			// Phase.
 			$start_date = new \DateTimeImmutable();
 
-			$phase = ( new SubscriptionPhaseBuilder() )
-				->with_start_date( $start_date )
-				->with_amount( $subscription_lines->get_amount() )
-				->with_interval( 'P' . $interval->value . $interval->unit )
-				->with_total_periods( $data->get_subscription_frequency() )
-				->create();
+			$interval = new SubscriptionInterval( 'P' . $interval->value . $interval->unit );
 
-			// Build subscription.
-			$subscription = ( new SubscriptionBuilder() )
-				->with_lines( $subscription_lines )
-				->create();
+			$phase = new SubscriptionPhase(
+				$subscription,
+				$start_date,
+				$interval,
+				$subscription_lines->get_amount()
+			);
+
+			$phase->set_total_periods( $data->get_subscription_frequency() );
 
 			// Proration.
 			if ( 'sync' === $this->feed->subscription_interval_date_type ) {
@@ -477,17 +481,17 @@ class Processor {
 					case 'D':
 						break;
 					case 'W':
-						$proration_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date ) );
+						$alignment_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date ) );
 						break;
 					case 'M':
-						$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
 						break;
 					case 'Y':
-						$proration_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
-						$proration_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
+						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+						$alignment_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
 				}
 
-				$align_date = $proration_rule->get_date( $start_date );
+				$align_date = $alignment_rule->get_date( $start_date );
 
 				$alignment_phase = SubscriptionPhase::align( $phase, $align_date );
 

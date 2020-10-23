@@ -17,10 +17,6 @@ use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
-use Pronamic\WordPress\Pay\Subscriptions\Subscription;
-use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
-use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
-use Pronamic\WordPress\Pay\Subscriptions\ProratingRule;
 use RGFormsModel;
 
 /**

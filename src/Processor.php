@@ -23,7 +23,7 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
-use Pronamic\WordPress\Pay\Subscriptions\ProratingRule;
+use Pronamic\WordPress\Pay\Subscriptions\AlignmentRule;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionBuilder;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhaseBuilder;
@@ -471,7 +471,7 @@ class Processor {
 
 			// Proration.
 			if ( 'sync' === $this->feed->subscription_interval_date_type ) {
-				$proration_rule = new ProratingRule( $interval->unit );
+				$alignment_rule = new AlignmentRule( $interval->unit );
 
 				switch ( $interval->unit ) {
 					case 'D':

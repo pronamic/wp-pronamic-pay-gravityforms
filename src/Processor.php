@@ -574,7 +574,18 @@ class Processor {
 
 		// Update entry meta.
 		gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
-		gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
+
+		$periods = $this->payment->get_periods();
+
+		if ( null !== $periods ) {
+			foreach ( $periods as $period ) {
+				$subscription_id = $period->get_phase()->get_subscription()->get_id();
+
+				if ( null !== $subscription_id ) {
+					gform_update_meta( $lead['id'], 'pronamic_subscription_id', $subscription_id );
+				}
+			}
+		}
 
 		$lead[ LeadProperties::PAYMENT_STATUS ] = PaymentStatuses::transform( $this->payment->get_status() );
 		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_total_amount()->get_value();

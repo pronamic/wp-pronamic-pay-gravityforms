@@ -462,12 +462,10 @@ class Processor {
 			// Phase.
 			$start_date = new \DateTimeImmutable();
 
-			$interval = new SubscriptionInterval( 'P' . $interval->value . $interval->unit );
-
 			$phase = new SubscriptionPhase(
 				$subscription,
 				$start_date,
-				$interval,
+				new SubscriptionInterval( 'P' . $interval->value . $interval->unit ),
 				$subscription_lines->get_amount()
 			);
 

@@ -479,13 +479,13 @@ class Processor {
 					case 'D':
 						break;
 					case 'W':
-						$alignment_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date ) );
+						$alignment_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date_day ) );
 						break;
 					case 'M':
-						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date ) );
 						break;
 					case 'Y':
-						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date_day ) );
+						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date ) );
 						$alignment_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
 				}
 

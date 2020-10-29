@@ -471,7 +471,7 @@ class Processor {
 
 			$phase->set_total_periods( $data->get_subscription_frequency() );
 
-			// Proration.
+			// Period alignment.
 			if ( 'sync' === $this->feed->subscription_interval_date_type ) {
 				$alignment_rule = new AlignmentRule( $interval->unit );
 
@@ -495,8 +495,7 @@ class Processor {
 
 				$alignment_rate = $alignment_phase->get_alignment_rate();
 
-				$subscription->add_phase( $alignment_phase );
-
+				// Amount proration.
 				if ( '1' === $this->feed->subscription_interval_date_prorate && null !== $alignment_rate ) {
 					$new_lines = new PaymentLines();
 
@@ -526,7 +525,12 @@ class Processor {
 					}
 
 					$payment->lines = $new_lines;
+
+					$alignment_phase->set_amount( $payment->lines->get_amount() );
+					$alignment_phase->set_prorated( true );
 				}
+
+				$subscription->add_phase( $alignment_phase );
 			}
 
 			$subscription->add_phase( $phase );

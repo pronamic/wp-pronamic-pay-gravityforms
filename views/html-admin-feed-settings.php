@@ -593,13 +593,13 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Frequency', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Number of Periods', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Frequency', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Number of Periods', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<label>
@@ -632,14 +632,6 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 							<br />
 						</fieldset>
-
-						<span class="description pronamic-pay-description">
-							<?php
-
-							esc_html_e( 'The number of frequency times excludes the first payment.', 'pronamic_ideal' );
-
-							?>
-						</span>
 					</td>
 				</tr>
 				<tr>

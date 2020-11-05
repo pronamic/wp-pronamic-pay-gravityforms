@@ -613,7 +613,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-frequency-settings frequency-fixed">
-								<input id="pronamic_pay_gf_subscription_frequency" name="_pronamic_pay_gf_subscription_frequency" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_frequency ); ?>" />
+								<input id="pronamic_pay_gf_subscription_number_periods" name="_pronamic_pay_gf_subscription_number_periods" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_number_periods ); ?>" />
 
 								<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
 							</div>

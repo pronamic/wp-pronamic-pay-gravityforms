@@ -275,7 +275,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_interval_date_prorate' => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_subscription_interval_field' => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_frequency_type' => 'sanitize_text_field',
-			'_pronamic_pay_gf_subscription_frequency'      => FILTER_SANITIZE_NUMBER_INT,
+			'_pronamic_pay_gf_subscription_number_periods' => FILTER_SANITIZE_NUMBER_INT,
 			'_pronamic_pay_gf_subscription_frequency_field' => 'sanitize_text_field',
 
 			// Feed conditions.
@@ -361,6 +361,11 @@ class AdminPaymentFormPostType {
 				update_post_meta( $post_id, $meta_key, $meta_value );
 			} else {
 				delete_post_meta( $post_id, $meta_key );
+			}
+
+			// Remove deprecated subscription frequency in favor of `subscription_number_periods`.
+			if ( '_pronamic_pay_gf_subscription_number_periods' === $meta_key ) {
+				\delete_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency' );
 			}
 
 			if ( '_gaddon_setting_feed_condition_conditional_logic_object' === $meta_key ) {

@@ -251,7 +251,7 @@ class PaymentData {
 
 				break;
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
-				return $this->feed->subscription_number_periods;
+				return \intval( $this->feed->subscription_number_periods );
 		}
 
 		return null;

@@ -32,7 +32,7 @@
 		elements.subscriptionIntervalDateMonth = $element.find( '#pronamic_pay_gf_subscription_interval_date_month' );
 		elements.subscriptionIntervalField = $element.find( '#pronamic_pay_gf_subscription_interval_field' );
 		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
-		elements.subscriptionFrequency = $element.find( '#pronamic_pay_gf_subscription_frequency' );
+		elements.subscriptionNumberPeriods = $element.find( '#pronamic_pay_gf_subscription_number_periods' );
 		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
 
 		// Data

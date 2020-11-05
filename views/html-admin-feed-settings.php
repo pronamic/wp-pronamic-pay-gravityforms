@@ -42,7 +42,7 @@ $feed->subscriptionInterval       = $pay_feed->subscription_interval;
 $feed->subscriptionIntervalPeriod = $pay_feed->subscription_interval_period;
 $feed->subscriptionIntervalField  = $pay_feed->subscription_interval_field;
 $feed->subscriptionFrequencyType  = $pay_feed->subscription_frequency_type;
-$feed->subscriptionFrequency      = $pay_feed->subscription_frequency;
+$feed->subscriptionNumberPeriods  = $pay_feed->subscription_number_periods;
 $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 ?>

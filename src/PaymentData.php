@@ -17,10 +17,6 @@ use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
-use Pronamic\WordPress\Pay\Payments\Item;
-use Pronamic\WordPress\Pay\Payments\Items;
-use Pronamic\WordPress\Pay\Payments\PaymentData as Pay_PaymentData;
-use Pronamic\WordPress\Pay\Subscriptions\Subscription;
 use RGFormsModel;
 
 /**
@@ -33,7 +29,7 @@ use RGFormsModel;
  * @version 2.1.10
  * @since   1.0.1
  */
-class PaymentData extends Pay_PaymentData {
+class PaymentData {
 	/**
 	 * Gravity Forms form object
 	 *
@@ -65,8 +61,6 @@ class PaymentData extends Pay_PaymentData {
 	 * @param PayFeed $feed Pay feed.
 	 */
 	public function __construct( $form, $lead, $feed ) {
-		parent::__construct();
-
 		$this->form = $form;
 		$this->lead = $lead;
 		$this->feed = $feed;
@@ -99,28 +93,6 @@ class PaymentData extends Pay_PaymentData {
 		}
 
 		return $this->lead[ $field_id ];
-	}
-
-	/**
-	 * Get source indicator
-	 *
-	 * @see Pronamic_Pay_PaymentDataInterface::get_source()
-	 *
-	 * @return string
-	 */
-	public function get_source() {
-		return 'gravityformsideal';
-	}
-
-	/**
-	 * Get source ID
-	 *
-	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_source_id()
-	 *
-	 * @return string
-	 */
-	public function get_source_id() {
-		return $this->lead['id'];
 	}
 
 	/**
@@ -166,177 +138,6 @@ class PaymentData extends Pay_PaymentData {
 	}
 
 	/**
-	 * Get items
-	 *
-	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_items()
-	 *
-	 * @return Items
-	 */
-	public function get_items() {
-		$items = new Items();
-
-		$number = 0;
-
-		// Products.
-		$products = GFCommon::get_product_fields( $this->form, $this->lead );
-
-		foreach ( $products['products'] as $product ) {
-			$description = $product['name'];
-			$price       = GFCommon::to_number( $product['price'] );
-			$quantity    = $product['quantity'];
-
-			$item = new Item();
-			$item->set_number( $number ++ );
-			$item->set_description( $description );
-			$item->set_price( $price );
-			$item->set_quantity( $quantity );
-
-			$items->add_item( $item );
-
-			if ( isset( $product['options'] ) && is_array( $product['options'] ) ) {
-				foreach ( $product['options'] as $option ) {
-					$description = $option['option_label'];
-					$price       = GFCommon::to_number( $option['price'] );
-
-					$item = new Item();
-					$item->set_number( $number ++ );
-					$item->set_description( $description );
-					$item->set_price( $price );
-					$item->set_quantity( $quantity ); // Product quantity.
-
-					$items->add_item( $item );
-				}
-			}
-		}
-
-		// Shipping.
-		if ( isset( $products['shipping'] ) ) {
-			$shipping = $products['shipping'];
-
-			if ( isset( $shipping['price'] ) && ! empty( $shipping['price'] ) ) {
-				$description = $shipping['name'];
-				$price       = GFCommon::to_number( $shipping['price'] );
-				$quantity    = 1;
-
-				$item = new Item();
-				$item->set_number( $number ++ );
-				$item->set_description( $description );
-				$item->set_price( $price );
-				$item->set_quantity( $quantity );
-
-				$items->add_item( $item );
-			}
-		}
-
-		// Donations.
-		$donation_fields = GFCommon::get_fields_by_type( $this->form, array( 'donation' ) );
-
-		foreach ( $donation_fields as $i => $field ) {
-			$value = RGFormsModel::get_lead_field_value( $this->lead, $field );
-
-			if ( ! empty( $value ) ) {
-				$description = '';
-				if ( isset( $field['adminLabel'] ) && ! empty( $field['adminLabel'] ) ) {
-					$description = $field['adminLabel'];
-				} elseif ( isset( $field['label'] ) ) {
-					$description = $field['label'];
-				}
-
-				$separator_position = strpos( $value, '|' );
-				if ( false !== $separator_position ) {
-					$label = substr( $value, 0, $separator_position );
-					$value = substr( $value, $separator_position + 1 );
-
-					$description .= ' - ' . $label;
-				}
-
-				$price    = GFCommon::to_number( $value );
-				$quantity = 1;
-
-				$item = new Item();
-				$item->set_number( $i );
-				$item->set_description( $description );
-				$item->set_price( $price );
-				$item->set_quantity( $quantity );
-
-				$items->add_item( $item );
-			}
-		}
-
-		return $items;
-	}
-
-	/**
-	 * Get (prorated) amount.
-	 *
-	 * @return TaxedMoney
-	 */
-	public function get_amount() {
-		$amount = parent::get_amount();
-
-		$subscription = $this->get_subscription();
-
-		if ( ! $subscription ) {
-			return $amount;
-		}
-
-		if ( 'sync' !== $this->feed->subscription_interval_date_type ) {
-			return $amount;
-		}
-
-		if ( '1' !== $this->feed->subscription_interval_date_prorate ) {
-			return $amount;
-		}
-
-		// Prorate.
-		$interval = $subscription->get_date_interval();
-
-		$now = new DateTime();
-
-		$next_date = clone $now;
-		$next_date->add( $interval );
-
-		$days_diff = $now->diff( $next_date )->days;
-
-		$interval_date       = $subscription->get_interval_date();
-		$interval_date_day   = $subscription->get_interval_date_day();
-		$interval_date_month = $subscription->get_interval_date_month();
-
-		if ( 'W' === $subscription->interval_period && is_numeric( $interval_date_day ) ) {
-			$days_delta = $interval_date_day - $next_date->format( 'w' );
-
-			$next_date->modify( sprintf( '+%s days', $days_delta ) );
-		}
-
-		if ( 'M' === $subscription->interval_period && is_numeric( $interval_date ) ) {
-			$next_date->setDate( $next_date->format( 'Y' ), $next_date->format( 'm' ), $interval_date );
-		}
-
-		if ( 'M' === $subscription->interval_period && 'last' === $interval_date ) {
-			$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
-		}
-
-		if ( 'Y' === $subscription->interval_period && is_numeric( $interval_date_month ) ) {
-			$next_date->setDate( $next_date->format( 'Y' ), $interval_date_month, $next_date->format( 'd' ) );
-
-			if ( 'last' === $interval_date ) {
-				$next_date->modify( 'last day of ' . $next_date->format( 'F Y' ) );
-			}
-		}
-
-		// Prorate subscription amount.
-		$amount = $amount->subtract( $subscription->get_total_amount() );
-
-		$prorated_days_diff = $now->diff( $next_date )->days;
-
-		$prorated_amount = $subscription->get_total_amount()->divide( $days_diff )->multiply( $prorated_days_diff );
-
-		$amount = $amount->add( $prorated_amount );
-
-		return $amount;
-	}
-
-	/**
 	 * Get currency alphabetic code.
 	 *
 	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_currency_alphabetic_code()
@@ -352,179 +153,6 @@ class PaymentData extends Pay_PaymentData {
 	}
 
 	/**
-	 * Get email.
-	 *
-	 * @return string
-	 */
-	public function get_email() {
-		return $this->get_field_value( 'email' );
-	}
-
-	/**
-	 * Get first name.
-	 *
-	 * @return string
-	 */
-	public function get_first_name() {
-		return $this->get_field_value( 'first_name' );
-	}
-
-	/**
-	 * Get last name.
-	 *
-	 * @return string
-	 */
-	public function get_last_name() {
-		return $this->get_field_value( 'last_name' );
-	}
-
-	/**
-	 * Get customer name.
-	 *
-	 * @return string
-	 */
-	public function get_customer_name() {
-		$parts = array(
-			$this->get_field_value( 'first_name' ),
-			$this->get_field_value( 'last_name' ),
-		);
-
-		$name = array_filter( $parts );
-
-		return implode( ' ', $name );
-	}
-
-	/**
-	 * Get address.
-	 *
-	 * @return string
-	 */
-	public function get_address() {
-		$parts = array(
-			$this->get_field_value( 'address1' ),
-			$this->get_field_value( 'address2' ),
-		);
-
-		$address = array_filter( $parts );
-
-		return implode( ' ', $address );
-	}
-
-	/**
-	 * Get city.
-	 *
-	 * @return string
-	 */
-	public function get_city() {
-		return $this->get_field_value( 'city' );
-	}
-
-	/**
-	 * Get ZIP.
-	 *
-	 * @return string
-	 */
-	public function get_zip() {
-		return $this->get_field_value( 'zip' );
-	}
-
-	/**
-	 * Get country.
-	 *
-	 * @return string
-	 */
-	public function get_country() {
-		return $this->get_field_value( 'country' );
-	}
-
-	/**
-	 * Get telephone number.
-	 *
-	 * @return string
-	 */
-	public function get_telephone_number() {
-		return $this->get_field_value( 'telephone_number' );
-	}
-
-	/**
-	 * Get consumer bank details name.
-	 *
-	 * @return string
-	 */
-	public function get_consumer_bank_details_name() {
-		return $this->get_field_value( 'consumer_bank_details_name' );
-	}
-
-	/**
-	 * Get consumer bank details IBAN.
-	 *
-	 * @return string
-	 */
-	public function get_consumer_bank_details_iban() {
-		return $this->get_field_value( 'consumer_bank_details_iban' );
-	}
-
-	/**
-	 * Get normal return URL.
-	 *
-	 * @return false|null|string
-	 */
-	public function get_normal_return_url() {
-		$url = $this->feed->get_url( Links::OPEN );
-
-		if ( empty( $url ) ) {
-			$url = parent::get_normal_return_url();
-		}
-
-		return $url;
-	}
-
-	/**
-	 * Get cancel URL.
-	 *
-	 * @return false|null|string
-	 */
-	public function get_cancel_url() {
-		$url = $this->feed->get_url( Links::CANCEL );
-
-		if ( empty( $url ) ) {
-			$url = parent::get_cancel_url();
-		}
-
-		return $url;
-	}
-
-	/**
-	 * Get success URL.
-	 *
-	 * @return false|null|string
-	 */
-	public function get_success_url() {
-		$url = $this->feed->get_url( Links::SUCCESS );
-
-		if ( empty( $url ) ) {
-			$url = parent::get_success_url();
-		}
-
-		return $url;
-	}
-
-	/**
-	 * Get error URL.
-	 *
-	 * @return false|null|string
-	 */
-	public function get_error_url() {
-		$url = $this->feed->get_url( Links::ERROR );
-
-		if ( empty( $url ) ) {
-			$url = parent::get_error_url();
-		}
-
-		return $url;
-	}
-
-	/**
 	 * Get payment method.
 	 *
 	 * @return string|null
@@ -535,11 +163,6 @@ class PaymentData extends Pay_PaymentData {
 		foreach ( $fields as $field ) {
 			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 				$method = RGFormsModel::get_field_value( $field );
-
-				if ( ! $this->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $method ) {
-					// DIRECT_DEBIT_IDEAL can only be used for subscription payments.
-					$method = PaymentMethods::IDEAL;
-				}
 
 				return $method;
 			}
@@ -611,44 +234,39 @@ class PaymentData extends Pay_PaymentData {
 	}
 
 	/**
-	 * Get subscription.
+	 * Get frequency.
 	 *
-	 * @return Subscription|null
+	 * @return int|null
 	 */
-	public function get_subscription() {
-		// Amount.
-		$amount = 0;
+	public function get_subscription_frequency() {
+		switch ( $this->feed->subscription_frequency_type ) {
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
+				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
-		switch ( $this->feed->subscription_amount_type ) {
-			case GravityForms::SUBSCRIPTION_AMOUNT_TOTAL:
-				$items = $this->get_items();
-
-				$amount = $items->get_amount()->get_value();
-
-				break;
-			case GravityForms::SUBSCRIPTION_AMOUNT_FIELD:
-				$field_id = $this->feed->subscription_amount_field;
-
-				$product_fields = GFCommon::get_product_fields( $this->form, $this->lead );
-
-				if ( isset( $product_fields['products'][ $field_id ] ) ) {
-					$amount  = GFCommon::to_number( $product_fields['products'][ $field_id ]['price'] );
-					$amount *= $product_fields['products'][ $field_id ]['quantity'];
+				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
+						return intval( $this->lead[ $this->feed->subscription_frequency_field ] );
+					}
 				}
 
 				break;
+			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
+				return \intval( $this->feed->subscription_number_periods );
 		}
 
-		if ( 0 === $amount ) {
-			return null;
-		}
+		return null;
+	}
 
-		// Interval.
-		$interval            = '';
-		$interval_period     = 'D';
-		$interval_date       = '';
-		$interval_date_day   = '';
-		$interval_date_month = '';
+	/**
+	 * Get subscription interval.
+	 *
+	 * @return object
+	 */
+	public function get_subscription_interval() {
+		$interval = (object) array(
+			'unit'  => 'D',
+			'value' => null,
+		);
 
 		switch ( $this->feed->subscription_interval_type ) {
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
@@ -656,74 +274,28 @@ class PaymentData extends Pay_PaymentData {
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_interval_field ] ) ) {
-						$interval = $this->lead[ $this->feed->subscription_interval_field ];
+						$value = $this->lead[ $this->feed->subscription_interval_field ];
 
-						$interval_period = Core_Util::string_to_interval_period( $interval );
+						// Interval value.
+						$interval->value = \intval( $value );
 
-						// Default to interval period in days.
-						if ( null === $interval_period ) {
-							$interval_period = 'D';
+						// Interval unit.
+						$unit = Core_Util::string_to_interval_period( $value );
+
+						if ( null !== $unit ) {
+							$interval->unit = $unit;
 						}
 					}
 				}
 
-				$interval = intval( $interval );
-
-				// Do not start subscriptions for `0` interval.
-				if ( 0 === $interval ) {
-					return null;
-				}
-
-				break;
+				return $interval;
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIXED:
-				$interval        = $this->feed->subscription_interval;
-				$interval_period = $this->feed->subscription_interval_period;
+				$interval->value = \intval( $this->feed->subscription_interval );
+				$interval->unit  = $this->feed->subscription_interval_period;
 
-				if ( 'sync' === $this->feed->subscription_interval_date_type ) {
-					$interval_date       = $this->feed->subscription_interval_date;
-					$interval_date_day   = $this->feed->subscription_interval_date_day;
-					$interval_date_month = $this->feed->subscription_interval_date_month;
-				}
-
-				break;
+				return $interval;
+			default:
+				return $interval;
 		}
-
-		// Frequency.
-		$frequency = null;
-
-		switch ( $this->feed->subscription_frequency_type ) {
-			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
-				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
-
-				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
-					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
-						$frequency = intval( $this->lead[ $this->feed->subscription_frequency_field ] );
-					}
-				}
-
-				break;
-			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
-				$frequency = $this->feed->subscription_frequency;
-
-				break;
-		}
-
-		$subscription                      = new Subscription();
-		$subscription->frequency           = $frequency;
-		$subscription->interval            = $interval;
-		$subscription->interval_period     = $interval_period;
-		$subscription->interval_date       = $interval_date;
-		$subscription->interval_date_day   = $interval_date_day;
-		$subscription->interval_date_month = $interval_date_month;
-		$subscription->description         = $this->get_description();
-
-		$subscription->set_total_amount(
-			new TaxedMoney(
-				$amount,
-				$this->get_currency_alphabetic_code()
-			)
-		);
-
-		return $subscription;
 	}
 }

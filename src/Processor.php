@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
+use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
 use Pronamic\WordPress\Pay\Address;
@@ -22,6 +23,10 @@ use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
 use Pronamic\WordPress\Pay\Payments\PaymentLines;
 use Pronamic\WordPress\Pay\Payments\PaymentLineType;
+use Pronamic\WordPress\Pay\Subscriptions\AlignmentRule;
+use Pronamic\WordPress\Pay\Subscriptions\Subscription;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionInterval;
+use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
@@ -231,61 +236,29 @@ class Processor {
 		// Payment data.
 		$data = new PaymentData( $form, $lead, $this->feed );
 
-		// Does payment data contain any items?
-		$items = $data->get_items();
-
-		if ( 0 === iterator_count( $items ) ) {
-			return $lead;
-		}
-
-		// Update entry meta.
-		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
-		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
-
-		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
-		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
-		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
-
-		GravityForms::update_entry( $lead );
-
-		// Set payment method to iDEAL if issuer ID is set.
-		$payment_method = $data->get_payment_method();
-
-		if ( null === $payment_method && null !== $data->get_issuer_id() ) {
-			$payment_method = PaymentMethods::IDEAL;
-		}
-
-		// Don't delay feed actions for free payments.
-		$amount = $data->get_amount()->get_value();
-
-		if ( empty( $amount ) ) {
-			$this->feed->delay_actions = array();
-		}
-
 		// Payment.
 		$payment = new Payment();
 
 		$payment->title = sprintf(
-			/* translators: %s: title */
+			/* translators: %s: payment data title */
 			__( 'Payment for %s', 'pronamic_ideal' ),
-			$data->get_title()
+			$data->get_description()
 		);
 
-		$payment->user_id                = $data->get_user_id();
-		$payment->config_id              = $this->feed->config_id;
-		$payment->order_id               = $data->get_order_id();
-		$payment->description            = $data->get_description();
-		$payment->source                 = $data->get_source();
-		$payment->source_id              = $data->get_source_id();
-		$payment->email                  = $data->get_email();
-		$payment->method                 = $payment_method;
-		$payment->issuer                 = $data->get_issuer( $payment_method );
-		$payment->analytics_client_id    = $data->get_analytics_client_id();
-		$payment->recurring              = $data->get_recurring();
-		$payment->subscription           = $data->get_subscription();
-		$payment->subscription_id        = $data->get_subscription_id();
-		$payment->subscription_source_id = $data->get_subscription_source_id();
-		$payment->set_total_amount( $data->get_amount() );
+		$payment->config_id   = $this->feed->config_id;
+		$payment->order_id    = $data->get_order_id();
+		$payment->description = $data->get_description();
+		$payment->method      = $data->get_payment_method();
+		$payment->issuer      = $data->get_issuer_id();
+
+		// Currency.
+		$currency = Currency::get_instance( $data->get_currency_alphabetic_code() );
+
+		// Source.
+		$payment->set_source( 'gravityformsideal' );
+		$payment->set_source_id( $lead['id'] );
+
+		// Credit Card.
 		$payment->set_credit_card( $data->get_credit_card() );
 
 		// Name.
@@ -342,13 +315,15 @@ class Processor {
 		// Consumer bank details.
 		$consumer_bank_details = new BankAccountDetails();
 
-		$consumer_bank_details->set_name( $data->get_consumer_bank_details_name() );
-		$consumer_bank_details->set_iban( $data->get_consumer_bank_details_iban() );
+		$consumer_bank_details->set_name( $data->get_field_value( 'consumer_bank_details_name' ) );
+		$consumer_bank_details->set_iban( $data->get_field_value( 'consumer_bank_details_iban' ) );
 
 		$payment->set_consumer_bank_details( $consumer_bank_details );
 
 		// Lines.
 		$payment->lines = new PaymentLines();
+
+		$subscription_lines = new PaymentLines();
 
 		$product_fields = GFCommon::get_product_fields( $form, $lead );
 
@@ -358,7 +333,13 @@ class Processor {
 				$products = $product_fields['products'];
 
 				foreach ( $products as $key => $product ) {
+					$key = \strval( $key );
+
+					$product_lines = array();
+
 					$line = $payment->lines->new_line();
+
+					$product_lines[] = $line;
 
 					$line->set_id( $key );
 
@@ -369,13 +350,13 @@ class Processor {
 					if ( array_key_exists( 'price', $product ) ) {
 						$value = GFCommon::to_number( $product['price'] );
 
-						$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+						$line->set_unit_price( new TaxedMoney( $value, $currency ) );
 
 						if ( array_key_exists( 'quantity', $product ) ) {
 							$value = ( $value * intval( $product['quantity'] ) );
 						}
 
-						$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+						$line->set_total_amount( new TaxedMoney( $value, $currency ) );
 					}
 
 					if ( array_key_exists( 'quantity', $product ) ) {
@@ -388,6 +369,8 @@ class Processor {
 						foreach ( $options as $option ) {
 							$line = $payment->lines->new_line();
 
+							$product_lines[] = $line;
+
 							$line->set_quantity( 1 );
 
 							if ( array_key_exists( 'option_label', $option ) ) {
@@ -397,10 +380,20 @@ class Processor {
 							if ( array_key_exists( 'price', $option ) ) {
 								$value = GFCommon::to_number( $option['price'] );
 
-								$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+								$line->set_unit_price( new TaxedMoney( $value, $currency ) );
 
-								$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+								$line->set_total_amount( new TaxedMoney( $value, $currency ) );
 							}
+						}
+					}
+
+					if (
+						GravityForms::SUBSCRIPTION_AMOUNT_FIELD === $this->feed->subscription_amount_type
+							&&
+						$key === $this->feed->subscription_amount_field
+					) {
+						foreach ( $product_lines as $line ) {
+							$subscription_lines->add_line( $line );
 						}
 					}
 				}
@@ -426,12 +419,151 @@ class Processor {
 				if ( array_key_exists( 'price', $shipping ) ) {
 					$value = $shipping['price'];
 
-					$line->set_unit_price( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+					$line->set_unit_price( new TaxedMoney( $value, $currency ) );
 
-					$line->set_total_amount( new TaxedMoney( $value, $payment->get_total_amount()->get_currency() ) );
+					$line->set_total_amount( new TaxedMoney( $value, $currency ) );
 				}
 			}
 		}
+
+		/**
+		 * Donation.
+		 *
+		 * @todo Should we do something with 'donation'?
+		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/src/PaymentData.php#L231-L264
+		 */
+
+		// Does payment contain any lines?
+		if ( 0 === count( $payment->lines ) ) {
+			return $lead;
+		}
+
+		/**
+		 * Subscription.
+		 *
+		 * As soon as a recurring amount is set, we create a subscription.
+		 */
+		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
+			foreach ( $payment->lines as $line ) {
+				$subscription_lines->add_line( $line );
+			}
+		}
+
+		$interval = $data->get_subscription_interval();
+
+		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
+			$payment->subscription_source_id = $lead['id'];
+
+			// Build subscription.
+			$subscription = new Subscription();
+
+			$subscription->lines = $subscription_lines;
+
+			// Phase.
+			$start_date = new \DateTimeImmutable();
+
+			$phase = new SubscriptionPhase(
+				$subscription,
+				$start_date,
+				new SubscriptionInterval( 'P' . $interval->value . $interval->unit ),
+				$subscription_lines->get_amount()
+			);
+
+			$phase->set_total_periods( $data->get_subscription_frequency() );
+
+			// Period alignment.
+			if ( 'sync' === $this->feed->subscription_interval_date_type ) {
+				$alignment_rule = new AlignmentRule( $interval->unit );
+
+				switch ( $interval->unit ) {
+					case 'D':
+						break;
+					case 'W':
+						$alignment_rule->by_numeric_day_of_the_week( \intval( $this->feed->subscription_interval_date_day ) );
+						break;
+					case 'M':
+						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date ) );
+						break;
+					case 'Y':
+						$alignment_rule->by_numeric_day_of_the_month( \intval( $this->feed->subscription_interval_date ) );
+						$alignment_rule->by_numeric_month( \intval( $this->feed->subscription_interval_date_month ) );
+				}
+
+				$align_date = $alignment_rule->get_date( $start_date );
+
+				$alignment_phase = SubscriptionPhase::align( $phase, $align_date );
+
+				$alignment_rate = $alignment_phase->get_alignment_rate();
+
+				// Amount proration.
+				if ( '1' === $this->feed->subscription_interval_date_prorate && null !== $alignment_rate ) {
+					$new_lines = new PaymentLines();
+
+					$subscription_lines_array = $subscription_lines->get_array();
+
+					foreach ( $payment->lines as $line ) {
+						$new_line = $line;
+
+						if ( in_array( $line, $subscription_lines_array, true ) ) {
+							$new_line = clone $new_line;
+
+							$total_amount = $new_line->get_total_amount();
+							$total_amount = $total_amount->multiply( $alignment_rate );
+
+							$new_line->set_total_amount( $total_amount );
+
+							$unit_price = $new_line->get_unit_price();
+
+							if ( null !== $unit_price ) {
+								$unit_price = $unit_price->multiply( $alignment_rate );
+							}
+
+							$new_line->set_unit_price( $unit_price );
+						}
+
+						$new_lines->add_line( $new_line );
+					}
+
+					$payment->lines = $new_lines;
+
+					$alignment_phase->set_amount( $payment->lines->get_amount() );
+					$alignment_phase->set_prorated( true );
+				}
+
+				$subscription->add_phase( $alignment_phase );
+			}
+
+			$subscription->add_phase( $phase );
+
+			$payment->add_period( $subscription->new_period() );
+
+			$payment->subscription = $subscription;
+		}
+
+		// Total amount.
+		$payment->set_total_amount( $payment->lines->get_amount() );
+
+		// Don't delay feed actions for free payments.
+		$amount = $payment->get_total_amount()->get_value();
+
+		if ( empty( $amount ) ) {
+			$this->feed->delay_actions = array();
+		}
+
+		// Use iDEAL instead of 'Direct Debit (mandate via iDEAL)' without subscription.
+		if ( null === $payment->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_method() ) {
+			$payment->method = PaymentMethods::IDEAL;
+		}
+
+		// Update entry meta.
+		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
+		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
+
+		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
+		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
+		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
+
+		GravityForms::update_entry( $lead );
 
 		// Start.
 		try {
@@ -444,7 +576,18 @@ class Processor {
 
 		// Update entry meta.
 		gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
-		gform_update_meta( $lead['id'], 'pronamic_subscription_id', $this->payment->get_subscription_id() );
+
+		$periods = $this->payment->get_periods();
+
+		if ( null !== $periods ) {
+			foreach ( $periods as $period ) {
+				$subscription_id = $period->get_phase()->get_subscription()->get_id();
+
+				if ( null !== $subscription_id ) {
+					gform_update_meta( $lead['id'], 'pronamic_subscription_id', $subscription_id );
+				}
+			}
+		}
 
 		$lead[ LeadProperties::PAYMENT_STATUS ] = PaymentStatuses::transform( $this->payment->get_status() );
 		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_total_amount()->get_value();

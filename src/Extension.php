@@ -88,6 +88,9 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
 		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
 
+		// Dutch translations.
+		\Pronamic\WordPress\GravityFormsNL\Plugin::instance();
+
 		// Post types.
 		$this->payment_form_post_type = new PaymentFormPostType();
 
@@ -487,39 +490,39 @@ class Extension extends AbstractPluginIntegration {
 			return $url;
 		}
 
-		$form_id = $lead['form_id'];
-
-		$form = RGFormsModel::get_form_meta( $form_id );
 		$feed = FeedsDB::get_feed_by_entry_id( $lead_id );
 
 		if ( ! $feed ) {
 			return $url;
 		}
 
-		$data = new PaymentData( $form, $lead, $feed );
+		$new_url = null;
 
 		switch ( $payment->status ) {
 			case PaymentStatus::CANCELLED:
-				$url = $data->get_cancel_url();
+				$new_url = $feed->get_url( Links::CANCEL );
 
 				break;
 			case PaymentStatus::EXPIRED:
-				$url = $feed->get_url( Links::EXPIRED );
+				$new_url = $feed->get_url( Links::EXPIRED );
 
 				break;
 			case PaymentStatus::FAILURE:
-				$url = $data->get_error_url();
+				$new_url = $feed->get_url( Links::ERROR );
 
 				break;
 			case PaymentStatus::SUCCESS:
-				$url = $data->get_success_url();
+				$new_url = $feed->get_url( Links::SUCCESS );
 
 				break;
 			case PaymentStatus::OPEN:
-			default:
-				$url = $data->get_normal_return_url();
+				$new_url = $feed->get_url( Links::OPEN );
 
 				break;
+		}
+
+		if ( null !== $new_url ) {
+			$url = $new_url;
 		}
 
 		// Process Gravity Forms confirmations if link type is confirmation.
@@ -585,8 +588,8 @@ class Extension extends AbstractPluginIntegration {
 			'entry_id'       => $lead['id'],
 		);
 
-		if ( $data->get_subscription() ) {
-			$action['subscription_id'] = $payment->get_subscription_id();
+		if ( null !== $payment->subscription ) {
+			$action['subscription_id'] = $payment->subscription->get_id();
 		}
 
 		$success_action = 'complete_payment';
@@ -663,10 +666,20 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
+		// Get amount from current phase.
+		$amount = null;
+
+		$current_phase = $subscription->get_current_phase();
+
+		if ( null !== $current_phase ) {
+			$amount = $current_phase->get_amount()->get_value();
+		}
+
+		// Action.
 		$action = array(
 			'id'              => $subscription->get_id(),
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_total_amount()->get_value(),
+			'amount'          => $amount,
 			'entry_id'        => $lead['id'],
 		);
 
@@ -719,9 +732,18 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
+		// Get amount from current phase.
+		$amount = null;
+
+		$current_phase = $subscription->get_current_phase();
+
+		if ( null !== $current_phase ) {
+			$amount = $current_phase->get_amount()->get_value();
+		}
+
 		$action = array(
 			'subscription_id' => $subscription->get_id(),
-			'amount'          => $subscription->get_total_amount()->get_value(),
+			'amount'          => $amount,
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
 		);
@@ -1051,7 +1073,15 @@ class Extension extends AbstractPluginIntegration {
 				$subscription_renewal_date = date_i18n( get_option( 'date_format' ), $next_payment_date->getTimestamp() );
 			}
 
-			$subscription_amount     = $subscription->get_total_amount()->format_i18n();
+			// Get amount from current phase.
+			$current_phase = $subscription->get_current_phase();
+
+			$subscription_amount = null;
+
+			if ( null !== $current_phase ) {
+				$subscription_amount = $current_phase->get_amount()->format_i18n();
+			}
+
 			$subscription_cancel_url = $subscription->get_cancel_url();
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}

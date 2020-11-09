@@ -7,6 +7,14 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.5.0] - 2020-11-09
+- Changed 'Frequency' to 'Number of Periods' in payment feed subscription settings.
+- Changed 'Synchronized payment date' to 'Fixed Subscription Period' in payment feed subscription settings.
+- Places Euro symbol left of amount in Gravity Forms currency when using Dutch language.
+- Added Dutch address notation for Gravity Forms.
+- Added support for new subscription phases and periods.
+- Fixed unselected options in payment method selector after processing conditional logic.
+
 ## [2.4.1] - 2020-07-08
 - Added support for company name and VAT number.
 - Improved Gravity Forms 2.5 beta compatibility.
@@ -278,7 +286,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.1...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.0...HEAD
+[2.5.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.1...2.5.0
 [2.4.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.0...2.4.1
 [2.4.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.3.1...2.4.0
 [2.3.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.3.0...2.3.1

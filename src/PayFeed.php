@@ -106,6 +106,14 @@ class PayFeed {
 	public $delay_user_notification;
 
 	/**
+	 * Subscription frequency.
+	 *
+	 * @deprecated 2.5.0
+	 * @var string|false
+	 */
+	public $subscription_frequency;
+
+	/**
 	 * Construct and initialize payment object.
 	 *
 	 * @param int $post_id Post ID.
@@ -195,7 +203,31 @@ class PayFeed {
 		$this->subscription_interval_field        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
 		$this->subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
 		$this->subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
+		$this->subscription_number_periods        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_number_periods', true );
 		$this->subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
+
+		/*
+		 * Set subscription number periods from deprecated frequency setting
+		 * for backwards compatibility. Add one, because the frequency excluded
+		 * the first payment and total number of periods includes the first payment.
+		 */
+		if ( empty( $this->subscription_number_periods ) && ! empty( $this->subscription_frequency ) ) {
+			$this->subscription_number_periods = intval( $this->subscription_frequency ) + 1;
+		}
+
+		if ( empty( $this->subscription_interval_date_type ) ) {
+			$this->subscription_interval_date_type = 'payment_date';
+		}
+
+		/**
+		 * In version 2.5 the 'last' monthday option was removed.
+		 *
+		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/views/html-admin-feed-settings.php#L753
+		 * @link https://github.com/wp-pay/core/issues/17
+		 */
+		if ( 'last' === $this->subscription_interval_date ) {
+			$this->subscription_interval_date = 28;
+		}
 
 		// Delay notification IDs.
 		$ids                          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );

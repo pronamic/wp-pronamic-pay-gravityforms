@@ -15,25 +15,6 @@ use Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed;
 
 $form_meta = RGFormsModel::get_form_meta( $form_id );
 
-$condition_enabled                  = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
-$conditional_logic_object           = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
-$delay_notification_ids             = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
-$links                              = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
-$subscription_amount_type           = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
-$subscription_amount_field          = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_field', true );
-$subscription_interval_type         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_type', true );
-$subscription_interval              = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval', true );
-$subscription_interval_period       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_period', true );
-$subscription_interval_date_type    = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_type', true );
-$subscription_interval_date         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date', true );
-$subscription_interval_date_day     = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_day', true );
-$subscription_interval_date_month   = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_month', true );
-$subscription_interval_date_prorate = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_prorate', true );
-$subscription_interval_field        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
-$subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
-$subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
-$subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
-
 $entry_id_prefix = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
 $order_id        = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
 
@@ -48,21 +29,21 @@ if ( ! GFCommon::has_merge_tag( $order_id ) ) {
 $pay_feed = new PayFeed( $post_id );
 
 $feed                             = new stdClass();
-$feed->conditionEnabled           = $condition_enabled;
+$feed->conditionEnabled           = $pay_feed->condition_enabled;
 $feed->conditionalLogicObject     = $pay_feed->conditional_logic_object;
-$feed->delayNotificationIds       = $delay_notification_ids;
+$feed->delayNotificationIds       = $pay_feed->delay_notification_ids;
 $feed->fields                     = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
 $feed->userRoleFieldId            = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
-$feed->links                      = $links;
-$feed->subscriptionAmountType     = $subscription_amount_type;
-$feed->subscriptionAmountField    = $subscription_amount_field;
-$feed->subscriptionIntervalType   = $subscription_interval_type;
-$feed->subscriptionInterval       = $subscription_interval;
-$feed->subscriptionIntervalPeriod = $subscription_interval_period;
-$feed->subscriptionIntervalField  = $subscription_interval_field;
-$feed->subscriptionFrequencyType  = $subscription_frequency_type;
-$feed->subscriptionFrequency      = $subscription_frequency;
-$feed->subscriptionFrequencyField = $subscription_frequency_field;
+$feed->links                      = $pay_feed->links;
+$feed->subscriptionAmountType     = $pay_feed->subscription_amount_type;
+$feed->subscriptionAmountField    = $pay_feed->subscription_amount_field;
+$feed->subscriptionIntervalType   = $pay_feed->subscription_interval_type;
+$feed->subscriptionInterval       = $pay_feed->subscription_interval;
+$feed->subscriptionIntervalPeriod = $pay_feed->subscription_interval_period;
+$feed->subscriptionIntervalField  = $pay_feed->subscription_interval_field;
+$feed->subscriptionFrequencyType  = $pay_feed->subscription_frequency_type;
+$feed->subscriptionNumberPeriods  = $pay_feed->subscription_number_periods;
+$feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 ?>
 <div id="gf-pay-feed-editor">
@@ -285,10 +266,6 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 						<?php
 
-						if ( ! is_array( $delay_notification_ids ) ) {
-							$delay_notification_ids = array();
-						}
-
 						$delay_admin_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
 						$delay_user_notification  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
 
@@ -315,7 +292,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 										'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
 										esc_attr( 'pronamic-pay-gf-notification-' . $id ),
 										esc_attr( $id ),
-										checked( in_array( $id, $delay_notification_ids, true ), true, false )
+										checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
 									);
 
 									printf( ' ' );
@@ -443,8 +420,8 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						$page_id = null;
 						$url     = null;
 
-						if ( is_array( $links ) && isset( $links[ $name ] ) ) {
-							$link = $links[ $name ];
+						if ( isset( $pay_feed->links[ $name ] ) ) {
+							$link = $pay_feed->links[ $name ];
 
 							$type            = isset( $link['type'] ) ? $link['type'] : null;
 							$confirmation_id = isset( $link['confirmation_id'] ) ? $link['confirmation_id'] : null;
@@ -530,21 +507,21 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							</legend>
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_amount_type_none" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="" <?php checked( $subscription_amount_type, '' ); ?> />
+								<input id="pronamic_pay_gf_subscription_amount_type_none" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="" <?php checked( $pay_feed->subscription_amount_type, '' ); ?> />
 								<?php esc_html_e( 'None', 'pronamic_ideal' ); ?>
 							</label>
 
 							<br />
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $subscription_amount_type, 'total' ); ?> />
+								<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $pay_feed->subscription_amount_type, 'total' ); ?> />
 								<?php esc_html_e( 'Form total', 'pronamic_ideal' ); ?>
 							</label>
 
 							<br />
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_amount_type_field" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="field" <?php checked( $subscription_amount_type, 'field' ); ?> />
+								<input id="pronamic_pay_gf_subscription_amount_type_field" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="field" <?php checked( $pay_feed->subscription_amount_type, 'field' ); ?> />
 								<?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
 							</label>
 
@@ -569,27 +546,27 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							</legend>
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_interval_type_fixed" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="fixed" <?php checked( $subscription_interval_type, 'fixed' ); ?> />
+								<input id="pronamic_pay_gf_subscription_interval_type_fixed" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="fixed" <?php checked( $pay_feed->subscription_interval_type, 'fixed' ); ?> />
 								<?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-interval-settings interval-fixed">
 								<?php echo esc_html( _x( 'Every', 'Recurring payment', 'pronamic_ideal' ) ); ?>
 
-								<input id="pronamic_pay_gf_subscription_interval" name="_pronamic_pay_gf_subscription_interval" type="text" size="4" value="<?php echo esc_attr( $subscription_interval ); ?>" />
+								<input id="pronamic_pay_gf_subscription_interval" name="_pronamic_pay_gf_subscription_interval" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_interval ); ?>" />
 
 								<select id="pronamic_pay_gf_subscription_interval_period" name="_pronamic_pay_gf_subscription_interval_period">
-									<option value="D" <?php selected( $subscription_interval_period, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
-									<option value="W" <?php selected( $subscription_interval_period, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
-									<option value="M" <?php selected( $subscription_interval_period, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
-									<option value="Y" <?php selected( $subscription_interval_period, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
+									<option value="D" <?php selected( $pay_feed->subscription_interval_period, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
+									<option value="W" <?php selected( $pay_feed->subscription_interval_period, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
+									<option value="M" <?php selected( $pay_feed->subscription_interval_period, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
+									<option value="Y" <?php selected( $pay_feed->subscription_interval_period, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
 								</select>
 							</div>
 
 							<br />
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_interval_type_field" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="field" <?php checked( $subscription_interval_type, 'field' ); ?> />
+								<input id="pronamic_pay_gf_subscription_interval_type_field" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="field" <?php checked( $pay_feed->subscription_interval_type, 'field' ); ?> />
 								<?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
 							</label>
 
@@ -616,27 +593,27 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Frequency', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Number of Periods', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Frequency', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Number of Periods', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_frequency_type_unlimited" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="unlimited" <?php checked( $subscription_frequency_type, 'unlimited' ); ?> /> <?php echo esc_html_x( 'Unlimited', 'Recurring payment', 'pronamic_ideal' ); ?>
+								<input id="pronamic_pay_gf_subscription_frequency_type_unlimited" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="unlimited" <?php checked( $pay_feed->subscription_frequency_type, 'unlimited' ); ?> /> <?php echo esc_html_x( 'Unlimited', 'Recurring payment', 'pronamic_ideal' ); ?>
 							</label>
 
 							<br />
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_frequency_type_fixed" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="fixed" <?php checked( $subscription_frequency_type, 'fixed' ); ?> /> <?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
+								<input id="pronamic_pay_gf_subscription_frequency_type_fixed" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="fixed" <?php checked( $pay_feed->subscription_frequency_type, 'fixed' ); ?> /> <?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-frequency-settings frequency-fixed">
-								<input id="pronamic_pay_gf_subscription_frequency" name="_pronamic_pay_gf_subscription_frequency" type="text" size="4" value="<?php echo esc_attr( $subscription_frequency ); ?>" />
+								<input id="pronamic_pay_gf_subscription_number_periods" name="_pronamic_pay_gf_subscription_number_periods" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_number_periods ); ?>" />
 
 								<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
 							</div>
@@ -644,7 +621,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							<br />
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_frequency_type_field" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="field" <?php checked( $subscription_frequency_type, 'field' ); ?> /> <?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
+								<input id="pronamic_pay_gf_subscription_frequency_type_field" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="field" <?php checked( $pay_feed->subscription_frequency_type, 'field' ); ?> /> <?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-frequency-settings frequency-field">
@@ -655,47 +632,34 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 							<br />
 						</fieldset>
-
-						<span class="description pronamic-pay-description">
-							<?php
-
-							esc_html_e( 'The number of frequency times excludes the first payment.', 'pronamic_ideal' );
-
-							?>
-						</span>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<p>
-								<?php esc_html_e( 'Synchronized payment date allows recurring payments on a pre-defined day or date, instead of on expiration of the first period.', 'pronamic_ideal' ); ?>
+								<?php
+
+								/* translators: nl: Een vaste abonnementsperiode zorgt ervoor dat de periodes van alle verkochte abonnementen op één lijn liggen. */
+								esc_html_e( 'A fixed subscription period ensures that periods of all sold subscriptions are aligned.', 'pronamic_ideal' );
+
+								?>
 							</p>
 
 							<br />
 
-							<?php
-
-							if ( empty( $subscription_interval_date_type ) ) :
-
-								$subscription_interval_date_type = 'payment_date';
-
-							endif;
-
-							?>
-
 							<label>
-								<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $subscription_interval_date_type, 'payment_date' ); ?> />
-								<?php esc_html_e( 'Follow interval starting from first payment date', 'pronamic_ideal' ); ?>
+								<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $pay_feed->subscription_interval_date_type, 'payment_date' ); ?> />
+								<?php esc_html_e( 'Entry Date', 'pronamic_ideal' ); ?>
 							</label>
 
 							<br />
@@ -742,24 +706,22 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 									$weekday_options_html .= sprintf(
 										'<option value="%s" %s>%s</option>',
 										esc_attr( $day_value ),
-										selected( $subscription_interval_date_day, $day_value, false ),
+										selected( $pay_feed->subscription_interval_date_day, $day_value, false ),
 										esc_html( $label )
 									);
 								}
 
 								// Monthday options.
-								$options = array_combine( range( 1, 27 ), range( 1, 27 ) );
-
-								$options['last'] = __( 'last', 'pronamic_ideal' );
+								$monthdays = range( 1, 28 );
 
 								$monthday_options_html = '';
 
-								foreach ( $options as $value => $label ) {
+								foreach ( $monthdays as $value ) {
 									$monthday_options_html .= sprintf(
 										'<option value="%s" %s>%s</option>',
 										esc_attr( $value ),
-										selected( $subscription_interval_date, $value, false ),
-										esc_html( $label )
+										selected( $pay_feed->subscription_interval_date, $value, false ),
+										esc_html( $value )
 									);
 								}
 
@@ -770,16 +732,16 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 									$month_options_html .= sprintf(
 										'<option value="%s" %s>%s</option>',
 										esc_attr( $month_number ),
-										selected( $subscription_interval_date_month, $month_number, false ),
+										selected( $pay_feed->subscription_interval_date_month, $month_number, false ),
 										esc_html( $wp_locale->get_month( $month_number ) )
 									);
 								}
 
 								?>
-								<input id="pronamic_pay_gf_subscription_interval_date_type_field" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="sync" <?php checked( $subscription_interval_date_type, 'sync' ); ?> />
+								<input id="pronamic_pay_gf_subscription_interval_date_type_field" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="sync" <?php checked( $pay_feed->subscription_interval_date_type, 'sync' ); ?> />
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-D">
-									<?php esc_html_e( 'Synchronized payment date', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'Not Available', 'pronamic_ideal' ); ?>
 								</span>
 
 								<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W">
@@ -794,7 +756,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 
 									echo wp_kses(
 										sprintf(
-											/* translators: %s: <select> Weekday (Monday-Sunday). */
+											/* translators: %s: input HTML */
 											__( 'On %s', 'pronamic_ideal' ),
 											$select
 										),
@@ -860,10 +822,15 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-interval-date-settings interval-date-sync">
-								<input type="checkbox" name="_pronamic_pay_gf_subscription_interval_date_prorate" id="pronamic_pay_gf_subscription_interval_date_prorate" value="true" <?php checked( $subscription_interval_date_prorate ); ?> />
+								<input type="checkbox" name="_pronamic_pay_gf_subscription_interval_date_prorate" id="pronamic_pay_gf_subscription_interval_date_prorate" value="true" <?php checked( $pay_feed->subscription_interval_date_prorate ); ?> />
 
 								<label for="pronamic_pay_gf_subscription_interval_date_prorate">
-									<?php esc_html_e( 'Prorate first payment amount', 'pronamic_ideal' ); ?>
+									<?php
+
+									/* translators: nl: Bereken bedrag uitlijingsperiode pro rata. */
+									esc_html_e( 'Prorate the amount of the alignment period.', 'pronamic_ideal' );
+
+									?>
 								</label>
 							</div>
 						</fieldset>
@@ -994,7 +961,7 @@ $feed->subscriptionFrequencyField = $subscription_frequency_field;
 						</div>
 
 						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden"
-							value="<?php echo esc_attr( $condition_enabled ); ?>"/>
+							value="<?php echo esc_attr( $pay_feed->condition_enabled ); ?>"/>
 
 						<span class="description pronamic-pay-description">
 							<?php esc_html_e( 'Set conditional logic to only use this gateway if the entry matches the condition(s).', 'pronamic_ideal' ); ?>

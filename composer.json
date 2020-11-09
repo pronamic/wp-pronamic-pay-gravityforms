@@ -33,6 +33,7 @@
 	},
 	"require": {
 		"php": ">=5.6.20",
+		"pronamic/wp-gravityforms-nl": "^3.0",
 		"wp-pay/core": "^2.4"
 	},
 	"require-dev": {

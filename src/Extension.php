@@ -89,11 +89,7 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
 
 		// Dutch translations.
-		\Pronamic\WordPress\GravityFormsNL\Plugin::instance(
-			array(
-				'file' => __FILE__,
-			)
-		);
+		\Pronamic\WordPress\GravityFormsNL\Plugin::instance();
 
 		// Post types.
 		$this->payment_form_post_type = new PaymentFormPostType();

@@ -26,9 +26,9 @@
 
 ### Example Allianz Direct
 
-> **Date:** Mon, 9 Nov 2020 01:34:14 +0100 (CET)
-> **From:** Allianz Direct <noreply@allianzdirect.nl>
-> **Subject:** Aankondiging: de betaling van je verzekering is over 5 dagen
+> **Date:** Mon, 9 Nov 2020 01:34:14 +0100 (CET)  
+> **From:** Allianz Direct <<noreply@allianzdirect.nl>>  
+> **Subject:** Aankondiging: de betaling van je verzekering is over 5 dagen  
 >
 > ---
 >

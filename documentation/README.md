@@ -48,7 +48,29 @@
 >
 > **Allianz Direct**
 
-### Mollie Advice
+### Example GoCardless
+
+> **Hamilton Enterprises is charging you € 100.00**
+>
+> We will debit your bank account ******52 (Bank of Ireland) by Direct Debit on or shortly after **June 15, 2015**.
+>
+> This payment will appear on your bank statement as **Hamilton Enterprises**, ref: 56YBS9G-HAMILTON, creditor indentifier 543381.
+
+**Source:** https://gocardless.com/nl/handleidingen/sepa/vooraankondiging/
+
+### Betaalvereniging Nederland
+
+> **Wat is een vooraankondiging (pre-notificatie)?**  
+>
+> De incassant moet zijn klant minimaal 14 kalenderdagen voor de uiteindelijke incassodatum laten weten, dat er een bedrag van de rekening zal worden afgeschreven. Dit heet een vooraankondiging of een pre-notificatie. In de [stappenplannen](https://www.betaalvereniging.nl/betalingsverkeer/giraal-betalingsverkeer/europees-betalen-sepa/stappenplannen/) staat hoe een incassant zijn klant kan informeren en wanneer hij af mag wijken van die 14 kalenderdagen.
+
+> **Moet een vooraankondiging altijd 14 dagen van tevoren plaatsvinden?**  
+>
+> Nee, een incassant mag daar met zijn klanten andere afspraken over maken. Belangrijk is wel dat hierover (aantoonbaar) overstemming is tussen incassant en klant.
+
+**Source:** https://www.betaalvereniging.nl/betalingsverkeer/giraal-betalingsverkeer/europees-betalen-sepa/veelgestelde-vragen/
+
+### Mollie
 
 > **Reducing the risk of chargebacks**  
 > To reduce the risk of chargebacks, it’s recommended to communicate how often and how much the customer will be charged as clearly as possible. We suggest notifying the customer a couple of days in advance of the next payment, for example by sending them an email.

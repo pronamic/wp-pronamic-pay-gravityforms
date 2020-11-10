@@ -19,7 +19,7 @@
 > - Mandaatreferentie (MDxx-xxxx-xxxx)
 > - Transactiereferentie (SDxx-xxxx-xxxx)
 >
-> Je kunt je abonnement op elk moment annuleren via de volgende link:
+> Je kunt je abonnement op elk moment annuleren via de volgende link:  
 > {pronamic_subscription_cancel_url}
 
 **Source:** https://help.mollie.com/hc/nl/articles/360005449393-Welke-informatie-is-zichtbaar-op-het-bankafschrift-van-de-klant-
@@ -50,7 +50,7 @@
 
 ### Mollie Advice
 
-> **Reducing the risk of chargebacks¶**
+> **Reducing the risk of chargebacks**  
 > To reduce the risk of chargebacks, it’s recommended to communicate how often and how much the customer will be charged as clearly as possible. We suggest notifying the customer a couple of days in advance of the next payment, for example by sending them an email.
 
 **Source:** https://docs.mollie.com/payments/recurring#reducing-the-risk-of-chargebacks

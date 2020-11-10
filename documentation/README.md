@@ -48,6 +48,18 @@
 >
 > **Allianz Direct**
 
+### Example Ziggo
+
+> De nieuwe factuur staat klaar en rond ●●●●●●●● incasseren we € ●●●●● van je rekening.
+
+### Example telefoonabonnement
+
+> Je nieuwe factuur voor telefoonnummer ●●●●●●●●●● staat klaar. Het factuurbedrag is € ●●●●●.
+>
+> …
+>
+> Het openstaande bedrag van € ●●●●● wordt omstreeks ●●●●●●●●●● van je rekening afgeschreven.
+
 ### Example GoCardless
 
 > **Hamilton Enterprises is charging you € 100.00**

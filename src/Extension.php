@@ -36,7 +36,7 @@ use WP_User;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.4.0
+ * @version 2.5.1
  * @since   1.0.0
  */
 class Extension extends AbstractPluginIntegration {
@@ -588,8 +588,13 @@ class Extension extends AbstractPluginIntegration {
 			'entry_id'       => $lead['id'],
 		);
 
-		if ( null !== $payment->subscription ) {
-			$action['subscription_id'] = $payment->subscription->get_id();
+		// Get subscription ID from payment period.
+		$periods = $payment->get_periods();
+
+		if ( null !== $periods ) {
+			foreach ( $periods as $period ) {
+				$action['subscription_id'] = $period->get_phase()->get_subscription()->get_id();
+			}
 		}
 
 		$success_action = 'complete_payment';

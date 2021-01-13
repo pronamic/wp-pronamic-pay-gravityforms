@@ -96,9 +96,7 @@ class PaymentData {
 	}
 
 	/**
-	 * Get description
-	 *
-	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_description()
+	 * Get description.
 	 *
 	 * @return string
 	 */
@@ -115,9 +113,7 @@ class PaymentData {
 	}
 
 	/**
-	 * Get order ID
-	 *
-	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_order_id()
+	 * Get order ID.
 	 *
 	 * @return string
 	 */
@@ -139,8 +135,6 @@ class PaymentData {
 
 	/**
 	 * Get currency alphabetic code.
-	 *
-	 * @see \Pronamic\WordPress\Pay\Payments\AbstractPaymentData::get_currency_alphabetic_code()
 	 *
 	 * @return string
 	 */

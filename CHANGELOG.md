@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.5.2] - 2021-01-14
+- Rmoved old @see.
+- Update readme.
+
 ## [2.5.1] - 2020-11-19
 - Updated getting subscription from payment period.
 
@@ -289,7 +293,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.1...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.2...HEAD
+[2.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.1...2.5.2
 [2.5.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.0...2.5.1
 [2.5.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.1...2.5.0
 [2.4.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.0...2.4.1

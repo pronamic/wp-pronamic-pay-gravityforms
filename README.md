@@ -8,7 +8,7 @@
 
 #### Description
 
-This hook runs when a transaction is completed successfully for the Pronamic iDEAL plugin and can be used to fire actions dependent on a successful transaction.
+This hook runs when a transaction is completed successfully for the Pronamic Pay plugin and can be used to fire actions dependent on a successful transaction.
 
 #### Usage
 

@@ -958,8 +958,16 @@ class Extension extends AbstractPluginIntegration {
 		// Store entry payment fulfillment in custom meta.
 		gform_update_meta( $entry_id, 'pronamic_pay_payment_fulfilled', true );
 
-		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
-		do_action( 'gform_ideal_fulfillment', $entry, $feed );
+		/**
+		 * The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
+		 *
+		 * @link https://docs.gravityforms.com/gform_paypal_fulfillment/
+		 * @link https://docs.gravityforms.com/entry-object/
+		 * @since 1.0.0
+		 * @param object $entry The entry used to generate the (iDEAL) payment.
+		 * @param object $feed  The feed configuration data used to generate the payment.
+		 */
+		\do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}
 
 	/**

@@ -412,8 +412,6 @@ class PaymentMethodsField extends GF_Field_Select {
 					width: 50%;
 
 					margin: 0;
-
-					vertical-align: baseline;
 				}
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
@@ -471,7 +469,7 @@ class PaymentMethodsField extends GF_Field_Select {
 					case 'icons-64':
 						?>
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
-					width: <?php echo esc_html( ( 64 * 2 ) + 126 ); ?>px;
+					width: <?php echo esc_html( 128 * 2 ); ?>px;
 				}
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {

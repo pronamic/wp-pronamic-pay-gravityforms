@@ -345,7 +345,7 @@ class PaymentMethodsField extends GF_Field_Select {
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$dimensions = array( 24, 24 );
+							$dimensions = array( 32, 32 );
 
 							break;
 						case 'icons-64':
@@ -360,40 +360,44 @@ class PaymentMethodsField extends GF_Field_Select {
 					// Loop payment methods.
 					foreach ( $this->choices as $choice ) {
 						// Icon file name.
-						$payment_method = strtr( strtolower( $choice['value'] ), $replacements );
-
-						if ( false !== stripos( $payment_method, 'test' ) || false !== stripos( $payment_method, 'simulation' ) ) {
-							$payment_method = 'test';
-						}
-
-						$icon_path = sprintf(
-							'%s/icon-%s.png',
-							$payment_method,
-							implode( 'x', $dimensions )
-						);
+						$payment_method = $choice['value'];
 
 						// Radio input.
-						$label_content = sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
+						$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
-						if ( file_exists( plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
-							$icon_url = plugins_url( 'images/' . $icon_path, Plugin::$file );
+						if ( PaymentMethods::is_direct_debit_method( $payment_method ) ) {
+							$icon_path = \sprintf(
+								'%s/icon-%s.png',
+								\strtr( \strtolower( $payment_method ), $replacements ),
+								\implode( 'x', $dimensions )
+							);
 
-							$label_content = sprintf(
-								'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
-								esc_html( $choice['text'] ),
-								esc_url( $icon_url ),
-								esc_url( str_replace( '.png', '@2x.png', $icon_url ) ),
-								esc_url( str_replace( '.png', '@3x.png', $icon_url ) ),
-								esc_url( str_replace( '.png', '@4x.png', $icon_url ) )
+							if ( \file_exists( \plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
+								$icon_url = \plugins_url( 'images/' . $icon_path, Plugin::$file );
+
+								$label_content = \sprintf(
+									'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
+									\esc_html( $choice['text'] ),
+									\esc_url( $icon_url ),
+									\esc_url( \str_replace( '.png', '@2x.png', $icon_url ) ),
+									\esc_url( \str_replace( '.png', '@3x.png', $icon_url ) ),
+									\esc_url( \str_replace( '.png', '@4x.png', $icon_url ) )
+								);
+							}
+						} elseif ( ! empty( $payment_method ) ) {
+							$label_content = \sprintf(
+								'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
+								\esc_html( $choice['text'] ),
+								\esc_url( PaymentMethods::get_icon_url( $payment_method ) )
 							);
 						}
 
-						printf(
+						\printf(
 							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" %5$s/> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
-							esc_attr( $this->formId ),
-							esc_attr( $this->id ),
-							esc_attr( $choice['value'] ),
-							wp_kses_post( $label_content ),
+							\esc_attr( $this->formId ),
+							\esc_attr( $this->id ),
+							\esc_attr( $choice['value'] ),
+							\wp_kses_post( $label_content ),
 							\checked( $choice['value'], $value, false )
 						);
 					}

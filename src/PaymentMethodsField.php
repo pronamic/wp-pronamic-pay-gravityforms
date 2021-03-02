@@ -345,7 +345,7 @@ class PaymentMethodsField extends GF_Field_Select {
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$dimensions = array( 32, 32 );
+							$dimensions = array( 24, 24 );
 
 							break;
 						case 'icons-64':
@@ -417,7 +417,6 @@ class PaymentMethodsField extends GF_Field_Select {
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
 					display: block;
 
-					width: <?php echo esc_html( $dimensions[0] ); ?>px;
 					height: <?php echo esc_html( $dimensions[1] ); ?>px;
 				}
 

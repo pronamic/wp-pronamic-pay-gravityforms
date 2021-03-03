@@ -22,35 +22,35 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
  */
 class LeadProperties {
 	/**
-	 * Lead propery payment status
+	 * Lead property payment status
 	 *
 	 * @var string
 	 */
 	const PAYMENT_STATUS = 'payment_status';
 
 	/**
-	 * Lead propery payment amount
+	 * Lead property payment amount
 	 *
 	 * @var string
 	 */
 	const PAYMENT_AMOUNT = 'payment_amount';
 
 	/**
-	 * Lead propery payment date
+	 * Lead property payment date
 	 *
 	 * @var string
 	 */
 	const PAYMENT_DATE = 'payment_date';
 
 	/**
-	 * Lead propery transaction ID
+	 * Lead property transaction ID
 	 *
 	 * @var string
 	 */
 	const TRANSACTION_ID = 'transaction_id';
 
 	/**
-	 * Lead propery transaction type
+	 * Lead property transaction type
 	 *
 	 * @var string
 	 */

@@ -33,7 +33,7 @@ class AdminPaymentFormPostType {
 	const POST_TYPE = 'pronamic_pay_gf';
 
 	/**
-	 * Constructs and intialize admin payment form post type.
+	 * Construct and initialize admin payment form post type.
 	 */
 	public function __construct() {
 		add_filter( 'manage_edit-pronamic_pay_gf_columns', array( $this, 'edit_columns' ) );

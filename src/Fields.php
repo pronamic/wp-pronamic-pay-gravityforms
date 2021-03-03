@@ -35,7 +35,7 @@ class Fields {
 	const PAYMENT_METHODS_FIELD_TYPE = 'pronamic_pay_payment_method_selector';
 
 	/**
-	 * Construct and intialize custom Gravity Forms fields.
+	 * Construct and initialize custom Gravity Forms fields.
 	 */
 	public function __construct() {
 		// Enable credit card field.

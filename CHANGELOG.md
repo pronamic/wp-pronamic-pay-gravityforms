@@ -8,7 +8,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 -
 
 ## [2.5.2] - 2021-01-14
-- Rmoved old @see.
+- Removed old @see.
 - Update readme.
 
 ## [2.5.1] - 2020-11-19
@@ -128,7 +128,7 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - Added Pronamic subscription amount merge tag {pronamic_subscription_amount}.
 - Added support for duplicating payment feeds.
 - Added custom display mode field setting.
-- Improved handel delay actions support.
+- Improved handling delay actions support.
 - Removed support for "Gravity Forms User Registration Add-On" version < 3.0.
 
 ## [2.0.1] - 2018-06-01
@@ -268,16 +268,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - WordPress Coding Standards optimizations.
 
 ## [1.2.2] - 2015-03-03
-- Changed WordPress pay core library requirment from ~1.0.0 to >=1.1.0.
+- Changed WordPress pay core library requirement from ~1.0.0 to >=1.1.0.
 - Use the new Pronamic_WP_Pay_Class::method_exists() function in the WordPress pay core library.
 - Added Pronamic_WP_Pay_Extensions_GravityForms_GravityForms::version_compare() function.
 - Fixed issue with adding issuer dropdown field in Gravity Forms version 1.9 or higher.
 
 ## [1.2.1] - 2015-02-13
-- Fix - PHP crashed on opline 3 of method_exists() errors on some hosting environments.
+- Fix - PHP crashed on line 3 of method_exists() errors on some hosting environments.
 
 ## [1.2.0] - 2015-02-12
-- This library now uses the [GFPaymentAddOn class](https://github.com/wp-premium/gravityforms/blob/1.8/includes/addon/class-gf-payment-addon.php) wich was introduced in Gravity Forms version 1.8.
+- This library now uses the [GFPaymentAddOn class](https://github.com/wp-premium/gravityforms/blob/1.8/includes/addon/class-gf-payment-addon.php) which was introduced in Gravity Forms version 1.8.
 - Changed payment gateway slug from 'ideal' to 'pronamic_pay'.
 
 ## [1.1.0] - 2015-02-06

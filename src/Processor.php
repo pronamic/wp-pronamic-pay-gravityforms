@@ -89,7 +89,7 @@ class Processor {
 	private $error;
 
 	/**
-	 * Constructs and initalize an Gravity Forms payment form processor
+	 * Construct and initialize an Gravity Forms payment form processor
 	 *
 	 * @param array     $form      Gravity Forms form.
 	 * @param Extension $extension Extension.

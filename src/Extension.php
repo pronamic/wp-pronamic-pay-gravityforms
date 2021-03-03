@@ -245,7 +245,7 @@ class Extension extends AbstractPluginIntegration {
 	}
 
 	/**
-	 * Pre submssion
+	 * Pre submission
 	 *
 	 * @param array $form Form.
 	 */

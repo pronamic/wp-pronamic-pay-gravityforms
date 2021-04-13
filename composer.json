@@ -60,6 +60,9 @@
 		"phpunit": "vendor/bin/phpunit",
 		"post-install-cmd": "echo 'Optionally run: composer bin all install'",
 		"post-update-cmd": "echo 'Optionally run: composer bin all update'",
-		"psalm": "vendor/bin/psalm"
+		"psalm": "vendor/bin/psalm",
+		"build-docs": [
+			"vendor/bin/wp-documentor parse src --format=markdown --relative=docs > docs/hooks.md"
+		]
 	}
 }

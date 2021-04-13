@@ -24,19 +24,7 @@ Source: [src/Extension.php](../src/Extension.php), [line 961](../src/Extension.p
 
 Argument | Type | Description
 -------- | ---- | -----------
-`$actions` | `array` | {
-
-    Delay action.
-
-    @var null|\GFAddon $addon                       Optional reference to a Gravity Forms add-on object.
-    @var bool          $active                      Boolean flag to indicate the delay action can be enabled (add-on active).
-    @var string        $meta_key                    Post meta key used to store meta value if the delay action is enabled.
-    @var bool          $delayed_payment_integration Boolean flag to indicate the delay action is defined by a delayed payment integration.
-    @var string        $label                       The label to show on the payment feed settings page.
-    @var callable      $delay_callback              Callback function which can be used to remove actions/filters to delay actions.
-    @var callable      $process_callback            Callback function to process the delay action.
-
-}
+`$actions` | `array` | {<br><br>    Delay action.<br><br>    @var null|\GFAddon $addon                       Optional reference to a Gravity Forms add-on object.<br>    @var bool          $active                      Boolean flag to indicate the delay action can be enabled (add-on active).<br>    @var string        $meta_key                    Post meta key used to store meta value if the delay action is enabled.<br>    @var bool          $delayed_payment_integration Boolean flag to indicate the delay action is defined by a delayed payment integration.<br>    @var string        $label                       The label to show on the payment feed settings page.<br>    @var callable      $delay_callback              Callback function which can be used to remove actions/filters to delay actions.<br>    @var callable      $process_callback            Callback function to process the delay action.<br><br>}
 
 Source: [src/Extension.php](../src/Extension.php), [line 1377](../src/Extension.php#L1377-L1399)
 

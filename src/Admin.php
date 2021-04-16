@@ -33,15 +33,12 @@ class Admin {
 		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_entry' ) );
 
 		// Filters.
-		add_filter( 'gform_addon_navigation', array( __CLASS__, 'addon_navigation' ) );
-
 		add_filter( 'gform_entry_info', array( __CLASS__, 'entry_info' ), 10, 2 );
 
 		add_filter( 'gform_custom_merge_tags', array( __CLASS__, 'custom_merge_tags' ), 10 );
 
 		// Actions - AJAX.
 		add_action( 'wp_ajax_gf_get_form_data', array( __CLASS__, 'ajax_get_form_data' ) );
-		add_action( 'wp_ajax_gf_dismiss_pronamic_pay_feeds_menu', array( __CLASS__, 'ajax_dismiss_feeds_menu' ) );
 	}
 
 	/**
@@ -49,57 +46,6 @@ class Admin {
 	 */
 	public static function admin_init() {
 		new AdminPaymentFormPostType();
-	}
-
-	/**
-	 * Gravity Forms addon navigation.
-	 *
-	 * @param array $menus Addon menu items.
-	 *
-	 * @return array
-	 */
-	public static function addon_navigation( $menus ) {
-		if ( GravityForms::version_compare( '1.7', '<' ) ) {
-			$menus[] = array(
-				'name'       => 'edit.php?post_type=pronamic_pay_gf',
-				'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
-				'callback'   => null,
-				'permission' => 'manage_options',
-			);
-
-			return $menus;
-		}
-
-		if ( '1' === get_user_meta( get_current_user_id(), '_pronamic_pay_gf_dismiss_feeds_menu', true ) ) {
-			return $menus;
-		}
-
-		$menus[] = array(
-			'name'       => PaymentAddOn::SLUG,
-			'label'      => __( 'Payment Feeds', 'pronamic_ideal' ),
-			'callback'   => array( __CLASS__, 'temporary_feeds_page' ),
-			'permission' => 'manage_options',
-		);
-
-		return $menus;
-	}
-
-	/**
-	 * Temporary feeds page.
-	 *
-	 * @since unreleased
-	 */
-	public static function temporary_feeds_page() {
-		require dirname( __FILE__ ) . '/../views/html-admin-temporary-feeds-page.php';
-	}
-
-	/**
-	 * Ajax action to dismiss feeds menu item.
-	 */
-	public function ajax_dismiss_feeds_menu() {
-		$current_user = wp_get_current_user();
-
-		update_user_meta( $current_user->ID, '_pronamic_pay_gf_dismiss_feeds_menu', 1 );
 	}
 
 	/**
@@ -296,10 +242,6 @@ class Admin {
 	 * @return string
 	 */
 	public static function get_new_feed_url( $form_id ) {
-		if ( GravityForms::version_compare( '1.7', '<' ) ) {
-			return add_query_arg( 'post_type', 'pronamic_pay_gf', admin_url( 'post-new.php' ) );
-		}
-
 		return add_query_arg(
 			array(
 				'page'    => 'gf_edit_forms',

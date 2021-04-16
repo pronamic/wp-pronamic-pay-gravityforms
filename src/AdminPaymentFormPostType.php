@@ -42,9 +42,7 @@ class AdminPaymentFormPostType {
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
-		if ( GravityForms::version_compare( '1.7', '>=' ) ) {
-			add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
-		}
+		add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
 
 		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data' ), 99, 2 );
 

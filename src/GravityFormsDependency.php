@@ -33,7 +33,7 @@ class GravityFormsDependency extends Dependency {
 
 		return \version_compare(
 			\GFCommon::$version,
-			'1.0.0',
+			'1.7.0',
 			'>='
 		);
 	}

@@ -37,16 +37,6 @@ class PaymentFormPostType {
 	}
 
 	/**
-	 * Get the show UI flag for the payment form post type.
-	 *
-	 * @return boolean true if show UI, false otherwise
-	 */
-	private function get_show_ui() {
-		// If Gravity Forms is active and version is lower then 1.7 we show the WordPress UI.
-		return GravityForms::version_compare( '1.7', '<' );
-	}
-
-	/**
 	 * Initialize.
 	 */
 	public function init() {
@@ -73,7 +63,7 @@ class PaymentFormPostType {
 				),
 				'public'             => false,
 				'publicly_queryable' => false,
-				'show_ui'            => $this->get_show_ui(),
+				'show_ui'            => false,
 				'show_in_nav_menus'  => false,
 				'show_in_menu'       => false,
 				'show_in_admin_bar'  => false,

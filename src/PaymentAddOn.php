@@ -142,11 +142,17 @@ class PaymentAddOn extends GFPaymentAddOn {
 		if ( '' === trim( $post_title ) ) {
 			$feeds = $this->get_feeds( $form_id );
 
-			$post_title = sprintf(
-				'%s #%s',
-				__( 'Payment feed', 'pronamic_ideal' ),
-				count( $feeds ) + 1
-			);
+			$post_title = __( 'Payment Feed', 'pronamic_ideal' );
+
+			$count = count( $feeds ) + 1;
+
+			if ( $count > 1 ) {
+				$post_title = sprintf(
+					/* translators: %d: payment feed index */
+					__( 'Payment Feed #%d', 'pronamic_ideal' ),
+					$count
+				);
+			}
 		}
 
 		$post_id = wp_insert_post(

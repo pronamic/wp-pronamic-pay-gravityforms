@@ -182,31 +182,37 @@ class Extension extends AbstractPluginIntegration {
 		$screen = get_current_screen();
 
 		if (
-			'pronamic_pay_gf' === $screen->post_type
-			||
-			'toplevel_page_gf_edit_forms' === $screen->id
+			(
+				'pronamic_pay_gf' !== $screen->post_type
+					&&
+				'pronamic_pay' !== \filter_input( \INPUT_GET, 'subview', \FILTER_SANITIZE_STRING )
+			)
+				||
+			'toplevel_page_gf_edit_forms' !== $screen->id
 		) {
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-			wp_register_style(
-				'pronamic-pay-gravityforms',
-				plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
-				array(),
-				$this->get_version()
-			);
-
-			wp_register_script(
-				'pronamic-pay-gravityforms',
-				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
-				array( 'jquery' ),
-				$this->get_version(),
-				true
-			);
-
-			wp_enqueue_style( 'pronamic-pay-gravityforms' );
-
-			wp_enqueue_script( 'pronamic-pay-gravityforms' );
+			return;
 		}
+
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+		wp_register_style(
+			'pronamic-pay-gravityforms',
+			plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
+			array(),
+			$this->get_version()
+		);
+
+		wp_register_script(
+			'pronamic-pay-gravityforms',
+			plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
+			array( 'jquery' ),
+			$this->get_version(),
+			true
+		);
+
+		wp_enqueue_style( 'pronamic-pay-gravityforms' );
+
+		wp_enqueue_script( 'pronamic-pay-gravityforms' );
 	}
 
 	/**

@@ -36,8 +36,8 @@
 		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
 
 		// Data
-		var feed = $.parseJSON( elements.feed.val() );
-		var gravityForm = $.parseJSON( elements.gravityForm.val() );
+		var feed = JSON.parse( elements.feed.val() );
+		var gravityForm = JSON.parse( elements.gravityForm.val() );
 
 		/**
 		 * Update delay post creation item
@@ -71,7 +71,13 @@
 					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
 						var isSelected = false;
 
-						if ( 'object' === typeof feed.links ) {
+						if ( 'object' !== typeof feed.links ) {
+							return;
+						}
+
+						isSelected = false;
+
+						if ( 'object' === typeof feed.links[ linkName ] ) {
 							isSelected = ( feed.links[ linkName ].confirmation_id === confirmation.id );
 						}
 

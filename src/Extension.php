@@ -3,7 +3,7 @@
  * Extension
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -32,7 +32,7 @@ use WP_User;
 /**
  * Title: WordPress pay extension Gravity Forms extension
  * Description:
- * Copyright: 2005-2020 Pronamic
+ * Copyright: 2005-2021 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -182,31 +182,37 @@ class Extension extends AbstractPluginIntegration {
 		$screen = get_current_screen();
 
 		if (
-			'pronamic_pay_gf' === $screen->post_type
-			||
-			'toplevel_page_gf_edit_forms' === $screen->id
+			(
+				'pronamic_pay_gf' !== $screen->post_type
+					&&
+				'pronamic_pay' !== \filter_input( \INPUT_GET, 'subview', \FILTER_SANITIZE_STRING )
+			)
+				||
+			'toplevel_page_gf_edit_forms' !== $screen->id
 		) {
-			$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-			wp_register_style(
-				'pronamic-pay-gravityforms',
-				plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
-				array(),
-				$this->get_version()
-			);
-
-			wp_register_script(
-				'pronamic-pay-gravityforms',
-				plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
-				array( 'jquery' ),
-				$this->get_version(),
-				true
-			);
-
-			wp_enqueue_style( 'pronamic-pay-gravityforms' );
-
-			wp_enqueue_script( 'pronamic-pay-gravityforms' );
+			return;
 		}
+
+		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+		wp_register_style(
+			'pronamic-pay-gravityforms',
+			plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
+			array(),
+			$this->get_version()
+		);
+
+		wp_register_script(
+			'pronamic-pay-gravityforms',
+			plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
+			array( 'jquery' ),
+			$this->get_version(),
+			true
+		);
+
+		wp_enqueue_style( 'pronamic-pay-gravityforms' );
+
+		wp_enqueue_script( 'pronamic-pay-gravityforms' );
 	}
 
 	/**
@@ -245,7 +251,7 @@ class Extension extends AbstractPluginIntegration {
 	}
 
 	/**
-	 * Pre submssion
+	 * Pre submission
 	 *
 	 * @param array $form Form.
 	 */
@@ -958,8 +964,16 @@ class Extension extends AbstractPluginIntegration {
 		// Store entry payment fulfillment in custom meta.
 		gform_update_meta( $entry_id, 'pronamic_pay_payment_fulfilled', true );
 
-		// The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
-		do_action( 'gform_ideal_fulfillment', $entry, $feed );
+		/**
+		 * The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
+		 *
+		 * @link https://docs.gravityforms.com/gform_paypal_fulfillment/
+		 * @link https://docs.gravityforms.com/entry-object/
+		 * @since 1.0.0
+		 * @param object $entry The entry used to generate the (iDEAL) payment.
+		 * @param object $feed  The feed configuration data used to generate the payment.
+		 */
+		\do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}
 
 	/**

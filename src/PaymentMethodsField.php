@@ -3,7 +3,7 @@
  * Payment methods field
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Plugin;
 /**
  * Title: WordPress pay extension Gravity Forms payment methods
  * Description:
- * Copyright: 2005-2020 Pronamic
+ * Copyright: 2005-2021 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -360,40 +360,44 @@ class PaymentMethodsField extends GF_Field_Select {
 					// Loop payment methods.
 					foreach ( $this->choices as $choice ) {
 						// Icon file name.
-						$payment_method = strtr( strtolower( $choice['value'] ), $replacements );
-
-						if ( false !== stripos( $payment_method, 'test' ) || false !== stripos( $payment_method, 'simulation' ) ) {
-							$payment_method = 'test';
-						}
-
-						$icon_path = sprintf(
-							'%s/icon-%s.png',
-							$payment_method,
-							implode( 'x', $dimensions )
-						);
+						$payment_method = $choice['value'];
 
 						// Radio input.
-						$label_content = sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
+						$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
-						if ( file_exists( plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
-							$icon_url = plugins_url( 'images/' . $icon_path, Plugin::$file );
+						if ( PaymentMethods::is_direct_debit_method( $payment_method ) ) {
+							$icon_path = \sprintf(
+								'%s/icon-%s.png',
+								\strtr( \strtolower( $payment_method ), $replacements ),
+								\implode( 'x', $dimensions )
+							);
 
-							$label_content = sprintf(
-								'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
-								esc_html( $choice['text'] ),
-								esc_url( $icon_url ),
-								esc_url( str_replace( '.png', '@2x.png', $icon_url ) ),
-								esc_url( str_replace( '.png', '@3x.png', $icon_url ) ),
-								esc_url( str_replace( '.png', '@4x.png', $icon_url ) )
+							if ( \file_exists( \plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
+								$icon_url = \plugins_url( 'images/' . $icon_path, Plugin::$file );
+
+								$label_content = \sprintf(
+									'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
+									\esc_html( $choice['text'] ),
+									\esc_url( $icon_url ),
+									\esc_url( \str_replace( '.png', '@2x.png', $icon_url ) ),
+									\esc_url( \str_replace( '.png', '@3x.png', $icon_url ) ),
+									\esc_url( \str_replace( '.png', '@4x.png', $icon_url ) )
+								);
+							}
+						} elseif ( ! empty( $payment_method ) ) {
+							$label_content = \sprintf(
+								'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
+								\esc_html( $choice['text'] ),
+								\esc_url( PaymentMethods::get_icon_url( $payment_method ) )
 							);
 						}
 
-						printf(
+						\printf(
 							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" %5$s/> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
-							esc_attr( $this->formId ),
-							esc_attr( $this->id ),
-							esc_attr( $choice['value'] ),
-							wp_kses_post( $label_content ),
+							\esc_attr( $this->formId ),
+							\esc_attr( $this->id ),
+							\esc_attr( $choice['value'] ),
+							\wp_kses_post( $label_content ),
 							\checked( $choice['value'], $value, false )
 						);
 					}
@@ -408,14 +412,11 @@ class PaymentMethodsField extends GF_Field_Select {
 					width: 50%;
 
 					margin: 0;
-
-					vertical-align: baseline;
 				}
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
 					display: block;
 
-					width: <?php echo esc_html( $dimensions[0] ); ?>px;
 					height: <?php echo esc_html( $dimensions[1] ); ?>px;
 				}
 
@@ -467,7 +468,7 @@ class PaymentMethodsField extends GF_Field_Select {
 					case 'icons-64':
 						?>
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio {
-					width: <?php echo esc_html( ( 64 * 2 ) + 126 ); ?>px;
+					width: <?php echo esc_html( 128 * 2 ); ?>px;
 				}
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li {

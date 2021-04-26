@@ -3,7 +3,7 @@
  * Admin feed Gravity Forms box.
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -37,6 +37,8 @@
 		<div id="titlewrap">
 			<?php
 
+			$title = empty( $post_id ) ? '' : get_the_title( $post_id );
+
 			$title_placeholder = __( 'Enter title here', 'pronamic_ideal' );
 
 			?>
@@ -45,7 +47,7 @@
 				<?php echo esc_html( $title_placeholder ); ?>
 			</label>
 
-			<input type="text" name="_pronamic_pay_gf_post_title" size="30" value="<?php echo esc_attr( get_the_title( $post_id ) ); ?>" id="title" spellcheck="true" autocomplete="off"  placeholder="<?php echo esc_attr( $title_placeholder ); ?>" />
+			<input type="text" name="_pronamic_pay_gf_post_title" size="30" value="<?php echo esc_attr( $title ); ?>" id="title" spellcheck="true" autocomplete="off" placeholder="<?php echo esc_attr( $title_placeholder ); ?>" />
 		</div>
 	</div>
 

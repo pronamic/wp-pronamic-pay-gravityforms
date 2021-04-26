@@ -3,7 +3,7 @@
  * Admin payment form post type
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -17,7 +17,7 @@ use WP_Query;
 /**
  * Title: WordPress admin payment form post type
  * Description:
- * Copyright: 2005-2020 Pronamic
+ * Copyright: 2005-2021 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -33,7 +33,7 @@ class AdminPaymentFormPostType {
 	const POST_TYPE = 'pronamic_pay_gf';
 
 	/**
-	 * Constructs and intialize admin payment form post type.
+	 * Construct and initialize admin payment form post type.
 	 */
 	public function __construct() {
 		add_filter( 'manage_edit-pronamic_pay_gf_columns', array( $this, 'edit_columns' ) );
@@ -42,9 +42,7 @@ class AdminPaymentFormPostType {
 
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
 
-		if ( GravityForms::version_compare( '1.7', '>=' ) ) {
-			add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
-		}
+		add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
 
 		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data' ), 99, 2 );
 

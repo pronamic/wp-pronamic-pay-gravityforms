@@ -3,7 +3,7 @@
  * Payment add-on
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -17,7 +17,7 @@ use WP_Query;
 /**
  * Title: WordPress pay extension Gravity Forms payment add-on
  * Description:
- * Copyright: 2005-2020 Pronamic
+ * Copyright: 2005-2021 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -142,11 +142,17 @@ class PaymentAddOn extends GFPaymentAddOn {
 		if ( '' === trim( $post_title ) ) {
 			$feeds = $this->get_feeds( $form_id );
 
-			$post_title = sprintf(
-				'%s #%s',
-				__( 'Payment feed', 'pronamic_ideal' ),
-				count( $feeds ) + 1
-			);
+			$post_title = __( 'Payment Feed', 'pronamic_ideal' );
+
+			$count = count( $feeds ) + 1;
+
+			if ( $count > 1 ) {
+				$post_title = sprintf(
+					/* translators: %d: payment feed index */
+					__( 'Payment Feed #%d', 'pronamic_ideal' ),
+					$count
+				);
+			}
 		}
 
 		$post_id = wp_insert_post(
@@ -207,6 +213,38 @@ class PaymentAddOn extends GFPaymentAddOn {
 	}
 
 	/**
+	 * Get menu icon.
+	 *
+	 * @since 2.6.0
+	 * @throws \Exception Throws exception if file is not readable.
+	 */
+	public function get_menu_icon() {
+		$file = __DIR__ . '/../images/dist/wp-pay.svgo-min.svg';
+
+		if ( ! \is_readable( $file ) ) {
+			throw new \Exception(
+				\sprintf(
+					'Could not read WordPress admin menu icon from file: %s.',
+					$file
+				)
+			);
+		}
+
+		$svg = \file_get_contents( $file, true );
+
+		if ( false === $svg ) {
+			throw new \Exception(
+				\sprintf(
+					'Could not read WordPress admin menu icon from file: %s.',
+					$file
+				)
+			);
+		}
+
+		return $svg;
+	}
+
+	/**
 	 * Form settings page.
 	 *
 	 * @since 1.3.0
@@ -239,6 +277,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return string
 	 */
 	public function feed_list_title() {
+		// Gravity Forms 2.5.
+		if ( GravityForms::version_compare( '2.5-rc', '>=' ) ) {
+			return __( 'Pay', 'pronamic_ideal' );
+		}
+
 		$title = sprintf(
 			'<i class="dashicons dashicons-money fa-"></i> %s',
 			esc_html__( 'Pay Feeds', 'pronamic_ideal' )

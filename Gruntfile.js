@@ -7,52 +7,6 @@ module.exports = function( grunt ) {
 		// Package
 		pkg: grunt.file.readJSON( 'package.json' ),
 
-		// PHP Code Sniffer
-		phpcs: {
-			application: {
-				src: [
-					'**/*.php',
-					'!node_modules/**',
-					'!vendor/**',
-					'!wordpress/**',
-					'!wp-content/**'
-				]
-			},
-			options: {
-				bin: 'vendor/bin/phpcs',
-				standard: 'phpcs.xml.dist',
-				showSniffCodes: true
-			}
-		},
-
-		// PHPLint
-		phplint: {
-			all: [ 'src/**/*.php' ]
-		},
-
-		// PHP Mess Detector
-		phpmd: {
-			application: {
-				dir: 'src'
-			},
-			options: {
-				bin: 'vendor/bin/phpmd',
-				exclude: 'node_modules',
-				reportFormat: 'xml',
-				rulesets: 'phpmd.ruleset.xml'
-			}
-		},
-		
-		// PHPUnit
-		phpunit: {
-			options: {
-				bin: 'vendor/bin/phpunit'
-			},
-			application: {
-
-			}
-		},
-
 		// JSHint
 		jshint: {
 			options: grunt.file.readJSON( '.jshintrc' ),
@@ -104,7 +58,7 @@ module.exports = function( grunt ) {
 				},
 
 				processors: [
-					require( 'autoprefixer' )( { browsers: 'last 2 versions' } )
+					require( 'autoprefixer' )()
 				]
 			},
 			dist: {
@@ -123,6 +77,6 @@ module.exports = function( grunt ) {
 	} );
 
 	// Default task(s).
-	grunt.registerTask( 'default', [ 'jshint', 'phplint', 'phpmd', 'phpcs', 'phpunit' ] );
+	grunt.registerTask( 'default', [ 'jshint' ] );
 	grunt.registerTask( 'assets', [ 'sasslint', 'jshint', 'uglify', 'compass', 'postcss', 'cssmin' ] );
 };

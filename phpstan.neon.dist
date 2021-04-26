@@ -1,6 +1,9 @@
+includes:
+	- vendor-bin/phpstan/vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
 	customRulesetUsed: false
 	level: max
-	bootstrap: tests/bootstrap.php
+	bootstrapFiles:
+		- tests/phpstan/bootstrap.php
 	paths:
-		- src
+		- src/

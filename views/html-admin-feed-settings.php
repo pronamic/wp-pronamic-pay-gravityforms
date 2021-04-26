@@ -3,13 +3,14 @@
  * Admin feed settings.
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2020 Pronamic
+ * @copyright 2005-2021 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
 
 use Pronamic\WordPress\Pay\Admin\AdminModule;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Extension;
+use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed;
 
@@ -925,6 +926,19 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 					<td>
 						<div id="gf_ideal_condition_config">
 							<script type="text/javascript">
+								<?php
+
+								if ( GravityForms::version_compare( '2.5-rc', '>=' ) ) {
+
+									?>
+
+									var form = <?php echo wp_json_encode( gf_apply_filters( array( 'gform_admin_pre_render', $form_id ), GFFormsModel::get_form_meta( $form_id ) ) ); ?>;
+
+									<?php
+								}
+
+								?>
+
 								function GetConditionalLogicFields () {
 									<?php
 

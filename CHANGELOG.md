@@ -7,6 +7,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.6.0] - 2021-04-26
+- Improved compatibility with Gravity Forms 2.5.
+- Improved displaying payment methods icons.
+- Removed support for Gravity Forms version < 1.7.
+
 ## [2.5.2] - 2021-01-14
 - Removed old @see.
 - Update readme.
@@ -293,7 +298,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.2...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.0...HEAD
+[2.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.2...2.6.0
 [2.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.1...2.5.2
 [2.5.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.0...2.5.1
 [2.5.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.4.1...2.5.0

@@ -131,10 +131,23 @@ class PayFeed {
 		$this->condition_enabled       = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
 
 		// Conditional logic.
-		$conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
+		$conditional_logic_object = get_post_meta( $post_id, '_gform_setting_feed_condition_conditional_logic_object', true );
 
+		// Check legacy meta key `_gaddon_setting_feed_condition_conditional_logic_object`.
+		if ( empty( $conditional_logic_object ) ) {
+			$conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
+		}
+
+		// JSON decode conditional logic object.
 		if ( ! empty( $conditional_logic_object ) ) {
 			$this->conditional_logic_object = \json_decode( $conditional_logic_object, true );
+
+			// The `_gform_setting_...` does not include the `conditionalLogic` key, as was the case previously with the `_gaddon_setting`.
+			if ( GravityForms::version_compare( '2.5', '>=' ) && \is_array( $this->conditional_logic_object ) && ! \array_key_exists( 'conditionalLogic', $this->conditional_logic_object ) ) {
+				$this->conditional_logic_object = array(
+					'conditionalLogic' => $this->conditional_logic_object,
+				);
+			}
 		}
 
 		/*

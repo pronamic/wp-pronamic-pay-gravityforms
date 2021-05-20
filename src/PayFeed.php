@@ -160,21 +160,27 @@ class PayFeed {
 			$condition_operator = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
 			$condition_value    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
 
+			$rule = array(
+				'fieldId'  => 0,
+				'operator' => 'is',
+				'value'    => '',
+			);
+
 			if ( ! empty( $condition_field_id ) && ! empty( $condition_operator ) && ! empty( $condition_value ) ) {
-				$this->conditional_logic_object = array(
-					'conditionalLogic' => array(
-						'actionType' => 'show',
-						'logicType'  => 'all',
-						'rules'      => array(
-							array(
-								'fieldId'  => $condition_field_id,
-								'operator' => ( GravityForms::OPERATOR_IS === $condition_operator ? 'is' : 'isnot' ),
-								'value'    => $condition_value,
-							),
-						),
-					),
+				$rule = array(
+					'fieldId'  => $condition_field_id,
+					'operator' => ( GravityForms::OPERATOR_IS === $condition_operator ? 'is' : 'isnot' ),
+					'value'    => $condition_value,
 				);
 			}
+
+			$this->conditional_logic_object = array(
+				'conditionalLogic' => array(
+					'actionType' => 'show',
+					'logicType'  => 'all',
+					'rules'      => array( $rule ),
+				),
+			);
 		}
 
 		// Delay actions.

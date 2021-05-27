@@ -417,6 +417,7 @@ class PaymentMethodsField extends GF_Field_Select {
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
 					display: block;
 
+					width: <?php echo esc_html( 'icons-125' === $this->pronamicPayDisplayMode ? $dimensions[0] . 'px' : 'auto' ); ?>;
 					height: <?php echo esc_html( $dimensions[1] ); ?>px;
 				}
 

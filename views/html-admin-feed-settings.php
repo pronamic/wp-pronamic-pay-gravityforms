@@ -965,7 +965,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 							$post_id = \filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
 
-							if ( empty( $post_id ) && method_exists( $this, 'get_settings_renderer' ) ) {
+							if ( empty( $post_id ) && method_exists( $this, 'get_settings_renderer' ) && false !== $this->get_settings_renderer() ) {
 								$feed = new PayFeed( $post_id );
 
 								$this->get_settings_renderer()->set_values(

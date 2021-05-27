@@ -140,6 +140,8 @@ class PayFeed {
 
 		// JSON decode conditional logic object.
 		if ( ! empty( $conditional_logic_object ) ) {
+			$conditional_logic_object = \html_entity_decode( $conditional_logic_object );
+
 			$this->conditional_logic_object = \json_decode( $conditional_logic_object, true );
 
 			// The `_gform_setting_...` does not include the `conditionalLogic` key, as was the case previously with the `_gaddon_setting`.

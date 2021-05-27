@@ -187,7 +187,7 @@ class Extension extends AbstractPluginIntegration {
 					&&
 				'pronamic_pay' !== \filter_input( \INPUT_GET, 'subview', \FILTER_SANITIZE_STRING )
 			)
-				||
+				&&
 			'toplevel_page_gf_edit_forms' !== $screen->id
 		) {
 			return;

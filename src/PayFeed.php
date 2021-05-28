@@ -19,7 +19,7 @@ use WP_Post;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.3.0
+ * @version 2.6.1
  * @since   1.4.4
  */
 class PayFeed {

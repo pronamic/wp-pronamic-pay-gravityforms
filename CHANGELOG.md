@@ -7,6 +7,11 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.6.1] - 2021-05-28
+- Improved Gravity Forms 2.5.3 compatibility.
+- Fixed payment feed conditional logic setting.
+- Fixed loading admin script in form editor.
+
 ## [2.6.0] - 2021-04-26
 - Improved compatibility with Gravity Forms 2.5.
 - Improved displaying payment methods icons.
@@ -298,7 +303,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.0...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.1...HEAD
+[2.6.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.0...2.6.1
 [2.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.2...2.6.0
 [2.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.1...2.5.2
 [2.5.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.0...2.5.1

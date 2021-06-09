@@ -148,6 +148,8 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
 		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
 
+		\add_filter( 'gform_payment_statuses', array( $this, 'gform_payment_statuses' ) );
+
 		$this->maybe_display_confirmation();
 	}
 
@@ -684,6 +686,15 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		/**
+		 * Total amount.
+		 */
+		$total_amount = $payment->get_total_amount();
+
+		if ( null === $total_amount ) {
+			return;
+		}
+
+		/**
 		 * Update refunded amount.
 		 * 
 		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/119
@@ -716,6 +727,12 @@ class Extension extends AbstractPluginIntegration {
 					'transaction_id' => '∅',
 					'entry_id'       => $entry_id,
 					'amount'         => $diff_amount->get_value(),
+					/**
+					 * Override the default Gravity Forms payment status.
+					 * 
+					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1910-L1912
+					 */
+					'payment_status' => $refunded_amount->get_value() < $total_amount->get_value() ? 'PartlyRefunded' : 'Refunded',
 					/**
 					 * Override the default Gravity Forms payment refund note.
 					 * 
@@ -1618,5 +1635,29 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		return $entry;
+	}
+
+	/**
+	 * Gravity Forms payment statuses.
+	 * 
+	 * Gravity Forms does not have a partial refund status by default, we'll add it.
+	 * 
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/common.php#L5327-L5357
+	 * @link https://github.com/wp-pay-extensions/easy-digital-downloads/blob/2.1.4/src/Extension.php#L486-L507
+	 */
+	public function gform_payment_statuses( $payment_statuses ) {
+		/**
+		 * Note: The Gravity Forms payment status is limited to 15 chars (`varchar(15)`).
+		 * That's why we use `PartlyRefunded` (14) instead of `PartiallyRefunded` (17).
+		 * 
+		 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/class-gf-upgrade.php#L435
+		 */
+		if ( \array_key_exists( 'PartlyRefunded', $payment_statuses ) ) {
+			return $payment_statuses;
+		}
+
+		$payment_statuses['PartlyRefunded'] = __( 'Partially Refunded', 'pronamic_ideal' );
+
+		return $payment_statuses;
 	}
 }

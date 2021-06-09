@@ -628,10 +628,6 @@ class Extension extends AbstractPluginIntegration {
 				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::FAILED );
 
 				break;
-			case PaymentStatus::REFUNDED:
-				$this->payment_action( 'refund_payment', $lead, $action, PaymentStatuses::REFUNDED );
-
-				break;
 			case PaymentStatus::SUCCESS:
 				if ( ! Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742

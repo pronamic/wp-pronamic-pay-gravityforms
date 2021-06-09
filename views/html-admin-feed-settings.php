@@ -963,6 +963,23 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 							<?php
 
+							$post_id = \filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
+
+							if ( method_exists( $this, 'get_settings_renderer' ) ) {
+								if ( false === $this->get_settings_renderer() && class_exists( '\Gravity_Forms\Gravity_Forms\Settings\Settings' ) ) {
+									$this->set_settings_renderer( new \Gravity_Forms\Gravity_Forms\Settings\Settings() );
+								}
+
+								$feed = new PayFeed( $post_id );
+
+								$this->get_settings_renderer()->set_values(
+									array(
+										'feed_condition_conditional_logic'        => $feed->condition_enabled,
+										'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
+									)
+								);
+							}
+
 							$field = array(
 								'name'  => 'conditionalLogic',
 								'label' => __( 'Conditional Logic', 'pronamic_ideal' ),

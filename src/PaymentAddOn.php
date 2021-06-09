@@ -21,7 +21,7 @@ use WP_Query;
  * Company: Pronamic
  *
  * @author  Remco Tolsma
- * @version 2.4.1
+ * @version 2.6.1
  * @since   1.1.0
  */
 class PaymentAddOn extends GFPaymentAddOn {
@@ -390,6 +390,8 @@ class PaymentAddOn extends GFPaymentAddOn {
 			return false;
 		}
 
+		$feed = new PayFeed( $id );
+
 		$post = array_merge(
 			$post,
 			array(
@@ -397,9 +399,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 				'form_id'   => get_post_meta( $id, '_pronamic_pay_gf_form_id', true ),
 				'is_active' => true,
 				'meta'      => array(
-					'post'            => $post,
-					'feed_name'       => $post['post_title'],
-					'transactionType' => 'product',
+					'post'                             => $post,
+					'feed_name'                        => $post['post_title'],
+					'transactionType'                  => 'product',
+					'feed_condition_conditional_logic' => $feed->condition_enabled,
+					'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
 				),
 			)
 		);

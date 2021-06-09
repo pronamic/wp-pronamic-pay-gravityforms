@@ -17,6 +17,7 @@ use GFCommon;
 use GFFormDisplay;
 use GFForms;
 use GFUserData;
+use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractPluginIntegration;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Recurring;
@@ -698,6 +699,8 @@ class Extension extends AbstractPluginIntegration {
 		$entry_refunded_amount_value = (float) \gform_get_meta( $entry_id, 'pronamic_pay_refunded_amount' );
 
 		if ( $entry_refunded_amount_value < $refunded_amount_value ) {
+			$diff_amount = $refunded_amount->subtract( new Money( $entry_refunded_amount_value ) );
+
 			$result = $this->addon->refund_payment(
 				$entry,
 				array(
@@ -712,7 +715,16 @@ class Extension extends AbstractPluginIntegration {
 					 */
 					'transaction_id' => '∅',
 					'entry_id'       => $entry_id,
-					'amount'         => ( $refunded_amount_value - $entry_refunded_amount_value ),
+					'amount'         => $diff_amount->get_value(),
+					/**
+					 * Override the default Gravity Forms payment refund note.
+					 * 
+					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1920-L1922
+					 */
+					'note'           => \sprintf(
+						\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
+						$diff_amount->format_i18n()
+					),
 				)
 			);
 

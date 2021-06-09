@@ -129,6 +129,7 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
 		add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
 		add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
+		add_action( 'pronamic_pay_update_payment', array( $this, 'update_payment' ) );
 		add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
 		add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
 		add_filter( 'pronamic_pay_subscription_amount_editable_' . self::SLUG, '__return_true' );
@@ -650,6 +651,74 @@ class Extension extends AbstractPluginIntegration {
 				if ( 'recurring' === $payment->recurring_type ) {
 					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
 				}
+		}
+	}
+
+	/**
+	 * Update payment.
+	 * 
+	 * @param Payment $payment Payment.
+	 */
+	public function update_payment( Payment $payment ) {
+		/**
+		 * Check if the payment source is Gravity Forms.
+		 */
+		$source = $payment->get_source();
+
+		if ( 'gravityformsideal' !== $source ) {
+			return;
+		}
+
+		/**
+		 * Search for the Gravity Forms entry by payment source ID.
+		 * 
+		 * @link https://docs.gravityforms.com/api-functions/#get-entry
+		 */
+		$entry_id = $payment->get_source_id();
+
+		$entry = \GFAPI::get_entry( $entry_id );
+
+		if ( \is_wp_error( $entry ) ) {
+			return;
+		}
+
+		/**
+		 * Update refunded amount.
+		 * 
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/119
+		 */
+		$refunded_amount = $payment->get_refunded_amount();
+
+		if ( null === $refunded_amount ) {
+			return;
+		}
+
+		$refunded_amount_value = $refunded_amount->get_value();
+
+		$entry_refunded_amount_value = (float) \gform_get_meta( $entry_id, 'pronamic_pay_refunded_amount' );
+
+		if ( $entry_refunded_amount_value < $refunded_amount_value ) {
+			$result = $this->addon->refund_payment(
+				$entry,
+				array(
+					// The Gravity Forms payment add-on callback feature uses the action ID to prevent processing an action twice.
+					'id'             => '',
+					'type'           => 'refund_payment',
+					/**
+					 * Unfortunately we don't have a specific transaction ID for this refund at this point.
+					 * 
+					 * @link https://en.wikipedia.org/wiki/%C3%98
+					 * @link https://unicode-table.com/en/2205/
+					 */
+					'transaction_id' => '∅',
+					'entry_id'       => $entry_id,
+					'amount'         => ( $refunded_amount_value - $entry_refunded_amount_value ),
+				)
+			);
+
+			if ( true === $result ) {
+				\gform_update_meta( $entry_id, 'pronamic_pay_refunded_amount', $refunded_amount_value );
+			}
 		}
 	}
 

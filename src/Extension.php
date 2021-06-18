@@ -17,6 +17,7 @@ use GFCommon;
 use GFFormDisplay;
 use GFForms;
 use GFUserData;
+use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractPluginIntegration;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Recurring;
@@ -129,6 +130,7 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
 		add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
 		add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
+		add_action( 'pronamic_pay_update_payment', array( $this, 'update_payment' ) );
 		add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
 		add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
 		add_filter( 'pronamic_pay_subscription_amount_editable_' . self::SLUG, '__return_true' );
@@ -145,6 +147,8 @@ class Extension extends AbstractPluginIntegration {
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled.
 		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
 		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
+
+		\add_filter( 'gform_payment_statuses', array( $this, 'gform_payment_statuses' ) );
 
 		$this->maybe_display_confirmation();
 	}
@@ -624,10 +628,6 @@ class Extension extends AbstractPluginIntegration {
 				$this->payment_action( $fail_action, $lead, $action, PaymentStatuses::FAILED );
 
 				break;
-			case PaymentStatus::REFUNDED:
-				$this->payment_action( 'refund_payment', $lead, $action, PaymentStatuses::REFUNDED );
-
-				break;
 			case PaymentStatus::SUCCESS:
 				if ( ! Entry::is_payment_approved( $lead ) || 'add_subscription_payment' === $success_action ) {
 					// @link https://github.com/wp-premium/gravityformspaypal/blob/2.3.1/class-gf-paypal.php#L1741-L1742
@@ -650,6 +650,101 @@ class Extension extends AbstractPluginIntegration {
 				if ( 'recurring' === $payment->recurring_type ) {
 					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
 				}
+		}
+	}
+
+	/**
+	 * Update payment.
+	 *
+	 * @param Payment $payment Payment.
+	 */
+	public function update_payment( Payment $payment ) {
+		/**
+		 * Check if the payment source is Gravity Forms.
+		 */
+		$source = $payment->get_source();
+
+		if ( 'gravityformsideal' !== $source ) {
+			return;
+		}
+
+		/**
+		 * Search for the Gravity Forms entry by payment source ID.
+		 *
+		 * @link https://docs.gravityforms.com/api-functions/#get-entry
+		 */
+		$entry_id = $payment->get_source_id();
+
+		$entry = \GFAPI::get_entry( $entry_id );
+
+		if ( \is_wp_error( $entry ) ) {
+			return;
+		}
+
+		/**
+		 * Total amount.
+		 */
+		$total_amount = $payment->get_total_amount();
+
+		if ( null === $total_amount ) {
+			return;
+		}
+
+		/**
+		 * Update refunded amount.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/119
+		 */
+		$refunded_amount = $payment->get_refunded_amount();
+
+		if ( null === $refunded_amount ) {
+			return;
+		}
+
+		$refunded_amount_value = $refunded_amount->get_value();
+
+		$entry_refunded_amount_value = (float) \gform_get_meta( $entry_id, 'pronamic_pay_refunded_amount' );
+
+		if ( $entry_refunded_amount_value < $refunded_amount_value ) {
+			$diff_amount = $refunded_amount->subtract( new Money( $entry_refunded_amount_value ) );
+
+			$result = $this->addon->refund_payment(
+				$entry,
+				array(
+					// The Gravity Forms payment add-on callback feature uses the action ID to prevent processing an action twice.
+					'id'             => '',
+					'type'           => 'refund_payment',
+					/**
+					 * Unfortunately we don't have a specific transaction ID for this refund at this point.
+					 *
+					 * @link https://en.wikipedia.org/wiki/%C3%98
+					 * @link https://unicode-table.com/en/2205/
+					 */
+					'transaction_id' => '∅',
+					'entry_id'       => $entry_id,
+					'amount'         => $diff_amount->get_value(),
+					/**
+					 * Override the default Gravity Forms payment status.
+					 *
+					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1910-L1912
+					 */
+					'payment_status' => $refunded_amount->get_value() < $total_amount->get_value() ? 'PartlyRefunded' : 'Refunded',
+					/**
+					 * Override the default Gravity Forms payment refund note.
+					 *
+					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1920-L1922
+					 */
+					'note'           => \sprintf(
+						/* translators: %s: refunded amount */
+						\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
+						$diff_amount->format_i18n()
+					),
+				)
+			);
+
+			if ( true === $result ) {
+				\gform_update_meta( $entry_id, 'pronamic_pay_refunded_amount', $refunded_amount_value );
+			}
 		}
 	}
 
@@ -1537,5 +1632,31 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		return $entry;
+	}
+
+	/**
+	 * Gravity Forms payment statuses.
+	 * Gravity Forms does not have a partial refund status by default, we'll add it.
+	 *
+	 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/common.php#L5327-L5357
+	 * @link https://github.com/wp-pay-extensions/easy-digital-downloads/blob/2.1.4/src/Extension.php#L486-L507
+	 *
+	 * @param array $payment_statuses Payment statuses.
+	 * @return array<string, string>
+	 */
+	public function gform_payment_statuses( $payment_statuses ) {
+		/**
+		 * Note: The Gravity Forms payment status is limited to 15 chars (`varchar(15)`).
+		 * That's why we use `PartlyRefunded` (14) instead of `PartiallyRefunded` (17).
+		 *
+		 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/class-gf-upgrade.php#L435
+		 */
+		if ( \array_key_exists( 'PartlyRefunded', $payment_statuses ) ) {
+			return $payment_statuses;
+		}
+
+		$payment_statuses['PartlyRefunded'] = __( 'Partially Refunded', 'pronamic_ideal' );
+
+		return $payment_statuses;
 	}
 }

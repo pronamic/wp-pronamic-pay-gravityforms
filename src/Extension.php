@@ -655,7 +655,7 @@ class Extension extends AbstractPluginIntegration {
 
 	/**
 	 * Update payment.
-	 * 
+	 *
 	 * @param Payment $payment Payment.
 	 */
 	public function update_payment( Payment $payment ) {
@@ -670,7 +670,7 @@ class Extension extends AbstractPluginIntegration {
 
 		/**
 		 * Search for the Gravity Forms entry by payment source ID.
-		 * 
+		 *
 		 * @link https://docs.gravityforms.com/api-functions/#get-entry
 		 */
 		$entry_id = $payment->get_source_id();
@@ -692,7 +692,7 @@ class Extension extends AbstractPluginIntegration {
 
 		/**
 		 * Update refunded amount.
-		 * 
+		 *
 		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/119
 		 */
 		$refunded_amount = $payment->get_refunded_amount();
@@ -716,7 +716,7 @@ class Extension extends AbstractPluginIntegration {
 					'type'           => 'refund_payment',
 					/**
 					 * Unfortunately we don't have a specific transaction ID for this refund at this point.
-					 * 
+					 *
 					 * @link https://en.wikipedia.org/wiki/%C3%98
 					 * @link https://unicode-table.com/en/2205/
 					 */
@@ -725,16 +725,17 @@ class Extension extends AbstractPluginIntegration {
 					'amount'         => $diff_amount->get_value(),
 					/**
 					 * Override the default Gravity Forms payment status.
-					 * 
+					 *
 					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1910-L1912
 					 */
 					'payment_status' => $refunded_amount->get_value() < $total_amount->get_value() ? 'PartlyRefunded' : 'Refunded',
 					/**
 					 * Override the default Gravity Forms payment refund note.
-					 * 
+					 *
 					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1920-L1922
 					 */
 					'note'           => \sprintf(
+						/* translators: %s: refunded amount */
 						\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
 						$diff_amount->format_i18n()
 					),
@@ -1635,17 +1636,19 @@ class Extension extends AbstractPluginIntegration {
 
 	/**
 	 * Gravity Forms payment statuses.
-	 * 
 	 * Gravity Forms does not have a partial refund status by default, we'll add it.
-	 * 
+	 *
 	 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/common.php#L5327-L5357
 	 * @link https://github.com/wp-pay-extensions/easy-digital-downloads/blob/2.1.4/src/Extension.php#L486-L507
+	 *
+	 * @param array $payment_statuses Payment statuses.
+	 * @return array<string, string>
 	 */
 	public function gform_payment_statuses( $payment_statuses ) {
 		/**
 		 * Note: The Gravity Forms payment status is limited to 15 chars (`varchar(15)`).
 		 * That's why we use `PartlyRefunded` (14) instead of `PartiallyRefunded` (17).
-		 * 
+		 *
 		 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/class-gf-upgrade.php#L435
 		 */
 		if ( \array_key_exists( 'PartlyRefunded', $payment_statuses ) ) {

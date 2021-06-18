@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [2.7.0] - 2021-06-18
+- Added initial support for refunds [#119](https://github.com/pronamic/wp-pronamic-pay/issues/119).
+
 ## [2.6.1] - 2021-05-28
 - Improved Gravity Forms 2.5.3 compatibility.
 - Fixed payment feed conditional logic setting.
@@ -303,7 +306,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.1...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.7.0...HEAD
+[2.7.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.1...2.7.0
 [2.6.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.0...2.6.1
 [2.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.2...2.6.0
 [2.5.2]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.1...2.5.2

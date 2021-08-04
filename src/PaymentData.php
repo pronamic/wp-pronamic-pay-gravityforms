@@ -12,8 +12,6 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
 use Pronamic\WordPress\DateTime\DateTime;
-use Pronamic\WordPress\Money\Money;
-use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;

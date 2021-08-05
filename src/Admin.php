@@ -32,9 +32,9 @@ class Admin {
 		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
 		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_entry' ) );
 
-		// Filters.
-		add_filter( 'gform_entry_info', array( __CLASS__, 'entry_info' ), 10, 2 );
+		add_action( 'gform_entry_info', array( __CLASS__, 'entry_info' ), 10, 2 );
 
+		// Filters.
 		add_filter( 'gform_custom_merge_tags', array( __CLASS__, 'custom_merge_tags' ), 10 );
 
 		// Actions - AJAX.

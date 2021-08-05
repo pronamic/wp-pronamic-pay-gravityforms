@@ -12,8 +12,6 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
 use Pronamic\WordPress\DateTime\DateTime;
-use Pronamic\WordPress\Money\Money;
-use Pronamic\WordPress\Money\TaxedMoney;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
@@ -233,22 +231,26 @@ class PaymentData {
 	 * @return int|null
 	 */
 	public function get_subscription_frequency() {
+		$frequency = null;
+
 		switch ( $this->feed->subscription_frequency_type ) {
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
 				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
-						return intval( $this->lead[ $this->feed->subscription_frequency_field ] );
+						$frequency = intval( $this->lead[ $this->feed->subscription_frequency_field ] );
 					}
 				}
 
 				break;
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIXED:
-				return \intval( $this->feed->subscription_number_periods );
+				$frequency = \intval( $this->feed->subscription_number_periods );
+
+				break;
 		}
 
-		return null;
+		return empty( $frequency ) ? null : $frequency;
 	}
 
 	/**

@@ -12,7 +12,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
 use Pronamic\WordPress\Money\Currency;
-use Pronamic\WordPress\Money\TaxedMoney;
+use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
 use Pronamic\WordPress\Pay\Address;
 use Pronamic\WordPress\Pay\Banks\BankAccountDetails;
@@ -350,13 +350,13 @@ class Processor {
 					if ( array_key_exists( 'price', $product ) ) {
 						$value = GFCommon::to_number( $product['price'] );
 
-						$line->set_unit_price( new TaxedMoney( $value, $currency ) );
+						$line->set_unit_price( new Money( $value, $currency ) );
 
 						if ( array_key_exists( 'quantity', $product ) ) {
 							$value = ( $value * intval( $product['quantity'] ) );
 						}
 
-						$line->set_total_amount( new TaxedMoney( $value, $currency ) );
+						$line->set_total_amount( new Money( $value, $currency ) );
 					}
 
 					if ( array_key_exists( 'quantity', $product ) ) {
@@ -380,9 +380,9 @@ class Processor {
 							if ( array_key_exists( 'price', $option ) ) {
 								$value = GFCommon::to_number( $option['price'] );
 
-								$line->set_unit_price( new TaxedMoney( $value, $currency ) );
+								$line->set_unit_price( new Money( $value, $currency ) );
 
-								$line->set_total_amount( new TaxedMoney( $value, $currency ) );
+								$line->set_total_amount( new Money( $value, $currency ) );
 							}
 						}
 					}
@@ -419,9 +419,9 @@ class Processor {
 				if ( array_key_exists( 'price', $shipping ) ) {
 					$value = $shipping['price'];
 
-					$line->set_unit_price( new TaxedMoney( $value, $currency ) );
+					$line->set_unit_price( new Money( $value, $currency ) );
 
-					$line->set_total_amount( new TaxedMoney( $value, $currency ) );
+					$line->set_total_amount( new Money( $value, $currency ) );
 				}
 			}
 		}

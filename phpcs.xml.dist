@@ -1,36 +1,18 @@
 <?xml version="1.0"?>
 
 <ruleset name="WordPress Pay Gravity Forms rules">
-	<config name="minimum_supported_wp_version" value="4.7" />
-
-	<config name="testVersion" value="5.6-" />
-
 	<file>.</file>
 
-	<arg name="colors"/>
-	<arg name="extensions" value="php" />
-	<arg name="parallel" value="8" />
-	<arg value="sp" />
-
-	<exclude-pattern>node_modules/*</exclude-pattern>
 	<exclude-pattern>tests/bootstrap.php</exclude-pattern>
 	<exclude-pattern>tests/wp-config.php</exclude-pattern>
-	<exclude-pattern>vendor/*</exclude-pattern>
-	<exclude-pattern>wordpress/*</exclude-pattern>
-	<exclude-pattern type="relative">^wp-content/*</exclude-pattern>
 
-	<rule ref="PHPCompatibilityWP" />
-
-	<rule ref="WordPress">
-		<exclude name="Generic.Files.LowercasedFilename.NotFound" />
+	<rule ref="PronamicWP">
+		<exclude name="Squiz.Commenting" />
 
 		<exclude name="PSR2.Classes.PropertyDeclaration.Underscore" />
 
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_key" />
 		<exclude name="WordPress.DB.SlowDBQuery.slow_db_query_meta_query" />
-
-		<exclude name="WordPress.Files.FileName.InvalidClassFileName" />
-		<exclude name="WordPress.Files.FileName.NotHyphenatedLowercase" />
 
 		<exclude name="WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase" />
 
@@ -39,6 +21,9 @@
 		<exclude name="WordPress.Security.SafeRedirect.wp_redirect_wp_redirect" />
 
 		<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited" />
+
+		<exclude name="WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown" />
+		<exclude name="WordPressVIPMinimum.Security.PHPFilterFunctions.MissingThirdParameter" />
 	</rule>
 
 	<rule ref="WordPress.WP.GlobalVariablesOverride.OverrideProhibited">

@@ -7,6 +7,13 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [3.0.0] - 2021-08-05
+- Updated to `pronamic/wp-pay-core`  version `3.0.0`.
+- Updated to `pronamic/wp-money`  version `2.0.0`.
+- Changed `TaxedMoney` to `Money`, no tax info.
+- Switched to `pronamic/wp-coding-standards`.
+- Process `0` value for frequency as infinite periods definition for subscription phase.
+
 ## [2.7.0] - 2021-06-18
 - Added initial support for refunds [#119](https://github.com/pronamic/wp-pronamic-pay/issues/119).
 
@@ -306,7 +313,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/2.7.0...HEAD
+[unreleased]: https://github.com/wp-pay-extensions/gravityforms/compare/3.0.0...HEAD
+[3.0.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.7.0...3.0.0
 [2.7.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.1...2.7.0
 [2.6.1]: https://github.com/wp-pay-extensions/gravityforms/compare/2.6.0...2.6.1
 [2.6.0]: https://github.com/wp-pay-extensions/gravityforms/compare/2.5.2...2.6.0

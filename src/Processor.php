@@ -18,6 +18,7 @@ use Pronamic\WordPress\Pay\Address;
 use Pronamic\WordPress\Pay\Banks\BankAccountDetails;
 use Pronamic\WordPress\Pay\ContactName;
 use Pronamic\WordPress\Pay\Customer;
+use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Plugin;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\Payment;
@@ -438,6 +439,9 @@ class Processor {
 			return $lead;
 		}
 
+		// Update entry payment meta.
+		$this->update_entry_payment_meta( $lead, $this->feed, $payment );
+
 		// Check free (subscription) payments.
 		if (
 			// First payment is free and no recurring amount set in payment feed.
@@ -446,7 +450,13 @@ class Processor {
 			// First payment and subscription amount are free.
 			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
 		) {
-			$this->extension->fulfill_order( $lead );
+			Plugin::complement_payment( $payment );
+
+			$payment->set_status( PaymentStatus::SUCCESS );
+			$payment->save();
+
+			// Set payment property for use in confirmation.
+			$this->payment = $payment;
 
 			return $lead;
 		}
@@ -561,16 +571,6 @@ class Processor {
 			$payment->method = PaymentMethods::IDEAL;
 		}
 
-		// Update entry meta.
-		gform_update_meta( $lead['id'], 'ideal_feed_id', $this->feed->id );
-		gform_update_meta( $lead['id'], 'payment_gateway', 'pronamic_pay' );
-
-		$lead[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::PROCESSING;
-		$lead[ LeadProperties::PAYMENT_DATE ]     = gmdate( 'y-m-d H:i:s' );
-		$lead[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
-
-		GravityForms::update_entry( $lead );
-
 		// Start.
 		try {
 			$this->payment = Plugin::start_payment( $payment );
@@ -580,26 +580,8 @@ class Processor {
 			$this->error = $e;
 		}
 
-		// Update entry meta.
-		gform_update_meta( $lead['id'], 'pronamic_payment_id', $this->payment->get_id() );
-
-		$periods = $this->payment->get_periods();
-
-		if ( null !== $periods ) {
-			foreach ( $periods as $period ) {
-				$subscription_id = $period->get_phase()->get_subscription()->get_id();
-
-				if ( null !== $subscription_id ) {
-					gform_update_meta( $lead['id'], 'pronamic_subscription_id', $subscription_id );
-				}
-			}
-		}
-
-		$lead[ LeadProperties::PAYMENT_STATUS ] = PaymentStatuses::transform( $this->payment->get_status() );
-		$lead[ LeadProperties::PAYMENT_AMOUNT ] = $this->payment->get_total_amount()->get_value();
-		$lead[ LeadProperties::TRANSACTION_ID ] = $this->payment->get_transaction_id();
-
-		GravityForms::update_entry( $lead );
+		// Update entry payment meta.
+		$this->update_entry_payment_meta( $lead, $this->feed, $this->payment );
 
 		// Pending payment.
 		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
@@ -616,6 +598,44 @@ class Processor {
 
 		// Return lead.
 		return $lead;
+	}
+
+	/**
+	 * Update entry payment meta.
+	 *
+	 * @param array   $entry    Entry.
+	 * @param PayFeed $pay_feed Payment feed.
+	 * @param Payment $payment  Payment.
+	 * @return void
+	 */
+	private function update_entry_payment_meta( $entry, PayFeed $pay_feed, Payment $payment ) {
+		gform_update_meta( $entry['id'], 'ideal_feed_id', $pay_feed->id );
+		gform_update_meta( $entry['id'], 'payment_gateway', 'pronamic_pay' );
+		gform_update_meta( $entry['id'], 'pronamic_payment_id', $payment->get_id() );
+
+		if ( empty( $entry[ LeadProperties::PAYMENT_DATE ] ) ) {
+			$entry[ LeadProperties::PAYMENT_DATE ] = gmdate( 'y-m-d H:i:s' );
+		}
+
+		$entry[ LeadProperties::PAYMENT_AMOUNT ]   = $payment->get_total_amount()->get_value();
+		$entry[ LeadProperties::PAYMENT_STATUS ]   = PaymentStatuses::transform( $payment->get_status() );
+		$entry[ LeadProperties::TRANSACTION_ID ]   = $payment->get_transaction_id();
+		$entry[ LeadProperties::TRANSACTION_TYPE ] = GravityForms::TRANSACTION_TYPE_PAYMENT;
+
+		// Set subscription ID meta.
+		$periods = $payment->get_periods();
+
+		if ( null !== $periods ) {
+			foreach ( $periods as $period ) {
+				$subscription_id = $period->get_phase()->get_subscription()->get_id();
+
+				if ( null !== $subscription_id ) {
+					gform_update_meta( $entry['id'], 'pronamic_subscription_id', $subscription_id );
+				}
+			}
+		}
+
+		GravityForms::update_entry( $entry );
 	}
 
 	/**
@@ -738,6 +758,10 @@ class Processor {
 		}
 
 		if ( ! $this->gateway || ! $this->payment ) {
+			return $confirmation;
+		}
+
+		if ( PaymentStatus::SUCCESS === $this->payment->get_status() ) {
 			return $confirmation;
 		}
 

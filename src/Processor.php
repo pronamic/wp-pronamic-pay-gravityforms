@@ -438,6 +438,19 @@ class Processor {
 			return $lead;
 		}
 
+		// Check free (subscription) payments.
+		if (
+			// First payment is free and no recurring amount set in payment feed.
+			( empty( $this->feed->subscription_amount_type ) && $payment->get_lines()->get_amount()->get_number()->is_zero() )
+				||
+			// First payment and subscription amount are free.
+			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
+		) {
+			$this->extension->fulfill_order( $lead );
+
+			return $lead;
+		}
+
 		/**
 		 * Subscription.
 		 *
@@ -542,13 +555,6 @@ class Processor {
 
 		// Total amount.
 		$payment->set_total_amount( $payment->lines->get_amount() );
-
-		// Don't delay feed actions for free payments.
-		$amount = $payment->get_total_amount()->get_value();
-
-		if ( empty( $amount ) ) {
-			$this->feed->delay_actions = array();
-		}
 
 		// Use iDEAL instead of 'Direct Debit (mandate via iDEAL)' without subscription.
 		if ( null === $payment->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_method() ) {

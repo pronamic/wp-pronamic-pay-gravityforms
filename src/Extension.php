@@ -1060,13 +1060,14 @@ class Extension extends AbstractPluginIntegration {
 		gform_update_meta( $entry_id, 'pronamic_pay_payment_fulfilled', true );
 
 		/**
-		 * The Gravity Forms PayPal Add-On executes the 'gform_paypal_fulfillment' action.
+		 * Execute payment fulfillment action (PayPal uses `gform_paypal_fulfillment`).
 		 *
 		 * @link https://docs.gravityforms.com/gform_paypal_fulfillment/
 		 * @link https://docs.gravityforms.com/entry-object/
 		 * @since 1.0.0
 		 * @param object $entry The entry used to generate the (iDEAL) payment.
 		 * @param object $feed  The feed configuration data used to generate the payment.
+		 * @deprecated Fulfillment of payments without amount (free) will be removed in the future. Use `gform_post_payment_completed` action instead.
 		 */
 		\do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}

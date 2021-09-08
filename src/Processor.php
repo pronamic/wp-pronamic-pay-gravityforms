@@ -611,7 +611,12 @@ class Processor {
 	private function update_entry_payment_meta( $entry, PayFeed $pay_feed, Payment $payment ) {
 		gform_update_meta( $entry['id'], 'ideal_feed_id', $pay_feed->id );
 		gform_update_meta( $entry['id'], 'payment_gateway', 'pronamic_pay' );
-		gform_update_meta( $entry['id'], 'pronamic_payment_id', $payment->get_id() );
+
+		$payment_id = $payment->get_id();
+
+		if ( ! empty( $payment_id ) ) {
+			gform_update_meta( $entry['id'], 'pronamic_payment_id', $payment_id );
+		}
 
 		if ( empty( $entry[ LeadProperties::PAYMENT_DATE ] ) ) {
 			$entry[ LeadProperties::PAYMENT_DATE ] = gmdate( 'y-m-d H:i:s' );

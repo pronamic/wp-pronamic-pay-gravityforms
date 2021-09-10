@@ -612,9 +612,17 @@ class Processor {
 		gform_update_meta( $entry['id'], 'ideal_feed_id', $pay_feed->id );
 		gform_update_meta( $entry['id'], 'payment_gateway', 'pronamic_pay' );
 
+		/**
+		 * The `gform_update_meta` and `gform_get_meta` functions don't handle
+		 * `null` values very well. A `null` value can result in multiple meta
+		 * values for 1 meta key. That is why we check if the payment ID is
+		 * not `null`.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/208
+		 */
 		$payment_id = $payment->get_id();
 
-		if ( ! empty( $payment_id ) ) {
+		if ( null !== $payment_id ) {
 			gform_update_meta( $entry['id'], 'pronamic_payment_id', $payment_id );
 		}
 

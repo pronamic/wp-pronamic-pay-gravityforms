@@ -440,7 +440,7 @@ class Processor {
 		}
 
 		// Update entry payment meta.
-		$this->update_entry_payment_meta( $lead, $this->feed, $payment );
+		$lead = $this->update_entry_payment_meta( $lead, $this->feed, $payment );
 
 		// Check free (subscription) payments.
 		if (
@@ -581,7 +581,7 @@ class Processor {
 		}
 
 		// Update entry payment meta.
-		$this->update_entry_payment_meta( $lead, $this->feed, $this->payment );
+		$lead = $this->update_entry_payment_meta( $lead, $this->feed, $this->payment );
 
 		// Pending payment.
 		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
@@ -606,7 +606,7 @@ class Processor {
 	 * @param array   $entry    Entry.
 	 * @param PayFeed $pay_feed Payment feed.
 	 * @param Payment $payment  Payment.
-	 * @return void
+	 * @return array
 	 */
 	private function update_entry_payment_meta( $entry, PayFeed $pay_feed, Payment $payment ) {
 		gform_update_meta( $entry['id'], 'ideal_feed_id', $pay_feed->id );
@@ -649,6 +649,8 @@ class Processor {
 		}
 
 		GravityForms::update_entry( $entry );
+
+		return $entry;
 	}
 
 	/**

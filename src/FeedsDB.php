@@ -30,7 +30,7 @@ class FeedsDB {
 	 *
 	 * @param string $form_id Gravity Forms form ID.
 	 * @param array  $meta    Meta query array.
-	 * @return array
+	 * @return PayFeed[]
 	 */
 	public static function get_feeds_by_form_id( $form_id, $meta = array() ) {
 		$feeds = array();

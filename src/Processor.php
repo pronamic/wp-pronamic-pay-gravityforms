@@ -440,7 +440,7 @@ class Processor {
 		}
 
 		// Update entry payment meta.
-		$this->update_entry_payment_meta( $lead, $this->feed, $payment );
+		$lead = $this->update_entry_payment_meta( $lead, $this->feed, $payment );
 
 		// Check free (subscription) payments.
 		if (
@@ -581,7 +581,7 @@ class Processor {
 		}
 
 		// Update entry payment meta.
-		$this->update_entry_payment_meta( $lead, $this->feed, $this->payment );
+		$lead = $this->update_entry_payment_meta( $lead, $this->feed, $this->payment );
 
 		// Pending payment.
 		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
@@ -606,12 +606,25 @@ class Processor {
 	 * @param array   $entry    Entry.
 	 * @param PayFeed $pay_feed Payment feed.
 	 * @param Payment $payment  Payment.
-	 * @return void
+	 * @return array
 	 */
 	private function update_entry_payment_meta( $entry, PayFeed $pay_feed, Payment $payment ) {
 		gform_update_meta( $entry['id'], 'ideal_feed_id', $pay_feed->id );
 		gform_update_meta( $entry['id'], 'payment_gateway', 'pronamic_pay' );
-		gform_update_meta( $entry['id'], 'pronamic_payment_id', $payment->get_id() );
+
+		/**
+		 * The `gform_update_meta` and `gform_get_meta` functions don't handle
+		 * `null` values very well. A `null` value can result in multiple meta
+		 * values for 1 meta key. That is why we check if the payment ID is
+		 * not `null`.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/208
+		 */
+		$payment_id = $payment->get_id();
+
+		if ( null !== $payment_id ) {
+			gform_update_meta( $entry['id'], 'pronamic_payment_id', $payment_id );
+		}
 
 		if ( empty( $entry[ LeadProperties::PAYMENT_DATE ] ) ) {
 			$entry[ LeadProperties::PAYMENT_DATE ] = gmdate( 'y-m-d H:i:s' );
@@ -636,6 +649,8 @@ class Processor {
 		}
 
 		GravityForms::update_entry( $entry );
+
+		return $entry;
 	}
 
 	/**

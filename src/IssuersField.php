@@ -132,6 +132,11 @@ class IssuersField extends GF_Field_Select {
 			$feeds = FeedsDB::get_feeds_by_form_id( $this->formId );
 
 			foreach ( $feeds as $feed ) {
+				// Check if feed is active.
+				if ( '0' === get_post_meta( $feed->id, '_pronamic_pay_gf_feed_active', true ) ) {
+					continue;
+				}
+
 				$gateway = Plugin::get_gateway( $feed->config_id );
 
 				if ( $gateway ) {

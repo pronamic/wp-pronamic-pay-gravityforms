@@ -635,7 +635,7 @@ class Extension extends AbstractPluginIntegration {
 				}
 
 				// Create subscription.
-				if ( ! Entry::is_payment_approved( $lead ) && Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
+				if ( ! Entry::is_payment_approved( $lead ) && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
 					$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
 					$this->payment_action( 'create_subscription', $lead, $action );

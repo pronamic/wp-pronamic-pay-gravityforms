@@ -248,9 +248,10 @@ class Processor {
 
 		$payment->config_id   = $this->feed->config_id;
 		$payment->order_id    = $data->get_order_id();
-		$payment->description = $data->get_description();
-		$payment->method      = $data->get_payment_method();
-		$payment->issuer      = $data->get_issuer_id();
+
+		$payment->set_description( $data->get_description() );
+		$payment->set_payment_method( $data->get_payment_method() );
+		$payment->set_meta( 'issuer', $data->get_issuer_id() );
 
 		// Currency.
 		$currency = Currency::get_instance( $data->get_currency_alphabetic_code() );

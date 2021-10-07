@@ -568,7 +568,7 @@ class Processor {
 		$payment->set_total_amount( $payment->lines->get_amount() );
 
 		// Use iDEAL instead of 'Direct Debit (mandate via iDEAL)' without subscription.
-		if ( null === $payment->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_method() ) {
+		if ( null === $payment->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_payment_method() ) {
 			$payment->set_payment_method( PaymentMethods::IDEAL );
 		}
 

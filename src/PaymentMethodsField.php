@@ -384,7 +384,7 @@ class PaymentMethodsField extends GF_Field_Select {
 									\esc_url( \str_replace( '.png', '@4x.png', $icon_url ) )
 								);
 							}
-						} elseif ( ! empty( $payment_method ) ) {
+						} elseif ( \array_key_exists( $payment_method, PaymentMethods::get_payment_methods() ) ) {
 							$label_content = \sprintf(
 								'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
 								\esc_html( $choice['text'] ),

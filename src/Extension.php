@@ -607,12 +607,31 @@ class Extension extends AbstractPluginIntegration {
 			}
 		}
 
+		/**
+		 * For follow-yp subscription payments we execute the `'add_subscription_payment'`
+		 * action instead of the regular `'complete_payment'` action. There is a follow-up
+		 * payment if the Pronamic payment ID stored with the entry does not match the
+		 * payment to be processed.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/239
+		 */
 		$success_action = 'complete_payment';
 		$fail_action    = 'fail_payment';
 
-		if ( 'recurring' === $payment->recurring_type ) {
-			$success_action = 'add_subscription_payment';
-			$fail_action    = 'fail_subscription_payment';
+		$subscriptions = $payment->get_subscriptions();
+
+		if ( \count( $subscriptions ) > 0 ) {
+			$payment_id_1 = (string) \gform_get_meta( $lead_id, 'pronamic_payment_id' );
+			$payment_id_2 = (string) $payment->get_id();
+
+			if ( $payment_id_1 !== $payment_id_2 ) {
+				$success_action = 'add_subscription_payment';
+				$fail_action    = 'fail_subscription_payment';
+
+				if ( PaymentStatus::OPEN === $payment->status ) {
+					\gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment_id_2 );
+				}
+			}
 		}
 
 		switch ( $payment->status ) {
@@ -647,9 +666,9 @@ class Extension extends AbstractPluginIntegration {
 				break;
 			case PaymentStatus::OPEN:
 			default:
-				if ( 'recurring' === $payment->recurring_type ) {
-					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
-				}
+				// Nothing to-do.
+
+				break;
 		}
 	}
 

@@ -476,10 +476,11 @@ class Processor {
 		$interval = $data->get_subscription_interval();
 
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
-			$payment->subscription_source_id = $lead['id'];
-
 			// Build subscription.
 			$subscription = new Subscription();
+
+			$payment->set_source( 'gravityformsideal' );
+			$payment->set_source_id( $lead['id'] );
 
 			$subscription->lines = $subscription_lines;
 

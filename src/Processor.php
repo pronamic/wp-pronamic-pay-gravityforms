@@ -562,7 +562,7 @@ class Processor {
 
 			$payment->add_period( $subscription->new_period() );
 
-			$payment->subscription = $subscription;
+			$payment->add_subscription( $subscription );
 		}
 
 		// Total amount.

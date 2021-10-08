@@ -246,8 +246,8 @@ class Processor {
 			$data->get_description()
 		);
 
-		$payment->config_id   = $this->feed->config_id;
-		$payment->order_id    = $data->get_order_id();
+		$payment->config_id = $this->feed->config_id;
+		$payment->order_id  = $data->get_order_id();
 
 		$payment->set_description( $data->get_description() );
 		$payment->set_payment_method( $data->get_payment_method() );

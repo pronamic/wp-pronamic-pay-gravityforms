@@ -451,8 +451,6 @@ class Processor {
 			// First payment and subscription amount are free.
 			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
 		) {
-			Plugin::complement_payment( $payment );
-
 			$payment->set_status( PaymentStatus::SUCCESS );
 			$payment->save();
 

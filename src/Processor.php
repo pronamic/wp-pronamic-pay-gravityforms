@@ -451,6 +451,9 @@ class Processor {
 			// First payment and subscription amount are free.
 			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
 		) {
+			// Allow delayed feeds to be processed during fulfilment for free payments (e.g. user registration for entry with discount).
+			\remove_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, array( $this, 'maybe_delay_feed' ), 10 );
+
 			$payment->set_status( PaymentStatus::SUCCESS );
 			$payment->save();
 

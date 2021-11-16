@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
+use Pronamic\WordPress\Number\Number;
 use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
@@ -350,12 +351,14 @@ class Processor {
 					}
 
 					if ( array_key_exists( 'price', $product ) ) {
-						$value = GFCommon::to_number( $product['price'] );
+						$value = Number::from_mixed( GFCommon::to_number( $product['price'] ) );
 
 						$line->set_unit_price( new Money( $value, $currency ) );
 
 						if ( array_key_exists( 'quantity', $product ) ) {
-							$value = ( $value * intval( $product['quantity'] ) );
+							$quantity = Number::from_mixed( $product['quantity'] );
+
+							$value = $value->multiply( $quantity );
 						}
 
 						$line->set_total_amount( new Money( $value, $currency ) );

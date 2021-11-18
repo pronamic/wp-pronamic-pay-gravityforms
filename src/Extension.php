@@ -443,15 +443,17 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
-		// Update payment post author.
+		// Update payment customer user ID and post author.
 		if ( null === $payment->get_customer() ) {
 			$payment->set_customer( new Customer() );
 		}
 
+		// Set payment customer user ID.
 		$payment->get_customer()->set_user_id( $user->ID );
 
 		$payment->save();
 
+		// Update payment post author.
 		wp_update_post(
 			array(
 				'ID'          => $payment->get_id(),
@@ -459,18 +461,20 @@ class Extension extends AbstractPluginIntegration {
 			)
 		);
 
-		// Update subscription post author.
-		$subscription = $payment->get_subscription();
+		// Update subscription customer user ID and post author.
+		$subscriptions = $payment->get_subscriptions();
 
-		if ( null !== $subscription ) {
+		foreach ( $subscriptions as $subscription ) {
 			if ( null === $subscription->get_customer() ) {
 				$subscription->set_customer( new Customer() );
 			}
 
+			// Set subscription customer user ID.
 			$subscription->get_customer()->set_user_id( $user->ID );
 
 			$subscription->save();
 
+			// Update subscription post author.
 			wp_update_post(
 				array(
 					'ID'          => $subscription->get_id(),

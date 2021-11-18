@@ -44,7 +44,8 @@
 		"pronamic/wp-coding-standards": "^1.0",
 		"roots/wordpress": "^5.8",
 		"wp-phpunit/wp-phpunit": "^5.8",
-		"wp-premium/gravityforms": "^2.3"
+		"wp-premium/gravityforms": "^2.3",
+		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"scripts": {
 		"coveralls": "vendor/bin/php-coveralls -v",

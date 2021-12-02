@@ -552,9 +552,10 @@ class Processor {
 
 					$payment->lines = $new_lines;
 
-					$alignment_phase->set_amount( $payment->lines->get_amount() );
 					$alignment_phase->set_prorated( true );
 				}
+
+				$alignment_phase->set_amount( $payment->lines->get_amount() );
 
 				$subscription->add_phase( $alignment_phase );
 			}

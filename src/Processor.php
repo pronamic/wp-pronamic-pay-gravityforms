@@ -369,6 +369,8 @@ class Processor {
 					}
 
 					if ( array_key_exists( 'options', $product ) && is_array( $product['options'] ) ) {
+						$product_quantity = $line->get_quantity();
+
 						$options = $product['options'];
 
 						foreach ( $options as $option ) {
@@ -376,16 +378,21 @@ class Processor {
 
 							$product_lines[] = $line;
 
-							$line->set_quantity( 1 );
-
+							// Name.
 							if ( array_key_exists( 'option_label', $option ) ) {
 								$line->set_name( $option['option_label'] );
 							}
 
+							// Quantity.
+							$line->set_quantity( null === $product_quantity ? 1 : $product_quantity );
+
+							// Price.
 							if ( array_key_exists( 'price', $option ) ) {
-								$value = GFCommon::to_number( $option['price'] );
+								$value = Number::from_mixed( GFCommon::to_number( $option['price'] ) );
 
 								$line->set_unit_price( new Money( $value, $currency ) );
+
+								$value = $value->multiply( Number::from_mixed( $line->get_quantity() ) );
 
 								$line->set_total_amount( new Money( $value, $currency ) );
 							}

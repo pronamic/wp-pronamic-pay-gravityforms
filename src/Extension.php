@@ -3,7 +3,7 @@
  * Extension
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -20,7 +20,6 @@ use GFUserData;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractPluginIntegration;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
-use Pronamic\WordPress\Pay\Core\Recurring;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Customer;
@@ -33,7 +32,7 @@ use WP_User;
 /**
  * Title: WordPress pay extension Gravity Forms extension
  * Description:
- * Copyright: 2005-2021 Pronamic
+ * Copyright: 2005-2022 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -444,15 +443,17 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
-		// Update payment post author.
+		// Update payment customer user ID and post author.
 		if ( null === $payment->get_customer() ) {
 			$payment->set_customer( new Customer() );
 		}
 
+		// Set payment customer user ID.
 		$payment->get_customer()->set_user_id( $user->ID );
 
 		$payment->save();
 
+		// Update payment post author.
 		wp_update_post(
 			array(
 				'ID'          => $payment->get_id(),
@@ -460,18 +461,20 @@ class Extension extends AbstractPluginIntegration {
 			)
 		);
 
-		// Update subscription post author.
-		$subscription = $payment->get_subscription();
+		// Update subscription customer user ID and post author.
+		$subscriptions = $payment->get_subscriptions();
 
-		if ( null !== $subscription ) {
+		foreach ( $subscriptions as $subscription ) {
 			if ( null === $subscription->get_customer() ) {
 				$subscription->set_customer( new Customer() );
 			}
 
+			// Set subscription customer user ID.
 			$subscription->get_customer()->set_user_id( $user->ID );
 
 			$subscription->save();
 
+			// Update subscription post author.
 			wp_update_post(
 				array(
 					'ID'          => $subscription->get_id(),
@@ -607,12 +610,31 @@ class Extension extends AbstractPluginIntegration {
 			}
 		}
 
+		/**
+		 * For follow-yp subscription payments we execute the `'add_subscription_payment'`
+		 * action instead of the regular `'complete_payment'` action. There is a follow-up
+		 * payment if the Pronamic payment ID stored with the entry does not match the
+		 * payment to be processed.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/239
+		 */
 		$success_action = 'complete_payment';
 		$fail_action    = 'fail_payment';
 
-		if ( 'recurring' === $payment->recurring_type ) {
-			$success_action = 'add_subscription_payment';
-			$fail_action    = 'fail_subscription_payment';
+		$subscriptions = $payment->get_subscriptions();
+
+		if ( \count( $subscriptions ) > 0 ) {
+			$payment_id_1 = (string) \gform_get_meta( $lead_id, 'pronamic_payment_id' );
+			$payment_id_2 = (string) $payment->get_id();
+
+			if ( $payment_id_1 !== $payment_id_2 ) {
+				$success_action = 'add_subscription_payment';
+				$fail_action    = 'fail_subscription_payment';
+
+				if ( PaymentStatus::OPEN === $payment->status ) {
+					\gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment_id_2 );
+				}
+			}
 		}
 
 		switch ( $payment->status ) {
@@ -635,7 +657,7 @@ class Extension extends AbstractPluginIntegration {
 				}
 
 				// Create subscription.
-				if ( ! Entry::is_payment_approved( $lead ) && Recurring::FIRST === $payment->recurring_type && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
+				if ( ! Entry::is_payment_approved( $lead ) && isset( $action['subscription_id'] ) && ! empty( $action['subscription_id'] ) ) {
 					$action['subscription_start_date'] = gmdate( 'Y-m-d H:i:s' );
 
 					$this->payment_action( 'create_subscription', $lead, $action );
@@ -647,9 +669,9 @@ class Extension extends AbstractPluginIntegration {
 				break;
 			case PaymentStatus::OPEN:
 			default:
-				if ( 'recurring' === $payment->recurring_type ) {
-					gform_update_meta( $lead['id'], 'pronamic_subscription_payment_id', $payment->get_id() );
-				}
+				// Nothing to-do.
+
+				break;
 		}
 	}
 

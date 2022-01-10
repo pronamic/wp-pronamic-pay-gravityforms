@@ -3,7 +3,7 @@
  * Processor
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -11,6 +11,7 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
+use Pronamic\WordPress\Number\Number;
 use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
@@ -32,7 +33,7 @@ use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 /**
  * Title: WordPress pay extension Gravity Forms processor
  * Description:
- * Copyright: 2005-2021 Pronamic
+ * Copyright: 2005-2022 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -246,11 +247,12 @@ class Processor {
 			$data->get_description()
 		);
 
-		$payment->config_id   = $this->feed->config_id;
-		$payment->order_id    = $data->get_order_id();
-		$payment->description = $data->get_description();
-		$payment->method      = $data->get_payment_method();
-		$payment->issuer      = $data->get_issuer_id();
+		$payment->config_id = $this->feed->config_id;
+		$payment->order_id  = $data->get_order_id();
+
+		$payment->set_description( $data->get_description() );
+		$payment->set_payment_method( $data->get_payment_method() );
+		$payment->set_meta( 'issuer', $data->get_issuer_id() );
 
 		// Currency.
 		$currency = Currency::get_instance( $data->get_currency_alphabetic_code() );
@@ -349,12 +351,14 @@ class Processor {
 					}
 
 					if ( array_key_exists( 'price', $product ) ) {
-						$value = GFCommon::to_number( $product['price'] );
+						$value = Number::from_mixed( GFCommon::to_number( $product['price'] ) );
 
 						$line->set_unit_price( new Money( $value, $currency ) );
 
 						if ( array_key_exists( 'quantity', $product ) ) {
-							$value = ( $value * intval( $product['quantity'] ) );
+							$quantity = Number::from_mixed( $product['quantity'] );
+
+							$value = $value->multiply( $quantity );
 						}
 
 						$line->set_total_amount( new Money( $value, $currency ) );
@@ -365,6 +369,8 @@ class Processor {
 					}
 
 					if ( array_key_exists( 'options', $product ) && is_array( $product['options'] ) ) {
+						$product_quantity = $line->get_quantity();
+
 						$options = $product['options'];
 
 						foreach ( $options as $option ) {
@@ -372,16 +378,21 @@ class Processor {
 
 							$product_lines[] = $line;
 
-							$line->set_quantity( 1 );
-
+							// Name.
 							if ( array_key_exists( 'option_label', $option ) ) {
 								$line->set_name( $option['option_label'] );
 							}
 
+							// Quantity.
+							$line->set_quantity( null === $product_quantity ? 1 : $product_quantity );
+
+							// Price.
 							if ( array_key_exists( 'price', $option ) ) {
-								$value = GFCommon::to_number( $option['price'] );
+								$value = Number::from_mixed( GFCommon::to_number( $option['price'] ) );
 
 								$line->set_unit_price( new Money( $value, $currency ) );
+
+								$value = $value->multiply( Number::from_mixed( $line->get_quantity() ) );
 
 								$line->set_total_amount( new Money( $value, $currency ) );
 							}
@@ -450,8 +461,6 @@ class Processor {
 			// First payment and subscription amount are free.
 			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
 		) {
-			Plugin::complement_payment( $payment );
-
 			$payment->set_status( PaymentStatus::SUCCESS );
 			$payment->save();
 
@@ -475,10 +484,11 @@ class Processor {
 		$interval = $data->get_subscription_interval();
 
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
-			$payment->subscription_source_id = $lead['id'];
-
 			// Build subscription.
 			$subscription = new Subscription();
+
+			$payment->set_source( 'gravityformsideal' );
+			$payment->set_source_id( $lead['id'] );
 
 			$subscription->lines = $subscription_lines;
 
@@ -549,9 +559,10 @@ class Processor {
 
 					$payment->lines = $new_lines;
 
-					$alignment_phase->set_amount( $payment->lines->get_amount() );
 					$alignment_phase->set_prorated( true );
 				}
+
+				$alignment_phase->set_amount( $payment->lines->get_amount() );
 
 				$subscription->add_phase( $alignment_phase );
 			}
@@ -559,16 +570,16 @@ class Processor {
 			$subscription->add_phase( $phase );
 
 			$payment->add_period( $subscription->new_period() );
-
-			$payment->subscription = $subscription;
 		}
 
 		// Total amount.
 		$payment->set_total_amount( $payment->lines->get_amount() );
 
 		// Use iDEAL instead of 'Direct Debit (mandate via iDEAL)' without subscription.
-		if ( null === $payment->get_subscription() && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_method() ) {
-			$payment->method = PaymentMethods::IDEAL;
+		$subscriptions = $payment->get_subscriptions();
+
+		if ( empty( $subscriptions ) && PaymentMethods::DIRECT_DEBIT_IDEAL === $payment->get_payment_method() ) {
+			$payment->set_payment_method( PaymentMethods::IDEAL );
 		}
 
 		// Start.

@@ -3,7 +3,7 @@
  * Payment methods field
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Plugin;
 /**
  * Title: WordPress pay extension Gravity Forms payment methods
  * Description:
- * Copyright: 2005-2021 Pronamic
+ * Copyright: 2005-2022 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -365,26 +365,7 @@ class PaymentMethodsField extends GF_Field_Select {
 						// Radio input.
 						$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
-						if ( PaymentMethods::is_direct_debit_method( $payment_method ) ) {
-							$icon_path = \sprintf(
-								'%s/icon-%s.png',
-								\strtr( \strtolower( $payment_method ), $replacements ),
-								\implode( 'x', $dimensions )
-							);
-
-							if ( \file_exists( \plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
-								$icon_url = \plugins_url( 'images/' . $icon_path, Plugin::$file );
-
-								$label_content = \sprintf(
-									'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
-									\esc_html( $choice['text'] ),
-									\esc_url( $icon_url ),
-									\esc_url( \str_replace( '.png', '@2x.png', $icon_url ) ),
-									\esc_url( \str_replace( '.png', '@3x.png', $icon_url ) ),
-									\esc_url( \str_replace( '.png', '@4x.png', $icon_url ) )
-								);
-							}
-						} elseif ( ! empty( $payment_method ) ) {
+						if ( \array_key_exists( $payment_method, PaymentMethods::get_payment_methods() ) ) {
 							$label_content = \sprintf(
 								'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
 								\esc_html( $choice['text'] ),

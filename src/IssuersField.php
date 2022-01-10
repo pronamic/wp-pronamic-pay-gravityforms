@@ -3,7 +3,7 @@
  * Issuers field
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2021 Pronamic
+ * @copyright 2005-2022 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -18,7 +18,7 @@ use Pronamic\WordPress\Pay\Plugin;
 /**
  * Title: WordPress pay extension Gravity Forms issuers field
  * Description:
- * Copyright: 2005-2021 Pronamic
+ * Copyright: 2005-2022 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma

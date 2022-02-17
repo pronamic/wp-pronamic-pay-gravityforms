@@ -298,11 +298,6 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return string
 	 */
 	public function get_field_input( $form, $value = '', $entry = null ) {
-		// Error handling.
-		if ( is_wp_error( $this->error ) ) {
-			return $this->error->get_error_message();
-		}
-
 		// Filter choices for display.
 		$choices = $this->choices;
 
@@ -750,8 +745,6 @@ class PaymentMethodsField extends GF_Field_Select {
 			$options = $gateway->get_payment_method_field_options( false );
 
 			$payment_methods = array_merge( $payment_methods, $options );
-
-			$this->error = $gateway->get_error();
 		}
 
 		if ( empty( $payment_methods ) ) {

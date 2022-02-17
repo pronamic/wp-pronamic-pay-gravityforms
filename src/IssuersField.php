@@ -178,6 +178,10 @@ class IssuersField extends GF_Field_Select {
 
 		$field = $gateway->get_issuer_field();
 
+		if ( null === $field ) {
+			return;
+		}
+
 		foreach ( $field['choices'] as $group ) {
 			foreach ( $group['options'] as $value => $label ) {
 				$this->choices[] = array(

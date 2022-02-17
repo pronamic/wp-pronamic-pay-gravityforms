@@ -178,13 +178,6 @@ class IssuersField extends GF_Field_Select {
 
 		$field = $gateway->get_issuer_field();
 
-		$this->error = $gateway->get_error();
-
-		// @todo What todo if error?
-		if ( ! $field || is_wp_error( $this->error ) ) {
-			return;
-		}
-
 		foreach ( $field['choices'] as $group ) {
 			foreach ( $group['options'] as $value => $label ) {
 				$this->choices[] = array(

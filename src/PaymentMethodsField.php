@@ -119,7 +119,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			$this->cssClass .= ' pronamic_pay_display_icons';
 		}
 
-		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
+		if ( false === strpos( $this->cssClass, 'gf_list_' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
 			$this->cssClass .= ' gf_list_2col';
 		}
 	}

@@ -77,16 +77,15 @@ class Extension extends AbstractPluginIntegration {
 	 * @return void
 	 */
 	public function setup() {
+		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
 		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
+		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
 		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
 
 		// Check if dependencies are met and integration is active.
 		if ( ! $this->is_active() ) {
 			return;
 		}
-
-		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
 
 		// Dutch translations.
 		\Pronamic\WordPress\GravityFormsNL\Plugin::instance();
@@ -275,7 +274,7 @@ class Extension extends AbstractPluginIntegration {
 	public function source_text( $text, Payment $payment ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
-		$entry = RGFormsModel::get_lead( $payment->get_source_id() );
+		$entry = $this->is_active() ? RGFormsModel::get_lead( $payment->get_source_id() ) : false;
 
 		$text .= sprintf(
 			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
@@ -333,7 +332,7 @@ class Extension extends AbstractPluginIntegration {
 	public function subscription_source_text( $text, Subscription $subscription ) {
 		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
-		$entry = RGFormsModel::get_lead( $subscription->get_source_id() );
+		$entry = $this->is_active() ? RGFormsModel::get_lead( $subscription->get_source_id() ) : false;
 
 		$text .= sprintf(
 			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',

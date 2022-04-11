@@ -7,6 +7,14 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.1.0] - 2022-04-11
+- Improve payment and subscription source text when Gravity Forms plugin is not active.
+- Fix possible invalid empty conditional logic object.
+- Add support for `gf_list_*` CSS classes in payment methods field (resolves pronamic/wp-pronamic-pay#312).
+- Update IssuersField.php
+- Remove error usage.
+- Remove gateway error usage, exception should be handled downstream.
+
 ## [4.0.1] - 2022-02-16
 - Fixed processing delayed feeds during fulfilment of free payments (e.g. user registration for entry with discount; [pronamic/wp-pronamic-pay#279](https://github.com/pronamic/wp-pronamic-pay/issues/279)).
 
@@ -333,7 +341,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.0...HEAD
+[4.1.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.1...4.1.0
 [4.0.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/wp-pay-extensions/gravityforms/compare/3.0.2...4.0.0
 [3.0.2]: https://github.com/wp-pay-extensions/gravityforms/compare/3.0.1...3.0.2

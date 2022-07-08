@@ -174,7 +174,11 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		// Always use iDEAL payment method for issuer field.
-		$gateway->set_payment_method( PaymentMethods::IDEAL );
+		$payment_method_object = $gateway->get_payment_method( PaymentMethods::IDEAL );
+
+		if ( null === $payment_method_object ) {
+			return;
+		}
 
 		/**
 		 * Removed `$gateway->get_issuer_field()` usage.

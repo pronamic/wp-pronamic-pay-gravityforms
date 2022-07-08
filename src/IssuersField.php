@@ -176,7 +176,13 @@ class IssuersField extends GF_Field_Select {
 		// Always use iDEAL payment method for issuer field.
 		$gateway->set_payment_method( PaymentMethods::IDEAL );
 
-		$field = $gateway->get_issuer_field();
+		/**
+		 * Removed `$gateway->get_issuer_field()` usage.
+		 * 
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1178965853
+		 * @todo Implement new payment methods fields.
+		 */
+		$field = null;
 
 		if ( null === $field ) {
 			return;

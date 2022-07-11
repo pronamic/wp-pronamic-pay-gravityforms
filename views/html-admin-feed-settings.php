@@ -925,20 +925,29 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 					</th>
 					<td>
 						<div id="gf_ideal_condition_config">
-							<script type="text/javascript">
-								<?php
+							<?php
 
-								if ( GravityForms::version_compare( '2.5-rc', '>=' ) ) {
-
-									?>
-
-									var form = <?php echo wp_json_encode( gf_apply_filters( array( 'gform_admin_pre_render', $form_id ), GFFormsModel::get_form_meta( $form_id ) ) ); ?>;
-
-									<?php
-								}
+							if ( GravityForms::version_compare( '2.5-rc', '>=' ) ) {
+								/**
+								 * We are executing the `gform_admin_pre_render` filter here, instead of within the script below,
+								 * as the filter can also result in output breaking our script.
+								 *
+								 * @link https://docs.gravityforms.com/gform_admin_pre_render/
+								 */
+								$form = \gf_apply_filters( [ 'gform_admin_pre_render', $form_id ], GFFormsModel::get_form_meta( $form_id ) );
 
 								?>
 
+								<script type="text/javascript">
+								var form = <?php echo \wp_json_encode( $form ); ?>;
+								</script>
+
+								<?php
+							}
+
+							?>
+
+							<script type="text/javascript">
 								function GetConditionalLogicFields () {
 									<?php
 

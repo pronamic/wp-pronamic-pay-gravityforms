@@ -742,9 +742,16 @@ class PaymentMethodsField extends GF_Field_Select {
 		$payment_methods = array();
 
 		foreach ( $gateways as $gateway ) {
-			$options = $gateway->get_payment_method_field_options( false );
+			$methods = array_filter(
+				$gateway->get_payment_methods(),
+				function( $payment_method ) {
+						return \in_array( $payment_method->get_status(), [ '', 'active' ], true );
+				}
+			);
 
-			$payment_methods = array_merge( $payment_methods, $options );
+			foreach ( $methods as $method ) {
+				$payment_methods[ $method->get_id() ] = $method->get_name();
+			}
 		}
 
 		if ( empty( $payment_methods ) ) {

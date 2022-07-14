@@ -140,7 +140,10 @@ class IssuersField extends GF_Field_Select {
 				$gateway = Plugin::get_gateway( $feed->config_id );
 
 				if ( $gateway ) {
-					$issuers = $gateway->get_transient_issuers();
+					/**
+					 * @todo Check for iDEAL issuers?
+					 */
+					$issuers = array();
 
 					if ( empty( $issuers ) ) {
 						continue;

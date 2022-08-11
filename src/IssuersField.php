@@ -13,6 +13,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 use GF_Field_Select;
 use Pronamic\WordPress\Pay\Core\Gateway;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Core\SelectField;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
@@ -189,14 +190,28 @@ class IssuersField extends GF_Field_Select {
 		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1178965853
 		 * @todo Implement new payment methods fields.
 		 */
-		$field = null;
+		$issuer_field = $payment_method_object->get_field( 'ideal-issuer' );
 
-		if ( null === $field ) {
+		if ( ! ( $issuer_field instanceof SelectField ) ) {
 			return;
 		}
 
-		foreach ( $field['choices'] as $group ) {
-			foreach ( $group['options'] as $value => $label ) {
+		$options = $issuer_field->get_options();
+
+		foreach ( $options as $option ) {
+			foreach ( $option as $value => $label ) {
+				// Flatten option groups.
+				if ( \is_array( $label ) ) {
+					foreach ( $label as $option_value => $option_label ) {
+						$this->choices[] = [
+							'value' => $option_value,
+							'text'  => $option_label,
+						];
+					}
+
+					continue;
+				}
+
 				$this->choices[] = [
 					'value' => $value,
 					'text'  => $label,

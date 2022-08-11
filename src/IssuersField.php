@@ -49,12 +49,12 @@ class IssuersField extends GF_Field_Select {
 	 *
 	 * @param array $properties Properties.
 	 */
-	public function __construct( $properties = array() ) {
+	public function __construct( $properties = [] ) {
 		parent::__construct( $properties );
 
 		// Actions.
-		if ( ! has_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) ) ) {
-			add_action( 'gform_editor_js_set_default_values', array( __CLASS__, 'editor_js_set_default_values' ) );
+		if ( ! has_action( 'gform_editor_js_set_default_values', [ __CLASS__, 'editor_js_set_default_values' ] ) ) {
+			add_action( 'gform_editor_js_set_default_values', [ __CLASS__, 'editor_js_set_default_values' ] );
 		}
 
 		if (
@@ -86,7 +86,7 @@ class IssuersField extends GF_Field_Select {
 			$this->cssClass .= ' pronamic_pay_display_icons';
 		}
 
-		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
+		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, [ 'icons-64', 'icons-125' ], true ) ) {
 			$this->cssClass .= ' gf_list_2col';
 		}
 	}
@@ -99,7 +99,7 @@ class IssuersField extends GF_Field_Select {
 	 * @return array
 	 */
 	public function get_form_editor_field_settings() {
-		return array(
+		return [
 			'conditional_logic_field_setting',
 			'error_message_setting',
 			'enable_enhanced_ui_setting',
@@ -113,7 +113,7 @@ class IssuersField extends GF_Field_Select {
 			'rules_setting',
 			'pronamic_pay_config_field_setting',
 			'pronamic_pay_display_field_setting',
-		);
+		];
 	}
 
 	/**
@@ -143,7 +143,7 @@ class IssuersField extends GF_Field_Select {
 					/**
 					 * @todo Check for iDEAL issuers?
 					 */
-					$issuers = array();
+					$issuers = [];
 
 					if ( empty( $issuers ) ) {
 						continue;
@@ -163,7 +163,7 @@ class IssuersField extends GF_Field_Select {
 	 * @param int $form_id Gravity Forms form ID.
 	 */
 	private function set_choices( $form_id ) {
-		$this->choices = array();
+		$this->choices = [];
 
 		// Prevent HTTP requests in forms list.
 		if ( \doing_filter( 'gform_form_actions' ) ) {
@@ -197,10 +197,10 @@ class IssuersField extends GF_Field_Select {
 
 		foreach ( $field['choices'] as $group ) {
 			foreach ( $group['options'] as $value => $label ) {
-				$this->choices[] = array(
+				$this->choices[] = [
 					'value' => $value,
 					'text'  => $label,
-				);
+				];
 			}
 		}
 	}
@@ -241,24 +241,24 @@ class IssuersField extends GF_Field_Select {
 					<?php
 
 					// Icon filename replacements.
-					$replacements = array(
+					$replacements = [
 						' bankiers' => '',
 						' '         => '-',
-					);
+					];
 
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$dimensions = array( 24, 24 );
+							$dimensions = [ 24, 24 ];
 
 							break;
 						case 'icons-64':
-							$dimensions = array( 64, 64 );
+							$dimensions = [ 64, 64 ];
 
 							break;
 						case 'icons-125':
 						default:
-							$dimensions = array( 125, 60 );
+							$dimensions = [ 125, 60 ];
 					}
 
 					$images_path = plugin_dir_path( Plugin::$file ) . 'images/';
@@ -550,10 +550,10 @@ class IssuersField extends GF_Field_Select {
 	 * @return array
 	 */
 	public function get_form_editor_button() {
-		return array(
+		return [
 			'group' => 'pronamic_pay_fields',
 			'text'  => __( 'Issuer', 'pronamic_ideal' ),
-		);
+		];
 	}
 
 	/**

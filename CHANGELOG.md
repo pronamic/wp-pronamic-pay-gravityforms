@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.1.1] - 2022-08-15
+- Fixed compatibility issue with plugins producing output in `gform_admin_pre_render` filter.
+- Fixed duplicate configurations in payment gateway configuration field setting ([pronamic/wp-pronamic-pay-gravityforms#8](https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/8)).
+
 ## [4.1.0] - 2022-04-11
 - Improve payment and subscription source text when Gravity Forms plugin is not active.
 - Fix possible invalid empty conditional logic object.
@@ -341,7 +345,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.0...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.1...HEAD
+[4.1.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.1...4.1.0
 [4.0.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.0...4.0.1
 [4.0.0]: https://github.com/wp-pay-extensions/gravityforms/compare/3.0.2...4.0.0

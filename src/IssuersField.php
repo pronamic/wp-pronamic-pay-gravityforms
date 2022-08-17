@@ -184,27 +184,18 @@ class IssuersField extends GF_Field_Select {
 			return;
 		}
 
-		$options = $issuer_field->get_options();
+		/**
+		 * Gravity Forms has no support for <optgroup>  elements.
+		 *
+		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
+		 */
+		$options = $issuer_field->get_flat_options();
 
 		foreach ( $options as $option ) {
-			foreach ( $option as $value => $label ) {
-				// Flatten option groups.
-				if ( \is_array( $label ) ) {
-					foreach ( $label as $option_value => $option_label ) {
-						$this->choices[] = [
-							'value' => $option_value,
-							'text'  => $option_label,
-						];
-					}
-
-					continue;
-				}
-
-				$this->choices[] = [
-					'value' => $value,
-					'text'  => $label,
-				];
-			}
+			$this->choices[] = [
+				'value' => $option->value,
+				'text'  => $option->content,
+			];
 		}
 	}
 

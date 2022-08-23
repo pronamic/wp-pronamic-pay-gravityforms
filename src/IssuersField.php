@@ -194,7 +194,7 @@ class IssuersField extends GF_Field_Select {
 		foreach ( $options as $option ) {
 			$this->choices[] = [
 				'value' => $option->value,
-				'text'  => $option->content,
+				'text'  => $option->label,
 			];
 		}
 	}

@@ -148,6 +148,11 @@ class PayFeed {
 				$this->conditional_logic_object = $conditional_logic_object;
 			}
 
+			// Unset conditional logic object without any logic.
+			if ( \is_array( $this->conditional_logic_object ) && \array_key_exists( 'conditionalLogic', $this->conditional_logic_object ) && empty( $this->conditional_logic_object['conditionalLogic'] ) ) {
+				$this->conditional_logic_object = null;
+			}
+
 			// The `_gform_setting_...` does not include the `conditionalLogic` key, as was the case previously with the `_gaddon_setting`.
 			if ( GravityForms::version_compare( '2.5', '>=' ) && \is_array( $this->conditional_logic_object ) && ! \array_key_exists( 'conditionalLogic', $this->conditional_logic_object ) ) {
 				$this->conditional_logic_object = array(

@@ -137,8 +137,6 @@ class Extension extends AbstractPluginIntegration {
 
 		add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
 
-		add_filter( 'gform_currencies', array( __CLASS__, 'currencies' ), 10, 1 );
-
 		\add_filter( 'gform_form_args', array( $this, 'maybe_prepopulate_form' ), 10, 1 );
 		\add_filter( 'gform_pre_render', array( $this, 'allow_field_prepopulation' ), 10, 3 );
 
@@ -1311,29 +1309,6 @@ class Extension extends AbstractPluginIntegration {
 		$text = strtr( $text, $replacements );
 
 		return $text;
-	}
-
-	/**
-	 * Filter currencies.
-	 *
-	 * @param array $currencies Available currencies.
-	 *
-	 * @return mixed
-	 */
-	public static function currencies( $currencies ) {
-		if ( PaymentMethods::is_active( PaymentMethods::GULDEN ) ) {
-			$currencies['NLG'] = array(
-				'name'               => PaymentMethods::get_name( PaymentMethods::GULDEN ),
-				'symbol_left'        => 'G',
-				'symbol_right'       => '',
-				'symbol_padding'     => ' ',
-				'thousand_separator' => '',
-				'decimal_separator'  => '.',
-				'decimals'           => 4,
-			);
-		}
-
-		return $currencies;
 	}
 
 	/**

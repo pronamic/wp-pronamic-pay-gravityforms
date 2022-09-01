@@ -29,16 +29,16 @@ class Admin {
 	 */
 	public static function bootstrap() {
 		// Actions.
-		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
-		add_action( 'admin_init', array( __CLASS__, 'maybe_redirect_to_entry' ) );
+		add_action( 'admin_init', [ __CLASS__, 'admin_init' ] );
+		add_action( 'admin_init', [ __CLASS__, 'maybe_redirect_to_entry' ] );
 
-		add_action( 'gform_entry_info', array( __CLASS__, 'entry_info' ), 10, 2 );
+		add_action( 'gform_entry_info', [ __CLASS__, 'entry_info' ], 10, 2 );
 
 		// Filters.
-		add_filter( 'gform_custom_merge_tags', array( __CLASS__, 'custom_merge_tags' ), 10 );
+		add_filter( 'gform_custom_merge_tags', [ __CLASS__, 'custom_merge_tags' ], 10 );
 
 		// Actions - AJAX.
-		add_action( 'wp_ajax_gf_get_form_data', array( __CLASS__, 'ajax_get_form_data' ) );
+		add_action( 'wp_ajax_gf_get_form_data', [ __CLASS__, 'ajax_get_form_data' ] );
 	}
 
 	/**
@@ -56,11 +56,11 @@ class Admin {
 	 * @return array
 	 */
 	public static function form_settings_menu_item( $menu_items ) {
-		$menu_items[] = array(
+		$menu_items[] = [
 			'name'  => 'pronamic_pay',
 			'label' => __( 'Pay', 'pronamic_ideal' ),
-			'query' => array( 'fid' => null ),
-		);
+			'query' => [ 'fid' => null ],
+		];
 
 		return $menu_items;
 	}
@@ -93,102 +93,102 @@ class Admin {
 	 */
 	public static function custom_merge_tags( $merge_tags ) {
 		// Payment.
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Payment Status', 'pronamic_ideal' ),
 			'tag'   => '{payment_status}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Payment Date', 'pronamic_ideal' ),
 			'tag'   => '{payment_date}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Transaction Id', 'pronamic_ideal' ),
 			'tag'   => '{transaction_id}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Payment Amount', 'pronamic_ideal' ),
 			'tag'   => '{payment_amount}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Payment ID', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_id}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Pay Again URL', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_pay_again_url}',
-		);
+		];
 
 		// Bank transfer.
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient reference', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_reference}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient bank name', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_bank_name}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient name', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_name}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient IBAN', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_iban}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient BIC', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_bic}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient city', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_city}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient country', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_country}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic bank transfer recipient account number', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_account_number}',
-		);
+		];
 
 		// Subscription.
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Subscription Payment ID', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_payment_id}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Subscription Amount', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_amount}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Subscription Cancel URL', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_cancel_url}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Subscription Renew URL', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_renew_url}',
-		);
+		];
 
-		$merge_tags[] = array(
+		$merge_tags[] = [
 			'label' => __( 'Pronamic Subscription Renewal Date', 'pronamic_ideal' ),
 			'tag'   => '{pronamic_subscription_renewal_date}',
-		);
+		];
 
 		return $merge_tags;
 	}
@@ -207,12 +207,12 @@ class Admin {
 
 		if ( ! empty( $lead ) ) {
 			$url = add_query_arg(
-				array(
+				[
 					'page' => 'gf_entries',
 					'view' => 'entry',
 					'id'   => $lead['form_id'],
 					'lid'  => $lead_id,
-				),
+				],
 				admin_url( 'admin.php' )
 			);
 
@@ -243,13 +243,13 @@ class Admin {
 	 */
 	public static function get_new_feed_url( $form_id ) {
 		return add_query_arg(
-			array(
+			[
 				'page'    => 'gf_edit_forms',
 				'view'    => 'settings',
 				'subview' => 'pronamic_pay',
 				'id'      => $form_id,
 				'fid'     => 0,
-			),
+			],
 			admin_url( 'admin.php' )
 		);
 	}

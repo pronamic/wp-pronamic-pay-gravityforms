@@ -32,25 +32,25 @@ class FeedsDB {
 	 * @param array  $meta    Meta query array.
 	 * @return PayFeed[]
 	 */
-	public static function get_feeds_by_form_id( $form_id, $meta = array() ) {
-		$feeds = array();
+	public static function get_feeds_by_form_id( $form_id, $meta = [] ) {
+		$feeds = [];
 
-		$meta_query = array(
-			array(
+		$meta_query = [
+			[
 				'key'   => '_pronamic_pay_gf_form_id',
 				'value' => $form_id,
-			),
-		);
+			],
+		];
 
 		$meta_query = array_merge( $meta_query, $meta );
 
 		$query = new WP_Query(
-			array(
+			[
 				'fields'         => 'ids',
 				'post_type'      => 'pronamic_pay_gf',
 				'posts_per_page' => 50,
 				'meta_query'     => $meta_query,
-			)
+			]
 		);
 
 		foreach ( $query->posts as $post_id ) {
@@ -69,19 +69,19 @@ class FeedsDB {
 	 * @return array
 	 */
 	public static function get_active_feeds_by_form_id( $form_id ) {
-		$meta = array(
-			array(
+		$meta = [
+			[
 				'relation' => 'OR',
-				array(
+				[
 					'key'   => '_pronamic_pay_gf_feed_active',
 					'value' => 1,
-				),
-				array(
+				],
+				[
 					'key'     => '_pronamic_pay_gf_feed_active',
 					'compare' => 'NOT EXISTS',
-				),
-			),
-		);
+				],
+			],
+		];
 
 		$feeds = self::get_feeds_by_form_id( $form_id, $meta );
 

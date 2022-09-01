@@ -59,10 +59,10 @@ class Extension extends AbstractPluginIntegration {
 	 */
 	public function __construct() {
 		parent::__construct(
-			array(
+			[
 				'name'    => __( 'Gravity Forms', 'pronamic_ideal' ),
 				'version' => '2.3.0',
-			)
+			]
 		);
 
 		// Dependencies.
@@ -77,10 +77,10 @@ class Extension extends AbstractPluginIntegration {
 	 * @return void
 	 */
 	public function setup() {
-		add_filter( 'pronamic_payment_source_text_' . self::SLUG, array( $this, 'source_text' ), 10, 2 );
-		add_filter( 'pronamic_payment_source_description_' . self::SLUG, array( $this, 'source_description' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, array( $this, 'subscription_source_text' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, array( $this, 'subscription_source_description' ), 10, 2 );
+		add_filter( 'pronamic_payment_source_text_' . self::SLUG, [ $this, 'source_text' ], 10, 2 );
+		add_filter( 'pronamic_payment_source_description_' . self::SLUG, [ $this, 'source_description' ], 10, 2 );
+		add_filter( 'pronamic_subscription_source_text_' . self::SLUG, [ $this, 'subscription_source_text' ], 10, 2 );
+		add_filter( 'pronamic_subscription_source_description_' . self::SLUG, [ $this, 'subscription_source_description' ], 10, 2 );
 
 		// Check if dependencies are met and integration is active.
 		if ( ! $this->is_active() ) {
@@ -95,9 +95,9 @@ class Extension extends AbstractPluginIntegration {
 
 		// Actions
 		// Initialize hook, Gravity Forms uses the default priority (10).
-		add_action( 'init', array( $this, 'init' ), 20 );
+		add_action( 'init', [ $this, 'init' ], 20 );
 
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ) );
+		add_action( 'admin_enqueue_scripts', [ $this, 'admin_enqueue_scripts' ] );
 
 		// Add-on
 		// The `class_exists` call is required to prevent strange errors on some hosting environments.
@@ -121,30 +121,30 @@ class Extension extends AbstractPluginIntegration {
 		if ( is_admin() ) {
 			Admin::bootstrap();
 		} else {
-			add_action( 'gform_pre_submission', array( $this, 'pre_submission' ) );
+			add_action( 'gform_pre_submission', [ $this, 'pre_submission' ] );
 		}
 
-		add_filter( 'pronamic_payment_source_url_' . self::SLUG, array( $this, 'source_url' ), 10, 2 );
-		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, array( $this, 'subscription_source_url' ), 10, 2 );
-		add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, array( $this, 'redirect_url' ), 10, 2 );
-		add_action( 'pronamic_payment_status_update_' . self::SLUG, array( $this, 'update_status' ), 10, 2 );
-		add_action( 'pronamic_pay_update_payment', array( $this, 'update_payment' ) );
-		add_action( 'pronamic_subscription_status_update_' . self::SLUG, array( $this, 'subscription_update_status' ) );
-		add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, array( $this, 'subscription_renewal_notice' ) );
+		add_filter( 'pronamic_payment_source_url_' . self::SLUG, [ $this, 'source_url' ], 10, 2 );
+		add_filter( 'pronamic_subscription_source_url_' . self::SLUG, [ $this, 'subscription_source_url' ], 10, 2 );
+		add_filter( 'pronamic_payment_redirect_url_' . self::SLUG, [ $this, 'redirect_url' ], 10, 2 );
+		add_action( 'pronamic_payment_status_update_' . self::SLUG, [ $this, 'update_status' ], 10, 2 );
+		add_action( 'pronamic_pay_update_payment', [ $this, 'update_payment' ] );
+		add_action( 'pronamic_subscription_status_update_' . self::SLUG, [ $this, 'subscription_update_status' ] );
+		add_action( 'pronamic_subscription_renewal_notice_' . self::SLUG, [ $this, 'subscription_renewal_notice' ] );
 		add_filter( 'pronamic_pay_subscription_amount_editable_' . self::SLUG, '__return_true' );
 
-		add_filter( 'gform_replace_merge_tags', array( $this, 'replace_merge_tags' ), 10, 7 );
+		add_filter( 'gform_replace_merge_tags', [ $this, 'replace_merge_tags' ], 10, 7 );
 
-		add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+		add_filter( 'gform_gf_field_create', [ $this, 'field_create' ], 10, 2 );
 
-		\add_filter( 'gform_form_args', array( $this, 'maybe_prepopulate_form' ), 10, 1 );
-		\add_filter( 'gform_pre_render', array( $this, 'allow_field_prepopulation' ), 10, 3 );
+		\add_filter( 'gform_form_args', [ $this, 'maybe_prepopulate_form' ], 10, 1 );
+		\add_filter( 'gform_pre_render', [ $this, 'allow_field_prepopulation' ], 10, 3 );
 
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled.
-		add_filter( 'gform_noconflict_scripts', array( $this, 'no_conflict_scripts' ) );
-		add_filter( 'gform_noconflict_styles', array( $this, 'no_conflict_styles' ) );
+		add_filter( 'gform_noconflict_scripts', [ $this, 'no_conflict_scripts' ] );
+		add_filter( 'gform_noconflict_styles', [ $this, 'no_conflict_styles' ] );
 
-		\add_filter( 'gform_payment_statuses', array( $this, 'gform_payment_statuses' ) );
+		\add_filter( 'gform_payment_statuses', [ $this, 'gform_payment_statuses' ] );
 
 		$this->maybe_display_confirmation();
 	}
@@ -198,14 +198,14 @@ class Extension extends AbstractPluginIntegration {
 		wp_register_style(
 			'pronamic-pay-gravityforms',
 			plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
-			array(),
+			[],
 			$this->get_version()
 		);
 
 		wp_register_script(
 			'pronamic-pay-gravityforms',
 			plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
-			array( 'jquery' ),
+			[ 'jquery' ],
 			$this->get_version(),
 			true
 		);
@@ -276,7 +276,7 @@ class Extension extends AbstractPluginIntegration {
 
 		$text .= sprintf(
 			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
-			add_query_arg( array( 'pronamic_gf_lid' => $payment->get_source_id() ), admin_url( 'admin.php' ) ),
+			add_query_arg( [ 'pronamic_gf_lid' => $payment->get_source_id() ], admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
 		);
@@ -309,9 +309,9 @@ class Extension extends AbstractPluginIntegration {
 
 		if ( false !== $entry ) {
 			$url = add_query_arg(
-				array(
+				[
 					'pronamic_gf_lid' => $payment->get_source_id(),
-				),
+				],
 				admin_url( 'admin.php' )
 			);
 		}
@@ -334,7 +334,7 @@ class Extension extends AbstractPluginIntegration {
 
 		$text .= sprintf(
 			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
-			add_query_arg( array( 'pronamic_gf_lid' => $subscription->get_source_id() ), admin_url( 'admin.php' ) ),
+			add_query_arg( [ 'pronamic_gf_lid' => $subscription->get_source_id() ], admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
 			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
 		);
@@ -367,9 +367,9 @@ class Extension extends AbstractPluginIntegration {
 
 		if ( false !== $entry ) {
 			$url = add_query_arg(
-				array(
+				[
 					'pronamic_gf_lid' => $subscription->get_source_id(),
-				),
+				],
 				admin_url( 'admin.php' )
 			);
 		}
@@ -452,10 +452,10 @@ class Extension extends AbstractPluginIntegration {
 
 		// Update payment post author.
 		wp_update_post(
-			array(
+			[
 				'ID'          => $payment->get_id(),
 				'post_author' => $user->ID,
-			)
+			]
 		);
 
 		// Update subscription customer user ID and post author.
@@ -473,10 +473,10 @@ class Extension extends AbstractPluginIntegration {
 
 			// Update subscription post author.
 			wp_update_post(
-				array(
+				[
 					'ID'          => $subscription->get_id(),
 					'post_author' => $user->ID,
-				)
+				]
 			);
 		}
 	}
@@ -552,10 +552,10 @@ class Extension extends AbstractPluginIntegration {
 					$url = $confirmation['redirect'];
 				} else {
 					$url = add_query_arg(
-						array(
+						[
 							'pay_confirmation' => $payment->get_id(),
 							'_wpnonce'         => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
-						),
+						],
 						$lead['source_url']
 					);
 				}
@@ -591,12 +591,12 @@ class Extension extends AbstractPluginIntegration {
 
 		$data = new PaymentData( $form, $lead, $feed );
 
-		$action = array(
+		$action = [
 			'id'             => $payment->get_id(),
 			'transaction_id' => $payment->get_transaction_id(),
 			'amount'         => $payment->get_total_amount()->get_value(),
 			'entry_id'       => $lead['id'],
-		);
+		];
 
 		// Get subscription ID from payment period.
 		$periods = $payment->get_periods();
@@ -729,7 +729,7 @@ class Extension extends AbstractPluginIntegration {
 
 			$result = $this->addon->refund_payment(
 				$entry,
-				array(
+				[
 					// The Gravity Forms payment add-on callback feature uses the action ID to prevent processing an action twice.
 					'id'             => '',
 					'type'           => 'refund_payment',
@@ -758,7 +758,7 @@ class Extension extends AbstractPluginIntegration {
 						\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
 						$diff_amount->format_i18n()
 					),
-				)
+				]
 			);
 
 			if ( true === $result ) {
@@ -801,12 +801,12 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		// Action.
-		$action = array(
+		$action = [
 			'id'              => $subscription->get_id(),
 			'subscription_id' => $subscription->get_id(),
 			'amount'          => $amount,
 			'entry_id'        => $lead['id'],
-		);
+		];
 
 		switch ( $subscription->get_status() ) {
 			case SubscriptionStatus::ACTIVE:
@@ -866,12 +866,12 @@ class Extension extends AbstractPluginIntegration {
 			$amount = $current_phase->get_amount()->get_value();
 		}
 
-		$action = array(
+		$action = [
 			'subscription_id' => $subscription->get_id(),
 			'amount'          => $amount,
 			'entry_id'        => $lead['id'],
 			'type'            => 'renew_subscription',
-		);
+		];
 
 		$this->addon->post_payment_action( $lead, $action );
 	}
@@ -1046,7 +1046,7 @@ class Extension extends AbstractPluginIntegration {
 			// Delay notifications.
 			// Determine if the feed has Gravity Form 1.7 Feed IDs.
 			if ( $feed->has_delayed_notifications() ) {
-				$delay_notification_ids = array();
+				$delay_notification_ids = [];
 
 				foreach ( $feed->delay_notification_ids as $notification_id ) {
 					if ( ! isset( $form['notifications'][ $notification_id ] ) ) {
@@ -1137,12 +1137,12 @@ class Extension extends AbstractPluginIntegration {
 
 			$form = GFAPI::get_form( $lead['form_id'] );
 
-			GFFormDisplay::$submission[ $form['id'] ] = array(
+			GFFormDisplay::$submission[ $form['id'] ] = [
 				'is_confirmation'      => true,
 				'confirmation_message' => $confirmation,
 				'form'                 => $form,
 				'lead'                 => $lead,
-			);
+			];
 		}
 	}
 
@@ -1170,7 +1170,7 @@ class Extension extends AbstractPluginIntegration {
 			$confirmation_id = $feed->links[ $link ]['confirmation_id'];
 
 			if ( isset( $form['confirmations'][ $confirmation_id ] ) ) {
-				$form['confirmations'] = array_intersect_key( $form['confirmations'], array( $confirmation_id => true ) );
+				$form['confirmations'] = array_intersect_key( $form['confirmations'], [ $confirmation_id => true ] );
 			}
 		}
 
@@ -1269,16 +1269,16 @@ class Extension extends AbstractPluginIntegration {
 
 		if ( null !== $payment ) {
 			$pay_again_url = \add_query_arg(
-				array(
+				[
 					'pay_again' => $payment->get_id(),
 					'key'       => $payment->key,
-				),
+				],
 				rgar( $entry, 'source_url' )
 			);
 		}
 
 		// Replacements.
-		$replacements = array(
+		$replacements = [
 			'{payment_status}'                     => rgar( $entry, 'payment_status' ),
 			'{payment_date}'                       => rgar( $entry, 'payment_date' ),
 			'{transaction_id}'                     => rgar( $entry, 'transaction_id' ),
@@ -1298,7 +1298,7 @@ class Extension extends AbstractPluginIntegration {
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,
 			'{pronamic_subscription_renew_url}'    => $subscription_renew_url,
 			'{pronamic_subscription_renewal_date}' => $subscription_renewal_date,
-		);
+		];
 
 		if ( $url_encode ) {
 			foreach ( $replacements as &$value ) {
@@ -1317,113 +1317,113 @@ class Extension extends AbstractPluginIntegration {
 	 * @return array
 	 */
 	public static function get_delay_actions() {
-		$actions = array(
-			'gravityformsactivecampaign'   => array(
+		$actions = [
+			'gravityformsactivecampaign'   => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'activecampaign_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to ActiveCampaign', 'pronamic_ideal' ),
-			),
-			'gravityformsaweber'           => array(
+			],
+			'gravityformsaweber'           => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'aweber_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
-					\remove_action( 'gform_post_submission', array( 'GFAWeber', 'export' ), 10 );
+					\remove_action( 'gform_post_submission', [ 'GFAWeber', 'export' ], 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					if ( Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
-						call_user_func( array( 'GFAWeber', 'export' ), $entry, $form, false );
+						call_user_func( [ 'GFAWeber', 'export' ], $entry, $form, false );
 					}
 				},
-			),
-			'gravityformscampaignmonitor'  => array(
+			],
+			'gravityformscampaignmonitor'  => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'campaignmonitor_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
-					\remove_action( 'gform_after_submission', array( 'GFCampaignMonitor', 'export' ), 10 );
+					\remove_action( 'gform_after_submission', [ 'GFCampaignMonitor', 'export' ], 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
 					if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
-						call_user_func( array( 'GFCampaignMonitor', 'export' ), $entry, $form, false );
+						call_user_func( [ 'GFCampaignMonitor', 'export' ], $entry, $form, false );
 					}
 				},
-			),
-			'gravityformsmailchimp'        => array(
+			],
+			'gravityformsmailchimp'        => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'mailchimp_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
-					\remove_action( 'gform_after_submission', array( 'GFMailChimp', 'export' ), 10 );
+					\remove_action( 'gform_after_submission', [ 'GFMailChimp', 'export' ], 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
 					if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
-						call_user_func( array( 'GFMailChimp', 'export' ), $entry, $form, false );
+						call_user_func( [ 'GFMailChimp', 'export' ], $entry, $form, false );
 					}
 				},
-			),
-			'slicedinvoices'               => array(
+			],
+			'slicedinvoices'               => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'sliced_invoices',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Creating quotes and invoices with Sliced Invoices', 'pronamic_ideal' ),
-			),
-			'gravityforms-moneybird'       => array(
+			],
+			'gravityforms-moneybird'       => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'moneybird',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Sending estimates and invoices with Moneybird', 'pronamic_ideal' ),
-			),
-			'gravityformstwilio'           => array(
+			],
+			'gravityformstwilio'           => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'twilio',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Sending data to Twilio', 'pronamic_ideal' ),
-			),
-			'gravityformswebhooks'         => array(
+			],
+			'gravityformswebhooks'         => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'webhooks',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Sending a trigger to Webhooks', 'pronamic_ideal' ),
-			),
-			'gravityformsdropbox'          => array(
+			],
+			'gravityformsdropbox'          => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'dropbox',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Uploading files to Dropbox', 'pronamic_ideal' ),
-			),
-			'gravityformszapier'           => array(
+			],
+			'gravityformszapier'           => [
 				'active'                      => class_exists( 'GFZapier' ),
 				'meta_key_suffix'             => 'zapier',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),
 				'delay_callback'              => function() {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
-					remove_action( 'gform_after_submission', array( 'GFZapier', 'send_form_data_to_zapier' ), 10 );
+					remove_action( 'gform_after_submission', [ 'GFZapier', 'send_form_data_to_zapier' ], 10 );
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.
 					if ( Core_Util::class_method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
-						call_user_func( array( 'GFZapier', 'send_form_data_to_zapier' ), $entry, $form );
+						call_user_func( [ 'GFZapier', 'send_form_data_to_zapier' ], $entry, $form );
 					}
 				},
-			),
-			'gravityformsuserregistration' => array(
+			],
+			'gravityformsuserregistration' => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'user_registration',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
-			),
-			'gravityflow'                  => array(
+			],
+			'gravityflow'                  => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'gravityflow',
 				'delayed_payment_integration' => true,
@@ -1439,19 +1439,19 @@ class Extension extends AbstractPluginIntegration {
 						$gravityflow->process_workflow( $form, $entry['id'] );
 					}
 				},
-			),
-		);
+			],
+		];
 
 		$addons = GFAddOn::get_registered_addons();
 
 		foreach ( $addons as $class ) {
-			$addon = call_user_func( array( $class, 'get_instance' ) );
+			$addon = call_user_func( [ $class, 'get_instance' ] );
 
 			$slug = $addon->get_slug();
 
 			if ( isset( $addon->delayed_payment_integration ) ) {
 				if ( ! isset( $actions[ $slug ] ) ) {
-					$actions[ $slug ] = array();
+					$actions[ $slug ] = [];
 				}
 
 				$actions[ $slug ]['meta_key_suffix']             = $slug;
@@ -1519,7 +1519,7 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		// Set field values.
-		$field_values = array();
+		$field_values = [];
 
 		foreach ( $entry as $key => $value ) {
 			$is_numeric   = \is_numeric( $key );

@@ -39,10 +39,10 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 *
 	 * @var array
 	 */
-	protected $_capabilities = array(
+	protected $_capabilities = [
 		'gravityforms_pronamic_pay',
 		'gravityforms_pronamic_pay_uninstall',
-	);
+	];
 
 	/**
 	 * Capabilities settings page.
@@ -104,12 +104,12 @@ class PaymentAddOn extends GFPaymentAddOn {
 		/*
 		 * Actions.
 		 */
-		add_action( 'admin_init', array( $this, 'pronamic_maybe_save_feed' ), 20 );
+		add_action( 'admin_init', [ $this, 'pronamic_maybe_save_feed' ], 20 );
 
 		/*
 		 * Filters.
 		 */
-		add_filter( 'gform_admin_pre_render', array( $this, 'admin_pre_render' ), 10, 1 );
+		add_filter( 'gform_admin_pre_render', [ $this, 'admin_pre_render' ], 10, 1 );
 	}
 
 	/**
@@ -156,25 +156,25 @@ class PaymentAddOn extends GFPaymentAddOn {
 		}
 
 		$post_id = wp_insert_post(
-			array(
+			[
 				'ID'             => $post_id,
 				'post_type'      => 'pronamic_pay_gf',
 				'post_title'     => $post_title,
 				'post_status'    => 'publish',
 				'comment_status' => 'closed',
 				'ping_status'    => 'closed',
-			)
+			]
 		);
 
 		$url = add_query_arg(
-			array(
+			[
 				'page'    => 'gf_edit_forms',
 				'view'    => 'settings',
 				'subview' => 'pronamic_pay',
 				'id'      => $form_id,
 				'fid'     => $post_id,
 				'message' => $post_id ? '1' : '0',
-			),
+			],
 			'admin.php'
 		);
 
@@ -197,7 +197,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 
 		$feeds = FeedsDB::get_feeds_by_form_id( $form['id'] );
 
-		$condition_field_ids = array();
+		$condition_field_ids = [];
 
 		foreach ( $feeds as $feed ) {
 			if ( empty( $feed->condition_field_id ) ) {
@@ -259,10 +259,10 @@ class PaymentAddOn extends GFPaymentAddOn {
 			$feed = new PayFeed( $post_id );
 
 			$this->set_settings(
-				array(
+				[
 					'feed_condition_conditional_logic' => $feed->condition_enabled,
 					'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
-				)
+				]
 			);
 
 			require dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php';
@@ -291,7 +291,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 			return $title;
 		}
 
-		$url = add_query_arg( array( 'fid' => '0' ) );
+		$url = add_query_arg( [ 'fid' => '0' ] );
 
 		$title .= sprintf(
 			'<a class="add-new-h2" href="%s">%s</a>',
@@ -314,9 +314,9 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$columns               = $this->feed_list_columns();
 		$bulk_actions          = $this->get_bulk_actions();
 		$action_links          = $this->get_action_links();
-		$column_value_callback = array( $this, 'get_column_value' );
-		$no_item_callback      = array( $this, 'feed_list_no_item_message' );
-		$message_callback      = array( $this, 'feed_list_message' );
+		$column_value_callback = [ $this, 'get_column_value' ];
+		$no_item_callback      = [ $this, 'feed_list_no_item_message' ];
+		$message_callback      = [ $this, 'feed_list_message' ];
 
 		$feed_table = new GFAddOnFeedsTable( $feeds, $this->_slug, $columns, $bulk_actions, $action_links, $column_value_callback, $no_item_callback, $message_callback, $this );
 
@@ -334,35 +334,35 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 */
 	public function get_feeds( $form_id = null ) {
 		$query = new WP_Query(
-			array(
+			[
 				'post_type'      => 'pronamic_pay_gf',
 				'posts_per_page' => 50,
-				'meta_query'     => array(
-					array(
+				'meta_query'     => [
+					[
 						'key'   => '_pronamic_pay_gf_form_id',
 						'value' => $form_id,
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
-		$posts = array();
+		$posts = [];
 
 		foreach ( $query->posts as $post ) {
 			$post = (array) $post;
 
 			$post = array_merge(
 				$post,
-				array(
+				[
 					'id'        => $post['ID'],
 					'form_id'   => get_post_meta( $post['ID'], '_pronamic_pay_gf_form_id', true ),
 					'is_active' => true,
-					'meta'      => array(
+					'meta'      => [
 						'post'            => $post,
 						'feed_name'       => $post['post_title'],
 						'transactionType' => 'product',
-					),
-				)
+					],
+				]
 			);
 
 			// Is activated?
@@ -394,18 +394,18 @@ class PaymentAddOn extends GFPaymentAddOn {
 
 		$post = array_merge(
 			$post,
-			array(
+			[
 				'id'        => $post['ID'],
 				'form_id'   => get_post_meta( $id, '_pronamic_pay_gf_form_id', true ),
 				'is_active' => true,
-				'meta'      => array(
+				'meta'      => [
 					'post'                             => $post,
 					'feed_name'                        => $post['post_title'],
 					'transactionType'                  => 'product',
 					'feed_condition_conditional_logic' => $feed->condition_enabled,
 					'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
-				),
-			)
+				],
+			]
 		);
 
 		// Is activated?
@@ -429,13 +429,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$pay_feed = new PayFeed( $feed['ID'] );
 
 		if ( ! \array_key_exists( 'meta', $feed ) ) {
-			$feed['meta'] = array();
+			$feed['meta'] = [];
 		}
 
-		$feed['meta'] = array(
+		$feed['meta'] = [
 			'feed_condition_conditional_logic'        => $pay_feed->condition_enabled,
 			'feed_condition_conditional_logic_object' => $pay_feed->conditional_logic_object,
-		);
+		];
 
 		return parent::is_feed_condition_met( $feed, $form, $entry );
 	}
@@ -446,11 +446,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return array
 	 */
 	public function feed_list_columns() {
-		return array(
+		return [
 			'name'                    => esc_html__( 'Name', 'pronamic_ideal' ),
 			'transaction_description' => esc_html__( 'Transaction Description', 'pronamic_ideal' ),
 			'configuration'           => esc_html__( 'Configuration', 'pronamic_ideal' ),
-		);
+		];
 	}
 
 	/**
@@ -467,7 +467,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 			$title = __( 'Default pay feed', 'pronamic_ideal' );
 		}
 
-		$edit_url = add_query_arg( array( 'fid' => $feed['id'] ) );
+		$edit_url = add_query_arg( [ 'fid' => $feed['id'] ] );
 
 		?>
 
@@ -520,7 +520,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		printf(
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			$label,
-			'<a href="' . esc_url( add_query_arg( array( 'fid' => 0 ) ) ) . '">',
+			'<a href="' . esc_url( add_query_arg( [ 'fid' => 0 ] ) ) . '">',
 			'</a>'
 		);
 	}
@@ -533,14 +533,14 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @return array
 	 */
 	public function supported_notification_events( $form ) {
-		$events = array();
+		$events = [];
 
 		// Check if form has feeds for this add-on.
 		if ( ! $this->has_feed( $form['id'] ) ) {
 			return $events;
 		}
 
-		$events = array(
+		$events = [
 			'complete_payment'          => esc_html__( 'Payment Completed', 'pronamic_ideal' ),
 			'fail_payment'              => esc_html__( 'Payment Failed', 'pronamic_ideal' ),
 			'add_pending_payment'       => esc_html__( 'Payment Pending', 'pronamic_ideal' ),
@@ -552,7 +552,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 			'renew_subscription'        => esc_html__( 'Subscription Renewal Notice', 'pronamic_ideal' ),
 			'add_subscription_payment'  => esc_html__( 'Subscription Payment Added', 'pronamic_ideal' ),
 			'fail_subscription_payment' => esc_html__( 'Subscription Payment Failed', 'pronamic_ideal' ),
-		);
+		];
 
 		return $events;
 	}
@@ -595,13 +595,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 
 		// Insert post.
 		$post_id = wp_insert_post(
-			array(
+			[
 				'post_type'      => 'pronamic_pay_gf',
 				'post_title'     => $meta['feed_name'],
 				'post_status'    => 'publish',
 				'comment_status' => 'closed',
 				'ping_status'    => 'closed',
-			)
+			]
 		);
 
 		$original_meta = get_post_meta( $original_feed['ID'] );

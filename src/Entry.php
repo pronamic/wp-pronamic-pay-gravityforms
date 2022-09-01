@@ -53,12 +53,12 @@ class Entry {
 
 			$approved = in_array(
 				$payment_status,
-				array(
+				[
 					// @since 1.0.0 - Approved
 					PaymentStatuses::APPROVED,
 					// @since 1.2.3 - Paid
 					PaymentStatuses::PAID,
-				),
+				],
 				true
 			);
 		}

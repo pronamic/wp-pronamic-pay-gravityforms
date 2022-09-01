@@ -259,6 +259,11 @@ class IssuersField extends GF_Field_Select {
 
 					// Loop issuers.
 					foreach ( $this->choices as $choice ) {
+						// Ignore choices without value.
+						if ( \array_key_exists( 'value', $choice ) && empty( $choice['value'] ) ) {
+							continue;
+						}
+
 						// Icon file name.
 						$issuer = strtr( strtolower( $choice['text'] ), $replacements );
 

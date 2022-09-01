@@ -11,8 +11,6 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
-use Pronamic\WordPress\DateTime\DateTime;
-use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
 use RGFormsModel;
@@ -52,7 +50,7 @@ class PaymentData {
 	private $feed;
 
 	/**
-	 * Constructs and initialize an Gravity Forms iDEAL data proxy
+	 * Constructs and initialize a Gravity Forms iDEAL data proxy
 	 *
 	 * @param array   $form Gravity Forms form.
 	 * @param array   $lead Gravity Forms lead/entry.
@@ -71,7 +69,7 @@ class PaymentData {
 	 *
 	 * @return null|string
 	 */
-	public function get_field_value( $field_name ) {
+	public function get_field_value( $field_name ) : ?string {
 		if ( ! isset( $this->feed->fields[ $field_name ] ) ) {
 			return null;
 		}
@@ -98,7 +96,7 @@ class PaymentData {
 	 *
 	 * @return string
 	 */
-	public function get_description() {
+	public function get_description() : string {
 		$description = $this->feed->transaction_description;
 
 		if ( empty( $description ) ) {
@@ -115,7 +113,7 @@ class PaymentData {
 	 *
 	 * @return string
 	 */
-	public function get_order_id() {
+	public function get_order_id() : string {
 		$order_id = $this->feed->order_id;
 
 		if ( ! empty( $this->feed->entry_id_prefix ) ) {
@@ -136,7 +134,7 @@ class PaymentData {
 	 *
 	 * @return string
 	 */
-	public function get_currency_alphabetic_code() {
+	public function get_currency_alphabetic_code() : string {
 		if ( isset( $this->lead['currency'] ) ) {
 			return $this->lead['currency'];
 		}
@@ -149,16 +147,18 @@ class PaymentData {
 	 *
 	 * @return string|null
 	 */
-	public function get_payment_method() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( Fields::PAYMENT_METHODS_FIELD_TYPE ) );
+	public function get_payment_method() : ?string {
+		$fields = GFCommon::get_fields_by_type( $this->form, [ Fields::PAYMENT_METHODS_FIELD_TYPE ] );
 
 		foreach ( $fields as $field ) {
-			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+			if ( ! RGFormsModel::is_field_hidden( $this->form, $field, [], $this->lead ) ) {
 				$method = RGFormsModel::get_field_value( $field );
 
 				return $method;
 			}
 		}
+
+		return null;
 	}
 
 	/**
@@ -166,16 +166,18 @@ class PaymentData {
 	 *
 	 * @return string|null
 	 */
-	public function get_issuer_id() {
-		$fields = GFCommon::get_fields_by_type( $this->form, array( IssuersField::TYPE ) );
+	public function get_issuer_id() : ?string {
+		$fields = GFCommon::get_fields_by_type( $this->form, [ IssuersField::TYPE ] );
 
 		foreach ( $fields as $field ) {
-			if ( RGFormsModel::is_field_hidden( $this->form, $field, array() ) ) {
+			if ( RGFormsModel::is_field_hidden( $this->form, $field, [] ) ) {
 				continue;
 			}
 
 			return RGFormsModel::get_field_value( $field );
 		}
+
+		return null;
 	}
 
 	/**
@@ -183,10 +185,10 @@ class PaymentData {
 	 *
 	 * @return CreditCard|null
 	 */
-	public function get_credit_card() {
+	public function get_credit_card() : ?CreditCard {
 		$credit_card = null;
 
-		$credit_card_fields = GFCommon::get_fields_by_type( $this->form, array( 'creditcard' ) );
+		$credit_card_fields = GFCommon::get_fields_by_type( $this->form, [ 'creditcard' ] );
 
 		$credit_card_field = array_shift( $credit_card_fields );
 
@@ -230,14 +232,14 @@ class PaymentData {
 	 *
 	 * @return int|null
 	 */
-	public function get_subscription_frequency() {
+	public function get_subscription_frequency() : ?int {
 		$frequency = null;
 
 		switch ( $this->feed->subscription_frequency_type ) {
 			case GravityForms::SUBSCRIPTION_FREQUENCY_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_frequency_field );
 
-				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, [], $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_frequency_field ] ) ) {
 						$frequency = intval( $this->lead[ $this->feed->subscription_frequency_field ] );
 					}
@@ -258,17 +260,17 @@ class PaymentData {
 	 *
 	 * @return object
 	 */
-	public function get_subscription_interval() {
-		$interval = (object) array(
+	public function get_subscription_interval() : object {
+		$interval = (object) [
 			'unit'  => 'D',
 			'value' => null,
-		);
+		];
 
 		switch ( $this->feed->subscription_interval_type ) {
 			case GravityForms::SUBSCRIPTION_INTERVAL_FIELD:
 				$field = RGFormsModel::get_field( $this->form, $this->feed->subscription_interval_field );
 
-				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, array(), $this->lead ) ) {
+				if ( ! RGFormsModel::is_field_hidden( $this->form, $field, [], $this->lead ) ) {
 					if ( isset( $this->lead[ $this->feed->subscription_interval_field ] ) ) {
 						$value = $this->lead[ $this->feed->subscription_interval_field ];
 

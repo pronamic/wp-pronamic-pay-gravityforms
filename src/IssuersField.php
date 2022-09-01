@@ -12,7 +12,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GF_Field_Select;
 use Pronamic\WordPress\Pay\Core\Gateway;
-use Pronamic\WordPress\Pay\Core\IDealIssuerSelectField;
+use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
 

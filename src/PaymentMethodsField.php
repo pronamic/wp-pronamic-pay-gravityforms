@@ -361,11 +361,15 @@ class PaymentMethodsField extends GF_Field_Select {
 						$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
 						if ( \array_key_exists( $payment_method, PaymentMethods::get_payment_methods() ) ) {
-							$label_content = \sprintf(
-								'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
-								\esc_html( $choice['text'] ),
-								\esc_url( PaymentMethods::get_icon_url( $payment_method ) )
-							);
+							$icon_url = PaymentMethods::get_icon_url( $payment_method );
+
+							if ( null !== $icon_url ) {
+								$label_content = \sprintf(
+									'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
+									\esc_html( $choice['text'] ),
+									\esc_url( $icon_url )
+								);
+							}
 						}
 
 						\printf(

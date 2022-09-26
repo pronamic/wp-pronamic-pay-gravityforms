@@ -140,18 +140,24 @@ class IssuersField extends GF_Field_Select {
 
 				$gateway = Plugin::get_gateway( $feed->config_id );
 
-				if ( $gateway ) {
-					/**
-					 * @todo Check for iDEAL issuers?
-					 */
-					$issuers = [];
-
-					if ( empty( $issuers ) ) {
-						continue;
-					}
-
-					return $gateway;
+				if ( null === $gateway ) {
+					continue;
 				}
+
+				// Always use iDEAL payment method for issuer field.
+				$issuer_field = $gateway->first_payment_method_field( PaymentMethods::IDEAL, IDealIssuerSelectField::class );
+
+				if ( null === $issuer_field ) {
+					continue;
+				}
+
+				$options = $issuer_field->get_options();
+
+				if ( 1 === count( $options ) ) {
+					continue;
+				}
+
+				return $gateway;
 			}
 		}
 

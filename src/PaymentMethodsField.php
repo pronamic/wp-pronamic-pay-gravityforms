@@ -52,7 +52,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	 *
 	 * @param array $properties Field properties.
 	 */
-	public function __construct( $properties = array() ) {
+	public function __construct( $properties = [] ) {
 		parent::__construct( $properties );
 
 		/*
@@ -65,25 +65,25 @@ class PaymentMethodsField extends GF_Field_Select {
 		$this->inputs = null;
 
 		// Actions.
-		if ( ! has_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) ) ) {
-			add_action( 'gform_editor_js_set_default_values', array( $this, 'editor_js_set_default_values' ) );
+		if ( ! has_action( 'gform_editor_js_set_default_values', [ $this, 'editor_js_set_default_values' ] ) ) {
+			add_action( 'gform_editor_js_set_default_values', [ $this, 'editor_js_set_default_values' ] );
 		}
 
 		// Filters.
-		if ( ! has_filter( 'gform_gf_field_create', array( $this, 'field_create' ) ) ) {
-			add_filter( 'gform_gf_field_create', array( $this, 'field_create' ), 10, 2 );
+		if ( ! has_filter( 'gform_gf_field_create', [ $this, 'field_create' ] ) ) {
+			add_filter( 'gform_gf_field_create', [ $this, 'field_create' ], 10, 2 );
 		}
 
-		if ( ! has_filter( 'gform_get_field_value', array( $this, 'get_field_value' ) ) ) {
-			add_filter( 'gform_get_field_value', array( $this, 'get_field_value' ), 10, 3 );
+		if ( ! has_filter( 'gform_get_field_value', [ $this, 'get_field_value' ] ) ) {
+			add_filter( 'gform_get_field_value', [ $this, 'get_field_value' ], 10, 3 );
 		}
 
-		if ( ! has_filter( 'gform_form_update_meta', array( __CLASS__, 'form_update_meta' ) ) ) {
-			add_filter( 'gform_form_update_meta', array( __CLASS__, 'form_update_meta' ), 10, 3 );
+		if ( ! has_filter( 'gform_form_update_meta', [ __CLASS__, 'form_update_meta' ] ) ) {
+			add_filter( 'gform_form_update_meta', [ __CLASS__, 'form_update_meta' ], 10, 3 );
 		}
 
-		if ( ! has_filter( 'gform_pre_render', array( __CLASS__, 'form_pre_render' ) ) ) {
-			add_filter( 'gform_pre_render', array( __CLASS__, 'form_pre_render' ), 10, 3 );
+		if ( ! has_filter( 'gform_pre_render', [ __CLASS__, 'form_pre_render' ] ) ) {
+			add_filter( 'gform_pre_render', [ __CLASS__, 'form_pre_render' ], 10, 3 );
 		}
 
 		// Admin.
@@ -95,7 +95,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			 *
 			 * @link https://github.com/wp-premium/gravityforms/blob/2.4.17/common.php#L804-L805
 			 */
-			$this->inputs = array();
+			$this->inputs = [];
 
 			if ( empty( $this->formId ) && 'gf_edit_forms' === filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) ) {
 				$this->formId = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
@@ -119,7 +119,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			$this->cssClass .= ' pronamic_pay_display_icons';
 		}
 
-		if ( false === strpos( $this->cssClass, 'gf_list_' ) && in_array( $this->pronamicPayDisplayMode, array( 'icons-64', 'icons-125' ), true ) ) {
+		if ( false === strpos( $this->cssClass, 'gf_list_' ) && in_array( $this->pronamicPayDisplayMode, [ 'icons-64', 'icons-125' ], true ) ) {
 			$this->cssClass .= ' gf_list_2col';
 		}
 	}
@@ -157,7 +157,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return array
 	 */
 	public function get_form_editor_field_settings() {
-		return array(
+		return [
 			'conditional_logic_field_setting',
 			'error_message_setting',
 			'enable_enhanced_ui_setting',
@@ -172,7 +172,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			'rules_setting',
 			'pronamic_pay_config_field_setting',
 			'pronamic_pay_display_field_setting',
-		);
+		];
 	}
 
 	/**
@@ -181,7 +181,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return array
 	 */
 	private function get_gateways() {
-		$gateways = array();
+		$gateways = [];
 
 		$feeds = FeedsDB::get_feeds_by_form_id( $this->formId );
 
@@ -203,7 +203,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Get all gateways if config ID setting is unused.
 		if ( empty( $gateways ) ) {
 			$gateways = array_map(
-				array( 'Pronamic\WordPress\Pay\Plugin', 'get_gateway' ),
+				[ 'Pronamic\WordPress\Pay\Plugin', 'get_gateway' ],
 				$config_ids
 			);
 
@@ -222,7 +222,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	private function set_choices( $form_id ) {
 		// Prevent HTTP requests in forms list.
 		if ( \doing_filter( 'gform_form_actions' ) ) {
-			$this->choices = array();
+			$this->choices = [];
 
 			return;
 		}
@@ -231,7 +231,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		$payment_methods = $this->get_gateway_payment_methods();
 
 		// Choices.
-		$choices = array();
+		$choices = [];
 
 		// Gravity Forms.
 		if ( is_array( $this->choices ) ) {
@@ -248,12 +248,12 @@ class PaymentMethodsField extends GF_Field_Select {
 		foreach ( $payment_methods as $value => $label ) {
 			// Only add built-in payment if it's not already set.
 			if ( ! isset( $choices[ $value ] ) ) {
-				$choices[ $value ] = array(
+				$choices[ $value ] = [
 					'value'      => $value,
 					'text'       => $label,
 					'isSelected' => false,
 					'builtin'    => true,
-				);
+				];
 			}
 		}
 
@@ -304,7 +304,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		$display_choices = $choices;
 
 		if ( \is_admin() && 'gf_edit_forms' === \filter_input( \INPUT_GET, 'page', \FILTER_SANITIZE_STRING ) ) {
-			$display_choices = array_filter( $choices, array( __CLASS__, 'filter_choice_is_selected' ) );
+			$display_choices = array_filter( $choices, [ __CLASS__, 'filter_choice_is_selected' ] );
 		}
 
 		// Make first item selected.
@@ -332,24 +332,24 @@ class PaymentMethodsField extends GF_Field_Select {
 					<?php
 
 					// Icon filename replacements.
-					$replacements = array(
+					$replacements = [
 						'_' => '-',
 						' ' => '-',
-					);
+					];
 
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$dimensions = array( 24, 24 );
+							$dimensions = [ 24, 24 ];
 
 							break;
 						case 'icons-64':
-							$dimensions = array( 64, 64 );
+							$dimensions = [ 64, 64 ];
 
 							break;
 						case 'icons-125':
 						default:
-							$dimensions = array( 125, 60 );
+							$dimensions = [ 125, 60 ];
 					}
 
 					// Loop payment methods.
@@ -361,11 +361,15 @@ class PaymentMethodsField extends GF_Field_Select {
 						$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
 						if ( \array_key_exists( $payment_method, PaymentMethods::get_payment_methods() ) ) {
-							$label_content = \sprintf(
-								'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
-								\esc_html( $choice['text'] ),
-								\esc_url( PaymentMethods::get_icon_url( $payment_method ) )
-							);
+							$icon_url = PaymentMethods::get_icon_url( $payment_method );
+
+							if ( null !== $icon_url ) {
+								$label_content = \sprintf(
+									'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
+									\esc_html( $choice['text'] ),
+									\esc_url( $icon_url )
+								);
+							}
 						}
 
 						\printf(
@@ -671,7 +675,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 
 			// Remove unselected choices.
-			$display_choices = array_filter( $field['choices'], array( __CLASS__, 'filter_choice_is_selected' ) );
+			$display_choices = array_filter( $field['choices'], [ __CLASS__, 'filter_choice_is_selected' ] );
 
 			// Set first item as selected.
 			\array_walk(
@@ -708,10 +712,10 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return array
 	 */
 	public function get_form_editor_button() {
-		return array(
+		return [
 			'group' => 'pronamic_pay_fields',
 			'text'  => __( 'Payment Method', 'pronamic_ideal' ),
-		);
+		];
 	}
 
 	/**
@@ -739,12 +743,18 @@ class PaymentMethodsField extends GF_Field_Select {
 	private function get_gateway_payment_methods() {
 		$gateways = $this->get_gateways();
 
-		$payment_methods = array();
+		$payment_methods = [];
 
 		foreach ( $gateways as $gateway ) {
-			$options = $gateway->get_payment_method_field_options( false );
+			$methods = $gateway->get_payment_methods(
+				[
+					'status' => [ '', 'active' ],
+				] 
+			);
 
-			$payment_methods = array_merge( $payment_methods, $options );
+			foreach ( $methods as $method ) {
+				$payment_methods[ $method->get_id() ] = $method->get_name();
+			}
 		}
 
 		if ( empty( $payment_methods ) ) {

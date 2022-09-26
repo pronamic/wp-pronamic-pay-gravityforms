@@ -36,17 +36,17 @@ class AdminPaymentFormPostType {
 	 * Construct and initialize admin payment form post type.
 	 */
 	public function __construct() {
-		add_filter( 'manage_edit-pronamic_pay_gf_columns', array( $this, 'edit_columns' ) );
+		add_filter( 'manage_edit-pronamic_pay_gf_columns', [ $this, 'edit_columns' ] );
 
-		add_action( 'manage_pronamic_pay_gf_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
+		add_action( 'manage_pronamic_pay_gf_posts_custom_column', [ $this, 'custom_columns' ], 10, 2 );
 
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ) );
+		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
 
-		add_action( 'gform_after_delete_form', array( $this, 'delete_payment_form' ) );
+		add_action( 'gform_after_delete_form', [ $this, 'delete_payment_form' ] );
 
-		add_filter( 'wp_insert_post_data', array( $this, 'insert_post_data' ), 99, 2 );
+		add_filter( 'wp_insert_post_data', [ $this, 'insert_post_data' ], 99, 2 );
 
-		add_action( 'save_post_' . self::POST_TYPE, array( $this, 'save_post' ) );
+		add_action( 'save_post_' . self::POST_TYPE, [ $this, 'save_post' ] );
 	}
 
 	/**
@@ -56,14 +56,14 @@ class AdminPaymentFormPostType {
 	 * @return array
 	 */
 	public function edit_columns( $columns ) {
-		$columns = array(
+		$columns = [
 			'cb'                                      => '<input type="checkbox" />',
 			'title'                                   => __( 'Title', 'pronamic_ideal' ),
 			'pronamic_pay_gf_form'                    => __( 'Form', 'pronamic_ideal' ),
 			'pronamic_pay_gf_config'                  => __( 'Configuration', 'pronamic_ideal' ),
 			'pronamic_pay_gf_transaction_description' => __( 'Transaction Description', 'pronamic_ideal' ),
 			'date'                                    => __( 'Date', 'pronamic_ideal' ),
-		);
+		];
 
 		return $columns;
 	}
@@ -84,10 +84,10 @@ class AdminPaymentFormPostType {
 						'<a href="%s">%s</a>',
 						esc_attr(
 							add_query_arg(
-								array(
+								[
 									'page' => 'gf_edit_forms',
 									'id'   => $form_id,
-								),
+								],
 								admin_url( 'admin.php' )
 							)
 						),
@@ -122,7 +122,7 @@ class AdminPaymentFormPostType {
 		add_meta_box(
 			'pronamic_pay_gf',
 			__( 'Configuration', 'pronamic_ideal' ),
-			array( $this, 'meta_box_config' ),
+			[ $this, 'meta_box_config' ],
 			'pronamic_pay_gf',
 			'normal',
 			'high'
@@ -148,15 +148,15 @@ class AdminPaymentFormPostType {
 	 */
 	public function delete_payment_form( $form_id ) {
 		$query = new WP_Query(
-			array(
+			[
 				'post_type'  => 'pronamic_pay_gf',
-				'meta_query' => array(
-					array(
+				'meta_query' => [
+					[
 						'key'   => '_pronamic_pay_gf_form_id',
 						'value' => $form_id,
-					),
-				),
-			)
+					],
+				],
+			]
 		);
 
 		foreach ( $query->posts as $post ) {
@@ -239,7 +239,7 @@ class AdminPaymentFormPostType {
 		}
 
 		/* OK, its safe for us to save the data now. */
-		$definition = array(
+		$definition = [
 			'_pronamic_pay_gf_form_id'                     => 'sanitize_text_field',
 			'_pronamic_pay_gf_config_id'                   => 'sanitize_text_field',
 			'_pronamic_pay_gf_entry_id_prefix'             => 'sanitize_text_field',
@@ -247,19 +247,19 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_transaction_description'     => 'sanitize_text_field',
 			'_pronamic_pay_gf_delay_admin_notification'    => FILTER_VALIDATE_BOOLEAN,
 			'_pronamic_pay_gf_delay_user_notification'     => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_delay_notification_ids'      => array(
+			'_pronamic_pay_gf_delay_notification_ids'      => [
 				'filter' => FILTER_SANITIZE_STRING,
 				'flags'  => FILTER_REQUIRE_ARRAY,
-			),
+			],
 			'_pronamic_pay_gf_delay_post_creation'         => FILTER_VALIDATE_BOOLEAN,
-			'_pronamic_pay_gf_fields'                      => array(
+			'_pronamic_pay_gf_fields'                      => [
 				'filter' => FILTER_SANITIZE_STRING,
 				'flags'  => FILTER_REQUIRE_ARRAY,
-			),
-			'_pronamic_pay_gf_links'                       => array(
+			],
+			'_pronamic_pay_gf_links'                       => [
 				'filter' => FILTER_SANITIZE_STRING,
 				'flags'  => FILTER_REQUIRE_ARRAY,
-			),
+			],
 			'_pronamic_pay_gf_user_role_field_id'          => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_amount_type'    => 'sanitize_text_field',
 			'_pronamic_pay_gf_subscription_amount_field'   => 'sanitize_text_field',
@@ -279,7 +279,7 @@ class AdminPaymentFormPostType {
 			// Feed conditions.
 			'_gaddon_setting_feed_condition_conditional_logic_object' => 'sanitize_text_field',
 			'_gform_setting_feed_condition_conditional_logic_object' => 'sanitize_text_field',
-		);
+		];
 
 		$delay_actions = Extension::get_delay_actions();
 
@@ -367,7 +367,7 @@ class AdminPaymentFormPostType {
 				\delete_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency' );
 			}
 
-			if ( \in_array( $meta_key, array( '_gform_setting_feed_condition_conditional_logic_object', '_gaddon_setting_feed_condition_conditional_logic_object' ), true ) ) {
+			if ( \in_array( $meta_key, [ '_gform_setting_feed_condition_conditional_logic_object', '_gaddon_setting_feed_condition_conditional_logic_object' ], true ) ) {
 				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id' );
 				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_operator' );
 				\delete_post_meta( $post_id, '_pronamic_pay_gf_condition_value' );

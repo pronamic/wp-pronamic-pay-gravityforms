@@ -122,10 +122,10 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 						}
 
 						AdminModule::dropdown_configs(
-							array(
+							[
 								'name'     => '_pronamic_pay_gf_config_id',
 								'selected' => $config_id,
-							)
+							]
 						);
 
 						?>
@@ -156,9 +156,9 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 										'{entry_id}'
 									)
 								),
-								array(
-									'code' => array(),
-								)
+								[
+									'code' => [],
+								]
 							);
 
 							?>
@@ -178,9 +178,9 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 										'{form_title}'
 									)
 								),
-								array(
-									'code' => array(),
-								)
+								[
+									'code' => [],
+								]
 							);
 
 							?>
@@ -219,9 +219,9 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 										'{entry_id}'
 									)
 								),
-								array(
-									'code' => array(),
-								)
+								[
+									'code' => [],
+								]
 							);
 
 							?>
@@ -241,9 +241,9 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 										'{form_title}'
 									)
 								),
-								array(
-									'code' => array(),
-								)
+								[
+									'code' => [],
+								]
 							);
 
 							?>
@@ -272,7 +272,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 						if ( version_compare( GFCommon::$version, '1.7', '>=' ) ) :
 
-							$notifications = array();
+							$notifications = [];
 							if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
 								$notifications = $form_meta['notifications'];
 							}
@@ -402,13 +402,13 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 			<table class="pronamic-pay-table-striped form-table pronamic-gf-links-tab">
 				<?php
 
-				$fields = array(
+				$fields = [
 					Links::SUCCESS => __( 'Success', 'pronamic_ideal' ),
 					Links::CANCEL  => __( 'Cancelled', 'pronamic_ideal' ),
 					Links::EXPIRED => __( 'Expired', 'pronamic_ideal' ),
 					Links::ERROR   => __( 'Error', 'pronamic_ideal' ),
 					Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
-				);
+				];
 
 				foreach ( $fields as $name => $label ) :
 
@@ -466,11 +466,11 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 								<?php
 
 								wp_dropdown_pages(
-									array(
+									[
 										'selected'         => esc_attr( $page_id ),
 										'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
 										'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
-									)
+									]
 								);
 
 								?>
@@ -668,18 +668,18 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 							<label>
 								<?php
 
-								$allowed_html = array(
-									'select' => array(
+								$allowed_html = [
+									'select' => [
 										'class' => true,
 										'id'    => true,
 										'name'  => true,
-									),
-									'option' => array(
+									],
+									'option' => [
 										'value'    => true,
 										'selected' => true,
-									),
-									'sup'    => array(),
-								);
+									],
+									'sup'    => [],
+								];
 
 
 								/**
@@ -691,7 +691,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 								global $wp_locale;
 
 								// Weekday options.
-								$weekdays = array(
+								$weekdays = [
 									1 => $wp_locale->get_weekday( 1 ),
 									2 => $wp_locale->get_weekday( 2 ),
 									3 => $wp_locale->get_weekday( 3 ),
@@ -699,7 +699,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 									5 => $wp_locale->get_weekday( 5 ),
 									6 => $wp_locale->get_weekday( 6 ),
 									7 => $wp_locale->get_weekday( 0 ),
-								);
+								];
 
 								$weekday_options_html = '';
 
@@ -847,7 +847,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 			<?php
 
-			$fields = array(
+			$fields = [
 				'prefix_name'                => __( 'Prefix Name', 'pronamic_ideal' ),
 				'first_name'                 => __( 'First Name', 'pronamic_ideal' ),
 				'middle_name'                => __( 'Middle Name', 'pronamic_ideal' ),
@@ -865,7 +865,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 				'consumer_bank_details_iban' => __( 'Account IBAN', 'pronamic_ideal' ),
 				'company_name'               => __( 'Company Name', 'pronamic_ideal' ),
 				'vat_number'                 => __( 'VAT Number', 'pronamic_ideal' ),
-			);
+			];
 
 			?>
 
@@ -884,9 +884,9 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 							$auto_option_label = '';
 
-							if ( in_array( $name, array( 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name' ), true ) ) :
+							if ( in_array( $name, [ 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name' ], true ) ) :
 								$auto_option_label = __( '— From first name field —', 'pronamic_ideal' );
-							elseif ( in_array( $name, array( 'address1', 'address2', 'zip', 'city', 'state', 'country' ), true ) ) :
+							elseif ( in_array( $name, [ 'address1', 'address2', 'zip', 'city', 'state', 'country' ], true ) ) :
 								$auto_option_label = __( '— From first address field —', 'pronamic_ideal' );
 							elseif ( 'telephone_number' === $name ) :
 								$auto_option_label = __( '— First phone field —', 'pronamic_ideal' );
@@ -951,7 +951,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 								function GetConditionalLogicFields () {
 									<?php
 
-									$conditional_logic_fields = array();
+									$conditional_logic_fields = [];
 
 									foreach ( \GF_Fields::get_all() as $gf_field ) {
 										if ( ! $gf_field->is_conditional_logic_supported() ) {
@@ -982,18 +982,18 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 								$feed = new PayFeed( $post_id );
 
 								$this->get_settings_renderer()->set_values(
-									array(
+									[
 										'feed_condition_conditional_logic'        => $feed->condition_enabled,
 										'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
-									)
+									]
 								);
 							}
 
-							$field = array(
+							$field = [
 								'name'  => 'conditionalLogic',
 								'label' => __( 'Conditional Logic', 'pronamic_ideal' ),
 								'type'  => 'feed_condition',
-							);
+							];
 
 							$this->settings_feed_condition( $field );
 
@@ -1030,7 +1030,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 			if ( $form_id && null !== $js_form ) :
 
 				if ( ! isset( $js_form['fields'] ) || ! is_array( $js_form['fields'] ) ) {
-					$js_form['fields'] = array();
+					$js_form['fields'] = [];
 				}
 
 				$_GET['id'] = $form_id;

@@ -33,7 +33,7 @@ class PaymentFormPostType {
 		 *
 		 * @link https://github.com/WordPress/WordPress/blob/4.0/wp-includes/post.php#L167
 		 */
-		add_action( 'init', array( $this, 'init' ), 0 ); // Highest priority.
+		add_action( 'init', [ $this, 'init' ], 0 ); // Highest priority.
 	}
 
 	/**
@@ -42,9 +42,9 @@ class PaymentFormPostType {
 	public function init() {
 		register_post_type(
 			'pronamic_pay_gf',
-			array(
+			[
 				'label'              => __( 'Payment Feeds', 'pronamic_ideal' ),
-				'labels'             => array(
+				'labels'             => [
 					'name'                  => __( 'Payment Feeds', 'pronamic_ideal' ),
 					'singular_name'         => __( 'Payment Feed', 'pronamic_ideal' ),
 					'add_new'               => __( 'Add New', 'pronamic_ideal' ),
@@ -60,17 +60,17 @@ class PaymentFormPostType {
 					'filter_items_list'     => __( 'Filter payment feeds list', 'pronamic_ideal' ),
 					'items_list_navigation' => __( 'Payment feeds list navigation', 'pronamic_ideal' ),
 					'items_list'            => __( 'Payment feeds list', 'pronamic_ideal' ),
-				),
+				],
 				'public'             => false,
 				'publicly_queryable' => false,
 				'show_ui'            => false,
 				'show_in_nav_menus'  => false,
 				'show_in_menu'       => false,
 				'show_in_admin_bar'  => false,
-				'supports'           => array( 'title', 'revisions' ),
+				'supports'           => [ 'title', 'revisions' ],
 				'rewrite'            => false,
 				'query_var'          => false,
-			)
+			]
 		);
 	}
 }

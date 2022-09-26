@@ -104,7 +104,7 @@ class Processor {
 		// Determine payment feed for processing.
 		$feeds = FeedsDB::get_active_feeds_by_form_id( $this->form_id );
 
-		$entry = array();
+		$entry = [];
 
 		foreach ( $feeds as $feed ) {
 			$gf_feed = $extension->addon->get_feed( $feed->id );
@@ -134,25 +134,25 @@ class Processor {
 		 */
 
 		// Lead.
-		add_action( 'gform_entry_post_save', array( $this, 'entry_post_save' ), 10, 2 );
+		add_action( 'gform_entry_post_save', [ $this, 'entry_post_save' ], 10, 2 );
 
 		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications).
-		add_filter( 'gform_disable_admin_notification_' . $this->form_id, array( $this, 'maybe_delay_admin_notification' ), 10, 3 );
-		add_filter( 'gform_disable_user_notification_' . $this->form_id, array( $this, 'maybe_delay_user_notification' ), 10, 3 );
-		add_filter( 'gform_disable_post_creation_' . $this->form_id, array( $this, 'maybe_delay_post_creation' ), 10, 3 );
-		add_filter( 'gform_disable_notification_' . $this->form_id, array( $this, 'maybe_delay_notification' ), 10, 4 );
+		add_filter( 'gform_disable_admin_notification_' . $this->form_id, [ $this, 'maybe_delay_admin_notification' ], 10, 3 );
+		add_filter( 'gform_disable_user_notification_' . $this->form_id, [ $this, 'maybe_delay_user_notification' ], 10, 3 );
+		add_filter( 'gform_disable_post_creation_' . $this->form_id, [ $this, 'maybe_delay_post_creation' ], 10, 3 );
+		add_filter( 'gform_disable_notification_' . $this->form_id, [ $this, 'maybe_delay_notification' ], 10, 4 );
 
 		// Confirmation (@see GFFormDisplay::handle_confirmation).
 		// @link http://www.gravityhelp.com/documentation/page/Gform_confirmation.
-		add_filter( 'gform_confirmation_' . $this->form_id, array( $this, 'confirmation' ), 10, 4 );
+		add_filter( 'gform_confirmation_' . $this->form_id, [ $this, 'confirmation' ], 10, 4 );
 
 		/*
 		 * After submission.
 		 */
-		add_action( 'gform_after_submission_' . $this->form_id, array( $this, 'after_submission' ), 10, 2 );
+		add_action( 'gform_after_submission_' . $this->form_id, [ $this, 'after_submission' ], 10, 2 );
 
-		add_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, array( $this, 'maybe_delay_feed' ), 10, 4 );
-		add_filter( 'gravityflow_is_delayed_pre_process_workflow', array( $this, 'maybe_delay_workflow' ), 10, 3 );
+		add_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, [ $this, 'maybe_delay_feed' ], 10, 4 );
+		add_filter( 'gravityflow_is_delayed_pre_process_workflow', [ $this, 'maybe_delay_workflow' ], 10, 3 );
 	}
 
 	/**
@@ -199,7 +199,7 @@ class Processor {
 			$delayed_payment_integration = ( isset( $data['delayed_payment_integration'] ) && true === $data['delayed_payment_integration'] );
 
 			if ( isset( $data['addon'] ) && ! $delayed_payment_integration ) {
-				remove_filter( 'gform_entry_post_save', array( $data['addon'], 'maybe_process_feed' ), 10 );
+				remove_filter( 'gform_entry_post_save', [ $data['addon'], 'maybe_process_feed' ], 10 );
 			}
 
 			if ( isset( $data['delay_callback'] ) ) {
@@ -338,7 +338,7 @@ class Processor {
 				foreach ( $products as $key => $product ) {
 					$key = \strval( $key );
 
-					$product_lines = array();
+					$product_lines = [];
 
 					$line = $payment->lines->new_line();
 
@@ -462,7 +462,7 @@ class Processor {
 			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
 		) {
 			// Allow delayed feeds to be processed during fulfilment for free payments (e.g. user registration for entry with discount).
-			\remove_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, array( $this, 'maybe_delay_feed' ), 10 );
+			\remove_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, [ $this, 'maybe_delay_feed' ], 10 );
 
 			$payment->set_status( PaymentStatus::SUCCESS );
 			$payment->save();
@@ -600,12 +600,12 @@ class Processor {
 		// Pending payment.
 		if ( PaymentStatuses::PROCESSING === $lead[ LeadProperties::PAYMENT_STATUS ] ) {
 			// Add pending payment.
-			$action = array(
+			$action = [
 				'id'             => $this->payment->get_id(),
 				'transaction_id' => $this->payment->get_transaction_id(),
 				'amount'         => $this->payment->get_total_amount()->get_value(),
 				'entry_id'       => $lead['id'],
-			);
+			];
 
 			$this->extension->payment_action( 'add_pending_payment', $lead, $action );
 		}
@@ -794,7 +794,7 @@ class Processor {
 			return $confirmation;
 		}
 
-		$confirmation = array( 'redirect' => $this->payment->get_pay_redirect_url() );
+		$confirmation = [ 'redirect' => $this->payment->get_pay_redirect_url() ];
 
 		if ( $this->error instanceof \Exception ) {
 			$html  = '<ul>';

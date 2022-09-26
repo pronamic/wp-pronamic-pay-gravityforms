@@ -7,6 +7,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.2.0] - 2022-09-26
+- Fixed conditional logic object without any logic.
+- Updated for new payment methods and fields registration.
+
 ## [4.1.1] - 2022-08-15
 - Fixed compatibility issue with plugins producing output in `gform_admin_pre_render` filter.
 - Fixed duplicate configurations in payment gateway configuration field setting ([pronamic/wp-pronamic-pay-gravityforms#8](https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/8)).
@@ -345,7 +349,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.0...HEAD
+[4.2.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.1...4.2.0
 [4.1.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.0...4.1.1
 [4.1.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.1...4.1.0
 [4.0.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.0.0...4.0.1

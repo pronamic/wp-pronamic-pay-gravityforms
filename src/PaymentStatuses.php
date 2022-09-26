@@ -124,7 +124,6 @@ class PaymentStatuses {
 			case Core_Statuses::REFUNDED:
 				return self::REFUNDED;
 
-			case Core_Statuses::RESERVED:
 			case Core_Statuses::OPEN:
 				return self::PROCESSING;
 

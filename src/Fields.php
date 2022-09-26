@@ -52,7 +52,7 @@ class Fields {
 		}
 
 		// Add extra fields settings.
-		add_action( 'gform_field_standard_settings', array( $this, 'field_standard_settings' ), 10, 2 );
+		add_action( 'gform_field_standard_settings', [ $this, 'field_standard_settings' ], 10, 2 );
 	}
 
 	/**
@@ -67,11 +67,11 @@ class Fields {
 	 */
 	public static function add_pay_field_group( $field_groups ) {
 		if ( ! isset( $field_groups['pronamic_pay_fields'] ) ) {
-			$field_groups['pronamic_pay_fields'] = array(
+			$field_groups['pronamic_pay_fields'] = [
 				'name'   => 'pronamic_pay_fields',
 				'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
-				'fields' => array(),
-			);
+				'fields' => [],
+			];
 		}
 
 		return $field_groups;

@@ -1,6 +1,6 @@
 {
   "name": "gravityforms",
-  "version": "4.1.1",
+  "version": "4.2.0",
   "description": "Gravity Forms driver for the WordPress payment processing library.",
   "repository": {
     "type": "git",
@@ -35,6 +35,7 @@
     "last 2 versions"
   ],
   "devDependencies": {
+    "@wordpress/env": "^5.2.0",
     "autoprefixer": "^10.2.5",
     "eslint": "^8.0",
     "eslint-plugin-json": "^3.1",
@@ -46,6 +47,7 @@
     "grunt-postcss": "^0.9.0",
     "grunt-sass-lint": "^0.2.4",
     "load-grunt-tasks": "^5.1.0",
+    "npm-run-all": "^4.1.5",
     "sass-lint": "^1.13.1"
   },
   "scripts": {
@@ -53,6 +55,13 @@
     "build-image-svg-default": "svgo images/src/wp-pay.svg -o images/dist/wp-pay.svgo-min.svg",
     "eslint": "eslint . --ext .json --ext .js",
     "lint": "npm-run-all --parallel eslint sass-lint",
-    "sass-lint": "sass-lint --verbose"
+    "sass-lint": "sass-lint --verbose",
+    "start": "wp-env start && npm run setup && npm run login",
+    "setup": "npm-run-all setup-*",
+    "setup-gravityforms": "wp-env run cli wp config set GF_LICENSE_KEY $GRAVITYFORMS_LICENSE_KEY",
+    "setup-mollie": "wp-env run cli wp config set MOLLIE_API_KEY $MOLLIE_API_KEY",
+    "setup-buckaroo-website-key": "wp-env run cli wp config set BUCKAROO_WEBSITE_KEY $BUCKAROO_WEBSITE_KEY",
+    "setup-buckaroo-secret-key": "wp-env run cli wp config set BUCKAROO_SECRET_KEY $BUCKAROO_SECRET_KEY",
+    "login": "wp-env run cli wp user one-time-login admin"
   }
 }

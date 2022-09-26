@@ -148,11 +148,16 @@ class PayFeed {
 				$this->conditional_logic_object = $conditional_logic_object;
 			}
 
+			// Unset conditional logic object without any logic.
+			if ( \is_array( $this->conditional_logic_object ) && \array_key_exists( 'conditionalLogic', $this->conditional_logic_object ) && empty( $this->conditional_logic_object['conditionalLogic'] ) ) {
+				$this->conditional_logic_object = null;
+			}
+
 			// The `_gform_setting_...` does not include the `conditionalLogic` key, as was the case previously with the `_gaddon_setting`.
 			if ( GravityForms::version_compare( '2.5', '>=' ) && \is_array( $this->conditional_logic_object ) && ! \array_key_exists( 'conditionalLogic', $this->conditional_logic_object ) ) {
-				$this->conditional_logic_object = array(
+				$this->conditional_logic_object = [
 					'conditionalLogic' => $this->conditional_logic_object,
-				);
+				];
 			}
 		}
 
@@ -166,27 +171,27 @@ class PayFeed {
 			$condition_operator = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
 			$condition_value    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
 
-			$rule = array(
+			$rule = [
 				'fieldId'  => 0,
 				'operator' => 'is',
 				'value'    => '',
-			);
+			];
 
 			if ( ! empty( $condition_field_id ) && ! empty( $condition_operator ) && ! empty( $condition_value ) ) {
-				$rule = array(
+				$rule = [
 					'fieldId'  => $condition_field_id,
 					'operator' => ( GravityForms::OPERATOR_IS === $condition_operator ? 'is' : 'isnot' ),
 					'value'    => $condition_value,
-				);
+				];
 			}
 
-			$this->conditional_logic_object = array(
-				'conditionalLogic' => array(
+			$this->conditional_logic_object = [
+				'conditionalLogic' => [
 					'actionType' => 'show',
 					'logicType'  => 'all',
-					'rules'      => array( $rule ),
-				),
-			);
+					'rules'      => [ $rule ],
+				],
+			];
 		}
 
 		// Delay actions.
@@ -194,7 +199,7 @@ class PayFeed {
 		$this->delay_user_notification  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
 		$this->delay_post_creation      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
 
-		$this->delay_actions = array();
+		$this->delay_actions = [];
 
 		$delay_actions = Extension::get_delay_actions();
 
@@ -256,15 +261,15 @@ class PayFeed {
 
 		// Delay notification IDs.
 		$ids                          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
-		$this->delay_notification_ids = is_array( $ids ) ? $ids : array();
+		$this->delay_notification_ids = is_array( $ids ) ? $ids : [];
 
 		// Fields.
 		$fields       = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
-		$this->fields = is_array( $fields ) ? $fields : array();
+		$this->fields = is_array( $fields ) ? $fields : [];
 
 		// Links.
 		$links       = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
-		$this->links = is_array( $links ) ? $links : array();
+		$this->links = is_array( $links ) ? $links : [];
 	}
 
 	/**

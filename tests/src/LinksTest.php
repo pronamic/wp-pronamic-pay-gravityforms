@@ -41,12 +41,12 @@ class LinksTest extends PHPUnit_Framework_TestCase {
 	 * @return array
 	 */
 	public function matrix_provider() {
-		return array(
-			array( 'open', Links::OPEN ),
-			array( 'cancel', Links::CANCEL ),
-			array( 'error', Links::ERROR ),
-			array( 'success', Links::SUCCESS ),
-			array( 'expired', Links::EXPIRED ),
-		);
+		return [
+			[ 'open', Links::OPEN ],
+			[ 'cancel', Links::CANCEL ],
+			[ 'error', Links::ERROR ],
+			[ 'success', Links::SUCCESS ],
+			[ 'expired', Links::EXPIRED ],
+		];
 	}
 }

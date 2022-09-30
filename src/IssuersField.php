@@ -177,7 +177,11 @@ class IssuersField extends GF_Field_Select {
 			return;
 		}
 
-		$gateway = $this->get_gateway();
+        try {
+	        $gateway = $this->get_gateway();
+        } catch ( \Exception $e ) {
+            return;
+        }
 
 		if ( ! $gateway ) {
 			return;

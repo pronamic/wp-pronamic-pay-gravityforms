@@ -151,7 +151,11 @@ class IssuersField extends GF_Field_Select {
 					continue;
 				}
 
-				$options = $issuer_field->get_options();
+				try {
+					$options = $issuer_field->get_options();
+				} catch( \Exception $e ) {
+					continue;
+				}
 
 				if ( 1 === count( $options ) ) {
 					continue;
@@ -177,11 +181,7 @@ class IssuersField extends GF_Field_Select {
 			return;
 		}
 
-		try {
-			$gateway = $this->get_gateway();
-		} catch ( \Exception $e ) {
-			return;
-		}
+		$gateway = $this->get_gateway();
 
 		if ( ! $gateway ) {
 			return;
@@ -199,7 +199,11 @@ class IssuersField extends GF_Field_Select {
 		 *
 		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
 		 */
-		$options = $issuer_field->get_flat_options();
+		try {
+			$options = $issuer_field->get_flat_options();
+		} catch ( \Exception $e ) {
+			return;
+		}
 
 		foreach ( $options as $option ) {
 			$this->choices[] = [

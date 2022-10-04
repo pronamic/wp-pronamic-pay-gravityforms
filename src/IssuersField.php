@@ -151,9 +151,17 @@ class IssuersField extends GF_Field_Select {
 					continue;
 				}
 
+				/**
+				 * The iDEAL issuer field options can be requested from the
+				 * gateway and that can result in exceptions. In this case,
+				 * that's no problem and we'll move on to the next
+				 * feed/gateway.
+				 * 
+				 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
+				 */
 				try {
 					$options = $issuer_field->get_options();
-				} catch( \Exception $e ) {
+				} catch ( \Exception $e ) {
 					continue;
 				}
 
@@ -195,21 +203,29 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		/**
-		 * Gravity Forms has no support for <optgroup>  elements.
-		 *
-		 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
+		 * The iDEAL issuer field options can be requested from the
+		 * gateway and that can result in exceptions. In this case,
+		 * that's no problem and we'll move on to the next
+		 * feed/gateway.
+		 * 
+		 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
 		 */
 		try {
+			/**
+			 * Gravity Forms has no support for <optgroup>  elements.
+			 *
+			 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
+			 */
 			$options = $issuer_field->get_flat_options();
+
+			foreach ( $options as $option ) {
+				$this->choices[] = [
+					'value' => $option->value,
+					'text'  => $option->label,
+				];
+			}
 		} catch ( \Exception $e ) {
 			return;
-		}
-
-		foreach ( $options as $option ) {
-			$this->choices[] = [
-				'value' => $option->value,
-				'text'  => $option->label,
-			];
 		}
 	}
 

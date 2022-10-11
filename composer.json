@@ -50,10 +50,10 @@
 		"php-coveralls/php-coveralls": "^2.4",
 		"phpmd/phpmd": "^2.9",
 		"phpunit/phpunit": "^5.7 || ^6.0",
+		"pronamic/gravityforms": "^2.6",
 		"pronamic/wp-coding-standards": "^1.0",
 		"roots/wordpress": "^5.8",
 		"wp-phpunit/wp-phpunit": "^5.8",
-		"wp-premium/gravityforms": "^2.3",
 		"yoast/phpunit-polyfills": "^1.0"
 	},
 	"scripts": {
@@ -62,7 +62,7 @@
 		"phpcs": "XDEBUG_MODE=off vendor/bin/phpcs -s -v",
 		"phplint": "find src tests -name '*.php' | xargs -n 1 -P 4 php -l",
 		"phpmd": "vendor/bin/phpmd src,tests text phpmd.ruleset.xml --suffixes php",
-		"phpstan": "vendor/bin/phpstan analyse",
+		"phpstan": "vendor/bin/phpstan analyse --memory-limit=-1",
 		"phpunit": "vendor/bin/phpunit",
 		"post-install-cmd": "echo 'Optionally run: composer bin all install'",
 		"post-update-cmd": "echo 'Optionally run: composer bin all update'",

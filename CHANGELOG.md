@@ -7,6 +7,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.2.2] - 2022-10-11
+- Fixed catching exceptions in issuer field (pronamic/wp-pronamic-pay-gravityforms#10).
+
 ## [4.2.1] - 2022-09-27
 - Update to `wp-pay/core` version `^4.4`.
 
@@ -352,7 +355,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.2...HEAD
+[4.2.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.0...4.2.1
 [4.2.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.1...4.2.0
 [4.1.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.1.0...4.1.1

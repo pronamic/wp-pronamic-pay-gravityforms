@@ -587,6 +587,16 @@ class Processor {
 
 		// Start.
 		try {
+			/**
+			 * Currently there is no support for manual renewals with Gravity Forms.
+			 * 
+			 * @link https://github.com/pronamic/wp-pay-core/pull/80
+			 * @link https://github.com/pronamic/wp-pronamic-pay-woocommerce/issues/15
+			 */
+			if ( \count( $subscriptions ) > 0 && ! $this->gateway->supports( 'recurring' ) ) {
+				throw new \Exception( 'Gateway does not support recurring payments.' );
+			}
+
 			$this->payment = Plugin::start_payment( $payment );
 		} catch ( \Exception $e ) {
 			$this->payment = $payment;

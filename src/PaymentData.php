@@ -70,7 +70,7 @@ class PaymentData {
 	 *
 	 * @return null|string
 	 */
-	public function get_field_value( $field_name ) : ?string {
+	public function get_field_value( $field_name ): ?string {
 		if ( ! isset( $this->feed->fields[ $field_name ] ) ) {
 			return null;
 		}
@@ -97,7 +97,7 @@ class PaymentData {
 	 *
 	 * @return string
 	 */
-	public function get_description() : string {
+	public function get_description(): string {
 		$description = $this->feed->transaction_description;
 
 		if ( empty( $description ) ) {
@@ -114,7 +114,7 @@ class PaymentData {
 	 *
 	 * @return string
 	 */
-	public function get_order_id() : string {
+	public function get_order_id(): string {
 		$order_id = $this->feed->order_id;
 
 		if ( ! empty( $this->feed->entry_id_prefix ) ) {
@@ -135,7 +135,7 @@ class PaymentData {
 	 *
 	 * @return string
 	 */
-	public function get_currency_alphabetic_code() : string {
+	public function get_currency_alphabetic_code(): string {
 		if ( isset( $this->lead['currency'] ) ) {
 			return $this->lead['currency'];
 		}
@@ -148,7 +148,7 @@ class PaymentData {
 	 *
 	 * @return string|null
 	 */
-	public function get_payment_method() : ?string {
+	public function get_payment_method(): ?string {
 		$fields = GFCommon::get_fields_by_type( $this->form, [ Fields::PAYMENT_METHODS_FIELD_TYPE ] );
 
 		foreach ( $fields as $field ) {
@@ -167,7 +167,7 @@ class PaymentData {
 	 *
 	 * @return string|null
 	 */
-	public function get_issuer_id() : ?string {
+	public function get_issuer_id(): ?string {
 		$fields = GFCommon::get_fields_by_type( $this->form, [ IssuersField::TYPE ] );
 
 		foreach ( $fields as $field ) {
@@ -186,7 +186,7 @@ class PaymentData {
 	 *
 	 * @return CreditCard|null
 	 */
-	public function get_credit_card() : ?CreditCard {
+	public function get_credit_card(): ?CreditCard {
 		$credit_card = null;
 
 		$credit_card_fields = GFCommon::get_fields_by_type( $this->form, [ 'creditcard' ] );
@@ -233,7 +233,7 @@ class PaymentData {
 	 *
 	 * @return int|null
 	 */
-	public function get_subscription_frequency() : ?int {
+	public function get_subscription_frequency(): ?int {
 		$frequency = null;
 
 		switch ( $this->feed->subscription_frequency_type ) {
@@ -261,7 +261,7 @@ class PaymentData {
 	 *
 	 * @return object
 	 */
-	public function get_subscription_interval() : object {
+	public function get_subscription_interval(): object {
 		$interval = (object) [
 			'unit'  => 'D',
 			'value' => null,

@@ -68,6 +68,14 @@ class PaymentAddOn extends GFPaymentAddOn {
 	protected $_capabilities_uninstall = 'gravityforms_pronamic_pay_uninstall';
 
 	/**
+	 * Full path to this class file.
+	 *
+	 * @var string
+	 */
+	protected $_full_path = __FILE__;
+
+
+	/**
 	 * Construct and initialize an Gravity Forms payment add-on
 	 *
 	 * @link https://github.com/wp-premium/gravityforms/blob/1.9.10.15/includes/addon/class-gf-payment-addon.php
@@ -75,6 +83,8 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @since 1.3.0
 	 */
 	public function __construct() {
+		$this->_path = str_replace( trailingslashit( \WP_PLUGIN_DIR ), '', $this->_full_path );
+
 		parent::__construct();
 
 		/*

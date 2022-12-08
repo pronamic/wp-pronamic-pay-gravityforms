@@ -181,18 +181,15 @@ class Extension extends AbstractPluginIntegration {
 	public function admin_enqueue_scripts() {
 		$screen = get_current_screen();
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$subview = \array_key_exists( 'subview', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['subview'] ) ) : '';
+
 		if (
-			(
-				'pronamic_pay_gf' !== $screen->post_type
-					&&
-				(
-					! \array_key_exists( 'subview', $_GET )
-						||
-					'pronamic_pay' !== $_GET['subview']
-				)
-			)
-				&&
 			'toplevel_page_gf_edit_forms' !== $screen->id
+				&&
+			'pronamic_pay_gf' !== $screen->post_type
+				&&
+			'pronamic_pay' !== $subview
 		) {
 			return;
 		}

@@ -198,14 +198,14 @@ class Extension extends AbstractPluginIntegration {
 
 		wp_register_style(
 			'pronamic-pay-gravityforms',
-			plugins_url( 'css/admin' . $min . '.css', dirname( __FILE__ ) ),
+			plugins_url( 'css/admin' . $min . '.css', __DIR__ ),
 			[],
 			$this->get_version()
 		);
 
 		wp_register_script(
 			'pronamic-pay-gravityforms',
-			plugins_url( 'js/admin' . $min . '.js', dirname( __FILE__ ) ),
+			plugins_url( 'js/admin' . $min . '.js', __DIR__ ),
 			[ 'jquery' ],
 			$this->get_version(),
 			true

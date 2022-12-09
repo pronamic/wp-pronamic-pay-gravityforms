@@ -138,7 +138,7 @@ class AdminPaymentFormPostType {
 		$form_id = get_post_meta( $post->ID, '_pronamic_pay_gf_form_id', true );
 		$post_id = $post->ID;
 
-		include dirname( __FILE__ ) . '/../views/html-admin-feed-meta-box.php';
+		include __DIR__ . '/../views/html-admin-feed-meta-box.php';
 	}
 
 	/**

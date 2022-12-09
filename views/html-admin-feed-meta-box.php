@@ -11,4 +11,4 @@
 /**
  * Require.
  */
-require dirname( __FILE__ ) . '/html-admin-feed-settings.php';
+require __DIR__ . '/html-admin-feed-settings.php';

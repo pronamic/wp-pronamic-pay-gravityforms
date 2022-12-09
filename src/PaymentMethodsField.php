@@ -750,7 +750,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			$methods = $gateway->get_payment_methods(
 				[
 					'status' => [ '', 'active' ],
-				] 
+				]
 			);
 
 			foreach ( $methods as $method ) {

@@ -275,7 +275,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 				]
 			);
 
-			require dirname( __FILE__ ) . '/../views/html-admin-feed-gf-box.php';
+			require __DIR__ . '/../views/html-admin-feed-gf-box.php';
 		} else {
 			$this->feed_list_page( $form );
 		}

@@ -156,7 +156,7 @@ class IssuersField extends GF_Field_Select {
 				 * gateway and that can result in exceptions. In this case,
 				 * that's no problem and we'll move on to the next
 				 * feed/gateway.
-				 * 
+				 *
 				 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
 				 */
 				try {
@@ -207,7 +207,7 @@ class IssuersField extends GF_Field_Select {
 		 * gateway and that can result in exceptions. In this case,
 		 * that's no problem and we'll move on to the next
 		 * feed/gateway.
-		 * 
+		 *
 		 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
 		 */
 		try {

@@ -1098,15 +1098,19 @@ class Extension extends AbstractPluginIntegration {
 	 * @return void
 	 */
 	public function maybe_display_confirmation() {
-		if ( ! filter_has_var( INPUT_GET, 'pay_confirmation' ) || ! filter_has_var( INPUT_GET, '_wpnonce' ) ) {
+		if ( ! filter_has_var( INPUT_GET, 'pay_confirmation' ) ) {
 			return;
 		}
 
+		// Verify nonce.
+		if ( ! \array_key_exists( '_wpnonce', $_GET ) ) {
+			return;
+		}
+
+		$nonce = \sanitize_text_field( \wp_unslash( $_GET['_wpnonce'] ) );
+
 		$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
 
-		$nonce = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
-
-		// Verify nonce.
 		if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
 			return;
 		}
@@ -1587,11 +1591,12 @@ class Extension extends AbstractPluginIntegration {
 	 * @return null|array
 	 */
 	public function get_payment_retry_entry() {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended -- Using payment key instead of nonce.
 		if ( ! \filter_has_var( \INPUT_GET, 'pay_again' ) ) {
 			return null;
 		}
 
-		if ( ! \filter_has_var( \INPUT_GET, 'key' ) ) {
+		if ( ! \array_key_exists( 'key', $_GET ) ) {
 			return null;
 		}
 
@@ -1610,15 +1615,17 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		// Check if payment key is valid.
-		$key = filter_input( INPUT_GET, 'key', FILTER_SANITIZE_STRING );
-
 		if ( empty( $payment->key ) ) {
 			return null;
 		}
 
-		if ( $key !== $payment->key ) {
+		$key = \sanitize_text_field( \wp_unslash( $_GET['key'] ) );
+
+		if ( $payment->key !== $key ) {
 			return null;
 		}
+
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		// Get entry.
 		$entry_id = $payment->get_source_id();

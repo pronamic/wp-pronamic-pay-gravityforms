@@ -140,7 +140,7 @@ class PayFeed {
 
 		// JSON decode conditional logic object.
 		if ( ! empty( $conditional_logic_object ) ) {
-			$conditional_logic_object = \html_entity_decode( $conditional_logic_object );
+			$conditional_logic_object = \html_entity_decode( $conditional_logic_object, \ENT_COMPAT );
 
 			$conditional_logic_object = \json_decode( $conditional_logic_object, true );
 

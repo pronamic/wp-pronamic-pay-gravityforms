@@ -138,8 +138,8 @@ class PaymentAddOn extends GFPaymentAddOn {
 			return;
 		}
 
-		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
-		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
+		$form_id = filter_input( INPUT_GET, 'id', \FILTER_SANITIZE_NUMBER_INT );
+		$post_id = filter_input( INPUT_GET, 'fid', \FILTER_SANITIZE_NUMBER_INT );
 
 		if ( empty( $form_id ) ) {
 			return;
@@ -147,7 +147,8 @@ class PaymentAddOn extends GFPaymentAddOn {
 
 		check_admin_referer( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' );
 
-		$post_title = filter_input( INPUT_POST, '_pronamic_pay_gf_post_title', FILTER_SANITIZE_STRING );
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$post_title = \array_key_exists( '_pronamic_pay_gf_post_title', $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST['_pronamic_pay_gf_post_title'] ) ) : '';
 
 		if ( '' === trim( $post_title ) ) {
 			$feeds = $this->get_feeds( $form_id );
@@ -262,8 +263,8 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @param array $form Gravity Forms form.
 	 */
 	public function form_settings( $form ) {
-		$form_id = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
-		$post_id = filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
+		$form_id = filter_input( INPUT_GET, 'id', \FILTER_SANITIZE_NUMBER_INT );
+		$post_id = filter_input( INPUT_GET, 'fid', \FILTER_SANITIZE_NUMBER_INT );
 
 		if ( $this->is_detail_page() ) {
 			$feed = new PayFeed( $post_id );

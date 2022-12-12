@@ -97,10 +97,14 @@ class PaymentMethodsField extends GF_Field_Select {
 			 */
 			$this->inputs = [];
 
-			/* phpcs:ignore WordPress.Security.NonceVerification.Recommended */
-			if ( empty( $this->formId ) && \array_key_exists( 'page', $_GET ) && 'gf_edit_forms' === $_GET['page'] ) {
-				$this->formId = filter_input( INPUT_GET, 'id', FILTER_SANITIZE_STRING );
+			// phpcs:disable WordPress.Security.NonceVerification.Recommended
+			$page = \array_key_exists( 'page', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['page'] ) ) : null;
+
+			if ( empty( $this->formId ) && 'gf_edit_forms' === $page ) {
+				$this->formId = \array_key_exists( 'id', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['id'] ) ) : null;
 			}
+
+			// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		}
 
 		// Choices.
@@ -304,7 +308,10 @@ class PaymentMethodsField extends GF_Field_Select {
 
 		$display_choices = $choices;
 
-		if ( \is_admin() && 'gf_edit_forms' === \filter_input( \INPUT_GET, 'page', \FILTER_SANITIZE_STRING ) ) {
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$page = \array_key_exists( 'page', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['page'] ) ) : null;
+
+		if ( \is_admin() && 'gf_edit_forms' === $page ) {
 			$display_choices = array_filter( $choices, [ __CLASS__, 'filter_choice_is_selected' ] );
 		}
 

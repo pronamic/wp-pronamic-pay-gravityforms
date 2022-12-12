@@ -972,9 +972,10 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 							<?php
 
-							$post_id = \filter_input( INPUT_GET, 'fid', FILTER_SANITIZE_STRING );
+                            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+							$post_id = array_key_exists( 'fid', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['fid'] ) ) : null;
 
-							if ( method_exists( $this, 'get_settings_renderer' ) ) {
+							if ( null !== $post_id && method_exists( $this, 'get_settings_renderer' ) ) {
 								if ( false === $this->get_settings_renderer() && class_exists( '\Gravity_Forms\Gravity_Forms\Settings\Settings' ) ) {
 									$this->set_settings_renderer( new \Gravity_Forms\Gravity_Forms\Settings\Settings() );
 								}

@@ -12,14 +12,15 @@
 <form method="post" action="">
 	<?php
 
-	if ( filter_has_var( INPUT_GET, 'message' ) ) {
-		$message = filter_input( INPUT_GET, 'message', FILTER_SANITIZE_STRING );
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	$message = array_key_exists( 'message', $_GET ) ? filter_var( $_GET['message'], \FILTER_SANITIZE_NUMBER_INT ) : null;
 
+	if ( null !== $message ) {
 		// Notice.
 		$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
 		$class = 'error';
 
-		if ( '1' === $message ) {
+		if ( 1 === $message ) {
 			$class = 'updated';
 			$msg   = __( 'Payment feed updated successfully.', 'pronamic_ideal' );
 		}

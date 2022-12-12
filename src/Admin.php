@@ -11,7 +11,6 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use RGFormsModel;
-use stdClass;
 
 /**
  * Title: WordPress pay extension Gravity Forms admin
@@ -197,11 +196,12 @@ class Admin {
 	 * Maybe redirect to Gravity Forms entry
 	 */
 	public static function maybe_redirect_to_entry() {
-		if ( ! filter_has_var( INPUT_GET, 'pronamic_gf_lid' ) ) {
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$lead_id = \array_key_exists( 'pronamic_gf_lid', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['pronamic_gf_lid'] ) ) : null;
+
+		if ( null === $lead_id ) {
 			return;
 		}
-
-		$lead_id = filter_input( INPUT_GET, 'pronamic_gf_lid', FILTER_SANITIZE_STRING );
 
 		$lead = RGFormsModel::get_lead( $lead_id );
 
@@ -226,7 +226,7 @@ class Admin {
 	 * Handle AJAX request get form data
 	 */
 	public static function ajax_get_form_data() {
-		$form_id = filter_input( INPUT_GET, 'formId', FILTER_SANITIZE_STRING );
+		$form_id = \filter_input( INPUT_GET, 'formId', \FILTER_SANITIZE_NUMBER_INT );
 
 		$data = RGFormsModel::get_form_meta( $form_id );
 

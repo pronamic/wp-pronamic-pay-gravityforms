@@ -194,11 +194,13 @@ class PaymentData {
 		$credit_card_field = array_shift( $credit_card_fields );
 
 		if ( $credit_card_field ) {
+			// phpcs:disable WordPress.Security.NonceVerification.Missing
+
 			$credit_card = new CreditCard();
 
 			// Number.
 			$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );
-			$number        = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
+			$number        = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
 
 			$credit_card->set_number( $number );
 
@@ -214,15 +216,17 @@ class PaymentData {
 
 			// Security code.
 			$variable_name = sprintf( 'input_%s_3', $credit_card_field['id'] );
-			$security_code = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
+			$security_code = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
 
 			$credit_card->set_security_code( $security_code );
 
 			// Name.
 			$variable_name = sprintf( 'input_%s_5', $credit_card_field['id'] );
-			$name          = filter_input( INPUT_POST, $variable_name, FILTER_SANITIZE_STRING );
+			$name          = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
 
 			$credit_card->set_name( $name );
+
+			// phpcs:enable WordPress.Security.NonceVerification.Missing
 		}
 
 		return $credit_card;

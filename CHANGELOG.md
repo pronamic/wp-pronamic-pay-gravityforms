@@ -7,6 +7,28 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.4.0] - 2022-12-23
+
+### Commits
+
+- Added support for https://github.com/WordPress/wp-plugin-dependencies. ([5d7688c](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/5d7688cde8bac5597f81a8c6b137f4006db46aa2))
+- Fixed "Deprecated: dirname(): Passing null to parameter #1 ($path) of type string is deprecated in /wp-content/plugins/gravityforms/includes/addon/class-gf-addon.php on line 6168". ([91e5328](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/91e5328becdde0eb48a369bc46a204288a12cf53))
+
+### Composer
+
+- Changed `php` from `>=5.6.20` to `>=8.0`.
+- Changed `pronamic/wp-datetime` from `^2.0` to `v2.1.0`.
+	Release notes: https://github.com/pronamic/wp-datetime/releases/tag/v4.3.0
+- Changed `pronamic/wp-money` from `^2.0` to `v2.2.0`.
+	Release notes: https://github.com/pronamic/wp-money/releases/tag/v4.3.0
+- Changed `pronamic/wp-number` from `^1.1` to `v1.2.0`.
+	Release notes: https://github.com/pronamic/wp-number/releases/tag/v4.3.0
+- Changed `wp-pay/core` from `^4.5` to `v4.6.0`.
+	Release notes: https://github.com/pronamic/wp-pay-core/releases/tag/v4.3.0
+Full set of changes: [`4.3.0...4.4.0`][4.4.0]
+
+[4.4.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.3.0...v4.4.0
+
 ## [4.3.0] - 2022-11-07
 - No support for manual renewals with Gravity Forms.
 

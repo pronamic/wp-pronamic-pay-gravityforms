@@ -7,6 +7,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.4.1] - 2022-12-23
+
+### Commits
+
+- Fixed incorrect update message after updating payment feed. ([39f5e1e](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/39f5e1e6e64a58881c67c177f5872806a29749c8))
+
+Full set of changes: [`4.4.0...4.4.1`][4.4.1]
+
+[4.4.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.4.0...v4.4.1
+
 ## [4.4.0] - 2022-12-23
 
 ### Commits

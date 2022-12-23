@@ -20,7 +20,7 @@
 		$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
 		$class = 'error';
 
-		if ( 1 === $message ) {
+		if ( '1' === $message ) {
 			$class = 'updated';
 			$msg   = __( 'Payment feed updated successfully.', 'pronamic_ideal' );
 		}

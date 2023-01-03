@@ -134,7 +134,7 @@ class Processor {
 		 */
 
 		// Lead.
-		add_action( 'gform_entry_post_save', [ $this, 'entry_post_save' ], 10, 2 );
+		add_filter( 'gform_entry_post_save', [ $this, 'entry_post_save' ], 10, 2 );
 
 		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications).
 		add_filter( 'gform_disable_admin_notification_' . $this->form_id, [ $this, 'maybe_delay_admin_notification' ], 10, 3 );

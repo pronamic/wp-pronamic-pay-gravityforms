@@ -116,26 +116,6 @@ class GravityForms {
 	}
 
 	/**
-	 * Update entry.
-	 *
-	 * @param array $entry Gravity Forms entry.
-	 */
-	public static function update_entry( $entry ) {
-		/*
-		 * GFFormsModel::update_lead() is no longer in use since version 1.8.8! Instead use GFAPI::update_entry().
-		 *
-		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.13/forms_model.php#L587-L624
-		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.13/includes/api.php#L495-L654
-		 * @link https://github.com/wp-premium/gravityforms/blob/1.8.7.11/forms_model.php#L587-L621
-		 */
-		if ( Core_Util::class_method_exists( 'GFAPI', 'update_entry' ) ) {
-			GFAPI::update_entry( $entry );
-		} elseif ( Core_Util::class_method_exists( 'GFFormsModel', 'update_lead' ) ) {
-			GFFormsModel::update_lead( $entry );
-		}
-	}
-
-	/**
 	 * Update entry property.
 	 *
 	 * @param int    $entry_id Entry ID.

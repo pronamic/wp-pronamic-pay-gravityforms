@@ -672,7 +672,7 @@ class Processor {
 			}
 		}
 
-		GravityForms::update_entry( $entry );
+		\GFAPI::update_entry( $entry );
 
 		return $entry;
 	}

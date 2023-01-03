@@ -25,6 +25,8 @@ use RGFormsModel;
 class Admin {
 	/**
 	 * Bootstrap.
+	 * 
+	 * @return void
 	 */
 	public static function bootstrap() {
 		// Actions.
@@ -42,6 +44,8 @@ class Admin {
 
 	/**
 	 * Admin initialize.
+	 * 
+	 * @return void
 	 */
 	public static function admin_init() {
 		new AdminPaymentFormPostType();
@@ -50,9 +54,8 @@ class Admin {
 	/**
 	 * Add menu item to form settings.
 	 *
-	 * @param array $menu_items Array with form settings menu items.
-	 *
-	 * @return array
+	 * @param array<array<string, string>> $menu_items Array with form settings menu items.
+	 * @return array<array<string, string>>
 	 */
 	public static function form_settings_menu_item( $menu_items ) {
 		$menu_items[] = [
@@ -69,6 +72,7 @@ class Admin {
 	 *
 	 * @param string $form_id Gravity Forms form ID.
 	 * @param array  $lead    Gravity Forms lead/entry.
+	 * @return void
 	 */
 	public static function entry_info( $form_id, $lead ) {
 		$payment_id = gform_get_meta( $lead['id'], 'pronamic_payment_id' );
@@ -87,8 +91,8 @@ class Admin {
 	/**
 	 * Custom merge tags.
 	 *
-	 * @param array $merge_tags Array with merge tags.
-	 * @return array
+	 * @param array<array<string, string>> $merge_tags Array with merge tags.
+	 * @return array<array<string, string>>
 	 */
 	public static function custom_merge_tags( $merge_tags ) {
 		// Payment.

@@ -138,7 +138,7 @@ class Extension extends AbstractPluginIntegration {
 		add_filter( 'gform_gf_field_create', [ $this, 'field_create' ], 10, 2 );
 
 		\add_filter( 'gform_form_args', [ $this, 'maybe_prepopulate_form' ], 10, 1 );
-		\add_filter( 'gform_pre_render', [ $this, 'allow_field_prepopulation' ], 10, 3 );
+		\add_filter( 'gform_pre_render', [ $this, 'allow_field_prepopulation' ], 10, 1 );
 
 		// Register scripts and styles if Gravity Forms No-Conflict Mode is enabled.
 		add_filter( 'gform_noconflict_scripts', [ $this, 'no_conflict_scripts' ] );

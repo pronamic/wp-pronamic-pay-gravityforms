@@ -7,3 +7,5 @@ parameters:
 		- tests/phpstan/bootstrap.php
 	paths:
 		- src/
+	scanDirectories:
+		- vendor/pronamic/gravityforms

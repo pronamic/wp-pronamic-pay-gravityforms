@@ -522,16 +522,17 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Display text if no pay feeds exist yet.
 	 *
-	 * @since unreleased
+	 * @link https://github.com/pronamic/gravityforms/blob/2.6.8/includes/addon/class-gf-feed-addon.php#L2390-L2392
+	 * @return string
 	 */
 	public function feed_list_no_item_message() {
 		/* translators: 1: <a href="new feed URL">, 2: </a> */
-		$label = __( 'This form doesn\'t have any pay feeds. Let\'s go %1$screate one%2$s.', 'pronamic_ideal' );
+		$label = \__( 'This form doesn’t have any pay feeds. Let’s go %1$screate one%2$s.', 'pronamic_ideal' );
 
-		printf(
+		return \sprintf(
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			$label,
-			'<a href="' . esc_url( add_query_arg( [ 'fid' => 0 ] ) ) . '">',
+			'<a href="' . \esc_url( \add_query_arg( [ 'fid' => 0 ] ) ) . '">',
 			'</a>'
 		);
 	}

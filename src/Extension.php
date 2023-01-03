@@ -1438,11 +1438,17 @@ class Extension extends AbstractPluginIntegration {
 				},
 				'process_callback'            => function( $entry, $form ) {
 					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4730-L4746
-					if ( Core_Util::class_method_exists( 'Gravity_Flow', 'get_instance' ) ) {
-						$gravityflow = \Gravity_Flow::get_instance();
-
-						$gravityflow->process_workflow( $form, $entry['id'] );
+					if ( ! \class_exists( '\Gravity_Flow' ) ) {
+						return;
 					}
+
+					if ( ! \method_exists( '\Gravity_Flow', 'get_instance' ) ) {
+						return;
+					}
+
+					$gravityflow = \Gravity_Flow::get_instance();
+
+					$gravityflow->process_workflow( $form, $entry['id'] );
 				},
 			],
 		];

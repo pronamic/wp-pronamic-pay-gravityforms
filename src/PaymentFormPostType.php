@@ -38,6 +38,8 @@ class PaymentFormPostType {
 
 	/**
 	 * Initialize.
+	 * 
+	 * @return void
 	 */
 	public function init() {
 		register_post_type(

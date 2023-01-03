@@ -388,9 +388,9 @@ class Extension extends AbstractPluginIntegration {
 		$user = false;
 
 		// Gravity Forms User Registration Add-on.
-		if ( \function_exists( 'gf_user_registration' ) ) {
+		if ( \function_exists( '\gf_user_registration' ) ) {
 			// Version >= 3.
-			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
+			$user = \gf_user_registration()->get_user_by_entry_id( $lead['id'] );
 		} elseif ( class_exists( 'GFUserData' ) ) {
 			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
 		}
@@ -421,9 +421,9 @@ class Extension extends AbstractPluginIntegration {
 		$user = false;
 
 		// Gravity Forms User Registration Add-on.
-		if ( class_exists( 'GF_User_Registration' ) ) {
+		if ( \function_exists( '\gf_user_registration' ) ) {
 			// Version >= 3.
-			$user = gf_user_registration()->get_user_by_entry_id( $lead['id'] );
+			$user = \gf_user_registration()->get_user_by_entry_id( $lead['id'] );
 		} elseif ( class_exists( 'GFUserData' ) ) {
 			$user = GFUserData::get_user_by_entry_id( $lead['id'] );
 		}

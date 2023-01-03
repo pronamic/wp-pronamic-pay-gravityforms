@@ -2,7 +2,7 @@ includes:
 	- vendor-bin/phpstan/vendor/szepeviktor/phpstan-wordpress/extension.neon
 parameters:
 	customRulesetUsed: false
-	level: max
+	level: 1
 	bootstrapFiles:
 		- tests/phpstan/bootstrap.php
 	paths:

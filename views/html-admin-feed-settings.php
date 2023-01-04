@@ -14,7 +14,6 @@ use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed;
 
-// $payment_addon is \Pronamic\WordPress\Pay\Extensions\GravityForms\PaymentAddOn
 $payment_addon = $this;
 
 $form_meta = RGFormsModel::get_form_meta( $form_id );

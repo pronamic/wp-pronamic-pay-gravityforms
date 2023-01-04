@@ -14,6 +14,9 @@ use Pronamic\WordPress\Pay\Extensions\GravityForms\GravityForms;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\Links;
 use Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed;
 
+// $payment_addon is \Pronamic\WordPress\Pay\Extensions\GravityForms\PaymentAddOn
+$payment_addon = $this;
+
 $form_meta = RGFormsModel::get_form_meta( $form_id );
 
 $entry_id_prefix = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
@@ -975,14 +978,14 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
                             // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 							$post_id = array_key_exists( 'fid', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['fid'] ) ) : null;
 
-							if ( null !== $post_id && method_exists( $this, 'get_settings_renderer' ) ) {
-								if ( false === $this->get_settings_renderer() && class_exists( '\Gravity_Forms\Gravity_Forms\Settings\Settings' ) ) {
-									$this->set_settings_renderer( new \Gravity_Forms\Gravity_Forms\Settings\Settings() );
+							if ( null !== $post_id && method_exists( $payment_addon, 'get_settings_renderer' ) ) {
+								if ( false === $payment_addon->get_settings_renderer() && class_exists( '\Gravity_Forms\Gravity_Forms\Settings\Settings' ) ) {
+									$payment_addon->set_settings_renderer( new \Gravity_Forms\Gravity_Forms\Settings\Settings() );
 								}
 
 								$feed = new PayFeed( $post_id );
 
-								$this->get_settings_renderer()->set_values(
+								$payment_addon->get_settings_renderer()->set_values(
 									[
 										'feed_condition_conditional_logic'        => $feed->condition_enabled,
 										'feed_condition_conditional_logic_object' => $feed->conditional_logic_object,
@@ -996,7 +999,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 								'type'  => 'feed_condition',
 							];
 
-							$this->settings_feed_condition( $field );
+							$payment_addon->settings_feed_condition( $field );
 
 							?>
 						</div>

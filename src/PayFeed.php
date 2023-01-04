@@ -18,9 +18,34 @@ use WP_Post;
  * Copyright: 2005-2023 Pronamic
  * Company: Pronamic
  *
- * @author  Remco Tolsma
- * @version 2.6.1
- * @since   1.4.4
+ * @author   Remco Tolsma
+ * @version  2.6.1
+ * @since    1.4.4
+ * 
+ * @todo     This class has too many settings properties, should we move this to a settings/options array?
+ * @property mixed $form_id
+ * @property mixed $config_id
+ * @property mixed $entry_id_prefix
+ * @property mixed $order_id
+ * @property mixed $transaction_description
+ * @property mixed $delay_actions
+ * @property mixed $user_role_field_id
+ * @property mixed $subscription_amount_type
+ * @property mixed $subscription_amount_field
+ * @property mixed $subscription_interval_type
+ * @property mixed $subscription_interval
+ * @property mixed $subscription_interval_period
+ * @property mixed $subscription_interval_date_type
+ * @property mixed $subscription_interval_date    
+ * @property mixed $subscription_interval_date_day
+ * @property mixed $subscription_interval_date_month
+ * @property mixed $subscription_interval_date_prorate
+ * @property mixed $subscription_interval_field
+ * @property mixed $subscription_frequency_type
+ * @property mixed $subscription_number_periods
+ * @property mixed $subscription_frequency_field
+ * @property mixed $fields
+ * @property mixed $links
  */
 class PayFeed {
 	/**

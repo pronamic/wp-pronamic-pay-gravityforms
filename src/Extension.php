@@ -91,7 +91,7 @@ class Extension extends AbstractPluginIntegration {
 		\Pronamic\WordPress\GravityFormsNL\Plugin::instance();
 
 		// Post types.
-		$this->payment_form_post_type = new PaymentFormPostType();
+		new PaymentFormPostType();
 
 		// Actions
 		// Initialize hook, Gravity Forms uses the default priority (10).
@@ -110,7 +110,7 @@ class Extension extends AbstractPluginIntegration {
 		}
 
 		// Fields.
-		$this->fields = new Fields();
+		new Fields();
 	}
 
 	/**

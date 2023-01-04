@@ -11,7 +11,7 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
-use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
 use RGFormsModel;
@@ -300,5 +300,36 @@ class PaymentData {
 			default:
 				return $interval;
 		}
+	}
+
+	/**
+	 * Get subscription trial amount.
+	 *
+	 * @return Money
+	 */
+	public function get_subscription_trial_amount(): Money {
+		$trial = $this->feed->get_subscription_trial();
+
+		// Free trial.
+		$amount = new Money( 0, $this->get_currency_alphabetic_code() );
+
+		switch ( $trial->amount_type ) {
+			case GravityForms::SUBSCRIPTION_TRIAL_AMOUNT_FREE:
+				$amount = new Money( 0, $this->get_currency_alphabetic_code() );
+
+				break;
+			case GravityForms::SUBSCRIPTION_TRIAL_AMOUNT_FIXED:
+				$amount = new Money( $trial->amount, $this->get_currency_alphabetic_code() );
+
+				break;
+			case GravityForms::SUBSCRIPTION_TRIAL_AMOUNT_FIELD:
+				if ( isset( $this->lead[ $trial->amount_field ] ) ) {
+					$amount = new Money( $this->lead[ $trial->amount_field ], $this->get_currency_alphabetic_code() );
+				}
+
+				break;
+		}
+
+		return $amount;
 	}
 }

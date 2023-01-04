@@ -104,6 +104,27 @@ class GravityForms {
 	const SUBSCRIPTION_FREQUENCY_UNLIMITED = 'unlimited';
 
 	/**
+	 * Indicator for free trial amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_TRIAL_AMOUNT_FREE = 'free';
+
+	/**
+	 * Indicator for fixed trial amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_TRIAL_AMOUNT_FIXED = 'fixed';
+
+	/**
+	 * Indicator for field trial amount type.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIPTION_TRIAL_AMOUNT_FIELD = 'field';
+
+	/**
 	 * Check if Gravity Forms is active (Automattic/developer style).
 	 *
 	 * @link https://bitbucket.org/Pronamic/gravityforms/src/42773f75ad7ad9ac9c31ce149510ff825e4aa01f/gravityforms.php?at=1.7.8#cl-95

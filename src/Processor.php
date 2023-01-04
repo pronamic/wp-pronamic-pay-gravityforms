@@ -498,6 +498,29 @@ class Processor {
 			// Phase.
 			$start_date = new \DateTimeImmutable();
 
+			// Trial phase.
+			$trial = $this->feed->get_subscription_trial();
+
+			if ( $trial->enabled && ! empty( $trial->length ) ) {
+				$trial_phase = new SubscriptionPhase(
+					$subscription,
+					$start_date,
+					new SubscriptionInterval( 'P' . $trial->length . $trial->length_unit ),
+					$data->get_subscription_trial_amount()
+				);
+
+				$trial_phase->set_total_periods( 1 );
+				$trial_phase->set_trial( true );
+
+				$subscription->add_phase( $trial_phase );
+
+				$trial_end_date = $trial_phase->get_end_date();
+
+				if ( null !== $trial_end_date ) {
+					$start_date = $trial_end_date;
+				}
+			}
+
 			$phase = new SubscriptionPhase(
 				$subscription,
 				$start_date,

@@ -48,6 +48,15 @@ $feed->subscriptionFrequencyType  = $pay_feed->subscription_frequency_type;
 $feed->subscriptionNumberPeriods  = $pay_feed->subscription_number_periods;
 $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
+$trial = $pay_feed->get_subscription_trial();
+
+$feed->subscriptionTrialEnabled     = $trial->enabled;
+$feed->subscriptionTrialAmountType  = $trial->amount_type;
+$feed->subscriptionTrialAmount      = $trial->amount;
+$feed->subscriptionTrialAmountField = $trial->amount_field;
+$feed->subscriptionTrialLength      = $trial->length;
+$feed->subscriptionTrialLengthUnit  = $trial->length_unit;
+
 ?>
 <div id="gf-pay-feed-editor">
 	<?php wp_nonce_field( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' ); ?>
@@ -644,13 +653,19 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 						</label>
 					</th>
 					<td>
+						<?php
+
+						$trial = $pay_feed->get_subscription_trial();
+
+						?>
+
 						<fieldset>
 							<legend class="screen-reader-text">
 								<span><?php esc_html_e( 'Trial Period', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<label>
-								<input id="pronamic_pay_gf_subscription_trial_enabled" name="_pronamic_pay_gf_subscription_trial_enabled" type="checkbox" value="true" <?php checked( $pay_feed->trial_enabled ); ?> />
+								<input id="pronamic_pay_gf_subscription_trial_enabled" name="_pronamic_pay_gf_subscription_trial_enabled" type="checkbox" value="1" <?php checked( $trial->enabled ); ?> />
 								<?php esc_html_e( 'Enable trial period', 'pronamic_ideal' ); ?>
 							</label>
 
@@ -662,12 +677,12 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 								</label>
 
 								<select id="pronamic_pay_gf_subscription_trial_amount_type" name="_pronamic_pay_gf_subscription_trial_amount_type">
-									<option value="free" <?php selected( $pay_feed->subscription_trial_amount_type, 'free' ); ?>><?php esc_html_e( 'Free', 'pronamic_ideal' ); ?></option>
-									<option value="fixed" <?php selected( $pay_feed->subscription_trial_amount_type, 'fixed' ); ?>><?php esc_html_e( 'Fixed amount', 'pronamic_ideal' ); ?></option>
-									<option value="field" <?php selected( $pay_feed->subscription_trial_amount_type, 'field' ); ?>><?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?></option>
+									<option value="free" <?php selected( $trial->amount_type, 'free' ); ?>><?php esc_html_e( 'Free', 'pronamic_ideal' ); ?></option>
+									<option value="fixed" <?php selected( $trial->amount_type, 'fixed' ); ?>><?php esc_html_e( 'Fixed amount', 'pronamic_ideal' ); ?></option>
+									<option value="field" <?php selected( $trial->amount_type, 'field' ); ?>><?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?></option>
 								</select> &nbsp;
 
-								<input id="pronamic_pay_gf_subscription_trial_amount" name="_pronamic_pay_gf_subscription_trial_amount" type="text" size="12" value="<?php echo esc_attr( $pay_feed->subscription_trial_amount ); ?>" placeholder="<?php echo esc_attr( GFCommon::get_currency() ); ?>" />
+								<input id="pronamic_pay_gf_subscription_trial_amount" name="_pronamic_pay_gf_subscription_trial_amount" type="text" size="12" value="<?php echo esc_attr( $trial->amount ); ?>" placeholder="<?php echo esc_attr( GFCommon::get_currency() ); ?>" />
 
 								<select id="pronamic_pay_gf_subscription_trial_amount_field" name="_pronamic_pay_gf_subscription_trial_amount_field"></select>
 
@@ -678,13 +693,13 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 									<?php esc_html_e( 'Length', 'pronamic_ideal' ); ?>
 								</label>
 
-								<input id="pronamic_pay_gf_subscription_trial_length" name="_pronamic_pay_gf_subscription_trial_length" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_trial_length ); ?>" />
+								<input id="pronamic_pay_gf_subscription_trial_length" name="_pronamic_pay_gf_subscription_trial_length" type="text" size="4" value="<?php echo esc_attr( $trial->length ); ?>" />
 
-								<select id="pronamic_pay_gf_subscription_trial_length_period" name="_pronamic_pay_gf_subscription_trial_length_period">
-									<option value="D" <?php selected( $pay_feed->subscription_trial_length_period, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
-									<option value="W" <?php selected( $pay_feed->subscription_trial_length_period, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
-									<option value="M" <?php selected( $pay_feed->subscription_trial_length_period, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
-									<option value="Y" <?php selected( $pay_feed->subscription_trial_length_period, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
+								<select id="pronamic_pay_gf_subscription_trial_length_unit" name="_pronamic_pay_gf_subscription_trial_length_unit">
+									<option value="D" <?php selected( $trial->length_unit, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
+									<option value="W" <?php selected( $trial->length_unit, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
+									<option value="M" <?php selected( $trial->length_unit, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
+									<option value="Y" <?php selected( $trial->length_unit, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
 								</select>
 
 								<br />

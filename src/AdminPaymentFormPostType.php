@@ -368,7 +368,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_trial_length' => [
 				'type' => 'integer',
 			],
-			'_pronamic_pay_gf_subscription_trial_length_period' => [
+			'_pronamic_pay_gf_subscription_trial_length_unit' => [
 				'type' => 'string',
 				'enum' => [
 					'D',

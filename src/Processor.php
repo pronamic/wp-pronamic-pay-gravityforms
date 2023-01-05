@@ -328,7 +328,11 @@ class Processor {
 
 		$subscription_lines = new PaymentLines();
 
+		$trial_lines = new PaymentLines();
+
 		$product_fields = GFCommon::get_product_fields( $form, $lead );
+
+		$trial = $this->feed->get_subscription_trial();
 
 		if ( is_array( $product_fields ) ) {
 			// Products.
@@ -399,6 +403,7 @@ class Processor {
 						}
 					}
 
+					// Subscription line.
 					if (
 						GravityForms::SUBSCRIPTION_AMOUNT_FIELD === $this->feed->subscription_amount_type
 							&&
@@ -406,6 +411,17 @@ class Processor {
 					) {
 						foreach ( $product_lines as $line ) {
 							$subscription_lines->add_line( $line );
+						}
+					}
+
+					// Trial line.
+					if (
+						GravityForms::SUBSCRIPTION_TRIAL_AMOUNT_FIELD === $trial->amount_type
+							&&
+						$key === $trial->amount_field
+					) {
+						foreach ( $product_lines as $line ) {
+							$trial_lines->add_line( $line );
 						}
 					}
 				}
@@ -445,6 +461,45 @@ class Processor {
 		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/src/PaymentData.php#L231-L264
 		 */
 
+		/**
+		 * Subscription payment lines.
+		 */
+		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
+			foreach ( $payment->lines as $line ) {
+				$subscription_lines->add_line( $line );
+			}
+		}
+
+		if ( GravityForms::SUBSCRIPTION_TRIAL_AMOUNT_FREE === $trial->amount_type ) {
+			$line = $trial_lines->new_line();
+
+			$line->set_name( __( 'Free trial', 'pronamic_ideal' ) );
+			$line->set_quantity( 1 );
+			$line->set_unit_price( new Money( 0, $currency ) );
+			$line->set_total_amount( new Money( 0, $currency ) );
+		}
+
+		if ( GravityForms::SUBSCRIPTION_TRIAL_AMOUNT_FIXED === $trial->amount_type ) {
+			$value = Number::from_string( (string) $trial->amount );
+
+			$line = $trial_lines->new_line();
+
+			$line->set_name( __( 'Trial', 'pronamic_ideal' ) );
+			$line->set_quantity( 1 );
+			$line->set_unit_price( new Money( $value, $currency ) );
+			$line->set_total_amount( new Money( $value, $currency ) );
+		}
+
+		$interval = $data->get_subscription_interval();
+
+		if (
+			$trial->enabled && 0 !== count( $trial_lines )
+				&&
+			null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0
+		) {
+			$payment->lines = $trial_lines;
+		}
+
 		// Does payment contain any lines?
 		if ( 0 === count( $payment->lines ) ) {
 			return $lead;
@@ -478,12 +533,6 @@ class Processor {
 		 *
 		 * As soon as a recurring amount is set, we create a subscription.
 		 */
-		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
-			foreach ( $payment->lines as $line ) {
-				$subscription_lines->add_line( $line );
-			}
-		}
-
 		$interval = $data->get_subscription_interval();
 
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
@@ -499,14 +548,12 @@ class Processor {
 			$start_date = new \DateTimeImmutable();
 
 			// Trial phase.
-			$trial = $this->feed->get_subscription_trial();
-
-			if ( $trial->enabled && ! empty( $trial->length ) ) {
+			if ( $trial->enabled && 0 !== count( $trial_lines ) ) {
 				$trial_phase = new SubscriptionPhase(
 					$subscription,
 					$start_date,
 					new SubscriptionInterval( 'P' . $trial->length . $trial->length_unit ),
-					$data->get_subscription_trial_amount()
+					$trial_lines->get_amount()
 				);
 
 				$trial_phase->set_total_periods( 1 );

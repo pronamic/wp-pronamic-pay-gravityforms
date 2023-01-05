@@ -348,7 +348,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_frequency_field' => [
 				'type' => 'string',
 			],
-			'_pronamic_pay_gf_subscription_trial_enabled' => [
+			'_pronamic_pay_gf_subscription_trial_enabled'  => [
 				'type' => 'boolean',
 			],
 			'_pronamic_pay_gf_subscription_trial_amount_type' => [
@@ -357,15 +357,15 @@ class AdminPaymentFormPostType {
 					'free',
 					'fixed',
 					'field',
-				]
+				],
 			],
-			'_pronamic_pay_gf_subscription_trial_amount' => [
+			'_pronamic_pay_gf_subscription_trial_amount'   => [
 				'type' => 'string',
 			],
-			'_pronamic_pay_gf_subscription_trial_field' => [
+			'_pronamic_pay_gf_subscription_trial_field'    => [
 				'type' => 'string',
 			],
-			'_pronamic_pay_gf_subscription_trial_length' => [
+			'_pronamic_pay_gf_subscription_trial_length'   => [
 				'type' => 'integer',
 			],
 			'_pronamic_pay_gf_subscription_trial_length_unit' => [
@@ -375,7 +375,7 @@ class AdminPaymentFormPostType {
 					'W',
 					'M',
 					'Y',
-				]
+				],
 			],
 
 			// Feed conditions.

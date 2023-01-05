@@ -7,6 +7,24 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.4.2] - 2023-01-04
+### Fixed
+
+- Fixed problem with saving status page settings in payment feed. ([#14](https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/14))
+
+### Commits
+
+- Use REST API to sanitize complex input types. ([4c0ffa3](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/4c0ffa32a3e824231f908358bec666c25eccbbcb))
+- Use file hashes for script and style version. ([d6d75c4](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/d6d75c460b6797b9525e34e7c8b0c80ae05f282a))
+- Fixed PHPStan:  Callback expects 1 parameter, $accepted_args is set to 3. ([5b2dfc6](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/5b2dfc610233bc78468abdf8c6bd992338907721))
+- Removed `GravityForms::update_entry( $entry )` function, no longer support Gravity Forms versions before 1.8.8. ([f945126](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/f945126f8e66c082189939c6bb9404901905ad1d))
+- The `gform_entry_post_save` hook is a filter, not an action. ([eec0d35](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/eec0d3598457af5f34bbc0571f2467efbf19661c))
+- Happy 2023. ([8572f8e](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/8572f8e14b5ec827ff8f900d50ba3063958febc3))
+
+Full set of changes: [`4.4.1...4.4.2`][4.4.2]
+
+[4.4.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.4.1...v4.4.2
+
 ## [4.4.1] - 2022-12-23
 
 ### Commits

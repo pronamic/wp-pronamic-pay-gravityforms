@@ -428,7 +428,7 @@
 
 				$( '<option>' ).appendTo( $element );
 
-				$.each( obj.getInputs(), function( key, input ) {
+				$.each( products, function( key, input ) {
 					var label = input.adminLabel ? input.adminLabel : input.label;
 
 					$( '<option>' )

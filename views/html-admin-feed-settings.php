@@ -682,7 +682,7 @@ $feed->subscriptionTrialLengthUnit  = $trial->length_unit;
 									<option value="field" <?php selected( $trial->amount_type, 'field' ); ?>><?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?></option>
 								</select> &nbsp;
 
-								<input id="pronamic_pay_gf_subscription_trial_amount" name="_pronamic_pay_gf_subscription_trial_amount" type="text" size="12" value="<?php echo esc_attr( $trial->amount ); ?>" placeholder="<?php echo esc_attr( GFCommon::get_currency() ); ?>" />
+								<input id="pronamic_pay_gf_subscription_trial_amount" name="_pronamic_pay_gf_subscription_trial_amount" type="number" step="any" autocomplete="off" size="12" value="<?php echo esc_attr( $trial->amount ); ?>" placeholder="<?php echo esc_attr( GFCommon::get_currency() ); ?>" />
 
 								<select id="pronamic_pay_gf_subscription_trial_amount_field" name="_pronamic_pay_gf_subscription_trial_amount_field"></select>
 

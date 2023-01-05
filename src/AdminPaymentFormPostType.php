@@ -362,7 +362,7 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_trial_amount'   => [
 				'type' => 'string',
 			],
-			'_pronamic_pay_gf_subscription_trial_field'    => [
+			'_pronamic_pay_gf_subscription_trial_amount_field' => [
 				'type' => 'string',
 			],
 			'_pronamic_pay_gf_subscription_trial_length'   => [

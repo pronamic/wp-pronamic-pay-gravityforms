@@ -200,7 +200,7 @@ class Extension extends AbstractPluginIntegration {
 			'pronamic-pay-gravityforms',
 			plugins_url( 'css/admin' . $min . '.css', __DIR__ ),
 			[],
-			\hash_file( 'crc32', \plugin_dir_path( __DIR__ ) . 'css/admin' . $min . '.js' )
+			\hash_file( 'crc32', \plugin_dir_path( __DIR__ ) . 'css/admin' . $min . '.css' )
 		);
 
 		wp_register_script(

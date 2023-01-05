@@ -693,7 +693,7 @@ $feed->subscriptionTrialLengthUnit  = $trial->length_unit;
 									<?php esc_html_e( 'Length', 'pronamic_ideal' ); ?>
 								</label>
 
-								<input id="pronamic_pay_gf_subscription_trial_length" name="_pronamic_pay_gf_subscription_trial_length" type="text" size="4" value="<?php echo esc_attr( $trial->length ); ?>" />
+								<input id="pronamic_pay_gf_subscription_trial_length" name="_pronamic_pay_gf_subscription_trial_length" type="number" step="1" min="1" value="<?php echo esc_attr( $trial->length ); ?>" />
 
 								<select id="pronamic_pay_gf_subscription_trial_length_unit" name="_pronamic_pay_gf_subscription_trial_length_unit">
 									<option value="D" <?php selected( $trial->length_unit, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>

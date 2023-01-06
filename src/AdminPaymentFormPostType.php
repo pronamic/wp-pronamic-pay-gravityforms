@@ -351,20 +351,6 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_subscription_trial_enabled'  => [
 				'type' => 'boolean',
 			],
-			'_pronamic_pay_gf_subscription_trial_amount_type' => [
-				'type' => 'string',
-				'enum' => [
-					'free',
-					'fixed',
-					'field',
-				],
-			],
-			'_pronamic_pay_gf_subscription_trial_amount'   => [
-				'type' => 'string',
-			],
-			'_pronamic_pay_gf_subscription_trial_amount_field' => [
-				'type' => 'string',
-			],
 			'_pronamic_pay_gf_subscription_trial_length'   => [
 				'type' => 'integer',
 			],

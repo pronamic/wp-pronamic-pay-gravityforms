@@ -51,9 +51,6 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 $trial = $pay_feed->get_subscription_trial();
 
 $feed->subscriptionTrialEnabled     = $trial->enabled;
-$feed->subscriptionTrialAmountType  = $trial->amount_type;
-$feed->subscriptionTrialAmount      = $trial->amount;
-$feed->subscriptionTrialAmountField = $trial->amount_field;
 $feed->subscriptionTrialLength      = $trial->length;
 $feed->subscriptionTrialLengthUnit  = $trial->length_unit;
 
@@ -672,23 +669,6 @@ $feed->subscriptionTrialLengthUnit  = $trial->length_unit;
 							<br />
 
 							<div class="pronamic-pay-gf-subscription-trial-settings">
-								<label for="pronamic_pay_gf_subscription_trial_amount_type">
-									<?php esc_html_e( 'Amount', 'pronamic_ideal' ); ?>
-								</label>
-
-								<select id="pronamic_pay_gf_subscription_trial_amount_type" name="_pronamic_pay_gf_subscription_trial_amount_type">
-									<option value="free" <?php selected( $trial->amount_type, 'free' ); ?>><?php esc_html_e( 'Free', 'pronamic_ideal' ); ?></option>
-									<option value="fixed" <?php selected( $trial->amount_type, 'fixed' ); ?>><?php esc_html_e( 'Fixed amount', 'pronamic_ideal' ); ?></option>
-									<option value="field" <?php selected( $trial->amount_type, 'field' ); ?>><?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?></option>
-								</select> &nbsp;
-
-								<input id="pronamic_pay_gf_subscription_trial_amount" name="_pronamic_pay_gf_subscription_trial_amount" type="number" step="any" autocomplete="off" size="12" value="<?php echo esc_attr( $trial->amount ); ?>" placeholder="<?php echo esc_attr( GFCommon::get_currency() ); ?>" />
-
-								<select id="pronamic_pay_gf_subscription_trial_amount_field" name="_pronamic_pay_gf_subscription_trial_amount_field"></select>
-
-								<br />
-								<br />
-
 								<label for="pronamic_pay_gf_subscription_trial_length">
 									<?php esc_html_e( 'Length', 'pronamic_ideal' ); ?>
 								</label>

@@ -35,9 +35,6 @@
 		elements.subscriptionNumberPeriods = $element.find( '#pronamic_pay_gf_subscription_number_periods' );
 		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
 		elements.subscriptionTrialEnabled = $element.find( '#pronamic_pay_gf_subscription_trial_enabled' );
-		elements.subscriptionTrialAmountType = $element.find( '#pronamic_pay_gf_subscription_trial_amount_type' );
-		elements.subscriptionTrialAmount = $element.find( '#pronamic_pay_gf_subscription_trial_amount' );
-		elements.subscriptionTrialAmountField = $element.find( '#pronamic_pay_gf_subscription_trial_amount_field' );
 
 		// Data
 		var feed = JSON.parse( elements.feed.val() );
@@ -422,56 +419,6 @@
 				} );
 
 				elements.subscriptionTrialEnabled.trigger( 'change' );
-
-				// Populate trial amount field with form fields.
-				$element = $( elements.subscriptionTrialAmountField );
-
-				$( '<option>' ).appendTo( $element );
-
-				$.each( products, function( key, input ) {
-					var label = input.adminLabel ? input.adminLabel : input.label;
-
-					$( '<option>' )
-						.attr( 'value', input.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.subscriptionTrialAmountField == input.id )
-						/* jshint eqeqeq: true */
-						.appendTo( $element );
-				} );
-
-				/* global console */
-
-				// Trial amount type.
-				elements.subscriptionTrialAmountType.on( 'change', function() {
-					var amountType = elements.subscriptionTrialAmountType.val();
-
-					var elementAmount = $( elements.subscriptionTrialAmount );
-					var elementField = $( elements.subscriptionTrialAmountField );
-
-					console.log( amountType );
-
-					switch ( amountType ) {
-						case 'free':
-							elementAmount.hide();
-							elementField.hide();
-
-							break;
-						case 'fixed':
-							elementAmount.show();
-							elementField.hide();
-
-							break;
-						case 'field':
-							elementAmount.hide();
-							elementField.show();
-
-							break;
-					}
-				} );
-
-				//elements.subscriptionTrialAmountType.val( feed.subscriptionTrialAmountField );
-				elements.subscriptionTrialAmountType.trigger( 'change' );
 			}
 		};
 

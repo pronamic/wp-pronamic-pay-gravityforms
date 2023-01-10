@@ -524,14 +524,14 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 							<label>
 								<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $pay_feed->subscription_amount_type, 'total' ); ?> />
-								<?php esc_html_e( 'Form total', 'pronamic_ideal' ); ?>
+								<?php esc_html_e( 'Total Amount', 'pronamic_ideal' ); ?>
 							</label>
 
 							<br />
 
 							<label>
 								<input id="pronamic_pay_gf_subscription_amount_type_field" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="field" <?php checked( $pay_feed->subscription_amount_type, 'field' ); ?> />
-								<?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
+								<?php esc_html_e( 'Form Field', 'pronamic_ideal' ); ?>
 							</label>
 
 							<div class="pronamic-pay-gf-subscription-amount-settings amount-field">

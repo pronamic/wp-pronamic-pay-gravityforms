@@ -50,9 +50,9 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 $trial = $pay_feed->get_subscription_trial();
 
-$feed->subscriptionTrialEnabled     = $trial->enabled;
-$feed->subscriptionTrialLength      = $trial->length;
-$feed->subscriptionTrialLengthUnit  = $trial->length_unit;
+$feed->subscriptionTrialEnabled    = $trial->enabled;
+$feed->subscriptionTrialLength     = $trial->length;
+$feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 ?>
 <div id="gf-pay-feed-editor">

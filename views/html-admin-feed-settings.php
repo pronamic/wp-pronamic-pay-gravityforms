@@ -48,6 +48,12 @@ $feed->subscriptionFrequencyType  = $pay_feed->subscription_frequency_type;
 $feed->subscriptionNumberPeriods  = $pay_feed->subscription_number_periods;
 $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
+$trial = $pay_feed->get_subscription_trial();
+
+$feed->subscriptionTrialEnabled    = $trial->enabled;
+$feed->subscriptionTrialLength     = $trial->length;
+$feed->subscriptionTrialLengthUnit = $trial->length_unit;
+
 ?>
 <div id="gf-pay-feed-editor">
 	<?php wp_nonce_field( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' ); ?>
@@ -640,6 +646,51 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 				<tr>
 					<th scope="row">
 						<label>
+							<?php esc_html_e( 'Trial Period', 'pronamic_ideal' ); ?>
+						</label>
+					</th>
+					<td>
+						<?php
+
+						$trial = $pay_feed->get_subscription_trial();
+
+						?>
+
+						<fieldset>
+							<legend class="screen-reader-text">
+								<span><?php esc_html_e( 'Trial Period', 'pronamic_ideal' ); ?></span>
+							</legend>
+
+							<label>
+								<input id="pronamic_pay_gf_subscription_trial_enabled" name="_pronamic_pay_gf_subscription_trial_enabled" type="checkbox" value="1" <?php checked( $trial->enabled ); ?> />
+								<?php esc_html_e( 'Enable trial period', 'pronamic_ideal' ); ?>
+							</label>
+
+							<br />
+
+							<div class="pronamic-pay-gf-subscription-trial-settings">
+								<label for="pronamic_pay_gf_subscription_trial_length">
+									<?php esc_html_e( 'Length', 'pronamic_ideal' ); ?>
+								</label>
+
+								<input id="pronamic_pay_gf_subscription_trial_length" name="_pronamic_pay_gf_subscription_trial_length" type="number" step="1" min="1" value="<?php echo esc_attr( $trial->length ); ?>" />
+
+								<select id="pronamic_pay_gf_subscription_trial_length_unit" name="_pronamic_pay_gf_subscription_trial_length_unit">
+									<option value="D" <?php selected( $trial->length_unit, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
+									<option value="W" <?php selected( $trial->length_unit, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
+									<option value="M" <?php selected( $trial->length_unit, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
+									<option value="Y" <?php selected( $trial->length_unit, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
+								</select>
+
+								<br />
+								<br />
+							</div>
+						</fieldset>
+					</td>
+				</tr>
+				<tr>
+					<th scope="row">
+						<label>
 							<?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
@@ -974,7 +1025,7 @@ $feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 							<?php
 
-                            // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+							// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 							$post_id = array_key_exists( 'fid', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['fid'] ) ) : null;
 
 							if ( null !== $post_id && method_exists( $payment_addon, 'get_settings_renderer' ) ) {

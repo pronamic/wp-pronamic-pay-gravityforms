@@ -21,7 +21,7 @@ use WP_Post;
  * @author   Remco Tolsma
  * @version  2.6.1
  * @since    1.4.4
- * 
+ *
  * @todo     This class has too many settings properties, should we move this to a settings/options array?
  * @property mixed $form_id
  * @property mixed $config_id
@@ -36,7 +36,7 @@ use WP_Post;
  * @property mixed $subscription_interval
  * @property mixed $subscription_interval_period
  * @property mixed $subscription_interval_date_type
- * @property mixed $subscription_interval_date    
+ * @property mixed $subscription_interval_date
  * @property mixed $subscription_interval_date_day
  * @property mixed $subscription_interval_date_month
  * @property mixed $subscription_interval_date_prorate
@@ -295,6 +295,21 @@ class PayFeed {
 		// Links.
 		$links       = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
 		$this->links = is_array( $links ) ? $links : [];
+	}
+
+	/**
+	 * Get subscription trial.
+	 *
+	 * @return object
+	 */
+	public function get_subscription_trial(): object {
+		$meta_key_prefix = '_pronamic_pay_gf_subscription_trial_';
+
+		return (object) [
+			'enabled'     => '1' === \get_post_meta( $this->id, $meta_key_prefix . 'enabled', true ),
+			'length'      => (int) \get_post_meta( $this->id, $meta_key_prefix . 'length', true ),
+			'length_unit' => \get_post_meta( $this->id, $meta_key_prefix . 'length_unit', true ),
+		];
 	}
 
 	/**

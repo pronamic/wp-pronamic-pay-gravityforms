@@ -304,6 +304,8 @@ class AdminPaymentFormPostType {
 			'_pronamic_pay_gf_user_role_field_id'          => [
 				'type' => 'string',
 			],
+
+			// Subscriptions.
 			'_pronamic_pay_gf_subscription_amount_type'    => [
 				'type' => 'string',
 			],
@@ -345,6 +347,21 @@ class AdminPaymentFormPostType {
 			],
 			'_pronamic_pay_gf_subscription_frequency_field' => [
 				'type' => 'string',
+			],
+			'_pronamic_pay_gf_subscription_trial_enabled'  => [
+				'type' => 'boolean',
+			],
+			'_pronamic_pay_gf_subscription_trial_length'   => [
+				'type' => 'integer',
+			],
+			'_pronamic_pay_gf_subscription_trial_length_unit' => [
+				'type' => 'string',
+				'enum' => [
+					'D',
+					'W',
+					'M',
+					'Y',
+				],
 			],
 
 			// Feed conditions.

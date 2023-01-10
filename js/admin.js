@@ -34,6 +34,7 @@
 		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
 		elements.subscriptionNumberPeriods = $element.find( '#pronamic_pay_gf_subscription_number_periods' );
 		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
+		elements.subscriptionTrialEnabled = $element.find( '#pronamic_pay_gf_subscription_trial_enabled' );
 
 		// Data
 		var feed = JSON.parse( elements.feed.val() );
@@ -398,6 +399,26 @@
 
 				elements.subscriptionFrequencyType.trigger( 'change' );
 
+				/**
+				 * Trial period.
+				 */
+
+				// Trial enabled.
+				elements.subscriptionTrialEnabled.on( 'change', function() {
+					var enabled = elements.subscriptionTrialEnabled.filter( ':checked' ).length > 0;
+
+					var trialSettings = $( element ).find( '.pronamic-pay-gf-subscription-trial-settings' );
+
+					if ( enabled ) {
+						trialSettings.show();
+
+						return;
+					}
+
+					trialSettings.hide();
+				} );
+
+				elements.subscriptionTrialEnabled.trigger( 'change' );
 			}
 		};
 

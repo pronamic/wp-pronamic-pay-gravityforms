@@ -399,6 +399,7 @@ class Processor {
 						}
 					}
 
+					// Subscription line.
 					if (
 						GravityForms::SUBSCRIPTION_AMOUNT_FIELD === $this->feed->subscription_amount_type
 							&&
@@ -445,6 +446,15 @@ class Processor {
 		 * @link https://github.com/wp-pay-extensions/gravityforms/blob/2.4.0/src/PaymentData.php#L231-L264
 		 */
 
+		/**
+		 * Subscription payment lines.
+		 */
+		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
+			foreach ( $payment->lines as $line ) {
+				$subscription_lines->add_line( $line );
+			}
+		}
+
 		// Does payment contain any lines?
 		if ( 0 === count( $payment->lines ) ) {
 			return $lead;
@@ -478,12 +488,6 @@ class Processor {
 		 *
 		 * As soon as a recurring amount is set, we create a subscription.
 		 */
-		if ( GravityForms::SUBSCRIPTION_AMOUNT_TOTAL === $this->feed->subscription_amount_type ) {
-			foreach ( $payment->lines as $line ) {
-				$subscription_lines->add_line( $line );
-			}
-		}
-
 		$interval = $data->get_subscription_interval();
 
 		if ( null !== $interval->value && $interval->value > 0 && $subscription_lines->get_amount()->get_value() > 0 ) {
@@ -497,6 +501,29 @@ class Processor {
 
 			// Phase.
 			$start_date = new \DateTimeImmutable();
+
+			// Trial phase.
+			$trial = $this->feed->get_subscription_trial();
+
+			if ( $trial->enabled ) {
+				$trial_phase = new SubscriptionPhase(
+					$subscription,
+					$start_date,
+					new SubscriptionInterval( 'P' . $trial->length . $trial->length_unit ),
+					$payment->lines->get_amount()
+				);
+
+				$trial_phase->set_total_periods( 1 );
+				$trial_phase->set_trial( true );
+
+				$subscription->add_phase( $trial_phase );
+
+				$trial_end_date = $trial_phase->get_end_date();
+
+				if ( null !== $trial_end_date ) {
+					$start_date = $trial_end_date;
+				}
+			}
 
 			$phase = new SubscriptionPhase(
 				$subscription,

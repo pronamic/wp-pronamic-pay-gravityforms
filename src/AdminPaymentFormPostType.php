@@ -352,7 +352,8 @@ class AdminPaymentFormPostType {
 				'type' => 'boolean',
 			],
 			'_pronamic_pay_gf_subscription_trial_length'   => [
-				'type' => 'integer',
+				'type'    => 'integer',
+				'minimum' => 1,
 			],
 			'_pronamic_pay_gf_subscription_trial_length_unit' => [
 				'type' => 'string',

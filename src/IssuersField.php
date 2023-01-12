@@ -215,6 +215,19 @@ class IssuersField extends GF_Field_Select {
 			$options = $issuer_field->get_flat_options();
 
 			foreach ( $options as $option ) {
+				/**
+				 * Gravity Forms automatically fills an empty value with the label.
+				 * For a first empty choice option, Gravity Forms works with a
+				 * `placeholder` property.
+				 * 
+				 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/19
+				 */
+				if ( '' === $option->value ) {
+					$this->placeholder = $option->label;
+
+					continue;
+				}
+
 				$this->choices[] = [
 					'value' => $option->value,
 					'text'  => $option->label,

@@ -197,36 +197,45 @@ class PaymentData {
 
 		$credit_card = new CreditCard();
 
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+
 		// Number.
 		$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+
 		$number = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
 
 		$credit_card->set_number( $number );
 
 		// Expiration date.
-		$variable_name   = sprintf( 'input_%s_2', $credit_card_field['id'] );
-		$expiration_date = filter_input( INPUT_POST, $variable_name, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY );
+		$variable_name = sprintf( 'input_%s_2', $credit_card_field['id'] );
 
-		$month = array_shift( $expiration_date );
-		$year  = array_shift( $expiration_date );
+		if ( \array_key_exists( $variable_name, $_POST ) && \is_array( $_POST[ $variable_name ] ) ) {
+			$data = \array_map( 'sanitize_text_field', \wp_unslash( $_POST[ $variable_name ] ) );
 
-		$credit_card->set_expiration_month( $month );
-		$credit_card->set_expiration_year( $year );
+			if ( \array_key_exists( 0, $data ) ) {
+				$credit_card->set_expiration_month( $data[0] );
+			}
+
+			if ( \array_key_exists( 1, $data ) ) {
+				$credit_card->set_expiration_year( $data[1] );
+			}
+		}
 
 		// Security code.
 		$variable_name = sprintf( 'input_%s_3', $credit_card_field['id'] );
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+
 		$security_code = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
 
 		$credit_card->set_security_code( $security_code );
 
 		// Name.
 		$variable_name = sprintf( 'input_%s_5', $credit_card_field['id'] );
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+
 		$name = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
 
 		$credit_card->set_name( $name );
+
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 
 		return $credit_card;
 	}

@@ -165,10 +165,6 @@ class IssuersField extends GF_Field_Select {
 					continue;
 				}
 
-				if ( 1 === count( $options ) ) {
-					continue;
-				}
-
 				return $gateway;
 			}
 		}

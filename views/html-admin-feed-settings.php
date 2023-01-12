@@ -683,7 +683,17 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 								</select>
 
 								<br />
-								<br />
+
+								<span class="description pronamic-pay-description">
+									<?php
+
+									\esc_html_e(
+										'The trial period uses the total amount of the form. You can set the recurring amount separately and add product fields with negative amounts for a discounted trial period.',
+										'pronamic_ideal'
+									);
+
+									?>
+								</span>
 							</div>
 						</fieldset>
 					</td>

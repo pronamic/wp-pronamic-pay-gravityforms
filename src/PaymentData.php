@@ -187,47 +187,46 @@ class PaymentData {
 	 * @return CreditCard|null
 	 */
 	public function get_credit_card(): ?CreditCard {
-		$credit_card = null;
-
 		$credit_card_fields = GFCommon::get_fields_by_type( $this->form, [ 'creditcard' ] );
 
 		$credit_card_field = array_shift( $credit_card_fields );
 
-		if ( $credit_card_field ) {
-			// phpcs:disable WordPress.Security.NonceVerification.Missing
-
-			$credit_card = new CreditCard();
-
-			// Number.
-			$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );
-			$number        = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
-
-			$credit_card->set_number( $number );
-
-			// Expiration date.
-			$variable_name   = sprintf( 'input_%s_2', $credit_card_field['id'] );
-			$expiration_date = filter_input( INPUT_POST, $variable_name, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY );
-
-			$month = array_shift( $expiration_date );
-			$year  = array_shift( $expiration_date );
-
-			$credit_card->set_expiration_month( $month );
-			$credit_card->set_expiration_year( $year );
-
-			// Security code.
-			$variable_name = sprintf( 'input_%s_3', $credit_card_field['id'] );
-			$security_code = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
-
-			$credit_card->set_security_code( $security_code );
-
-			// Name.
-			$variable_name = sprintf( 'input_%s_5', $credit_card_field['id'] );
-			$name          = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
-
-			$credit_card->set_name( $name );
-
-			// phpcs:enable WordPress.Security.NonceVerification.Missing
+		if ( null === $credit_card_field ) {
+			return null;
 		}
+
+		$credit_card = new CreditCard();
+
+		// Number.
+		$variable_name = sprintf( 'input_%s_1', $credit_card_field['id'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+		$number = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
+
+		$credit_card->set_number( $number );
+
+		// Expiration date.
+		$variable_name   = sprintf( 'input_%s_2', $credit_card_field['id'] );
+		$expiration_date = filter_input( INPUT_POST, $variable_name, FILTER_VALIDATE_INT, FILTER_FORCE_ARRAY );
+
+		$month = array_shift( $expiration_date );
+		$year  = array_shift( $expiration_date );
+
+		$credit_card->set_expiration_month( $month );
+		$credit_card->set_expiration_year( $year );
+
+		// Security code.
+		$variable_name = sprintf( 'input_%s_3', $credit_card_field['id'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+		$security_code = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
+
+		$credit_card->set_security_code( $security_code );
+
+		// Name.
+		$variable_name = sprintf( 'input_%s_5', $credit_card_field['id'] );
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- Nonce is not necessary because this parameter does not trigger an action.
+		$name = \array_key_exists( $variable_name, $_POST ) ? \sanitize_text_field( \wp_unslash( $_POST[ $variable_name ] ) ) : null;
+
+		$credit_card->set_name( $name );
 
 		return $credit_card;
 	}

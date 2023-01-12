@@ -516,19 +516,19 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 							</legend>
 
 							<ul style="margin: 0;">
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_amount_type_none" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="" <?php checked( $pay_feed->subscription_amount_type, '' ); ?> />
 										<?php esc_html_e( 'None', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $pay_feed->subscription_amount_type, 'total' ); ?> />
 										<?php esc_html_e( 'Total Amount', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_amount_type_field" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="field" <?php checked( $pay_feed->subscription_amount_type, 'field' ); ?> />
 										<?php esc_html_e( 'Form Field', 'pronamic_ideal' ); ?>
@@ -555,7 +555,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 							</legend>
 
 							<ul style="margin: 0;">
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_interval_type_fixed" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="fixed" <?php checked( $pay_feed->subscription_interval_type, 'fixed' ); ?> />
 										<?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
@@ -574,7 +574,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 										</select>
 									</div>
 								</li>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_interval_type_field" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="field" <?php checked( $pay_feed->subscription_interval_type, 'field' ); ?> />
 										<?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
@@ -613,12 +613,12 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 							</legend>
 
 							<ul style="margin: 0;">
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_frequency_type_unlimited" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="unlimited" <?php checked( $pay_feed->subscription_frequency_type, 'unlimited' ); ?> /> <?php echo esc_html_x( 'Unlimited', 'Recurring payment', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_frequency_type_fixed" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="fixed" <?php checked( $pay_feed->subscription_frequency_type, 'fixed' ); ?> /> <?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
 									</label>
@@ -629,7 +629,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 										<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
 									</div>
 								</li>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_frequency_type_field" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="field" <?php checked( $pay_feed->subscription_frequency_type, 'field' ); ?> /> <?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
 									</label>
@@ -719,13 +719,13 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 							</p>
 
 							<ul>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $pay_feed->subscription_interval_date_type, 'payment_date' ); ?> />
 										<?php esc_html_e( 'Entry Date', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
-								<li>
+								<li style="margin: 0;">
 									<label>
 										<?php
 

@@ -307,7 +307,7 @@ class PayFeed {
 
 		return (object) [
 			'enabled'     => '1' === \get_post_meta( $this->id, $meta_key_prefix . 'enabled', true ),
-			'length'      => (int) \get_post_meta( $this->id, $meta_key_prefix . 'length', true ),
+			'length'      => \max( 1, (int) \get_post_meta( $this->id, $meta_key_prefix . 'length', true ) ),
 			'length_unit' => \get_post_meta( $this->id, $meta_key_prefix . 'length_unit', true ),
 		];
 	}

@@ -476,8 +476,8 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 										wp_dropdown_pages(
 											[
-												'selected'         => esc_attr( $page_id ),
-												'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
+												'selected' => esc_attr( $page_id ),
+												'name'     => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
 												'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
 											]
 										);

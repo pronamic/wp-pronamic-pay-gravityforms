@@ -26,17 +26,12 @@
 #gf-pay-feed-editor .pronamic-pay-tab input + select {
   vertical-align: initial;
 }
-/* line 49, ../scss/admin.scss */
-#gf-pay-feed-editor .pronamic-gf-subscription-tab fieldset > div {
-  margin-bottom: -1em;
-  margin-left: 2em;
-}
-/* line 55, ../scss/admin.scss */
+/* line 50, ../scss/admin.scss */
 #gf-pay-feed-editor .pronamic-gf-subscription-tab fieldset .pronamic-pay-gf-subscription-trial-settings label {
   display: block;
 }
 
-/* line 65, ../scss/admin.scss */
+/* line 60, ../scss/admin.scss */
 .gforms_edit_form .ideal-edit-link {
   display: none;
   float: right;
@@ -45,17 +40,17 @@
   height: 16px;
   text-decoration: none;
 }
-/* line 81, ../scss/admin.scss */
+/* line 76, ../scss/admin.scss */
 .gforms_edit_form .field_hover .ideal-edit-link,
 .gforms_edit_form .field_selected .ideal-edit-link {
   display: block;
 }
 
-/* line 90, ../scss/admin.scss */
+/* line 85, ../scss/admin.scss */
 .form-table .pronamic-pay-description {
   display: block;
 }
-/* line 96, ../scss/admin.scss */
+/* line 91, ../scss/admin.scss */
 .form-table.pronamic-gf-links-tab fieldset {
   line-height: 2.75em;
 }

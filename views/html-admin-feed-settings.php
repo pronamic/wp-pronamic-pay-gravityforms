@@ -450,45 +450,49 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 									<span><?php echo esc_html( $label ); ?></span>
 								</legend>
 
-								<label>
-									<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_confirmation" value="confirmation" <?php checked( $type, 'confirmation' ); ?> />
-									<?php esc_html_e( 'Confirmation:', 'pronamic_ideal' ); ?>
-								</label>
+								<ul style="margin: 0;">
+									<li style="margin: 0;">
+										<label>
+											<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_confirmation" value="confirmation" <?php checked( $type, 'confirmation' ); ?> />
+											<?php esc_html_e( 'Confirmation:', 'pronamic_ideal' ); ?>
+										</label>
 
-								<?php
+										<?php
 
-								printf(
-									'<select id="gf_ideal_link_%s_confirmation_id" name="_pronamic_pay_gf_links[%1$s][confirmation_id]" class="gf_ideal_confirmation_select" data-pronamic-link-name="%1$s"></select>',
-									esc_attr( $name )
-								);
+										printf(
+											'<select id="gf_ideal_link_%s_confirmation_id" name="_pronamic_pay_gf_links[%1$s][confirmation_id]" class="gf_ideal_confirmation_select" data-pronamic-link-name="%1$s"></select>',
+											esc_attr( $name )
+										);
 
-								?>
+										?>
+									</li>
+									<li style="margin: 0;">
+										<label>
+											<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_page" value="page" <?php checked( $type, 'page' ); ?> />
+											<?php esc_html_e( 'Page:', 'pronamic_ideal' ); ?>
+										</label>
 
-								<br />
+										<?php
 
-								<label>
-									<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_page" value="page" <?php checked( $type, 'page' ); ?> />
-									<?php esc_html_e( 'Page:', 'pronamic_ideal' ); ?>
-								</label>
+										wp_dropdown_pages(
+											[
+												'selected'         => esc_attr( $page_id ),
+												'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
+												'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
+											]
+										);
 
-								<?php
+										?>
+									</li>
+									<li style="margin: 0;">
+										<label>
+											<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_url" value="url" <?php checked( $type, 'url' ); ?> />
+											<?php esc_html_e( 'URL:', 'pronamic_ideal' ); ?>
+										</label>
 
-								wp_dropdown_pages(
-									[
-										'selected'         => esc_attr( $page_id ),
-										'name'             => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
-										'show_option_none' => esc_html__( '— Select —', 'pronamic_ideal' ),
-									]
-								);
-
-								?>
-
-								<br />
-
-								<label>
-									<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_url" value="url" <?php checked( $type, 'url' ); ?> />
-									<?php esc_html_e( 'URL:', 'pronamic_ideal' ); ?>
-								</label> <input type="text" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][url]" value="<?php echo esc_attr( $url ); ?>" class="regular-text" />
+										<input type="text" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][url]" value="<?php echo esc_attr( $url ); ?>" class="regular-text" />
+									</li>
+								</ul>
 							</fieldset>
 						<td>
 					</tr>
@@ -587,13 +591,13 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 										<br />
 
-										<span class="description pronamic-pay-description">
+										<p class="description pronamic-pay-description">
 											<?php
 
 											esc_html_e( 'Use a field value of 0 days for one-time payments.', 'pronamic_ideal' );
 
 											?>
-										</span>
+										</p>
 									</div>
 								</li>
 							</ul>
@@ -683,7 +687,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 								<br />
 
-								<span class="description pronamic-pay-description">
+								<p class="description pronamic-pay-description">
 									<?php
 
 									\esc_html_e(
@@ -692,7 +696,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 									);
 
 									?>
-								</span>
+								</p>
 							</div>
 						</fieldset>
 					</td>
@@ -1067,9 +1071,9 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 						<input id="gf_ideal_condition_enabled" name="_pronamic_pay_gf_condition_enabled" type="hidden"
 							value="<?php echo esc_attr( $pay_feed->condition_enabled ); ?>"/>
 
-						<span class="description pronamic-pay-description">
+						<p class="description pronamic-pay-description">
 							<?php esc_html_e( 'Set conditional logic to only use this gateway if the entry matches the condition(s).', 'pronamic_ideal' ); ?>
-						</span>
+						</p>
 					</td>
 				</tr>
 				<tr>

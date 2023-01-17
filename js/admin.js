@@ -11,7 +11,6 @@
 
 		// Elements
 		var elements = {};
-		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
 		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
 		elements.subscriptionInterval = $element.find( '#pronamic_pay_gf_subscription_interval' );
@@ -23,9 +22,6 @@
 		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
 		elements.subscriptionNumberPeriods = $element.find( '#pronamic_pay_gf_subscription_number_periods' );
 		elements.subscriptionTrialEnabled = $element.find( '#pronamic_pay_gf_subscription_trial_enabled' );
-
-		// Data
-		var gravityForm = JSON.parse( elements.gravityForm.val() );
 
 		/**
 		 * Update subscription fields

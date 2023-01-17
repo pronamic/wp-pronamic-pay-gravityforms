@@ -141,27 +141,6 @@
 			} );
 
 			elements.subscriptionFrequencyType.trigger( 'change' );
-
-			/**
-			 * Trial period.
-			 */
-
-			// Trial enabled.
-			elements.subscriptionTrialEnabled.on( 'change', function() {
-				var enabled = elements.subscriptionTrialEnabled.filter( ':checked' ).length > 0;
-
-				var trialSettings = $( element ).find( '.pronamic-pay-gf-subscription-trial-settings' );
-
-				if ( enabled ) {
-					trialSettings.show();
-
-					return;
-				}
-
-				trialSettings.hide();
-			} );
-
-			elements.subscriptionTrialEnabled.trigger( 'change' );
 		};
 
 		/**

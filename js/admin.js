@@ -13,7 +13,6 @@
 		var elements = {};
 		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
-		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
 		elements.subscriptionAmountField = $element.find( '#pronamic_pay_gf_subscription_amount_field' );
@@ -71,36 +70,7 @@
 			
 			return inputs;
 		};
-		
-		this.updateNotifications = function() {			
-			elements.delayNotifications.empty();
 
-			if ( gravityForm ) {
-				$.each( gravityForm.notifications, function( key, notification ) {
-					if ( 'form_submission' !== notification.event ) {
-						return;
-					}
-
-					var item = $( '<li>' ).appendTo( elements.delayNotifications );
-					
-					var fieldId = 'pronamic-pay-gf-notification-' + notification.id;
-
-					$( '<input type="checkbox" name="_pronamic_pay_gf_delay_notification_ids[]">' )
-						.attr( 'id', fieldId )
-						.val( notification.id )
-						.prop( 'checked', $.inArray( notification.id, feed.delayNotificationIds ) >= 0 )
-						.appendTo( item );
-					
-					item.append( ' ' );
-					
-					$( '<label>' )
-						.attr( 'for', fieldId )
-						.text( notification.name )
-						.appendTo( item );
-				} );
-			}
-		};
-		
 		/**
 		 * Update subscription fields
 		 */
@@ -359,7 +329,6 @@
 		this.updateFields = function() {
 			obj.updateSubscriptionFields();
 			obj.updateSelectFields();
-			obj.updateNotifications();
 		};
 
 		// Function calls

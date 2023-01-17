@@ -425,9 +425,10 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 					<tr>
 						<?php
 
-						$type    = null;
-						$page_id = null;
-						$url     = null;
+						$type            = null;
+						$confirmation_id = null;
+						$page_id         = null;
+						$url             = null;
 
 						if ( isset( $pay_feed->links[ $name ] ) ) {
 							$link = $pay_feed->links[ $name ];
@@ -459,10 +460,30 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 										<?php
 
+										$confirmations = \GFFormsModel::get_form_confirmations( $form_id );
+
 										printf(
-											'<select id="gf_ideal_link_%s_confirmation_id" name="_pronamic_pay_gf_links[%1$s][confirmation_id]" class="gf_ideal_confirmation_select" data-pronamic-link-name="%1$s"></select>',
+											'<select id="gf_ideal_link_%s_confirmation_id" name="_pronamic_pay_gf_links[%1$s][confirmation_id]" data-pronamic-link-name="%1$s">',
 											esc_attr( $name )
 										);
+
+										printf(
+											'<option value="%s" %s>%s</option>',
+											\esc_attr( '' ),
+											\selected( null === $confirmation_id, true, false ),
+											\esc_html__( '— Select Confirmation —', 'pronamic_ideal' )
+										);
+
+										foreach ( $confirmations as $confirmation ) {
+											printf(
+												'<option value="%s" %s>%s</option>',
+												\esc_attr( $confirmation['id'] ),
+												\selected( $confirmation['id'], $confirmation_id, false ),
+												\esc_html( $confirmation['name'] )
+											);
+										}
+
+										echo '</select>';
 
 										?>
 									</li>

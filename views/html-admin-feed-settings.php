@@ -52,6 +52,25 @@ $feed->subscriptionTrialEnabled    = $trial->enabled;
 $feed->subscriptionTrialLength     = $trial->length;
 $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
+/**
+ * Input options.
+ */
+$input_options = [];
+
+foreach ( $form_meta['fields'] as $field ) {
+	if ( \is_array( $field->inputs ) ) {
+		foreach ( $field->inputs as $input ) {
+			$input_options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
+		}
+	}
+
+	if ( empty( $field->inputs ) ) {
+		if ( ! $field->displayOnly ) {
+			$input_options[ $field['id'] ] = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
+		}
+	}
+}
+
 ?>
 <div id="gf-pay-feed-editor">
 	<?php wp_nonce_field( 'pronamic_pay_save_pay_gf', 'pronamic_pay_nonce' ); ?>
@@ -542,7 +561,29 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 									</label>
 
 									<div style="margin-left: 2em;" class="pronamic-pay-gf-subscription-interval-settings interval-field">
-										<select id="pronamic_pay_gf_subscription_interval_field" name="_pronamic_pay_gf_subscription_interval_field"></select>
+										<?php
+
+										echo '<select id="pronamic_pay_gf_subscription_interval_field" name="_pronamic_pay_gf_subscription_interval_field">';
+
+										\printf(
+											'<option value="%s" %s>%s</option>',
+											\esc_attr( '' ),
+											\selected( $pay_feed->subscription_interval_field, '', false ),
+											\esc_html( '' )
+										);
+
+										foreach ( $input_options as $value => $label ) {
+											\printf(
+												'<option value="%s" %s>%s</option>',
+												\esc_attr( $value ),
+												\selected( $pay_feed->subscription_interval_field, $value, false ),
+												\esc_html( $label )
+											);
+										}
+
+										echo '</select>';
+
+										?>
 
 										<?php esc_html_e( 'days', 'pronamic_ideal' ); ?>
 
@@ -894,22 +935,6 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 			$meta_fields = \get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
 			$meta_fields = \is_array( $meta_fields ) ? $meta_fields : [];
 
-			$options = [];
-
-			foreach ( $form_meta['fields'] as $field ) {
-				if ( \is_array( $field->inputs ) ) {
-					foreach ( $field->inputs as $input ) {
-						$options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
-					}
-				}
-
-				if ( empty( $field->inputs ) ) {
-					if ( ! $field->displayOnly ) {
-						$options[ $field['id'] ] = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
-					}
-				}
-			}
-
 			?>
 
 			<table class="pronamic-pay-table-striped form-table">
@@ -965,7 +990,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 								\esc_html( '' )
 							);
 
-							foreach ( $options as $value => $label ) {
+							foreach ( $input_options as $value => $label ) {
 								\printf(
 									'<option value="%s" %s>%s</option>',
 									\esc_attr( $value ),

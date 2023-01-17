@@ -22,7 +22,6 @@
 		elements.subscriptionIntervalDate = $element.find( '#pronamic_pay_gf_subscription_interval_date' );
 		elements.subscriptionIntervalDateDay = $element.find( '#pronamic_pay_gf_subscription_interval_date_day' );
 		elements.subscriptionIntervalDateMonth = $element.find( '#pronamic_pay_gf_subscription_interval_date_month' );
-		elements.subscriptionIntervalField = $element.find( '#pronamic_pay_gf_subscription_interval_field' );
 		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
 		elements.subscriptionNumberPeriods = $element.find( '#pronamic_pay_gf_subscription_number_periods' );
 		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
@@ -56,7 +55,6 @@
 		this.updateSubscriptionFields = function() {
 			if ( gravityForm ) {
 				elements.subscriptionAmountField.empty();
-				elements.subscriptionIntervalField.empty();
 				elements.subscriptionFrequencyField.empty();
 
 				var products = [];
@@ -111,23 +109,6 @@
 				} );
 
 				elements.subscriptionAmountType.trigger( 'change' );
-
-				// Interval
-				$element = $( elements.subscriptionIntervalField );
-
-				$( '<option>' ).appendTo( $element );
-
-				$.each( obj.getInputs(), function( key, input ) {
-					var label = input.adminLabel ? input.adminLabel : input.label;
-
-					$( '<option>' )
-						.attr( 'value', input.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.subscriptionIntervalField == input.id )
-						/* jshint eqeqeq: true */
-						.appendTo( $element );
-				} );
 
 				elements.subscriptionIntervalType.on( 'change', function() {
 					var intervalType = elements.subscriptionIntervalType.filter( ':checked' ).val();

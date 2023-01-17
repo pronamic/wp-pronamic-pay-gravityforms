@@ -60,18 +60,6 @@
 				}
 			} );
 
-			elements.subscriptionIntervalDateType.on( 'change', function() {
-				var intervalDateType = elements.subscriptionIntervalDateType.filter( ':checked' ).val();
-
-				$( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings' ).hide();
-
-				var intervalDateSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings.interval-date-' + intervalDateType );
-
-				if ( intervalDateSettings.length > 0 ) {
-					intervalDateSettings.show();
-				}
-			} );
-
 			elements.subscriptionIntervalPeriod.on( 'change', function() {
 				var intervalPeriod = elements.subscriptionIntervalPeriod.val();
 

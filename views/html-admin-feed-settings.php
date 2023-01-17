@@ -274,60 +274,70 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 						</span>
 					</td>
 				</tr>
-				<tr>
-					<th scope="row">
-						<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
-					</th>
-					<td>
-						<p>
-							<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic_ideal' ); ?>
-						</p>
+				<?php
 
-						<?php
+				$notifications = [];
 
-						$notifications = [];
-						if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
-							$notifications = $form_meta['notifications'];
-						}
+				if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
+					$notifications = $form_meta['notifications'];
+				}
 
-						printf( '<ul id="gf_ideal_delay_notifications">' );
+				$notifications = \array_filter(
+					$notifications,
+					function( $notification ) {
+						return 'form_submission' === $notification['event'];
+					}
+				);
 
-						if ( ! empty( $notifications ) ) {
-							foreach ( $notifications as $notification ) {
-								if ( 'form_submission' !== $notification['event'] ) {
-									continue;
-								}
+				if ( count( $notifications ) > 0 ) : ?>
 
-								$id = $notification['id'];
+					<tr>
+						<th scope="row">
+							<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
 
-								printf( '<li>' );
+							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						</th>
+						<td>
+							<p>
+								<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic_ideal' ); ?>
+							</p>
 
-								printf(
-									'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
-									esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-									esc_attr( $id ),
-									checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
-								);
+							<ul id="gf_ideal_delay_notifications">
 
-								printf( ' ' );
+								<?php foreach ( $notifications as $notification ) : ?>
 
-								printf(
-									'<label class="inline" for="%s">%s</label>',
-									esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-									esc_html( $notification['name'] )
-								);
+									<li>
+										<?php
 
-								printf( '</li>' );
-							}
-						}
+										$id = $notification['id'];
 
-						printf( '</ul>' );
+										printf(
+											'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
+											esc_attr( 'pronamic-pay-gf-notification-' . $id ),
+											esc_attr( $id ),
+											checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
+										);
 
-						?>
-					</td>
-				</tr>
+										printf( ' ' );
+
+										printf(
+											'<label class="inline" for="%s">%s</label>',
+											esc_attr( 'pronamic-pay-gf-notification-' . $id ),
+											esc_html( $notification['name'] )
+										);
+
+										?>
+									</li>
+
+								<?php endforeach; ?>
+
+							</ul>
+						</td>
+					</tr>
+
+				<?php endif; ?>
+
 				<tr>
 					<th scope="row">
 						<?php esc_html_e( 'Delay actions', 'pronamic_ideal' ); ?>

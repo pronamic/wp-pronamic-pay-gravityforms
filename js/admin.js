@@ -21,9 +21,9 @@
 		elements.subscriptionIntervalDateMonth = $element.find( '#pronamic_pay_gf_subscription_interval_date_month' );
 
 		/**
-		 * Update subscription fields
+		 * Update fields
 		 */
-		this.updateSubscriptionFields = function() {
+		this.updateFields = function() {
 			elements.subscriptionAmountType.on( 'change', function() {
 				var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
 
@@ -106,13 +106,6 @@
 
 			elements.subscriptionIntervalType.trigger( 'change' );
 			elements.subscriptionIntervalPeriod.trigger( 'change' );
-		};
-
-		/**
-		 * Update fields
-		 */
-		this.updateFields = function() {
-			obj.updateSubscriptionFields();
 		};
 
 		// Function calls

@@ -1030,44 +1030,29 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 								$auto_option_label = __( '— First email address field —', 'pronamic_ideal' );
 							endif;
 
-							\printf(
-								'<select id="%s" name="%s">',
-								\esc_attr( 'gf_ideal_fields_' . $name ),
-								\esc_attr( '_pronamic_pay_gf_fields[' . $name . ']' )
-							);
-
 							$current = 'auto';
 
 							if ( \array_key_exists( $name, $meta_fields ) ) {
 								$current = $meta_fields[ $name ];
 							}
 
+							$options = [];
+
 							if ( '' !== $auto_option_label ) {
-								\printf(
-									'<option value="%s" %s>%s</option>',
-									\esc_attr( 'auto' ),
-									\selected( $current, 'auto', false ),
-									\esc_html( $auto_option_label )
-								);
+								$options['auto'] = $auto_option_label;
 							}
 
-							\printf(
-								'<option value="%s" %s>%s</option>',
-								\esc_attr( '' ),
-								\selected( $current, '', false ),
-								\esc_html( '' )
+							$options[''] = '';
+
+							_pronamic_pay_gravityforms_dropdown_input(
+								$form_meta,
+								[ 
+									'id'       => 'gf_ideal_fields_' . $name,
+									'name'     => '_pronamic_pay_gf_fields[' . $name . ']',
+									'selected' => $current,
+									'options'  => $options,
+								]
 							);
-
-							foreach ( $input_options as $value => $label ) {
-								\printf(
-									'<option value="%s" %s>%s</option>',
-									\esc_attr( $value ),
-									\selected( $current, $value, false ),
-									\esc_html( $label )
-								);
-							}
-
-							echo '</select>'
 
 							?>
 						</td>

@@ -61,15 +61,23 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 			continue;
 		}
 
+		$field_label = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
+
 		if ( \is_array( $field->inputs ) ) {
 			foreach ( $field->inputs as $input ) {
-				$options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
+				$input_label = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
+
+				$options[ $input['id'] ] = \sprintf(
+					'%s (%s)',
+					$field_label,
+					$input_label
+				);
 			}
 		}
 
 		if ( empty( $field->inputs ) ) {
 			if ( ! $field->displayOnly ) {
-				$options[ $field['id'] ] = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
+				$options[ $field['id'] ] = $field_label;
 			}
 		}
 	}

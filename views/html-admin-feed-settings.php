@@ -41,10 +41,8 @@ $feed->subscriptionAmountField    = $pay_feed->subscription_amount_field;
 $feed->subscriptionIntervalType   = $pay_feed->subscription_interval_type;
 $feed->subscriptionInterval       = $pay_feed->subscription_interval;
 $feed->subscriptionIntervalPeriod = $pay_feed->subscription_interval_period;
-$feed->subscriptionIntervalField  = $pay_feed->subscription_interval_field;
 $feed->subscriptionFrequencyType  = $pay_feed->subscription_frequency_type;
 $feed->subscriptionNumberPeriods  = $pay_feed->subscription_number_periods;
-$feed->subscriptionFrequencyField = $pay_feed->subscription_frequency_field;
 
 $trial = $pay_feed->get_subscription_trial();
 
@@ -637,7 +635,27 @@ foreach ( $form_meta['fields'] as $field ) {
 									</label>
 
 									<div style="margin-left: 2em;" class="pronamic-pay-gf-subscription-frequency-settings frequency-field">
-										<select id="pronamic_pay_gf_subscription_frequency_field" name="_pronamic_pay_gf_subscription_frequency_field"></select>
+										<?php
+
+										echo '<select id="pronamic_pay_gf_subscription_frequency_field" name="_pronamic_pay_gf_subscription_frequency_field">';
+
+										\printf(
+											'<option value="%s" %s>%s</option>',
+											\esc_attr( '' ),
+											\selected( $pay_feed->subscription_frequency_field, '', false ),
+											\esc_html( '' )
+										);
+
+										foreach ( $input_options as $value => $label ) {
+											\printf(
+												'<option value="%s" %s>%s</option>',
+												\esc_attr( $value ),
+												\selected( $pay_feed->subscription_frequency_field, $value, false ),
+												\esc_html( $label )
+											);
+										}
+
+										echo '</select>';
 
 										<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
 									</div>

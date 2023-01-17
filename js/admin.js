@@ -26,24 +26,6 @@
 
 		// Data
 		var gravityForm = JSON.parse( elements.gravityForm.val() );
-		
-		this.getInputs = function() {
-			var inputs = [];
-			
-			if ( gravityForm ) {
-				$.each( gravityForm.fields, function( key, field ) {
-					if ( field.inputs ) {
-						$.each( field.inputs, function( key, input ) {
-							inputs.push( input );
-						} );
-					} else if ( ! field.displayOnly ) {
-						inputs.push ( field );
-					}
-				} );
-			}
-			
-			return inputs;
-		};
 
 		/**
 		 * Update subscription fields

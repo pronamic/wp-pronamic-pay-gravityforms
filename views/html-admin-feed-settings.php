@@ -1020,15 +1020,15 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 							$auto_option_label = '';
 
-							if ( in_array( $name, [ 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name' ], true ) ) :
+							if ( in_array( $name, [ 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name' ], true ) ) {
 								$auto_option_label = __( '— From first name field —', 'pronamic_ideal' );
-							elseif ( in_array( $name, [ 'address1', 'address2', 'zip', 'city', 'state', 'country' ], true ) ) :
+							} elseif ( in_array( $name, [ 'address1', 'address2', 'zip', 'city', 'state', 'country' ], true ) ) {
 								$auto_option_label = __( '— From first address field —', 'pronamic_ideal' );
-							elseif ( 'telephone_number' === $name ) :
+							} elseif ( 'telephone_number' === $name ) {
 								$auto_option_label = __( '— First phone field —', 'pronamic_ideal' );
-							elseif ( 'email' === $name ) :
+							} elseif ( 'email' === $name ) {
 								$auto_option_label = __( '— First email address field —', 'pronamic_ideal' );
-							endif;
+							}
 
 							$current = 'auto';
 

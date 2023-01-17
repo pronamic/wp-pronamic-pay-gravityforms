@@ -1104,7 +1104,31 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 						</label>
 					</th>
 					<td>
-						<select id="gf_ideal_user_role_field_id" name="_pronamic_pay_gf_user_role_field_id"></select>
+						<?php
+
+						$value = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
+
+						echo '<select id="gf_ideal_user_role_field_id" name="_pronamic_pay_gf_user_role_field_id">';
+
+						printf(
+							'<option value="%s" %s>%s</option>',
+							\esc_attr( '' ),
+							\selected( empty( $value ), true, false ),
+							\esc_html__( '— Select Field —', 'pronamic_ideal' )
+						);
+
+						foreach ( $form_meta['fields'] as $field ) {
+							\printf(
+								'<option value="%s" %s>%s</option>',
+								\esc_attr( $field['id'] ),
+								\selected( $field['id'], $value, false ),
+								\esc_html( empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'] )
+							);
+						}
+
+						echo '</select>';
+
+						?>
 					</td>
 				</tr>
 			</table>

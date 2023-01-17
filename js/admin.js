@@ -17,7 +17,6 @@
 		elements.formId = $element.find( '#_pronamic_pay_gf_form_id' );
 		elements.configId = $element.find( '#gf_ideal_config_id' );
 		elements.delayPostCreationItem = $element.find( '#gf_ideal_delay_post_creation_item' );
-		elements.userRoleFieldId = $element.find( '#gf_ideal_user_role_field_id' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
@@ -112,28 +111,6 @@
 					}
 				}
 			);
-		};
-		
-		/**
-		 * Update user role 
-		 */
-		this.updateUserRoleFields = function() {
-			elements.userRoleFieldId.empty();
-			$( '<option>' ).appendTo( elements.userRoleFieldId );
-
-			if ( gravityForm ) {
-				$.each( gravityForm.fields, function( key, field ) {
-					var label = field.adminLabel ? field.adminLabel : field.label;
-	
-					$( '<option>' )
-						.attr( 'value', field.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.userRoleFieldId == field.id )
-						/* jshint eqeqeq: true */
-						.appendTo( elements.userRoleFieldId );
-				} );
-			}
 		};
 		
 		/**
@@ -433,7 +410,6 @@
 		this.updateFields = function() {
 			obj.updateConfigFields();
 			obj.updateDelayPostCreationItem();
-			obj.updateUserRoleFields();
 			obj.updateSubscriptionFields();
 			obj.updateSelectFields();
 			obj.updateNotifications();

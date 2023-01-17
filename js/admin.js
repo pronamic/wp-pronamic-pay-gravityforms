@@ -111,7 +111,7 @@
 				elements.subscriptionIntervalDateType.trigger( 'change' );
 			} );
 
-			$( element ).find( 'select.pronamic-pay-gf-subscription-interval-date-sync-settings' ).on( 'change', function() {
+			$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings select' ).on( 'change', function() {
 				elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
 
 				elements.subscriptionIntervalDateType.trigger( 'change' );

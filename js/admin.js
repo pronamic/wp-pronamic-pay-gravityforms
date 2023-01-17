@@ -31,145 +31,143 @@
 		 * Update subscription fields
 		 */
 		this.updateSubscriptionFields = function() {
-			if ( gravityForm ) {
-				elements.subscriptionAmountType.on( 'change', function() {
-					var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
+			elements.subscriptionAmountType.on( 'change', function() {
+				var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
 
-					$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
+				$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
 
-					if ( '' === amountType ) {
-                        elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
-					} else {
-                        elements.subscriptionAmountType.parents('tr').siblings().show();
+				if ( '' === amountType ) {
+                    elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
+				} else {
+                    elements.subscriptionAmountType.parents('tr').siblings().show();
 
-						// Set background color of visible even rows
-						var rows = elements.subscriptionAmountType.parents( 'table' ).find( 'tr' );
+					// Set background color of visible even rows
+					var rows = elements.subscriptionAmountType.parents( 'table' ).find( 'tr' );
 
-						rows.removeClass( 'even' );
-						rows.filter( ':visible:even' ).addClass( 'even' );
-                    }
+					rows.removeClass( 'even' );
+					rows.filter( ':visible:even' ).addClass( 'even' );
+                }
 
-                    var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
+                var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
 
-                    if ( amountSettings.length > 0 ) {
-                        amountSettings.show();
-                    }
-				} );
+                if ( amountSettings.length > 0 ) {
+                    amountSettings.show();
+                }
+			} );
 
-				elements.subscriptionAmountType.trigger( 'change' );
+			elements.subscriptionAmountType.trigger( 'change' );
 
-				elements.subscriptionIntervalType.on( 'change', function() {
-					var intervalType = elements.subscriptionIntervalType.filter( ':checked' ).val();
+			elements.subscriptionIntervalType.on( 'change', function() {
+				var intervalType = elements.subscriptionIntervalType.filter( ':checked' ).val();
 
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-settings' ).hide();
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-settings' ).hide();
 
-					var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
+				var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
 
-					if ( 'fixed' !== intervalType ) {
-						elements.subscriptionIntervalPeriod.val( 'D' );
+				if ( 'fixed' !== intervalType ) {
+					elements.subscriptionIntervalPeriod.val( 'D' );
 
-						elements.subscriptionIntervalPeriod.trigger( 'change' );
-					}
+					elements.subscriptionIntervalPeriod.trigger( 'change' );
+				}
 
-					if ( intervalSettings.length > 0 ) {
-						intervalSettings.show();
-					}
-				} );
+				if ( intervalSettings.length > 0 ) {
+					intervalSettings.show();
+				}
+			} );
 
-				elements.subscriptionIntervalDateType.on( 'change', function() {
-					var intervalDateType = elements.subscriptionIntervalDateType.filter( ':checked' ).val();
+			elements.subscriptionIntervalDateType.on( 'change', function() {
+				var intervalDateType = elements.subscriptionIntervalDateType.filter( ':checked' ).val();
 
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings' ).hide();
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings' ).hide();
 
-					var intervalDateSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings.interval-date-' + intervalDateType );
+				var intervalDateSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings.interval-date-' + intervalDateType );
 
-					if ( intervalDateSettings.length > 0 ) {
-						intervalDateSettings.show();
-					}
-				} );
+				if ( intervalDateSettings.length > 0 ) {
+					intervalDateSettings.show();
+				}
+			} );
 
-				elements.subscriptionIntervalPeriod.on( 'change', function() {
-					var intervalPeriod = elements.subscriptionIntervalPeriod.val();
+			elements.subscriptionIntervalPeriod.on( 'change', function() {
+				var intervalPeriod = elements.subscriptionIntervalPeriod.val();
 
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings' ).hide();
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings' ).hide();
 
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings.interval-' + intervalPeriod ).show();
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings.interval-' + intervalPeriod ).show();
 
-					switch ( intervalPeriod ) {
-						case 'D' :
-							elements.subscriptionIntervalDateType.filter( '[value="payment_date"]' ).prop( 'checked', true );
-							elements.subscriptionIntervalDateType.attr( 'disabled', 'disabled' );
-							elements.subscriptionIntervalDate.val( '' );
-							elements.subscriptionIntervalDateDay.val( '' );
-							elements.subscriptionIntervalDateMonth.val( '' );
+				switch ( intervalPeriod ) {
+					case 'D' :
+						elements.subscriptionIntervalDateType.filter( '[value="payment_date"]' ).prop( 'checked', true );
+						elements.subscriptionIntervalDateType.attr( 'disabled', 'disabled' );
+						elements.subscriptionIntervalDate.val( '' );
+						elements.subscriptionIntervalDateDay.val( '' );
+						elements.subscriptionIntervalDateMonth.val( '' );
 
-							break;
-						case 'W' :
-							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
-							elements.subscriptionIntervalDate.val( '' );
-							elements.subscriptionIntervalDateMonth.val( '' );
+						break;
+					case 'W' :
+						elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+						elements.subscriptionIntervalDate.val( '' );
+						elements.subscriptionIntervalDateMonth.val( '' );
 
-							break;
-						case 'M' :
-							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
-							elements.subscriptionIntervalDateDay.val( '' );
-							elements.subscriptionIntervalDateMonth.val( '' );
+						break;
+					case 'M' :
+						elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+						elements.subscriptionIntervalDateDay.val( '' );
+						elements.subscriptionIntervalDateMonth.val( '' );
 
-							break;
-						case 'Y' :
-							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
-							elements.subscriptionIntervalDateDay.val( '' );
+						break;
+					case 'Y' :
+						elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+						elements.subscriptionIntervalDateDay.val( '' );
 
-							break;
-					}
+						break;
+				}
 
-					elements.subscriptionIntervalDateType.trigger( 'change' );
-				} );
+				elements.subscriptionIntervalDateType.trigger( 'change' );
+			} );
 
-				$( element ).find( 'select.pronamic-pay-gf-subscription-interval-date-sync-settings' ).on( 'change', function() {
-					elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
+			$( element ).find( 'select.pronamic-pay-gf-subscription-interval-date-sync-settings' ).on( 'change', function() {
+				elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
 
-					elements.subscriptionIntervalDateType.trigger( 'change' );
-				} );
+				elements.subscriptionIntervalDateType.trigger( 'change' );
+			} );
 
-				elements.subscriptionIntervalType.trigger( 'change' );
-				elements.subscriptionIntervalPeriod.trigger( 'change' );
+			elements.subscriptionIntervalType.trigger( 'change' );
+			elements.subscriptionIntervalPeriod.trigger( 'change' );
 
-				elements.subscriptionFrequencyType.on( 'change', function() {
-					var frequencyType = elements.subscriptionFrequencyType.filter( ':checked' ).val();
+			elements.subscriptionFrequencyType.on( 'change', function() {
+				var frequencyType = elements.subscriptionFrequencyType.filter( ':checked' ).val();
 
-					$( element ).find( '.pronamic-pay-gf-subscription-frequency-settings' ).hide();
+				$( element ).find( '.pronamic-pay-gf-subscription-frequency-settings' ).hide();
 
-					var frequencySettings = $( element ).find( '.pronamic-pay-gf-subscription-frequency-settings.frequency-' + frequencyType );
+				var frequencySettings = $( element ).find( '.pronamic-pay-gf-subscription-frequency-settings.frequency-' + frequencyType );
 
-					if ( frequencySettings.length > 0 ) {
-						frequencySettings.show();
-					}
-				} );
+				if ( frequencySettings.length > 0 ) {
+					frequencySettings.show();
+				}
+			} );
 
-				elements.subscriptionFrequencyType.trigger( 'change' );
+			elements.subscriptionFrequencyType.trigger( 'change' );
 
-				/**
-				 * Trial period.
-				 */
+			/**
+			 * Trial period.
+			 */
 
-				// Trial enabled.
-				elements.subscriptionTrialEnabled.on( 'change', function() {
-					var enabled = elements.subscriptionTrialEnabled.filter( ':checked' ).length > 0;
+			// Trial enabled.
+			elements.subscriptionTrialEnabled.on( 'change', function() {
+				var enabled = elements.subscriptionTrialEnabled.filter( ':checked' ).length > 0;
 
-					var trialSettings = $( element ).find( '.pronamic-pay-gf-subscription-trial-settings' );
+				var trialSettings = $( element ).find( '.pronamic-pay-gf-subscription-trial-settings' );
 
-					if ( enabled ) {
-						trialSettings.show();
+				if ( enabled ) {
+					trialSettings.show();
 
-						return;
-					}
+					return;
+				}
 
-					trialSettings.hide();
-				} );
+				trialSettings.hide();
+			} );
 
-				elements.subscriptionTrialEnabled.trigger( 'change' );
-			}
+			elements.subscriptionTrialEnabled.trigger( 'change' );
 		};
 
 		/**

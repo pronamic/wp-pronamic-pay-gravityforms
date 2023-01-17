@@ -19,7 +19,6 @@
 		elements.subscriptionIntervalDate = $element.find( '#pronamic_pay_gf_subscription_interval_date' );
 		elements.subscriptionIntervalDateDay = $element.find( '#pronamic_pay_gf_subscription_interval_date_day' );
 		elements.subscriptionIntervalDateMonth = $element.find( '#pronamic_pay_gf_subscription_interval_date_month' );
-		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
 
 		/**
 		 * Update subscription fields
@@ -119,20 +118,6 @@
 
 			elements.subscriptionIntervalType.trigger( 'change' );
 			elements.subscriptionIntervalPeriod.trigger( 'change' );
-
-			elements.subscriptionFrequencyType.on( 'change', function() {
-				var frequencyType = elements.subscriptionFrequencyType.filter( ':checked' ).val();
-
-				$( element ).find( '.pronamic-pay-gf-subscription-frequency-settings' ).hide();
-
-				var frequencySettings = $( element ).find( '.pronamic-pay-gf-subscription-frequency-settings.frequency-' + frequencyType );
-
-				if ( frequencySettings.length > 0 ) {
-					frequencySettings.show();
-				}
-			} );
-
-			elements.subscriptionFrequencyType.trigger( 'change' );
 		};
 
 		/**

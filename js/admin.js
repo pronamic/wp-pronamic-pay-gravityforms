@@ -30,8 +30,6 @@
 			elements.subscriptionAmountType.on( 'change', function() {
 				var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
 
-				$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
-
 				if ( '' === amountType ) {
                     elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
 				} else {

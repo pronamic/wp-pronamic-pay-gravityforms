@@ -93,3 +93,28 @@ $white: #fff;
 		}
 	}
 }
+
+// Form choice
+.pronamic-pay-gf-form-choice-list {
+	margin: 0 !important;
+}
+
+.pronamic-pay-gf-form-choice-list > li {
+	margin: 0;
+}
+
+.pronamic-pay-gf-form-choice {
+
+}
+
+.pronamic-pay-gf-form-choice .pronamic-pay-gf-form-choice-checked {
+	margin-left: 2em;
+}
+
+.pronamic-pay-gf-form-choice > input + label + .pronamic-pay-gf-form-choice-checked {
+	display: none;
+}
+
+.pronamic-pay-gf-form-choice > input:checked + label + .pronamic-pay-gf-form-choice-checked {
+	display: block;
+}

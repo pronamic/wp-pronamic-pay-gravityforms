@@ -41,12 +41,6 @@
 					rows.removeClass( 'even' );
 					rows.filter( ':visible:even' ).addClass( 'even' );
                 }
-
-                var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
-
-                if ( amountSettings.length > 0 ) {
-                    amountSettings.show();
-                }
 			} );
 
 			elements.subscriptionAmountType.trigger( 'change' );

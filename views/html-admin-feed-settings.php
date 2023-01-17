@@ -891,7 +891,8 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 				'vat_number'                 => __( 'VAT Number', 'pronamic_ideal' ),
 			];
 
-			$data = \get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
+			$meta_fields = \get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
+			$meta_fields = \is_array( $meta_fields ) ? $meta_fields : [];
 
 			$options = [];
 
@@ -942,10 +943,10 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 								\esc_attr( '_pronamic_pay_gf_fields[' . $name . ']' )
 							);
 
-							$current = '';
+							$current = 'auto';
 
-							if ( \array_key_exists( $name, $data ) ) {
-								$current = $data[ $name ];
+							if ( \array_key_exists( $name, $meta_fields ) ) {
+								$current = $meta_fields[ $name ];
 							}
 
 							if ( '' !== $auto_option_label ) {

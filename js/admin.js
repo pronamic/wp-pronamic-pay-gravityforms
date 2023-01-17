@@ -17,7 +17,6 @@
 		elements.formId = $element.find( '#_pronamic_pay_gf_form_id' );
 		elements.configId = $element.find( '#gf_ideal_config_id' );
 		elements.delayPostCreationItem = $element.find( '#gf_ideal_delay_post_creation_item' );
-		elements.confirmationSelectFields = $element.find( '.gf_ideal_confirmation_select' );
 		elements.userRoleFieldId = $element.find( '#gf_ideal_user_role_field_id' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
@@ -56,42 +55,6 @@
 			}
 			
 			elements.delayPostCreationItem.toggle( display );
-		};
-
-		/**
-		 * Update confirmations
-		 */
-		this.updateConfirmationFields = function() {
-			elements.confirmationSelectFields.empty();
-			$( '<option>' ).appendTo( elements.confirmationSelectFields );
-
-			if ( gravityForm ) {
-				$.each( elements.confirmationSelectFields, function( index, field ) {
-					var linkName = $( field ).attr( 'data-pronamic-link-name' );
-
-					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
-						var isSelected = false;
-
-						if ( 'object' !== typeof feed.links ) {
-							return;
-						}
-
-						isSelected = false;
-
-						if ( 'object' === typeof feed.links[ linkName ] ) {
-							isSelected = ( feed.links[ linkName ].confirmation_id === confirmation.id );
-						}
-
-						$( '<option>' )
-							.attr( 'value', confirmation.id )
-							.text( confirmation.name )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', isSelected )
-							/* jshint eqeqeq: true */
-							.appendTo( field );
-					});
-				} );
-			}
 		};
 
 		/**
@@ -470,7 +433,6 @@
 		this.updateFields = function() {
 			obj.updateConfigFields();
 			obj.updateDelayPostCreationItem();
-			obj.updateConfirmationFields();
 			obj.updateUserRoleFields();
 			obj.updateSubscriptionFields();
 			obj.updateSelectFields();

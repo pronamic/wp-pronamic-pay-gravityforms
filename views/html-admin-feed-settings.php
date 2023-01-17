@@ -243,72 +243,45 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 						<?php
 
-						$delay_admin_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
-						$delay_user_notification  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
+						$notifications = [];
+						if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
+							$notifications = $form_meta['notifications'];
+						}
 
-						if ( version_compare( GFCommon::$version, '1.7', '>=' ) ) :
+						printf( '<ul id="gf_ideal_delay_notifications">' );
 
-							$notifications = [];
-							if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
-								$notifications = $form_meta['notifications'];
-							}
-
-							printf( '<ul id="gf_ideal_delay_notifications">' );
-
-							if ( ! empty( $notifications ) ) {
-								foreach ( $notifications as $notification ) {
-									if ( 'form_submission' !== $notification['event'] ) {
-										continue;
-									}
-
-									$id = $notification['id'];
-
-									printf( '<li>' );
-
-									printf(
-										'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
-										esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-										esc_attr( $id ),
-										checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
-									);
-
-									printf( ' ' );
-
-									printf(
-										'<label class="inline" for="%s">%s</label>',
-										esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-										esc_html( $notification['name'] )
-									);
-
-									printf( '</li>' );
+						if ( ! empty( $notifications ) ) {
+							foreach ( $notifications as $notification ) {
+								if ( 'form_submission' !== $notification['event'] ) {
+									continue;
 								}
+
+								$id = $notification['id'];
+
+								printf( '<li>' );
+
+								printf(
+									'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
+									esc_attr( 'pronamic-pay-gf-notification-' . $id ),
+									esc_attr( $id ),
+									checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
+								);
+
+								printf( ' ' );
+
+								printf(
+									'<label class="inline" for="%s">%s</label>',
+									esc_attr( 'pronamic-pay-gf-notification-' . $id ),
+									esc_html( $notification['name'] )
+								);
+
+								printf( '</li>' );
 							}
+						}
 
-							printf( '</ul>' );
+						printf( '</ul>' );
 
-						else :
-
-							?>
-
-							<ul>
-								<li id="gf_ideal_delay_admin_notification_item">
-									<input type="checkbox" name="_pronamic_pay_gf_delay_admin_notification" id="gf_ideal_delay_admin_notification" value="true" <?php checked( $delay_admin_notification ); ?> />
-
-									<label for="gf_ideal_delay_admin_notification">
-										<?php esc_html_e( 'Admin notification', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-								<li id="gf_ideal_delay_user_notification_item">
-									<input type="checkbox" name="_pronamic_pay_gf_delay_user_notification" id="gf_ideal_delay_user_notification" value="true" <?php checked( $delay_user_notification ); ?> />
-
-									<label for="gf_ideal_delay_user_notification">
-										<?php esc_html_e( 'User notification', 'pronamic_ideal' ); ?>
-									</label>
-								</li>
-							</ul>
-
-						<?php endif; ?>
-
+						?>
 					</td>
 				</tr>
 				<tr>

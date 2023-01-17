@@ -62,11 +62,7 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 	<input id="gf_ideal_feed_id" name="gf_ideal_feed_id" value="<?php echo esc_attr( $post_id ); ?>" type="hidden" />
 	<input id="gf_ideal_feed" name="gf_ideal_feed" value="<?php echo esc_attr( wp_json_encode( $feed ) ); ?>" type="hidden" />
 
-	<?php if ( filter_has_var( INPUT_GET, 'fid' ) ) : ?>
-
-		<input id="_pronamic_pay_gf_form_id" name="_pronamic_pay_gf_form_id" value="<?php echo esc_attr( $form_id ); ?>" type="hidden" />
-
-	<?php endif; ?>
+	<input id="_pronamic_pay_gf_form_id" name="_pronamic_pay_gf_form_id" value="<?php echo esc_attr( $form_id ); ?>" type="hidden" />
 
 	<div class="pronamic-pay-tabs">
 
@@ -84,34 +80,6 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 			</div>
 
 			<table class="pronamic-pay-table-striped form-table">
-
-				<?php if ( ! filter_has_var( INPUT_GET, 'fid' ) ) : ?>
-
-					<tr>
-						<th scope="row">
-							<label for="_pronamic_pay_gf_form_id">
-								<?php esc_html_e( 'Form', 'pronamic_ideal' ); ?>
-							</label>
-
-							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'The Gravity Forms form to process payments for.', 'pronamic_ideal' ); ?>"></span>
-						</th>
-						<td>
-							<select id="_pronamic_pay_gf_form_id" name="_pronamic_pay_gf_form_id">
-								<option value=""><?php esc_html_e( '— Select a form —', 'pronamic_ideal' ); ?></option>
-
-								<?php foreach ( RGFormsModel::get_forms() as $form ) : ?>
-
-									<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $form_id, $form->id ); ?>>
-										<?php echo esc_html( $form->title ); ?>
-									</option>
-
-								<?php endforeach; ?>
-							</select>
-						</td>
-					</tr>
-
-				<?php endif; ?>
-
 				<tr>
 					<th scope="row">
 						<label for="_pronamic_pay_gf_config_id">

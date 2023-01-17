@@ -1,4 +1,3 @@
-/* global ajaxurl */
 /* global gform */
 /* global form */
 /* global SetFieldProperty */
@@ -14,7 +13,6 @@
 		var elements = {};
 		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
-		elements.formId = $element.find( '#_pronamic_pay_gf_form_id' );
 		elements.configId = $element.find( '#gf_ideal_config_id' );
 		elements.delayPostCreationItem = $element.find( '#gf_ideal_delay_post_creation_item' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
@@ -92,25 +90,6 @@
 			}
 			
 			return inputs;
-		};
-		
-		/**
-		 * Change form
-		 */
-		this.changeForm = function() {
-			jQuery.get(
-				ajaxurl, {
-					action: 'gf_get_form_data', 
-					formId: elements.formId.val()
-				},
-				function( response ) {
-					if ( response.success ) {
-						gravityForm = response.data;
-
-						obj.updateFields();
-					}
-				}
-			);
 		};
 		
 		/**
@@ -418,7 +397,6 @@
 		// Function calls
 		obj.updateFields();
 
-		elements.formId.change( obj.changeForm );
 		elements.configId.change( obj.updateConfigFields );
 	};
 

@@ -51,22 +51,48 @@ $feed->subscriptionTrialLength     = $trial->length;
 $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 
 /**
- * Input options.
+ * Private helper function for Gravity Forms dropdown input.
+ * 
+ * @param array $form Gravity Forms form array/object.
+ * @param array $args Arguments.
+ * @return void 
  */
-$input_options = [];
+function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
+	$id       = $args['id'];
+	$name     = $args['name'];
+	$selected = $args['selected'];
+	$options  = $args['options'];
 
-foreach ( $form_meta['fields'] as $field ) {
-	if ( \is_array( $field->inputs ) ) {
-		foreach ( $field->inputs as $input ) {
-			$input_options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
+	foreach ( $form_meta['fields'] as $field ) {
+		if ( \is_array( $field->inputs ) ) {
+			foreach ( $field->inputs as $input ) {
+				$options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
+			}
+		}
+
+		if ( empty( $field->inputs ) ) {
+			if ( ! $field->displayOnly ) {
+				$options[ $field['id'] ] = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
+			}
 		}
 	}
 
-	if ( empty( $field->inputs ) ) {
-		if ( ! $field->displayOnly ) {
-			$input_options[ $field['id'] ] = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
-		}
+	\printf(
+		'<select id="%s" name="%s">',
+		\esc_attr( $id ),
+		\esc_attr( $name )
+	);
+
+	foreach ( $options as $value => $label ) {
+		\printf(
+			'<option value="%s" %s>%s</option>',
+			\esc_attr( $value ),
+			\selected( $selected, $value, false ),
+			\esc_html( $label )
+		);
 	}
+
+	echo '</select>';
 }
 
 ?>
@@ -561,29 +587,21 @@ foreach ( $form_meta['fields'] as $field ) {
 									<div style="margin-left: 2em;" class="pronamic-pay-gf-subscription-interval-settings interval-field">
 										<?php
 
-										echo '<select id="pronamic_pay_gf_subscription_interval_field" name="_pronamic_pay_gf_subscription_interval_field">';
-
-										\printf(
-											'<option value="%s" %s>%s</option>',
-											\esc_attr( '' ),
-											\selected( $pay_feed->subscription_interval_field, '', false ),
-											\esc_html( '' )
+										_pronamic_pay_gravityforms_dropdown_input(
+											$form_meta,
+											[ 
+												'id'       => 'pronamic_pay_gf_subscription_interval_field',
+												'name'     => '_pronamic_pay_gf_subscription_interval_field',
+												'selected' => $pay_feed->subscription_interval_field,
+												'options'  => [
+													'' => '',
+												],
+											]
 										);
 
-										foreach ( $input_options as $value => $label ) {
-											\printf(
-												'<option value="%s" %s>%s</option>',
-												\esc_attr( $value ),
-												\selected( $pay_feed->subscription_interval_field, $value, false ),
-												\esc_html( $label )
-											);
-										}
-
-										echo '</select>';
+										esc_html_e( 'days', 'pronamic_ideal' );
 
 										?>
-
-										<?php esc_html_e( 'days', 'pronamic_ideal' ); ?>
 
 										<br />
 
@@ -637,27 +655,21 @@ foreach ( $form_meta['fields'] as $field ) {
 									<div style="margin-left: 2em;" class="pronamic-pay-gf-subscription-frequency-settings frequency-field">
 										<?php
 
-										echo '<select id="pronamic_pay_gf_subscription_frequency_field" name="_pronamic_pay_gf_subscription_frequency_field">';
-
-										\printf(
-											'<option value="%s" %s>%s</option>',
-											\esc_attr( '' ),
-											\selected( $pay_feed->subscription_frequency_field, '', false ),
-											\esc_html( '' )
+										_pronamic_pay_gravityforms_dropdown_input(
+											$form_meta,
+											[ 
+												'id'       => 'pronamic_pay_gf_subscription_frequency_field',
+												'name'     => '_pronamic_pay_gf_subscription_frequency_field',
+												'selected' => $pay_feed->subscription_frequency_field,
+												'options'  => [
+													'' => '',
+												],
+											]
 										);
 
-										foreach ( $input_options as $value => $label ) {
-											\printf(
-												'<option value="%s" %s>%s</option>',
-												\esc_attr( $value ),
-												\selected( $pay_feed->subscription_frequency_field, $value, false ),
-												\esc_html( $label )
-											);
-										}
+										echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) );
 
-										echo '</select>';
-
-										<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+										?>
 									</div>
 								</li>
 							</ul>

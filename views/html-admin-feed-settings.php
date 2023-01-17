@@ -891,6 +891,24 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 				'vat_number'                 => __( 'VAT Number', 'pronamic_ideal' ),
 			];
 
+			$data = \get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
+
+			$options = [];
+
+			foreach ( $form_meta['fields'] as $field ) {
+				if ( \is_array( $field->inputs ) ) {
+					foreach ( $field->inputs as $input ) {
+						$options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
+					}
+				}
+
+				if ( empty( $field->inputs ) ) {
+					if ( ! $field->displayOnly ) {
+						$options[ $field['id'] ] = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
+					}
+				}
+			}
+
 			?>
 
 			<table class="pronamic-pay-table-striped form-table">
@@ -918,13 +936,44 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 								$auto_option_label = __( '— First email address field —', 'pronamic_ideal' );
 							endif;
 
-							printf(
-								'<select id="%s" name="%s" data-gateway-field-name="%s" data-auto-option-label="%s" class="field-select"><select>',
-								esc_attr( 'gf_ideal_fields_' . $name ),
-								esc_attr( '_pronamic_pay_gf_fields[' . $name . ']' ),
-								esc_attr( $name ),
-								esc_attr( $auto_option_label )
+							\printf(
+								'<select id="%s" name="%s">',
+								\esc_attr( 'gf_ideal_fields_' . $name ),
+								\esc_attr( '_pronamic_pay_gf_fields[' . $name . ']' )
 							);
+
+							$current = '';
+
+							if ( \array_key_exists( $name, $data ) ) {
+								$current = $data[ $name ];
+							}
+
+							if ( '' !== $auto_option_label ) {
+								\printf(
+									'<option value="%s" %s>%s</option>',
+									\esc_attr( 'auto' ),
+									\selected( $current, 'auto', false ),
+									\esc_html( $auto_option_label )
+								);
+							}
+
+							\printf(
+								'<option value="%s" %s>%s</option>',
+								\esc_attr( '' ),
+								\selected( $current, '', false ),
+								\esc_html( '' )
+							);
+
+							foreach ( $options as $value => $label ) {
+								\printf(
+									'<option value="%s" %s>%s</option>',
+									\esc_attr( $value ),
+									\selected( $current, $value, false ),
+									\esc_html( $label )
+								);
+							}
+
+							echo '</select>'
 
 							?>
 						</td>

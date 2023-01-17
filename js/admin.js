@@ -13,7 +13,6 @@
 		var elements = {};
 		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
-		elements.fieldSelectFields = $element.find( 'select.field-select' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
 		elements.subscriptionAmountField = $element.find( '#pronamic_pay_gf_subscription_amount_field' );
 		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
@@ -262,53 +261,10 @@
 		};
 
 		/**
-		 * Update select fields
-		 */
-		this.updateSelectFields = function() {
-			if ( gravityForm ) {
-				elements.fieldSelectFields.empty();
-
-				elements.fieldSelectFields.each( function( i, element ) {
-					$element = $( element );
-
-					var name = $element.data( 'gateway-field-name' );
-
-					// Auto detect option.
-					var auto_option_label = $element.data( 'auto-option-label' );
-
-					if ( '' !== auto_option_label ) {
-						$( '<option>' )
-							.attr( 'value', 'auto' )
-							.text( auto_option_label )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', feed.fields[name] == 'auto' )
-							/* jshint eqeqeq: true */
-							.appendTo( $element );
-					}
-
-					$( '<option>' ).appendTo( $element );
-
-					$.each( obj.getInputs(), function( key, input ) {
-						var label = input.adminLabel ? input.adminLabel : input.label;
-
-						$( '<option>' )
-							.attr( 'value', input.id )
-							.text( label )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', feed.fields[ name ] == input.id )
-							/* jshint eqeqeq: true */
-							.appendTo( $element );
-					} );
-				} );
-			}
-		};
-
-		/**
 		 * Update fields
 		 */
 		this.updateFields = function() {
 			obj.updateSubscriptionFields();
-			obj.updateSelectFields();
 		};
 
 		// Function calls

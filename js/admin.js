@@ -13,7 +13,6 @@
 		var elements = {};
 		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
-		elements.configId = $element.find( '#gf_ideal_config_id' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
@@ -71,16 +70,6 @@
 			}
 			
 			return inputs;
-		};
-		
-		/**
-		 * Update config
-		 */
-		this.updateConfigFields = function() {
-			var method = elements.configId.find( 'option:selected' ).attr( 'data-ideal-method' );
-
-			$element.find( '.extra-settings' ).hide();
-			$element.find( '.method-' + method ).show();
 		};
 		
 		this.updateNotifications = function() {			
@@ -368,7 +357,6 @@
 		 * Update fields
 		 */
 		this.updateFields = function() {
-			obj.updateConfigFields();
 			obj.updateSubscriptionFields();
 			obj.updateSelectFields();
 			obj.updateNotifications();
@@ -376,8 +364,6 @@
 
 		// Function calls
 		obj.updateFields();
-
-		elements.configId.change( obj.updateConfigFields );
 	};
 
 	/**

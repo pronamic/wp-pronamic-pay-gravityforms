@@ -305,9 +305,6 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 										<?php esc_html_e( 'User notification', 'pronamic_ideal' ); ?>
 									</label>
 								</li>
-								<li id="gf_ideal_delay_post_creation_item">
-
-								</li>
 							</ul>
 
 						<?php endif; ?>

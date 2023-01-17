@@ -14,7 +14,6 @@
 		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
 		elements.configId = $element.find( '#gf_ideal_config_id' );
-		elements.delayPostCreationItem = $element.find( '#gf_ideal_delay_post_creation_item' );
 		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
 		elements.fieldSelectFields = $element.find( 'select.field-select' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
@@ -35,24 +34,6 @@
 		// Data
 		var feed = JSON.parse( elements.feed.val() );
 		var gravityForm = JSON.parse( elements.gravityForm.val() );
-
-		/**
-		 * Update delay post creation item
-		 */
-		this.updateDelayPostCreationItem = function() {
-			var display = false;
-
-			if ( gravityForm ) {
-				// Displaying delayed post creation setting if current form has a post field
-				var postFields = obj.getFieldsByType( [ 'post_title', 'post_content', 'post_excerpt', 'post_category', 'post_custom_field', 'post_image', 'post_tag' ] );
-
-				if ( postFields.length > 0 ) {
-					display = true;
-				}
-			}
-			
-			elements.delayPostCreationItem.toggle( display );
-		};
 
 		/**
 		 * Get fields by types
@@ -388,7 +369,6 @@
 		 */
 		this.updateFields = function() {
 			obj.updateConfigFields();
-			obj.updateDelayPostCreationItem();
 			obj.updateSubscriptionFields();
 			obj.updateSelectFields();
 			obj.updateNotifications();

@@ -1071,36 +1071,5 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
 				</tr>
 			</table>
 		</div>
-
-		<?php
-
-		if ( version_compare( GFCommon::$version, '1.7', '<' ) ) :
-
-			$js_form = GFFormsModel::get_form_meta( $form_id );
-
-			if ( $form_id && null !== $js_form ) :
-
-				if ( ! isset( $js_form['fields'] ) || ! is_array( $js_form['fields'] ) ) {
-					$js_form['fields'] = [];
-				}
-
-				$_GET['id'] = $form_id;
-
-				printf(
-					'<script type="text/javascript">
-					var form = %s;
-					%s
-					</script>',
-					wp_json_encode( $js_form ),
-					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					GFCommon::gf_vars( false )
-				);
-
-			endif;
-
-		endif;
-
-		?>
-
 	</div>
 </div>

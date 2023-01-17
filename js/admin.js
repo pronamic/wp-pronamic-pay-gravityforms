@@ -32,26 +32,6 @@
 		// Data
 		var feed = JSON.parse( elements.feed.val() );
 		var gravityForm = JSON.parse( elements.gravityForm.val() );
-
-		/**
-		 * Get fields by types
-		 * 
-		 * @param types
-		 * @return Array
-		 */
-		this.getFieldsByType = function( types ) {
-			var fields = [];
-
-			if ( gravityForm ) {				
-				for ( var i = 0; i < gravityForm.fields.length; i++ ) {
-					if ( $.inArray( gravityForm.fields[ i ].type, types ) >= 0 ) {
-						fields.push(gravityForm.fields[ i ]);
-					}
-				}
-			}
-
-			return fields;
-		};
 		
 		this.getInputs = function() {
 			var inputs = [];

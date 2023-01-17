@@ -14,7 +14,6 @@
 		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
-		elements.subscriptionAmountField = $element.find( '#pronamic_pay_gf_subscription_amount_field' );
 		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
 		elements.subscriptionInterval = $element.find( '#pronamic_pay_gf_subscription_interval' );
 		elements.subscriptionIntervalPeriod = $element.find( '#pronamic_pay_gf_subscription_interval_period' );
@@ -53,35 +52,6 @@
 		 */
 		this.updateSubscriptionFields = function() {
 			if ( gravityForm ) {
-				elements.subscriptionAmountField.empty();
-
-				var products = [];
-
-				if ( gravityForm ) {
-					$.each( gravityForm.fields, function( key, field ) {
-						if ( 'product' === field.type ) {
-							products.push( field );
-						}
-					} );
-				}
-
-				// Recurring amount field
-				$element = $( elements.subscriptionAmountField );
-
-				$( '<option>' ).appendTo( $element );
-
-				$.each( products, function( key, product ) {
-					var label = product.adminLabel ? product.adminLabel : product.label;
-
-					$( '<option>' )
-						.attr( 'value', product.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.subscriptionAmountField == product.id )
-						/* jshint eqeqeq: true */
-						.appendTo( $element );
-				} );
-
 				elements.subscriptionAmountType.on( 'change', function() {
 					var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
 

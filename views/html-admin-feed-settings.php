@@ -37,7 +37,6 @@ $feed->conditionalLogicObject     = $pay_feed->conditional_logic_object;
 $feed->fields                     = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
 $feed->links                      = $pay_feed->links;
 $feed->subscriptionAmountType     = $pay_feed->subscription_amount_type;
-$feed->subscriptionAmountField    = $pay_feed->subscription_amount_field;
 $feed->subscriptionIntervalType   = $pay_feed->subscription_interval_type;
 $feed->subscriptionInterval       = $pay_feed->subscription_interval;
 $feed->subscriptionIntervalPeriod = $pay_feed->subscription_interval_period;
@@ -58,12 +57,28 @@ $feed->subscriptionTrialLengthUnit = $trial->length_unit;
  * @return void 
  */
 function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
+	$args = \wp_parse_args(
+		$args,
+		[
+			'id'       => '',
+			'name'     => '',
+			'selected' => '',
+			'type'     => '',
+			'options'  => [],
+		]
+	);
+
 	$id       = $args['id'];
 	$name     = $args['name'];
 	$selected = $args['selected'];
+	$type     = $args['type'];
 	$options  = $args['options'];
 
-	foreach ( $form_meta['fields'] as $field ) {
+	foreach ( $form['fields'] as $field ) {
+		if ( '' !== $type && $type !== $field['type'] ) {
+			continue;
+		}
+
 		if ( \is_array( $field->inputs ) ) {
 			foreach ( $field->inputs as $input ) {
 				$options[ $input['id'] ] = empty( $input['adminLabel'] ) ? $input['label'] : $input['adminLabel'];
@@ -539,7 +554,22 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									</label>
 
 									<div style="margin-left: 2em;" class="pronamic-pay-gf-subscription-amount-settings amount-field">
-										<select id="pronamic_pay_gf_subscription_amount_field" name="_pronamic_pay_gf_subscription_amount_field"></select>
+										<?php
+
+										_pronamic_pay_gravityforms_dropdown_input(
+											$form_meta,
+											[ 
+												'id'       => 'pronamic_pay_gf_subscription_amount_field',
+												'name'     => '_pronamic_pay_gf_subscription_amount_field',
+												'selected' => $pay_feed->subscription_amount_field,
+												'type'     => 'product',
+												'options'  => [
+													'' => '',
+												],
+											]
+										);
+
+										?>
 									</div>
 								</li>
 							</ul>
@@ -1147,27 +1177,17 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 					<td>
 						<?php
 
-						$value = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
-
-						echo '<select id="gf_ideal_user_role_field_id" name="_pronamic_pay_gf_user_role_field_id">';
-
-						printf(
-							'<option value="%s" %s>%s</option>',
-							\esc_attr( '' ),
-							\selected( empty( $value ), true, false ),
-							\esc_html__( '— Select Field —', 'pronamic_ideal' )
+						_pronamic_pay_gravityforms_dropdown_input(
+							$form_meta,
+							[ 
+								'id'       => 'gf_ideal_user_role_field_id',
+								'name'     => '_pronamic_pay_gf_user_role_field_id',
+								'selected' => \get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true ),
+								'options'  => [
+									'' => \__( '— Select Field —', 'pronamic_ideal' ),
+								],
+							]
 						);
-
-						foreach ( $form_meta['fields'] as $field ) {
-							\printf(
-								'<option value="%s" %s>%s</option>',
-								\esc_attr( $field['id'] ),
-								\selected( $field['id'], $value, false ),
-								\esc_html( empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'] )
-							);
-						}
-
-						echo '</select>';
 
 						?>
 					</td>

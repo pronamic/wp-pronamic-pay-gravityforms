@@ -31,24 +31,6 @@ if ( ! GFCommon::has_merge_tag( $order_id ) ) {
 
 $pay_feed = new PayFeed( $post_id );
 
-$feed                             = new stdClass();
-$feed->conditionEnabled           = $pay_feed->condition_enabled;
-$feed->conditionalLogicObject     = $pay_feed->conditional_logic_object;
-$feed->fields                     = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
-$feed->links                      = $pay_feed->links;
-$feed->subscriptionAmountType     = $pay_feed->subscription_amount_type;
-$feed->subscriptionIntervalType   = $pay_feed->subscription_interval_type;
-$feed->subscriptionInterval       = $pay_feed->subscription_interval;
-$feed->subscriptionIntervalPeriod = $pay_feed->subscription_interval_period;
-$feed->subscriptionFrequencyType  = $pay_feed->subscription_frequency_type;
-$feed->subscriptionNumberPeriods  = $pay_feed->subscription_number_periods;
-
-$trial = $pay_feed->get_subscription_trial();
-
-$feed->subscriptionTrialEnabled    = $trial->enabled;
-$feed->subscriptionTrialLength     = $trial->length;
-$feed->subscriptionTrialLengthUnit = $trial->length_unit;
-
 /**
  * Private helper function for Gravity Forms dropdown input.
  * 
@@ -116,7 +98,6 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 	<input id="gf_ideal_gravity_form" name="gf_ideal_gravity_form" value="<?php echo esc_attr( wp_json_encode( $form_meta ) ); ?>" type="hidden" />
 	<input id="gf_ideal_feed_id" name="gf_ideal_feed_id" value="<?php echo esc_attr( $post_id ); ?>" type="hidden" />
-	<input id="gf_ideal_feed" name="gf_ideal_feed" value="<?php echo esc_attr( wp_json_encode( $feed ) ); ?>" type="hidden" />
 
 	<input id="_pronamic_pay_gf_form_id" name="_pronamic_pay_gf_form_id" value="<?php echo esc_attr( $form_id ); ?>" type="hidden" />
 

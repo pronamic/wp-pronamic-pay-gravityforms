@@ -11,7 +11,6 @@
 
 		// Elements
 		var elements = {};
-		elements.feed = $element.find( '#gf_ideal_feed' );
 		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
 		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
@@ -26,7 +25,6 @@
 		elements.subscriptionTrialEnabled = $element.find( '#pronamic_pay_gf_subscription_trial_enabled' );
 
 		// Data
-		var feed = JSON.parse( elements.feed.val() );
 		var gravityForm = JSON.parse( elements.gravityForm.val() );
 		
 		this.getInputs = function() {

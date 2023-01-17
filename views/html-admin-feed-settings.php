@@ -610,6 +610,8 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											]
 										);
 
+										echo ' ';
+
 										esc_html_e( 'days', 'pronamic_ideal' );
 
 										?>
@@ -677,6 +679,8 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 												],
 											]
 										);
+
+										echo ' ';
 
 										echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) );
 

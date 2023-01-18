@@ -290,7 +290,8 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 					}
 				);
 
-				if ( count( $notifications ) > 0 ) : ?>
+				if ( count( $notifications ) > 0 ) :
+					?>
 
 					<tr>
 						<th scope="row">

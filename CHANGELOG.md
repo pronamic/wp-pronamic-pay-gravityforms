@@ -7,6 +7,23 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.0] - 2023-01-18
+### Added
+
+- Added support for trial period subscription.
+
+### Changed
+
+- Editing a Gravity Forms payment feed uses less JavaScript. 
+
+### Commits
+
+- Only show delay notifications settings if there is one ore more. ([b85708e](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/b85708e1b3d75a7e0e85926aeb475e626b84d33e))
+
+Full set of changes: [`4.4.2...4.5.0`][4.5.0]
+
+[4.5.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.4.2...v4.5.0
+
 ## [4.4.2] - 2023-01-04
 ### Fixed
 

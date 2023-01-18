@@ -1,4 +1,3 @@
-/* global ajaxurl */
 /* global gform */
 /* global form */
 /* global SetFieldProperty */
@@ -12,17 +11,7 @@
 
 		// Elements
 		var elements = {};
-		elements.feed = $element.find( '#gf_ideal_feed' );
-		elements.gravityForm = $element.find( '#gf_ideal_gravity_form' );
-		elements.formId = $element.find( '#_pronamic_pay_gf_form_id' );
-		elements.configId = $element.find( '#gf_ideal_config_id' );
-		elements.delayPostCreationItem = $element.find( '#gf_ideal_delay_post_creation_item' );
-		elements.confirmationSelectFields = $element.find( '.gf_ideal_confirmation_select' );
-		elements.userRoleFieldId = $element.find( '#gf_ideal_user_role_field_id' );
-		elements.delayNotifications = $element.find( '#gf_ideal_delay_notifications' );
-		elements.fieldSelectFields = $element.find( 'select.field-select' );
 		elements.subscriptionAmountType = $element.find( 'input[name="_pronamic_pay_gf_subscription_amount_type"]' );
-		elements.subscriptionAmountField = $element.find( '#pronamic_pay_gf_subscription_amount_field' );
 		elements.subscriptionIntervalType = $element.find( 'input[name="_pronamic_pay_gf_subscription_interval_type"]' );
 		elements.subscriptionInterval = $element.find( '#pronamic_pay_gf_subscription_interval' );
 		elements.subscriptionIntervalPeriod = $element.find( '#pronamic_pay_gf_subscription_interval_period' );
@@ -30,458 +19,97 @@
 		elements.subscriptionIntervalDate = $element.find( '#pronamic_pay_gf_subscription_interval_date' );
 		elements.subscriptionIntervalDateDay = $element.find( '#pronamic_pay_gf_subscription_interval_date_day' );
 		elements.subscriptionIntervalDateMonth = $element.find( '#pronamic_pay_gf_subscription_interval_date_month' );
-		elements.subscriptionIntervalField = $element.find( '#pronamic_pay_gf_subscription_interval_field' );
-		elements.subscriptionFrequencyType = $element.find( 'input[name="_pronamic_pay_gf_subscription_frequency_type"]' );
-		elements.subscriptionNumberPeriods = $element.find( '#pronamic_pay_gf_subscription_number_periods' );
-		elements.subscriptionFrequencyField = $element.find( '#pronamic_pay_gf_subscription_frequency_field' );
-		elements.subscriptionTrialEnabled = $element.find( '#pronamic_pay_gf_subscription_trial_enabled' );
-
-		// Data
-		var feed = JSON.parse( elements.feed.val() );
-		var gravityForm = JSON.parse( elements.gravityForm.val() );
-
-		/**
-		 * Update delay post creation item
-		 */
-		this.updateDelayPostCreationItem = function() {
-			var display = false;
-
-			if ( gravityForm ) {
-				// Displaying delayed post creation setting if current form has a post field
-				var postFields = obj.getFieldsByType( [ 'post_title', 'post_content', 'post_excerpt', 'post_category', 'post_custom_field', 'post_image', 'post_tag' ] );
-
-				if ( postFields.length > 0 ) {
-					display = true;
-				}
-			}
-			
-			elements.delayPostCreationItem.toggle( display );
-		};
-
-		/**
-		 * Update confirmations
-		 */
-		this.updateConfirmationFields = function() {
-			elements.confirmationSelectFields.empty();
-			$( '<option>' ).appendTo( elements.confirmationSelectFields );
-
-			if ( gravityForm ) {
-				$.each( elements.confirmationSelectFields, function( index, field ) {
-					var linkName = $( field ).attr( 'data-pronamic-link-name' );
-
-					$.each( gravityForm.confirmations, function( confirmationId, confirmation ) {
-						var isSelected = false;
-
-						if ( 'object' !== typeof feed.links ) {
-							return;
-						}
-
-						isSelected = false;
-
-						if ( 'object' === typeof feed.links[ linkName ] ) {
-							isSelected = ( feed.links[ linkName ].confirmation_id === confirmation.id );
-						}
-
-						$( '<option>' )
-							.attr( 'value', confirmation.id )
-							.text( confirmation.name )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', isSelected )
-							/* jshint eqeqeq: true */
-							.appendTo( field );
-					});
-				} );
-			}
-		};
-
-		/**
-		 * Get fields by types
-		 * 
-		 * @param types
-		 * @return Array
-		 */
-		this.getFieldsByType = function( types ) {
-			var fields = [];
-
-			if ( gravityForm ) {				
-				for ( var i = 0; i < gravityForm.fields.length; i++ ) {
-					if ( $.inArray( gravityForm.fields[ i ].type, types ) >= 0 ) {
-						fields.push(gravityForm.fields[ i ]);
-					}
-				}
-			}
-
-			return fields;
-		};
-		
-		this.getInputs = function() {
-			var inputs = [];
-			
-			if ( gravityForm ) {
-				$.each( gravityForm.fields, function( key, field ) {
-					if ( field.inputs ) {
-						$.each( field.inputs, function( key, input ) {
-							inputs.push( input );
-						} );
-					} else if ( ! field.displayOnly ) {
-						inputs.push ( field );
-					}
-				} );
-			}
-			
-			return inputs;
-		};
-		
-		/**
-		 * Change form
-		 */
-		this.changeForm = function() {
-			jQuery.get(
-				ajaxurl, {
-					action: 'gf_get_form_data', 
-					formId: elements.formId.val()
-				},
-				function( response ) {
-					if ( response.success ) {
-						gravityForm = response.data;
-
-						obj.updateFields();
-					}
-				}
-			);
-		};
-		
-		/**
-		 * Update user role 
-		 */
-		this.updateUserRoleFields = function() {
-			elements.userRoleFieldId.empty();
-			$( '<option>' ).appendTo( elements.userRoleFieldId );
-
-			if ( gravityForm ) {
-				$.each( gravityForm.fields, function( key, field ) {
-					var label = field.adminLabel ? field.adminLabel : field.label;
-	
-					$( '<option>' )
-						.attr( 'value', field.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.userRoleFieldId == field.id )
-						/* jshint eqeqeq: true */
-						.appendTo( elements.userRoleFieldId );
-				} );
-			}
-		};
-		
-		/**
-		 * Update config
-		 */
-		this.updateConfigFields = function() {
-			var method = elements.configId.find( 'option:selected' ).attr( 'data-ideal-method' );
-
-			$element.find( '.extra-settings' ).hide();
-			$element.find( '.method-' + method ).show();
-		};
-		
-		this.updateNotifications = function() {			
-			elements.delayNotifications.empty();
-
-			if ( gravityForm ) {
-				$.each( gravityForm.notifications, function( key, notification ) {
-					if ( 'form_submission' !== notification.event ) {
-						return;
-					}
-
-					var item = $( '<li>' ).appendTo( elements.delayNotifications );
-					
-					var fieldId = 'pronamic-pay-gf-notification-' + notification.id;
-
-					$( '<input type="checkbox" name="_pronamic_pay_gf_delay_notification_ids[]">' )
-						.attr( 'id', fieldId )
-						.val( notification.id )
-						.prop( 'checked', $.inArray( notification.id, feed.delayNotificationIds ) >= 0 )
-						.appendTo( item );
-					
-					item.append( ' ' );
-					
-					$( '<label>' )
-						.attr( 'for', fieldId )
-						.text( notification.name )
-						.appendTo( item );
-				} );
-			}
-		};
-		
-		/**
-		 * Update subscription fields
-		 */
-		this.updateSubscriptionFields = function() {
-			if ( gravityForm ) {
-				elements.subscriptionAmountField.empty();
-				elements.subscriptionIntervalField.empty();
-				elements.subscriptionFrequencyField.empty();
-
-				var products = [];
-
-				if ( gravityForm ) {
-					$.each( gravityForm.fields, function( key, field ) {
-						if ( 'product' === field.type ) {
-							products.push( field );
-						}
-					} );
-				}
-
-				// Recurring amount field
-				$element = $( elements.subscriptionAmountField );
-
-				$( '<option>' ).appendTo( $element );
-
-				$.each( products, function( key, product ) {
-					var label = product.adminLabel ? product.adminLabel : product.label;
-
-					$( '<option>' )
-						.attr( 'value', product.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.subscriptionAmountField == product.id )
-						/* jshint eqeqeq: true */
-						.appendTo( $element );
-				} );
-
-				elements.subscriptionAmountType.on( 'change', function() {
-					var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
-
-					$( element ).find( '.pronamic-pay-gf-subscription-amount-settings' ).hide();
-
-					if ( '' === amountType ) {
-                        elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
-					} else {
-                        elements.subscriptionAmountType.parents('tr').siblings().show();
-
-						// Set background color of visible even rows
-						var rows = elements.subscriptionAmountType.parents( 'table' ).find( 'tr' );
-
-						rows.removeClass( 'even' );
-						rows.filter( ':visible:even' ).addClass( 'even' );
-                    }
-
-                    var amountSettings = $( element ).find( '.pronamic-pay-gf-subscription-amount-settings.amount-' + amountType );
-
-                    if ( amountSettings.length > 0 ) {
-                        amountSettings.show();
-                    }
-				} );
-
-				elements.subscriptionAmountType.trigger( 'change' );
-
-				// Interval
-				$element = $( elements.subscriptionIntervalField );
-
-				$( '<option>' ).appendTo( $element );
-
-				$.each( obj.getInputs(), function( key, input ) {
-					var label = input.adminLabel ? input.adminLabel : input.label;
-
-					$( '<option>' )
-						.attr( 'value', input.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.subscriptionIntervalField == input.id )
-						/* jshint eqeqeq: true */
-						.appendTo( $element );
-				} );
-
-				elements.subscriptionIntervalType.on( 'change', function() {
-					var intervalType = elements.subscriptionIntervalType.filter( ':checked' ).val();
-
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-settings' ).hide();
-
-					var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
-
-					if ( 'fixed' !== intervalType ) {
-						elements.subscriptionIntervalPeriod.val( 'D' );
-
-						elements.subscriptionIntervalPeriod.trigger( 'change' );
-					}
-
-					if ( intervalSettings.length > 0 ) {
-						intervalSettings.show();
-					}
-				} );
-
-				elements.subscriptionIntervalDateType.on( 'change', function() {
-					var intervalDateType = elements.subscriptionIntervalDateType.filter( ':checked' ).val();
-
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings' ).hide();
-
-					var intervalDateSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-date-settings.interval-date-' + intervalDateType );
-
-					if ( intervalDateSettings.length > 0 ) {
-						intervalDateSettings.show();
-					}
-				} );
-
-				elements.subscriptionIntervalPeriod.on( 'change', function() {
-					var intervalPeriod = elements.subscriptionIntervalPeriod.val();
-
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings' ).hide();
-
-					$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings.interval-' + intervalPeriod ).show();
-
-					switch ( intervalPeriod ) {
-						case 'D' :
-							elements.subscriptionIntervalDateType.filter( '[value="payment_date"]' ).prop( 'checked', true );
-							elements.subscriptionIntervalDateType.attr( 'disabled', 'disabled' );
-							elements.subscriptionIntervalDate.val( '' );
-							elements.subscriptionIntervalDateDay.val( '' );
-							elements.subscriptionIntervalDateMonth.val( '' );
-
-							break;
-						case 'W' :
-							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
-							elements.subscriptionIntervalDate.val( '' );
-							elements.subscriptionIntervalDateMonth.val( '' );
-
-							break;
-						case 'M' :
-							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
-							elements.subscriptionIntervalDateDay.val( '' );
-							elements.subscriptionIntervalDateMonth.val( '' );
-
-							break;
-						case 'Y' :
-							elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
-							elements.subscriptionIntervalDateDay.val( '' );
-
-							break;
-					}
-
-					elements.subscriptionIntervalDateType.trigger( 'change' );
-				} );
-
-				$( element ).find( 'select.pronamic-pay-gf-subscription-interval-date-sync-settings' ).on( 'change', function() {
-					elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
-
-					elements.subscriptionIntervalDateType.trigger( 'change' );
-				} );
-
-				elements.subscriptionIntervalType.trigger( 'change' );
-				elements.subscriptionIntervalPeriod.trigger( 'change' );
-
-				// Frequency
-				$element = $( elements.subscriptionFrequencyField );
-
-				$( '<option>' ).appendTo( $element );
-
-				$.each( obj.getInputs(), function( key, product ) {
-					var label = product.adminLabel ? product.adminLabel : product.label;
-
-					$( '<option>' )
-						.attr( 'value', product.id )
-						.text( label )
-						/* jshint eqeqeq: false */
-						.prop( 'selected', feed.subscriptionFrequencyField == product.id )
-						/* jshint eqeqeq: true */
-						.appendTo( $element );
-				} );
-
-				elements.subscriptionFrequencyType.on( 'change', function() {
-					var frequencyType = elements.subscriptionFrequencyType.filter( ':checked' ).val();
-
-					$( element ).find( '.pronamic-pay-gf-subscription-frequency-settings' ).hide();
-
-					var frequencySettings = $( element ).find( '.pronamic-pay-gf-subscription-frequency-settings.frequency-' + frequencyType );
-
-					if ( frequencySettings.length > 0 ) {
-						frequencySettings.show();
-					}
-				} );
-
-				elements.subscriptionFrequencyType.trigger( 'change' );
-
-				/**
-				 * Trial period.
-				 */
-
-				// Trial enabled.
-				elements.subscriptionTrialEnabled.on( 'change', function() {
-					var enabled = elements.subscriptionTrialEnabled.filter( ':checked' ).length > 0;
-
-					var trialSettings = $( element ).find( '.pronamic-pay-gf-subscription-trial-settings' );
-
-					if ( enabled ) {
-						trialSettings.show();
-
-						return;
-					}
-
-					trialSettings.hide();
-				} );
-
-				elements.subscriptionTrialEnabled.trigger( 'change' );
-			}
-		};
-
-		/**
-		 * Update select fields
-		 */
-		this.updateSelectFields = function() {
-			if ( gravityForm ) {
-				elements.fieldSelectFields.empty();
-
-				elements.fieldSelectFields.each( function( i, element ) {
-					$element = $( element );
-
-					var name = $element.data( 'gateway-field-name' );
-
-					// Auto detect option.
-					var auto_option_label = $element.data( 'auto-option-label' );
-
-					if ( '' !== auto_option_label ) {
-						$( '<option>' )
-							.attr( 'value', 'auto' )
-							.text( auto_option_label )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', feed.fields[name] == 'auto' )
-							/* jshint eqeqeq: true */
-							.appendTo( $element );
-					}
-
-					$( '<option>' ).appendTo( $element );
-
-					$.each( obj.getInputs(), function( key, input ) {
-						var label = input.adminLabel ? input.adminLabel : input.label;
-
-						$( '<option>' )
-							.attr( 'value', input.id )
-							.text( label )
-							/* jshint eqeqeq: false */
-							.prop( 'selected', feed.fields[ name ] == input.id )
-							/* jshint eqeqeq: true */
-							.appendTo( $element );
-					} );
-				} );
-			}
-		};
 
 		/**
 		 * Update fields
 		 */
 		this.updateFields = function() {
-			obj.updateConfigFields();
-			obj.updateDelayPostCreationItem();
-			obj.updateConfirmationFields();
-			obj.updateUserRoleFields();
-			obj.updateSubscriptionFields();
-			obj.updateSelectFields();
-			obj.updateNotifications();
+			elements.subscriptionAmountType.on( 'change', function() {
+				var amountType = elements.subscriptionAmountType.filter( ':checked' ).val();
+
+				if ( '' === amountType ) {
+                    elements.subscriptionAmountType.parents( 'tr' ).siblings().hide();
+				} else {
+                    elements.subscriptionAmountType.parents('tr').siblings().show();
+
+					// Set background color of visible even rows
+					var rows = elements.subscriptionAmountType.parents( 'table' ).find( 'tr' );
+
+					rows.removeClass( 'even' );
+					rows.filter( ':visible:even' ).addClass( 'even' );
+                }
+			} );
+
+			elements.subscriptionAmountType.trigger( 'change' );
+
+			elements.subscriptionIntervalType.on( 'change', function() {
+				var intervalType = elements.subscriptionIntervalType.filter( ':checked' ).val();
+
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-settings' ).hide();
+
+				var intervalSettings = $( element ).find( '.pronamic-pay-gf-subscription-interval-settings.interval-' + intervalType );
+
+				if ( 'fixed' !== intervalType ) {
+					elements.subscriptionIntervalPeriod.val( 'D' );
+
+					elements.subscriptionIntervalPeriod.trigger( 'change' );
+				}
+
+				if ( intervalSettings.length > 0 ) {
+					intervalSettings.show();
+				}
+			} );
+
+			elements.subscriptionIntervalPeriod.on( 'change', function() {
+				var intervalPeriod = elements.subscriptionIntervalPeriod.val();
+
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings' ).hide();
+
+				$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings.interval-' + intervalPeriod ).show();
+
+				switch ( intervalPeriod ) {
+					case 'D' :
+						elements.subscriptionIntervalDateType.filter( '[value="payment_date"]' ).prop( 'checked', true );
+						elements.subscriptionIntervalDateType.attr( 'disabled', 'disabled' );
+						elements.subscriptionIntervalDate.val( '' );
+						elements.subscriptionIntervalDateDay.val( '' );
+						elements.subscriptionIntervalDateMonth.val( '' );
+
+						break;
+					case 'W' :
+						elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+						elements.subscriptionIntervalDate.val( '' );
+						elements.subscriptionIntervalDateMonth.val( '' );
+
+						break;
+					case 'M' :
+						elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+						elements.subscriptionIntervalDateDay.val( '' );
+						elements.subscriptionIntervalDateMonth.val( '' );
+
+						break;
+					case 'Y' :
+						elements.subscriptionIntervalDateType.removeAttr( 'disabled' );
+						elements.subscriptionIntervalDateDay.val( '' );
+
+						break;
+				}
+
+				elements.subscriptionIntervalDateType.trigger( 'change' );
+			} );
+
+			$( element ).find( '.pronamic-pay-gf-subscription-interval-date-sync-settings select' ).on( 'change', function() {
+				elements.subscriptionIntervalDateType.filter( '[value="sync"]' ).prop( 'checked', true );
+
+				elements.subscriptionIntervalDateType.trigger( 'change' );
+			} );
+
+			elements.subscriptionIntervalType.trigger( 'change' );
+			elements.subscriptionIntervalPeriod.trigger( 'change' );
 		};
 
 		// Function calls
 		obj.updateFields();
-
-		elements.formId.change( obj.changeForm );
-		elements.configId.change( obj.updateConfigFields );
 	};
 
 	/**

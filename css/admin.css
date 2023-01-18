@@ -54,3 +54,28 @@
 .form-table.pronamic-gf-links-tab fieldset {
   line-height: 2.75em;
 }
+
+/* line 98, ../scss/admin.scss */
+.pronamic-pay-gf-form-choice-list {
+  margin: 0 !important;
+}
+
+/* line 102, ../scss/admin.scss */
+.pronamic-pay-gf-form-choice-list > li {
+  margin: 0;
+}
+
+/* line 110, ../scss/admin.scss */
+.pronamic-pay-gf-form-choice .pronamic-pay-gf-form-choice-checked {
+  margin-left: 2em;
+}
+
+/* line 114, ../scss/admin.scss */
+.pronamic-pay-gf-form-choice > input + label + .pronamic-pay-gf-form-choice-checked {
+  display: none;
+}
+
+/* line 118, ../scss/admin.scss */
+.pronamic-pay-gf-form-choice > input:checked + label + .pronamic-pay-gf-form-choice-checked {
+  display: block;
+}

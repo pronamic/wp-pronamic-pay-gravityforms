@@ -270,7 +270,7 @@ class AdminPaymentFormPostType {
 				'type' => 'boolean',
 			],
 			'_pronamic_pay_gf_fields'                      => [
-				'type'  => 'array',
+				'type'  => 'object',
 				'items' => [
 					'type' => 'string',
 				],

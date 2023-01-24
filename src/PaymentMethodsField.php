@@ -308,7 +308,7 @@ class PaymentMethodsField extends GF_Field_Select {
 
 		$display_choices = $choices;
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$page = \array_key_exists( 'page', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['page'] ) ) : null;
 
 		if ( \is_admin() && 'gf_edit_forms' === $page ) {

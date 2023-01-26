@@ -654,14 +654,18 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return array<mixed>
 	 */
 	public static function form_update_meta( $form_meta, $form_id, $meta_name ) {
-		if ( 'display_meta' === $meta_name ) {
-			foreach ( $form_meta['fields'] as &$field ) {
-				if ( self::TYPE !== $field['type'] ) {
-					continue;
-				}
+		// Check meta name.
+		if ( 'display_meta' !== $meta_name ) {
+			return $form_meta;
+		}
 
-				$field->inputType = 'select';
+		// Set input type.
+		foreach ( $form_meta['fields'] as &$field ) {
+			if ( self::TYPE !== $field['type'] ) {
+				continue;
 			}
+
+			$field->inputType = 'select';
 		}
 
 		return $form_meta;

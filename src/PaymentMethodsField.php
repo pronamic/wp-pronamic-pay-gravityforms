@@ -245,6 +245,8 @@ class PaymentMethodsField extends GF_Field_Select {
 
 				$choice['builtin'] = isset( $payment_methods[ $value ] );
 
+				$choice['enabled'] = isset( $choice['isSelected'] ) && $choice['isSelected'];
+
 				$choices[ $value ] = $choice;
 			}
 		}
@@ -258,6 +260,7 @@ class PaymentMethodsField extends GF_Field_Select {
 					'text'       => $label,
 					'isSelected' => false,
 					'builtin'    => true,
+					'enabled'    => false,
 				];
 			}
 		}
@@ -267,27 +270,23 @@ class PaymentMethodsField extends GF_Field_Select {
 	}
 
 	/**
-	 * Filter Gravity Forms selected choice.
+	 * Filter Gravity Forms enabled choice.
 	 *
 	 * @param array $choice Choice.
 	 *
-	 * @return boolean true if 'isSelected' is set and true, false otherwise.
+	 * @return boolean true if `enabled` is set and true, false otherwise.
 	 */
-	public static function filter_choice_is_selected( $choice ) {
-		return is_array( $choice ) && isset( $choice['isSelected'] ) && $choice['isSelected'];
+	public static function filter_choice_is_enabled( $choice ) {
+		return is_array( $choice ) && isset( $choice['enabled'] ) && $choice['enabled'];
 	}
 
 	/**
 	 * Unselect the specified choice.
 	 *
 	 * @param array $choice Choice.
-	 *
-	 * @return array choice
 	 */
-	public function unselect_choice( $choice ) {
+	public static function unselect_choice( &$choice ) {
 		$choice['isSelected'] = false;
-
-		return $choice;
 	}
 
 	/**
@@ -302,26 +301,20 @@ class PaymentMethodsField extends GF_Field_Select {
 	 *
 	 * @return string
 	 */
-	public function get_field_input( $form, $value = '', $entry = null ) {
+	public function get_field_input( $form, $value = null, $entry = null ) {
 		// Filter choices for display.
 		$choices = $this->choices;
 
-		$display_choices = $choices;
+		$display_choices = array_filter( $choices, [ __CLASS__, 'filter_choice_is_enabled' ] );
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		$page = \array_key_exists( 'page', $_GET ) ? \sanitize_text_field( \wp_unslash( $_GET['page'] ) ) : null;
+		// Select first item.
+		\array_walk( $display_choices, [ __CLASS__, 'unselect_choice' ] );
 
-		if ( \is_admin() && 'gf_edit_forms' === $page ) {
-			$display_choices = array_filter( $choices, [ __CLASS__, 'filter_choice_is_selected' ] );
+		$index = \array_key_first( $display_choices );
+
+		if ( null !== $index ) {
+			$display_choices[ $index ]['isSelected'] = true;
 		}
-
-		// Make first item selected.
-		\array_walk(
-			$display_choices,
-			function ( &$item, $key ) {
-				$item['isSelected'] = ( 0 === $key );
-			}
-		);
 
 		$this->choices = \array_values( $display_choices );
 
@@ -654,14 +647,18 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return array<mixed>
 	 */
 	public static function form_update_meta( $form_meta, $form_id, $meta_name ) {
-		if ( 'display_meta' === $meta_name ) {
-			foreach ( $form_meta['fields'] as &$field ) {
-				if ( self::TYPE !== $field['type'] ) {
-					continue;
-				}
+		// Check meta name.
+		if ( 'display_meta' !== $meta_name ) {
+			return $form_meta;
+		}
 
-				$field->inputType = 'select';
+		// Set input type.
+		foreach ( $form_meta['fields'] as &$field ) {
+			if ( self::TYPE !== $field['type'] ) {
+				continue;
 			}
+
+			$field->inputType = 'select';
 		}
 
 		return $form_meta;
@@ -683,15 +680,17 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 
 			// Remove unselected choices.
-			$display_choices = array_filter( $field['choices'], [ __CLASS__, 'filter_choice_is_selected' ] );
+			$display_choices = array_filter( $field['choices'], [ __CLASS__, 'filter_choice_is_enabled' ] );
 
-			// Set first item as selected.
-			\array_walk(
-				$display_choices,
-				function ( &$item, $key ) {
-					$item['isSelected'] = ( 0 === $key );
-				}
-			);
+			// Select first item.
+			\array_walk($display_choices, [ __CLASS__, 'unselect_choice' ] );
+
+			$index = \array_key_first( $display_choices );
+
+			if ( null !== $index ) {
+				$display_choices[ $index ]['isSelected'] = true;
+			}
+
 
 			// Set field choices.
 			$field['choices'] = $display_choices;
@@ -785,29 +784,28 @@ class PaymentMethodsField extends GF_Field_Select {
 	public function editor_js_set_default_values() {
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
-		if ( ! field.label ) {
-		field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
-		}
+			if ( ! field.label ) {
+				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
+			}
 
-		field.enableChoiceValue = true;
+			field.enableChoiceValue = true;
 
-		if ( ! field.choices ) {
-		field.choices = new Array();
+			if ( ! field.choices ) {
+				field.choices = new Array();
 
-		<?php foreach ( $this->get_gateway_payment_methods() as $payment_method => $name ) : ?>
+				<?php foreach ( $this->get_gateway_payment_methods() as $payment_method => $name ) : ?>
 
-			var choice = new Choice( <?php echo wp_json_encode( $name ); ?>, <?php echo wp_json_encode( strval( $payment_method ) ); ?> );
+					var choice = new Choice( <?php echo wp_json_encode( $name ); ?>, <?php echo wp_json_encode( strval( $payment_method ) ); ?> );
 
-			choice.isSelected = true;
-			choice.builtin    = true;
+					choice.isSelected = true;
+					choice.builtin    = true;
 
-			field.choices.push( choice );
+					field.choices.push( choice );
 
-		<?php endforeach; ?>
+				<?php endforeach; ?>
+			}
 
-		}
-
-		break;
+			break;
 		<?php
 	}
 }

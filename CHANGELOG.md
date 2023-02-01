@@ -7,6 +7,18 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.1] - 2023-01-31
+### Commits
+
+- Fixed all choices being removed from payment method field when using the Gravity Forms Partial Entries Add-On (fixes #27). ([73cb2e8](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/73cb2e8bd9b87825de95456a6dbb971a4bd86a6c))
+
+### Composer
+
+- Changed `php` from `>=8.0` to `>=7.4`.
+Full set of changes: [`4.5.0...4.5.1`][4.5.1]
+
+[4.5.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.0...v4.5.1
+
 ## [4.5.0] - 2023-01-18
 ### Added
 

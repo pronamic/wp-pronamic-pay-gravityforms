@@ -38,7 +38,7 @@
 		}
 	},
 	"require": {
-		"php": ">=8.0",
+		"php": ">=7.4",
 		"pronamic/wp-datetime": "^2.1",
 		"pronamic/wp-gravityforms-nl": "^3.0",
 		"pronamic/wp-money": "^2.2",

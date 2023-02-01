@@ -683,7 +683,7 @@ class PaymentMethodsField extends GF_Field_Select {
 			$display_choices = array_filter( $field['choices'], [ __CLASS__, 'filter_choice_is_enabled' ] );
 
 			// Select first item.
-			\array_walk($display_choices, [ __CLASS__, 'unselect_choice' ] );
+			\array_walk( $display_choices, [ __CLASS__, 'unselect_choice' ] );
 
 			$index = \array_key_first( $display_choices );
 

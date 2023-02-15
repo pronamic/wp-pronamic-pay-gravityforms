@@ -825,7 +825,6 @@ class Extension extends AbstractPluginIntegration {
 				$this->payment_action( 'cancel_subscription', $lead, $action, PaymentStatuses::CANCELLED );
 
 				break;
-			case SubscriptionStatus::EXPIRED:
 			case SubscriptionStatus::COMPLETED:
 				// @todo are we sure an 'expired subscription' is the same as the Pronamic\WordPress\Pay\Core\Statuses::COMPLETED status?
 				$this->payment_action( 'expire_subscription', $lead, $action, PaymentStatuses::EXPIRED );

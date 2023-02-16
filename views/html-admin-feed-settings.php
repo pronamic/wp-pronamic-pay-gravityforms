@@ -46,6 +46,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 			'name'     => '',
 			'selected' => '',
 			'type'     => '',
+			'inputs'   => '',
 			'options'  => [],
 		]
 	);
@@ -54,6 +55,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 	$name     = $args['name'];
 	$selected = $args['selected'];
 	$type     = $args['type'];
+	$inputs   = $args['inputs'];
 	$options  = $args['options'];
 
 	foreach ( $form['fields'] as $field ) {
@@ -62,6 +64,14 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 		}
 
 		$field_label = empty( $field['adminLabel'] ) ? $field['label'] : $field['adminLabel'];
+
+		if ( empty( $field->inputs ) || false === $inputs ) {
+			if ( ! $field->displayOnly ) {
+				$options[ $field['id'] ] = $field_label;
+			}
+
+			continue;
+		}
 
 		if ( \is_array( $field->inputs ) ) {
 			foreach ( $field->inputs as $input ) {
@@ -72,12 +82,6 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 					$field_label,
 					$input_label
 				);
-			}
-		}
-
-		if ( empty( $field->inputs ) ) {
-			if ( ! $field->displayOnly ) {
-				$options[ $field['id'] ] = $field_label;
 			}
 		}
 	}
@@ -565,6 +569,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 												'name'     => '_pronamic_pay_gf_subscription_amount_field',
 												'selected' => $pay_feed->subscription_amount_field,
 												'type'     => 'product',
+												'inputs'   => false,
 												'options'  => [
 													'' => '',
 												],

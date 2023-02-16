@@ -46,7 +46,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 			'name'     => '',
 			'selected' => '',
 			'type'     => '',
-			'inputs'   => '',
+			'inputs'   => true,
 			'options'  => [],
 		]
 	);

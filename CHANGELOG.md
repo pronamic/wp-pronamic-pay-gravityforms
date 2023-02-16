@@ -7,6 +7,20 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.2] - 2023-02-16
+
+### Fixed
+
+- Fixed field inputs options in recurring amount settings field. ([#30](https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/30))
+
+### Composer
+
+- Changed `wp-pay/core` from `^4.6` to `v4.7.2`.
+	Release notes: https://github.com/pronamic/wp-pay-core/releases/tag/v4.7.2
+Full set of changes: [`4.5.1...4.5.2`][4.5.2]
+
+[4.5.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.1...v4.5.2
+
 ## [4.5.1] - 2023-01-31
 ### Commits
 

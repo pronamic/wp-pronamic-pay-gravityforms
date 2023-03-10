@@ -7,6 +7,18 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.3] - 2023-03-10
+
+### Commits
+
+- Set Composer type to `wordpress-plugin`. ([9e5255a](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/9e5255a40908235d28ecd8cbcdcbc8dc5fe7d1fa))
+- Updated .gitattributes ([fca89e2](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/fca89e24ea2420a931cc19333d1b140ef55c0fec))
+- Set default `inputs` parameter to `true` in dropdown input. ([69a3f52](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/69a3f525a76fe2a5c8bf1bd11a2173a5ebd51aad))
+
+Full set of changes: [`4.5.2...4.5.3`][4.5.3]
+
+[4.5.3]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.2...v4.5.3
+
 ## [4.5.2] - 2023-02-16
 
 ### Fixed

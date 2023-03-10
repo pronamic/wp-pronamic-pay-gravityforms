@@ -4,6 +4,7 @@
 	"keywords": ["wordpress", "wp", "pay", "gravityforms", "extension", "pronamic"],
 	"homepage": "http://www.wp-pay.org/extensions/gravityforms/",
 	"license": "GPL-3.0-or-later",
+	"type": "wordpress-plugin",
 	"authors": [
 		{
 			"name": "Pronamic",

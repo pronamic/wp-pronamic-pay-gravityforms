@@ -181,6 +181,18 @@ class PaymentMethodsField extends GF_Field_Select {
 	}
 
 	/**
+	 * Returns the field's form editor icon.
+	 *
+	 * This could be an icon url or a gform-icon class.
+	 *
+	 * @link https://github.com/pronamic/gravityforms/blob/2.7.3/includes/fields/class-gf-field-address.php#L51-L62
+	 * @return string
+	 */
+	public function get_form_editor_field_icon() {
+		return 'gform-icon--credit-card';
+	}
+
+	/**
 	 * Get the gateways for this field.
 	 *
 	 * @return array

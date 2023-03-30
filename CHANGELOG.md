@@ -7,6 +7,17 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.4] - 2023-03-30
+
+### Commits
+
+- Fixed refunded amount check. ([ea2f0e9](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/ea2f0e9463052d4d5ce349783a0569eb75505644))
+- Updated field icons. ([4bf8242](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/4bf8242652cb73b2dfdefc46c5141e0ad479ebfa))
+
+Full set of changes: [`4.5.3...4.5.4`][4.5.4]
+
+[4.5.4]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.3...v4.5.4
+
 ## [4.5.3] - 2023-03-10
 
 ### Commits

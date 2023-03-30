@@ -717,54 +717,52 @@ class Extension extends AbstractPluginIntegration {
 		 */
 		$refunded_amount = $payment->get_refunded_amount();
 
-		if ( null === $refunded_amount ) {
-			return;
-		}
-
 		$refunded_amount_value = $refunded_amount->get_value();
 
 		$entry_refunded_amount_value = (float) \gform_get_meta( $entry_id, 'pronamic_pay_refunded_amount' );
 
-		if ( $entry_refunded_amount_value < $refunded_amount_value ) {
-			$diff_amount = $refunded_amount->subtract( new Money( $entry_refunded_amount_value ) );
+		if ( $entry_refunded_amount_value >= $refunded_amount_value ) {
+			return;
+		}
 
-			$result = $this->addon->refund_payment(
-				$entry,
-				[
-					// The Gravity Forms payment add-on callback feature uses the action ID to prevent processing an action twice.
-					'id'             => '',
-					'type'           => 'refund_payment',
-					/**
-					 * Unfortunately we don't have a specific transaction ID for this refund at this point.
-					 *
-					 * @link https://en.wikipedia.org/wiki/%C3%98
-					 * @link https://unicode-table.com/en/2205/
-					 */
-					'transaction_id' => '∅',
-					'entry_id'       => $entry_id,
-					'amount'         => $diff_amount->get_value(),
-					/**
-					 * Override the default Gravity Forms payment status.
-					 *
-					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1910-L1912
-					 */
-					'payment_status' => $refunded_amount->get_value() < $total_amount->get_value() ? 'PartlyRefunded' : 'Refunded',
-					/**
-					 * Override the default Gravity Forms payment refund note.
-					 *
-					 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1920-L1922
-					 */
-					'note'           => \sprintf(
-						/* translators: %s: refunded amount */
-						\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
-						$diff_amount->format_i18n()
-					),
-				]
-			);
+		$diff_amount = $refunded_amount->subtract( new Money( $entry_refunded_amount_value ) );
 
-			if ( true === $result ) {
-				\gform_update_meta( $entry_id, 'pronamic_pay_refunded_amount', $refunded_amount_value );
-			}
+		$result = $this->addon->refund_payment(
+			$entry,
+			[
+				// The Gravity Forms payment add-on callback feature uses the action ID to prevent processing an action twice.
+				'id'             => '',
+				'type'           => 'refund_payment',
+				/**
+				 * Unfortunately we don't have a specific transaction ID for this refund at this point.
+				 *
+				 * @link https://en.wikipedia.org/wiki/%C3%98
+				 * @link https://unicode-table.com/en/2205/
+				 */
+				'transaction_id' => '∅',
+				'entry_id'       => $entry_id,
+				'amount'         => $diff_amount->get_value(),
+				/**
+				 * Override the default Gravity Forms payment status.
+				 *
+				 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1910-L1912
+				 */
+				'payment_status' => $refunded_amount->get_value() < $total_amount->get_value() ? 'PartlyRefunded' : 'Refunded',
+				/**
+				 * Override the default Gravity Forms payment refund note.
+				 *
+				 * @link https://github.com/wp-premium/gravityforms/blob/2.4.20/includes/addon/class-gf-payment-addon.php#L1920-L1922
+				 */
+				'note'           => \sprintf(
+					/* translators: %s: refunded amount */
+					\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
+					$diff_amount->format_i18n()
+				),
+			]
+		);
+
+		if ( true === $result ) {
+			\gform_update_meta( $entry_id, 'pronamic_pay_refunded_amount', $refunded_amount_value );
 		}
 	}
 

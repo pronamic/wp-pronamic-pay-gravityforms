@@ -1,4 +1,5 @@
 /bin               export-ignore
+/images/src        export-ignore
 /scss              export-ignore
 /tests             export-ignore
 /.eslintignore     export-ignore
@@ -12,7 +13,6 @@
 /.wp-env.json      export-ignore
 /documentation/    export-ignore
 /Gruntfile.js      export-ignore
-/package.json      export-ignore
 /phpcs.xml.dist    export-ignore
 /phpmd.ruleset.xml export-ignore
 /phpstan.neon.dist export-ignore

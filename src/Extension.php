@@ -559,6 +559,10 @@ class Extension extends AbstractPluginIntegration {
 						],
 						$lead['source_url']
 					);
+
+					$anchor = GFFormDisplay::get_anchor( GFAPI::get_form( $lead['form_id'] ), false );
+
+					$url .= $anchor['id'];
 				}
 			}
 		}

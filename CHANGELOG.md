@@ -7,6 +7,18 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.5] - 2023-06-01
+
+### Commits
+
+- Switch from `pronamic/wp-deployer` to `pronamic/pronamic-cli`. ([a2363f9](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/a2363f9905b39c539c0be7466caebe8a1faf5514))
+- Added support for `gform_confirmation_anchor`. ([ae07289](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/ae07289b7be7bd791c67f75d08b9d68a9f6973ec))
+- Updated .gitattributes ([89b6396](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/89b6396e6e6401c06fa3f9eda661a88d6542c20e))
+
+Full set of changes: [`4.5.4...4.5.5`][4.5.5]
+
+[4.5.5]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.4...v4.5.5
+
 ## [4.5.4] - 2023-03-30
 
 ### Commits

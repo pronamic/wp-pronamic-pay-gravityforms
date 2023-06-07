@@ -1299,6 +1299,7 @@ class Extension extends AbstractPluginIntegration {
 			'{pronamic_payment_bank_transfer_recipient_city}' => $bank_transfer_recipient_city,
 			'{pronamic_payment_bank_transfer_recipient_country}' => $bank_transfer_recipient_country,
 			'{pronamic_payment_bank_transfer_recipient_account_number}' => $bank_transfer_recipient_account_number,
+			'{pronamic_subscription_id}'           => $subscription_id,
 			'{pronamic_subscription_payment_id}'   => $subscription_payment_id,
 			'{pronamic_subscription_amount}'       => $subscription_amount,
 			'{pronamic_subscription_cancel_url}'   => $subscription_cancel_url,

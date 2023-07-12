@@ -7,6 +7,17 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.6] - 2023-07-12
+
+### Commits
+
+- Added label for subscription ID merge tag. ([22466f0](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/22466f07a111097b45d10933e2cbf38132dc1b34))
+- Added merge tag `{pronamic_subscription_id}`. ([9d25939](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/9d25939eb1e31d9aa75eaaa4a99a6ecd16a842be))
+
+Full set of changes: [`4.5.5...4.5.6`][4.5.6]
+
+[4.5.6]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.5...v4.5.6
+
 ## [4.5.5] - 2023-06-01
 
 ### Commits

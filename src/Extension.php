@@ -1204,9 +1204,9 @@ class Extension extends AbstractPluginIntegration {
 
 		$subscription_id = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_id' );
 
-		if ( ! empty( $subscription_id ) ) {
-			$subscription = get_pronamic_subscription( $subscription_id );
+		$subscription = empty( $subscription_id ) ? null : \get_pronamic_subscription( $subscription_id );
 
+		if ( null !== $subscription ) {
 			$next_payment_date = $subscription->get_next_payment_date();
 
 			if ( $next_payment_date ) {

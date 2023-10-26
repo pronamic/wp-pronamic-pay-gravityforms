@@ -1469,6 +1469,11 @@ class Extension extends AbstractPluginIntegration {
 
 				$actions[ $slug ]['meta_key_suffix']             = $slug;
 				$actions[ $slug ]['delayed_payment_integration'] = true;
+				$actions[ $slug ]['label']                       = \sprintf(
+					/* translators: %s: plugin title */
+					\__( 'Process %s feeds', 'pronamic_ideal' ),
+					$addon->plugin_page_title()
+				);
 
 				if ( isset( $addon->delayed_payment_integration['option_label'] ) ) {
 					$actions[ $slug ]['label'] = $addon->delayed_payment_integration['option_label'];

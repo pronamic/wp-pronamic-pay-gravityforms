@@ -7,6 +7,17 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.7] - 2023-10-30
+
+### Commits
+
+- Set default label for delayed actions. ([7dc44ae](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/7dc44ae93d891b15aca46b2dafc7646c29b5a37e))
+- Check if subscription is available, fixes #35. ([9682673](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/9682673ff1126e0c6a085fe2973c2658172c7b69))
+
+Full set of changes: [`4.5.6...4.5.7`][4.5.7]
+
+[4.5.7]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.6...v4.5.7
+
 ## [4.5.6] - 2023-07-12
 
 ### Commits

@@ -1226,17 +1226,20 @@ class Extension extends AbstractPluginIntegration {
 			$subscription_renew_url  = $subscription->get_renewal_url();
 		}
 
-		$payment_id              = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' );
-		$subscription_payment_id = gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' );
+		$payment_id              = (string) gform_get_meta( rgar( $entry, 'id' ), 'pronamic_payment_id' );
+		$subscription_payment_id = (string) gform_get_meta( rgar( $entry, 'id' ), 'pronamic_subscription_payment_id' );
 
 		/**
 		 * Bank transfer recipient details.
+		 * 
+		 * Use bank transfer details from last subscription payment if available.
 		 */
-		// Use bank transfer details from last subscription payment if available.
-		$payment = \get_pronamic_payment( $subscription_payment_id );
+		$payment = null;
+
+		$payment = ( '' === $subscription_payment_id ) ? $payment : \get_pronamic_payment( $subscription_payment_id );
 
 		if ( null === $payment ) {
-			$payment = \get_pronamic_payment( $payment_id );
+			$payment = ( '' === $payment_id ) ? $payment : \get_pronamic_payment( $payment_id );
 		}
 
 		$bank_transfer_recipient_reference      = '';

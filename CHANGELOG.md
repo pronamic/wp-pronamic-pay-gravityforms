@@ -7,6 +7,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.5.8] - 2023-11-06
+
+### Commits
+
+- Reduce `get_pronamic_payment()` calls. ([49ced02](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/49ced0204791fbcf05425eafa00b6cea6090c0ae))
+
+Full set of changes: [`4.5.7...4.5.8`][4.5.8]
+
+[4.5.8]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.7...v4.5.8
+
 ## [4.5.7] - 2023-10-30
 
 ### Commits

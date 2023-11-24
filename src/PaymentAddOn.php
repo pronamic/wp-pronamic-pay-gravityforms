@@ -401,7 +401,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 			return false;
 		}
 
-		$feed = new PayFeed( $id );
+		$feed = FeedsDB::get_feed( $id );
 
 		$post = array_merge(
 			$post,
@@ -648,7 +648,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * @param int $feed_id Feed ID.
 	 */
 	public function delete_feed( $feed_id ) {
-		wp_delete_post( $feed_id );
+		FeedsDB::delete_feed( $feed_id );
 	}
 
 	/**

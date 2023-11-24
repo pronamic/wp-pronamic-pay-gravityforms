@@ -24,6 +24,41 @@ use WP_Query;
  */
 class FeedsDB {
 	/**
+	 * Feeds.
+	 *
+	 * @var array<int, PayFeed>
+	 */
+	private static $feeds = [];
+
+	/**
+	 * Get feed.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return PayFeed
+	 */
+	public static function get_feed( $post_id ) {
+		if ( ! array_key_exists( $post_id, self::$feeds ) ) {
+			self::$feeds[ $post_id ] = new PayFeed( $post_id );
+		}
+
+		return self::$feeds[ $post_id ];
+	}
+
+	/**
+	 * Delete feed.
+	 *
+	 * @param int $post_id Post ID.
+	 * @return void
+	 */
+	public static function delete_feed( $post_id ) {
+		\wp_delete_post( $post_id );
+
+		if ( \array_key_exists( $post_id, self::$feeds ) ) {
+			unset( self::$feeds[ $post_id ] );
+		}
+	}
+
+	/**
 	 * Get feeds by form ID.
 	 *
 	 * In earlier version of this library this was the function `get_pronamic_gf_pay_feeds_by_form_id`.
@@ -33,8 +68,6 @@ class FeedsDB {
 	 * @return PayFeed[]
 	 */
 	public static function get_feeds_by_form_id( $form_id, $meta = [] ) {
-		$feeds = [];
-
 		$meta_query = [
 			[
 				'key'   => '_pronamic_pay_gf_form_id',
@@ -53,8 +86,10 @@ class FeedsDB {
 			]
 		);
 
+		$feeds = [];
+
 		foreach ( $query->posts as $post_id ) {
-			$feeds[] = new PayFeed( $post_id );
+			$feeds[] = self::get_feed( $post_id );
 		}
 
 		return $feeds;
@@ -100,7 +135,7 @@ class FeedsDB {
 		$feed_id = gform_get_meta( $entry_id, 'ideal_feed_id' );
 
 		if ( ! empty( $feed_id ) ) {
-			return new PayFeed( $feed_id );
+			return self::get_feed( $feed_id );
 		}
 
 		return null;

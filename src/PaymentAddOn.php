@@ -664,7 +664,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$feeds = $this->get_feeds( $form_id );
 
 		foreach ( $feeds as $feed ) {
-			$this->get_feed( $feed['ID'] );
+			$this->delete_feed( $feed['ID'] );
 		}
 	}
 }

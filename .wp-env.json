@@ -3,6 +3,7 @@
 	"plugins": [
 		"pronamic/wp-env-quick-login",
 		"pronamic/gravityforms",
+		"pronamic/gravityperks",
 		"pronamic/gp-unique-id",
 		"pronamic/wp-pronamic-pay-test-helper",
 		"https://downloads.wordpress.org/plugin/pronamic-client.zip",

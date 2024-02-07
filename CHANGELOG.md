@@ -7,6 +7,20 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.6.0] - 2024-02-07
+
+### Changed
+
+- Optimize performance by reusing instances of `PayFeed` from memory. ([fa89eab](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/fa89eaba746000d5c432b480f1b4f0b4b8e07994))
+
+### Fixed
+
+- Fixed deleting feeds through `PaymentAddOn::delete_feeds()`. ([89f88b7](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/89f88b7ea1b27af52418bf34a04b5c31690f5ff3))
+
+Full set of changes: [`4.5.8...4.6.0`][4.6.0]
+
+[4.6.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.5.8...v4.6.0
+
 ## [4.5.8] - 2023-11-06
 
 ### Commits

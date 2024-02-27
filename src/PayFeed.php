@@ -47,6 +47,7 @@ use WP_Post;
  * @property mixed $fields
  * @property mixed $links
  */
+#[\AllowDynamicProperties]
 class PayFeed {
 	/**
 	 * Indicator for an link to an WordPress page

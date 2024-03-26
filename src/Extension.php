@@ -1339,11 +1339,11 @@ class Extension extends AbstractPluginIntegration {
 				'meta_key_suffix'             => 'aweber_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
-				'delay_callback'              => function() {
+				'delay_callback'              => function () {
 					// @link https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 					\remove_action( 'gform_post_submission', [ 'GFAWeber', 'export' ], 10 );
 				},
-				'process_callback'            => function( $entry, $form ) {
+				'process_callback'            => function ( $entry, $form ) {
 					if ( Core_Util::class_method_exists( 'GFAWeber', 'export' ) ) {
 						call_user_func( [ 'GFAWeber', 'export' ], $entry, $form, false );
 					}
@@ -1354,11 +1354,11 @@ class Extension extends AbstractPluginIntegration {
 				'meta_key_suffix'             => 'campaignmonitor_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
-				'delay_callback'              => function() {
+				'delay_callback'              => function () {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 					\remove_action( 'gform_after_submission', [ 'GFCampaignMonitor', 'export' ], 10 );
 				},
-				'process_callback'            => function( $entry, $form ) {
+				'process_callback'            => function ( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L1184
 					if ( Core_Util::class_method_exists( 'GFCampaignMonitor', 'export' ) ) {
 						call_user_func( [ 'GFCampaignMonitor', 'export' ], $entry, $form, false );
@@ -1370,11 +1370,11 @@ class Extension extends AbstractPluginIntegration {
 				'meta_key_suffix'             => 'mailchimp_subscription',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
-				'delay_callback'              => function() {
+				'delay_callback'              => function () {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 					\remove_action( 'gform_after_submission', [ 'GFMailChimp', 'export' ], 10 );
 				},
-				'process_callback'            => function( $entry, $form ) {
+				'process_callback'            => function ( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.5/mailchimp.php#L1512.
 					if ( Core_Util::class_method_exists( 'GFMailChimp', 'export' ) ) {
 						call_user_func( [ 'GFMailChimp', 'export' ], $entry, $form, false );
@@ -1416,11 +1416,11 @@ class Extension extends AbstractPluginIntegration {
 				'meta_key_suffix'             => 'zapier',
 				'delayed_payment_integration' => false,
 				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),
-				'delay_callback'              => function() {
+				'delay_callback'              => function () {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
 					remove_action( 'gform_after_submission', [ 'GFZapier', 'send_form_data_to_zapier' ], 10 );
 				},
-				'process_callback'            => function( $entry, $form ) {
+				'process_callback'            => function ( $entry, $form ) {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L469-L533.
 					if ( Core_Util::class_method_exists( 'GFZapier', 'send_form_data_to_zapier' ) ) {
 						call_user_func( [ 'GFZapier', 'send_form_data_to_zapier' ], $entry, $form );
@@ -1438,10 +1438,10 @@ class Extension extends AbstractPluginIntegration {
 				'meta_key_suffix'             => 'gravityflow',
 				'delayed_payment_integration' => true,
 				'label'                       => __( 'Start the Workflow once payment has been received.', 'pronamic_ideal' ),
-				'delay_callback'              => function() {
+				'delay_callback'              => function () {
 					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4711-L4720
 				},
-				'process_callback'            => function( $entry, $form ) {
+				'process_callback'            => function ( $entry, $form ) {
 					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4730-L4746
 					if ( ! \class_exists( '\Gravity_Flow' ) ) {
 						return;

@@ -289,7 +289,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 				$notifications = \array_filter(
 					$notifications,
-					function( $notification ) {
+					function ( $notification ) {
 						return 'form_submission' === $notification['event'];
 					}
 				);
@@ -362,7 +362,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 						$delay_actions = array_filter(
 							$delay_actions,
-							function( $action ) {
+							function ( $action ) {
 								return $action['active'];
 							}
 						);

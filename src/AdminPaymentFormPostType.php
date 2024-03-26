@@ -378,7 +378,7 @@ class AdminPaymentFormPostType {
 
 		$delay_actions = array_filter(
 			$delay_actions,
-			function( $action ) {
+			function ( $action ) {
 				return $action['active'];
 			}
 		);

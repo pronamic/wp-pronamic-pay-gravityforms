@@ -144,7 +144,7 @@ class Processor {
 
 		// Confirmation (@see GFFormDisplay::handle_confirmation).
 		// @link http://www.gravityhelp.com/documentation/page/Gform_confirmation.
-		add_filter( 'gform_confirmation_' . $this->form_id, [ $this, 'confirmation' ], 10, 42 );
+		add_filter( 'gform_confirmation_' . $this->form_id, [ $this, 'confirmation' ], 10, 2 );
 
 		/*
 		 * After submission.

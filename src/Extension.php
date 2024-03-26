@@ -271,26 +271,15 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function source_text( $text, Payment $payment ) {
-		$source_url = $this->source_url( '', $payment );
+		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
-		$entry_text = \sprintf(
+		$entry = $this->is_active() ? RGFormsModel::get_lead( $payment->get_source_id() ) : false;
+
+		$text .= sprintf(
+			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
+			add_query_arg( [ 'pronamic_gf_lid' => $payment->get_source_id() ], admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
-			__( 'Entry #%s', 'pronamic_ideal' ),
-			$payment->get_source_id()
-		);
-
-		if ( '' !== $source_url ) {
-			$entry_text = \sprintf(
-				'<a href="%1$s">%2$s</a>',
-				$source_url,
-				$entry_text
-			);
-		}
-
-		$text = \sprintf(
-			'%1$s<br />%2$s',
-			\__( 'Gravity Forms', 'pronamic_ideal' ),
-			$entry_text
+			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
 		);
 
 		return $text;
@@ -317,9 +306,9 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function source_url( $url, Payment $payment ) {
-		$count_entries = \GFAPI::count_entries( null, [ 'id' => $payment->get_source_id() ] );
+		$entry = RGFormsModel::get_lead( $payment->get_source_id() );
 
-		if ( $count_entries > 0 ) {
+		if ( false !== $entry ) {
 			$url = add_query_arg(
 				[
 					'pronamic_gf_lid' => $payment->get_source_id(),
@@ -340,26 +329,15 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function subscription_source_text( $text, Subscription $subscription ) {
-		$source_url = $this->subscription_source_url( '', $subscription );
+		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
 
-		$entry_text = \sprintf(
+		$entry = $this->is_active() ? RGFormsModel::get_lead( $subscription->get_source_id() ) : false;
+
+		$text .= sprintf(
+			false === $entry ? '%2$s' : '<a href="%1$s">%2$s</a>',
+			add_query_arg( [ 'pronamic_gf_lid' => $subscription->get_source_id() ], admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
-			__( 'Entry #%s', 'pronamic_ideal' ),
-			$subscription->get_source_id()
-		);
-
-		if ( '' !== $source_url ) {
-			$entry_text = \sprintf(
-				'<a href="%1$s">%2$s</a>',
-				$source_url,
-				$entry_text
-			);
-		}
-
-		$text = \sprintf(
-			'%1$s<br />%2$s',
-			\__( 'Gravity Forms', 'pronamic_ideal' ),
-			$entry_text
+			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
 		);
 
 		return $text;
@@ -386,9 +364,9 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function subscription_source_url( $url, Subscription $subscription ) {
-		$count_entries = \GFAPI::count_entries( null, [ 'id' => $subscription->get_source_id() ] );
+		$entry = RGFormsModel::get_lead( $subscription->get_source_id() );
 
-		if ( $count_entries > 0 ) {
+		if ( false !== $entry ) {
 			$url = add_query_arg(
 				[
 					'pronamic_gf_lid' => $subscription->get_source_id(),
@@ -1253,7 +1231,7 @@ class Extension extends AbstractPluginIntegration {
 
 		/**
 		 * Bank transfer recipient details.
-		 *
+		 * 
 		 * Use bank transfer details from last subscription payment if available.
 		 */
 		$payment = null;

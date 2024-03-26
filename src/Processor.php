@@ -137,14 +137,14 @@ class Processor {
 		add_filter( 'gform_entry_post_save', [ $this, 'entry_post_save' ], 10, 2 );
 
 		// Delay (@see GFFormDisplay::handle_submission > GFCommon::send_form_submission_notifications).
-		add_filter( 'gform_disable_admin_notification_' . $this->form_id, [ $this, 'maybe_delay_admin_notification' ], 10, 3 );
-		add_filter( 'gform_disable_user_notification_' . $this->form_id, [ $this, 'maybe_delay_user_notification' ], 10, 3 );
-		add_filter( 'gform_disable_post_creation_' . $this->form_id, [ $this, 'maybe_delay_post_creation' ], 10, 3 );
-		add_filter( 'gform_disable_notification_' . $this->form_id, [ $this, 'maybe_delay_notification' ], 10, 4 );
+		add_filter( 'gform_disable_admin_notification_' . $this->form_id, [ $this, 'maybe_delay_admin_notification' ], 10, 2 );
+		add_filter( 'gform_disable_user_notification_' . $this->form_id, [ $this, 'maybe_delay_user_notification' ], 10, 2 );
+		add_filter( 'gform_disable_post_creation_' . $this->form_id, [ $this, 'maybe_delay_post_creation' ], 10, 2 );
+		add_filter( 'gform_disable_notification_' . $this->form_id, [ $this, 'maybe_delay_notification' ], 10, 3 );
 
 		// Confirmation (@see GFFormDisplay::handle_confirmation).
 		// @link http://www.gravityhelp.com/documentation/page/Gform_confirmation.
-		add_filter( 'gform_confirmation_' . $this->form_id, [ $this, 'confirmation' ], 10, 4 );
+		add_filter( 'gform_confirmation_' . $this->form_id, [ $this, 'confirmation' ], 10, 42 );
 
 		/*
 		 * After submission.
@@ -710,11 +710,10 @@ class Processor {
 	 * @param bool  $is_disabled  Is disabled flag.
 	 * @param array $notification Gravity Forms notification.
 	 * @param array $form         Gravity Forms form.
-	 * @param array $lead         Gravity Forms lead/entry.
 	 *
 	 * @return bool
 	 */
-	public function maybe_delay_notification( $is_disabled, $notification, $form, $lead ) {
+	public function maybe_delay_notification( $is_disabled, $notification, $form ) {
 		if ( ! $is_disabled && $this->is_processing( $form ) ) {
 			$is_disabled = in_array( $notification['id'], $this->feed->delay_notification_ids, true );
 		}
@@ -727,11 +726,9 @@ class Processor {
 	 *
 	 * @param bool  $is_disabled Is disabled flag.
 	 * @param array $form        Gravity Forms form.
-	 * @param array $lead        Gravity Forms lead/entry.
-	 *
 	 * @return boolean true if admin notification is disabled / delayed, false otherwise
 	 */
-	public function maybe_delay_admin_notification( $is_disabled, $form, $lead ) {
+	public function maybe_delay_admin_notification( $is_disabled, $form ) {
 		if ( ! $is_disabled && $this->is_processing( $form ) ) {
 			$is_disabled = $this->feed->delay_admin_notification;
 		}
@@ -744,11 +741,10 @@ class Processor {
 	 *
 	 * @param bool  $is_disabled Is disabled flag.
 	 * @param array $form        Gravity Forms form.
-	 * @param array $lead        Gravity Forms lead/entry.
 	 *
 	 * @return boolean true if user notification is disabled / delayed, false otherwise
 	 */
-	public function maybe_delay_user_notification( $is_disabled, $form, $lead ) {
+	public function maybe_delay_user_notification( $is_disabled, $form ) {
 		if ( ! $is_disabled && $this->is_processing( $form ) ) {
 			$is_disabled = $this->feed->delay_user_notification;
 		}
@@ -761,11 +757,10 @@ class Processor {
 	 *
 	 * @param boole $is_disabled Is disabled flag.
 	 * @param array $form        Gravity Forms form.
-	 * @param array $lead        Gravity Forms lead/entry.
 	 *
 	 * @return boolean true if post creation is disabled / delayed, false otherwise
 	 */
-	public function maybe_delay_post_creation( $is_disabled, $form, $lead ) {
+	public function maybe_delay_post_creation( $is_disabled, $form ) {
 		if ( ! $is_disabled && $this->is_processing( $form ) ) {
 			$is_disabled = $this->feed->delay_post_creation;
 		}
@@ -813,12 +808,10 @@ class Processor {
 	 *
 	 * @param array $confirmation Gravity Forms confirmation.
 	 * @param array $form         Gravity Forms form.
-	 * @param array $lead         Gravity Forms lead/entry.
-	 * @param bool  $ajax         AJAX request flag.
 	 *
 	 * @return array|string
 	 */
-	public function confirmation( $confirmation, $form, $lead, $ajax ) {
+	public function confirmation( $confirmation, $form ) {
 		if ( ! $this->is_processing( $form ) ) {
 			return $confirmation;
 		}

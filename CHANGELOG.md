@@ -7,6 +7,28 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.6.1] - 2024-03-26
+
+### Commits
+
+- Fixed "All output should be run through an escaping function". ([bb98644](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/bb986440ecb2fd48b1f14bad289010a1dfc87425))
+- Fixed "The method parameter $x is never used" warnings. ([b22a1d1](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/b22a1d187a991b8f1cb3721e75bc19315e928ce0))
+- Allow dynamic properties in payment feed (resolves “Deprecated: Creation of dynamic property Pronamic\WordPress\Pay\Extensions\GravityForms\PayFeed::$[…] is deprecated”). ([e444081](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/e4440810d6544fe9f07c984711e648f712f18dff))
+
+### Composer
+
+- Changed `php` from `>=7.4` to `>=8.0`.
+- Changed `pronamic/wp-money` from `^2.2` to `v2.4.3`.
+	Release notes: https://github.com/pronamic/wp-money/releases/tag/v2.4.3
+- Changed `pronamic/wp-number` from `^1.2` to `v1.3.0`.
+	Release notes: https://github.com/pronamic/wp-number/releases/tag/v1.3.0
+- Changed `wp-pay/core` from `^4.7` to `v4.16.0`.
+	Release notes: https://github.com/pronamic/wp-pay-core/releases/tag/v4.16.0
+
+Full set of changes: [`4.6.0...4.6.1`][4.6.1]
+
+[4.6.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.6.0...v4.6.1
+
 ## [4.6.0] - 2024-02-07
 
 ### Changed

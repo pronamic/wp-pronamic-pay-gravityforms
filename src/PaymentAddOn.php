@@ -234,9 +234,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 
 		if ( ! \is_readable( $file ) ) {
 			throw new \Exception(
-				\sprintf(
-					'Could not read WordPress admin menu icon from file: %s.',
-					$file
+				\esc_html(
+					\sprintf(
+						'Could not read WordPress admin menu icon from file: %s.',
+						$file
+					) 
 				)
 			);
 		}
@@ -245,9 +247,11 @@ class PaymentAddOn extends GFPaymentAddOn {
 
 		if ( false === $svg ) {
 			throw new \Exception(
-				\sprintf(
-					'Could not read WordPress admin menu icon from file: %s.',
-					$file
+				\esc_html(
+					\sprintf(
+						'Could not read WordPress admin menu icon from file: %s.',
+						$file
+					) 
 				)
 			);
 		}

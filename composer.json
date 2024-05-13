@@ -43,7 +43,13 @@
 	"extra": {
 		"installer-paths": {
 			"packages/{$vendor}/{$name}": [
-				"vendor:pronamic",
+				"pronamic/wp-datetime",
+				"pronamic/wp-gravityforms-nl",
+				"pronamic/wp-html",
+				"pronamic/wp-http",
+				"pronamic/wp-mollie",
+				"pronamic/wp-money",
+				"pronamic/wp-number",
 				"vendor:wp-pay",
 				"vendor:wp-pay-extensions",
 				"vendor:wp-pay-gateways",

@@ -22,3 +22,6 @@
 
 # WordPress content
 /wp-content/
+
+# Packages
+/packages/

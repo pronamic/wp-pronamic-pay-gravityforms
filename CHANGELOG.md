@@ -7,6 +7,26 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.7.0] - 2024-05-15
+
+### Commits
+
+- Improve redirect to entry in case the entry has been deleted. ([cddab3b](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/cddab3b4ba8f284c47a0a6ac58aeb4ce027d2b74))
+- Manual revert fe6438a40da3784b5b38fb662eb305977c5c93c1, was causing performance issues. ([4c7ecb3](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/4c7ecb34c61607c204f394230d90372dd4f6ef2b))
+
+### Composer
+
+- Added `automattic/jetpack-autoloader` `^3.0`.
+- Added `composer/installers` `^2.2`.
+- Added `woocommerce/action-scheduler` `^3.7`.
+- Added `wp-pay-gateways/mollie` `^4.10`.
+- Changed `wp-pay/core` from `^4.16` to `v4.17.0`.
+	Release notes: https://github.com/pronamic/wp-pay-core/releases/tag/v4.17.0
+
+Full set of changes: [`4.6.1...4.7.0`][4.7.0]
+
+[4.7.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.6.1...v4.7.0
+
 ## [4.6.1] - 2024-03-26
 
 ### Commits

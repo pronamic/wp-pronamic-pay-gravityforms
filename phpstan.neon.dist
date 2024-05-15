@@ -1,7 +1,5 @@
 parameters:
 	level: 0
-	bootstrapFiles:
-		- tests/phpstan/bootstrap.php
 	paths:
 		- src/
 		- views/

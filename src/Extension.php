@@ -1205,7 +1205,7 @@ class Extension extends AbstractPluginIntegration {
 
 		/**
 		 * Bank transfer recipient details.
-		 * 
+		 *
 		 * Use bank transfer details from last subscription payment if available.
 		 */
 		$payment = null;
@@ -1247,6 +1247,21 @@ class Extension extends AbstractPluginIntegration {
 			}
 		}
 
+		/**
+		 * Consumer bank account details.
+		 */
+		$consumer_bank_account_name = '';
+		$consumer_iban              = '';
+
+		if ( null !== $payment ) {
+			$consumer_bank_details = $payment->get_consumer_bank_details();
+
+			if ( null !== $consumer_bank_details ) {
+				$consumer_bank_account_name = \strval( $consumer_bank_details->get_name() );
+				$consumer_iban              = \strval( $consumer_bank_details->get_iban() );
+			}
+		}
+
 		// Pay again URL.
 		$pay_again_url = \rgar( $entry, 'source_url' );
 
@@ -1276,6 +1291,8 @@ class Extension extends AbstractPluginIntegration {
 			'{pronamic_payment_bank_transfer_recipient_city}' => $bank_transfer_recipient_city,
 			'{pronamic_payment_bank_transfer_recipient_country}' => $bank_transfer_recipient_country,
 			'{pronamic_payment_bank_transfer_recipient_account_number}' => $bank_transfer_recipient_account_number,
+			'{pronamic_payment_consumer_bank_account_name}' => $consumer_bank_account_name,
+			'{pronamic_payment_consumer_iban}'     => $consumer_iban,
 			'{pronamic_subscription_id}'           => $subscription_id,
 			'{pronamic_subscription_payment_id}'   => $subscription_payment_id,
 			'{pronamic_subscription_amount}'       => $subscription_amount,

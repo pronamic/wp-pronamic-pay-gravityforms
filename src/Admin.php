@@ -167,16 +167,6 @@ class Admin {
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_account_number}',
 		];
 
-		$merge_tags[] = [
-			'label' => __( 'Pronamic consumer bank account name', 'pronamic_ideal' ),
-			'tag'   => '{pronamic_payment_consumer_bank_account_name}',
-		];
-
-		$merge_tags[] = [
-			'label' => __( 'Pronamic consumer IBAN', 'pronamic_ideal' ),
-			'tag'   => '{pronamic_payment_consumer_iban}',
-		];
-
 		// Subscription.
 		$merge_tags[] = [
 			'label' => __( 'Pronamic Subscription ID', 'pronamic_ideal' ),
@@ -213,7 +203,7 @@ class Admin {
 
 	/**
 	 * Maybe redirect to Gravity Forms entry.
-	 *
+	 * 
 	 * @return void
 	 */
 	public static function maybe_redirect_to_entry() {

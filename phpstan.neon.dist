@@ -4,4 +4,4 @@ parameters:
 		- src/
 		- views/
 	scanDirectories:
-		- wp-content/plugins/gravityforms
+		- vendor/pronamic/gravityforms

@@ -370,7 +370,7 @@ class Processor {
 										\esc_html( $key )
 									),
 									0,
-									$e
+									$exception
 								);
 
 								throw $exception;

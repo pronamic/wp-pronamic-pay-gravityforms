@@ -12,6 +12,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
 use Pronamic\WordPress\Number\Number;
+use Pronamic\WordPress\Number\Parser as NumberParser;
 use Pronamic\WordPress\Money\Currency;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractGatewayIntegration;
@@ -356,9 +357,24 @@ class Processor {
 						$line->set_unit_price( new Money( $value, $currency ) );
 
 						if ( array_key_exists( 'quantity', $product ) ) {
-							$quantity = Number::from_mixed( $product['quantity'] );
+							try {
+								$parser = new NumberParser();
 
-							$value = $value->multiply( $quantity );
+								$quantity = $parser->parse( $product['quantity'] );
+
+								$value = $value->multiply( $quantity );
+							} catch ( \Exception $exception ) {
+								$exception = new \Exception(
+									\sprintf(
+										'Couldn’t parse Gravity Forms product field `%s` quantity to a number.',
+										\esc_html( $key )
+									),
+									0,
+									$e
+								);
+
+								throw $exception;
+							}
 						}
 
 						$line->set_total_amount( new Money( $value, $currency ) );

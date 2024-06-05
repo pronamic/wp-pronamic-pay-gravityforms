@@ -33,10 +33,10 @@ $pay_feed = new PayFeed( $post_id );
 
 /**
  * Private helper function for Gravity Forms dropdown input.
- * 
+ *
  * @param array $form Gravity Forms form array/object.
  * @param array $args Arguments.
- * @return void 
+ * @return void
  */
 function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 	$args = \wp_parse_args(
@@ -564,7 +564,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 										_pronamic_pay_gravityforms_dropdown_input(
 											$form_meta,
-											[ 
+											[
 												'id'       => 'pronamic_pay_gf_subscription_amount_field',
 												'name'     => '_pronamic_pay_gf_subscription_amount_field',
 												'selected' => $pay_feed->subscription_amount_field,
@@ -628,7 +628,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 										_pronamic_pay_gravityforms_dropdown_input(
 											$form_meta,
-											[ 
+											[
 												'id'       => 'pronamic_pay_gf_subscription_interval_field',
 												'name'     => '_pronamic_pay_gf_subscription_interval_field',
 												'selected' => $pay_feed->subscription_interval_field,
@@ -704,7 +704,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 										_pronamic_pay_gravityforms_dropdown_input(
 											$form_meta,
-											[ 
+											[
 												'id'       => 'pronamic_pay_gf_subscription_frequency_field',
 												'name'     => '_pronamic_pay_gf_subscription_frequency_field',
 												'selected' => $pay_feed->subscription_frequency_field,
@@ -784,20 +784,19 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Payment Date Alignment', 'pronamic_ideal' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Fixed Subscription Period', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Payment Date Alignment', 'pronamic_ideal' ); ?></span>
 							</legend>
 
 							<p>
 								<?php
 
-								/* translators: nl: Een vaste abonnementsperiode zorgt ervoor dat de periodes van alle verkochte abonnementen op één lijn liggen. */
-								esc_html_e( 'A fixed subscription period ensures that periods of all sold subscriptions are aligned.', 'pronamic_ideal' );
+								esc_html_e( 'The payment date can be aligned to a fixed day of the week, month, or year. An additional subscription phase is added at the beginning of the subscription to achieve this, resulting in one extra period being added to the configured number of periods. Optionally, the amount of this alignment phase can be prorated.', 'pronamic_ideal' );
 
 								?>
 							</p>
@@ -1062,7 +1061,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 							_pronamic_pay_gravityforms_dropdown_input(
 								$form_meta,
-								[ 
+								[
 									'id'       => 'gf_ideal_fields_' . $name,
 									'name'     => '_pronamic_pay_gf_fields[' . $name . ']',
 									'selected' => $current,
@@ -1188,7 +1187,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 						_pronamic_pay_gravityforms_dropdown_input(
 							$form_meta,
-							[ 
+							[
 								'id'       => 'gf_ideal_user_role_field_id',
 								'name'     => '_pronamic_pay_gf_user_role_field_id',
 								'selected' => \get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true ),

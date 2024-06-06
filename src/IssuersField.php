@@ -15,6 +15,7 @@ use Pronamic\WordPress\Pay\Core\Gateway;
 use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
+use Pronamic\WpPayLogos\ImageService;
 
 /**
  * Title: WordPress pay extension Gravity Forms issuers field
@@ -294,19 +295,25 @@ class IssuersField extends GF_Field_Select {
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$dimensions = [ 24, 24 ];
+							$display_width    = 24;
+							$display_height   = 24;
+							$image_variation = 'icon-512x512.svg';
 
 							break;
 						case 'icons-64':
-							$dimensions = [ 64, 64 ];
+							$display_width    = 64;
+							$display_height   = 64;
+							$image_variation = 'icon-512x512.svg';
 
 							break;
 						case 'icons-125':
 						default:
-							$dimensions = [ 125, 60 ];
+							$display_width    = 125;
+							$display_height   = 70;
+							$image_variation = '640x360.svg';
 					}
 
-					$images_path = plugin_dir_path( Plugin::$file ) . 'images/';
+					$image_service = new ImageService();
 
 					// Loop issuers.
 					foreach ( $this->choices as $choice ) {
@@ -322,29 +329,21 @@ class IssuersField extends GF_Field_Select {
 							$issuer = 'test';
 						}
 
-						if ( ! is_dir( $images_path . $issuer ) && is_dir( $images_path . $issuer . '-bank' ) ) {
-							$issuer .= '-bank';
-						}
-
-						$icon_path = sprintf(
-							'%s/icon-%s.png',
-							$issuer,
-							implode( 'x', $dimensions )
-						);
-
 						// Radio input.
 						$label_content = sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
-						if ( file_exists( plugin_dir_path( Plugin::$file ) . 'images/' . $icon_path ) ) {
-							$icon_url = plugins_url( 'images/' . $icon_path, Plugin::$file );
+						$image_path = $image_service->get_path( "ideal-issuers/$issuer/ideal-issuer-$issuer-$image_variation" );
 
-							$label_content = sprintf(
-								'<img src="%2$s" alt="%1$s" srcset="%3$s 2x, %4$s 3x, %5$s 4x" /><span>%1$s</span>',
-								esc_html( $choice['text'] ),
-								esc_url( $icon_url ),
-								esc_url( str_replace( '.png', '@2x.png', $icon_url ) ),
-								esc_url( str_replace( '.png', '@3x.png', $icon_url ) ),
-								esc_url( str_replace( '.png', '@4x.png', $icon_url ) )
+						if ( file_exists( $image_path ) ) {
+							$image_url = \plugins_url( \basename( $image_path ), $image_path );
+
+							$label_content = \sprintf(
+								'<img src="%s" alt="%s" width="%s" height="%s" /><span>%s</span>',
+								\esc_url( $image_url ),
+								\esc_attr( $choice['text'] ),
+								\esc_attr( $display_width ),
+								\esc_attr( $display_height ),
+								\esc_html( $choice['text'] )
 							);
 						}
 
@@ -373,9 +372,6 @@ class IssuersField extends GF_Field_Select {
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li img {
 					display: block;
-
-					width: <?php echo esc_html( $dimensions[0] ); ?>px;
-					height: <?php echo esc_html( $dimensions[1] ); ?>px;
 				}
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
@@ -498,8 +494,6 @@ class IssuersField extends GF_Field_Select {
 
 				.gform_wrapper <?php echo esc_html( $field_css_id ); ?> .gfield_radio li label {
 					display: block;
-
-					height: 68px;
 
 					padding: 3px;
 

@@ -60,15 +60,18 @@ add_filter(
 	}
 );
 
-add_filter(
-	'pronamic_pay_gateways',
-	function ( $gateways ) {
-		$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Mollie\Integration(
-			[
-				'manual_url' => \__( 'https://www.pronamicpay.com/en/manuals/how-to-connect-mollie-to-wordpress-with-pronamic-pay/', 'pronamic-pay-gravity-forms' ),
-			]
-		);
+if ( class_exists( \Pronamic\WordPress\Pay\Gateways\Mollie\Integration::class ) ) {
+	add_filter(
+		'pronamic_pay_gateways',
+		function ( $gateways ) {
+			$gateways[] = new \Pronamic\WordPress\Pay\Gateways\Mollie\Integration(
+				[
+					'manual_url' => \__( 'https://www.pronamicpay.com/en/manuals/how-to-connect-mollie-to-wordpress-with-pronamic-pay/', 'pronamic-pay-gravity-forms' ),
+				]
+			);
 
-		return $gateways;
-	}
-);
+			return $gateways;
+		}
+	);
+}
+

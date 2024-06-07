@@ -271,7 +271,7 @@ class IssuersField extends GF_Field_Select {
 			'nationale' => IDealIssuerCode::NNBANL2G,
 			'nn'        => IDealIssuerCode::NNBANL2G,
 			'rabobank'  => IDealIssuerCode::RABONL2U,
-			'regiobank' => IDealIssuerCode::RBRBNL21,
+			'regio'     => IDealIssuerCode::RBRBNL21,
 			'revolut'   => IDealIssuerCode::REVOLT21,
 			'sns'       => IDealIssuerCode::SNSBNL2A,
 			'triodos'   => IDealIssuerCode::TRIONL2U,

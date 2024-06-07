@@ -7,6 +7,31 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.8.0] - 2024-06-07
+
+### Added
+
+- Added consumer bank account name and IBAN merge tags.
+
+### Changed
+
+- Updated payment date alignment setting name and description (https://github.com/pronamic/wp-pay-core/issues/182). ([df49d2d](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/df49d2d9a370ab0515f309914dbc1c506dfaa7c1))
+- Updated to PHP 8.1. ([5af380d](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/5af380db735827727b1f0cb19881ced44c2c8d06))
+- The iDEAL issuers field now uses the SVG images from https://github.com/pronamic/wp-pay-logos.
+
+### Composer
+
+- Removed `wp-pay-gateways/mollie` `^4.10`.
+- Added `pronamic/ideal-issuers` `^1.1`.
+- Added `pronamic/wp-pay-logos` `^2.2`.
+- Changed `php` from `>=8.0` to `>=8.1`.
+- Changed `wp-pay/core` from `^4.17` to `v4.19.0`.
+	Release notes: https://github.com/pronamic/wp-pay-core/releases/tag/v4.19.0
+
+Full set of changes: [`4.7.0...4.8.0`][4.8.0]
+
+[4.8.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.7.0...v4.8.0
+
 ## [4.7.0] - 2024-05-15
 
 ### Commits

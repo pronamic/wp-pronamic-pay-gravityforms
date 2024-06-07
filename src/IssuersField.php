@@ -11,11 +11,12 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GF_Field_Select;
+use Pronamic\IDealIssuers\IDealIssuerCode;
+use Pronamic\IDealIssuers\IDealIssuerService;
 use Pronamic\WordPress\Pay\Core\Gateway;
 use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Plugin;
-use Pronamic\WpPayLogos\ImageService;
 
 /**
  * Title: WordPress pay extension Gravity Forms issuers field
@@ -252,6 +253,42 @@ class IssuersField extends GF_Field_Select {
 	}
 
 	/**
+	 * Get iDEAL issuer code from label.
+	 * 
+	 * @param string $label Label.
+	 * @return string|null
+	 */
+	private function get_ideal_issuer_code_from_label( $label ) {
+		$label = \strtolower( $label );
+
+		$map = [
+			'abn'       => IDealIssuerCode::ABNANL2A,
+			'asn'       => IDealIssuerCode::ASNBNL21,
+			'bunq'      => IDealIssuerCode::BUNQNL2A,
+			'ing'       => IDealIssuerCode::INGBNL2A,
+			'knab'      => IDealIssuerCode::KNABNL2H,
+			'n26'       => IDealIssuerCode::NTSBDEB1,
+			'nationale' => IDealIssuerCode::NNBANL2G,
+			'nn'        => IDealIssuerCode::NNBANL2G,
+			'rabobank'  => IDealIssuerCode::RABONL2U,
+			'regiobank' => IDealIssuerCode::RBRBNL21,
+			'revolut'   => IDealIssuerCode::REVOLT21,
+			'sns'       => IDealIssuerCode::SNSBNL2A,
+			'triodos'   => IDealIssuerCode::TRIONL2U,
+			'lanschot'  => IDealIssuerCode::FVLBNL22,
+			'yoursafe'  => IDealIssuerCode::BITSNL2A,
+		];
+
+		foreach ( $map as $needle => $ideal_issuer_code ) {
+			if ( \str_contains( $label, $needle ) ) {
+				return $ideal_issuer_code;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Get the field input.
 	 *
 	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/includes/fields/class-gf-field-select.php#L41-L60
@@ -286,12 +323,6 @@ class IssuersField extends GF_Field_Select {
 				<ul class="gfield_radio input_<?php echo esc_attr( $this->formId ); ?>_<?php echo esc_attr( $this->id ); ?>">
 					<?php
 
-					// Icon filename replacements.
-					$replacements = [
-						' bankiers' => '',
-						' '         => '-',
-					];
-
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
@@ -313,7 +344,9 @@ class IssuersField extends GF_Field_Select {
 							$image_variation = '640x360.svg';
 					}
 
-					$image_service = new ImageService();
+					$ideal_issuer_service = new IDealIssuerService();
+
+					$ideal_issuers = $ideal_issuer_service->get_issuers();
 
 					// Loop issuers.
 					foreach ( $this->choices as $choice ) {
@@ -322,19 +355,25 @@ class IssuersField extends GF_Field_Select {
 							continue;
 						}
 
-						// Icon file name.
-						$issuer = strtr( strtolower( $choice['text'] ), $replacements );
+						$label = $choice['text'];
 
-						if ( false !== stripos( $issuer, 'test' ) || false !== stripos( $issuer, 'simulation' ) ) {
-							$issuer = 'test';
-						}
-
-						// Radio input.
 						$label_content = sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
-						$image_path = $image_service->get_path( "ideal-issuers/$issuer/ideal-issuer-$issuer-$image_variation" );
+						$ideal_issuer = null;
 
-						if ( file_exists( $image_path ) ) {
+						$ideal_issuer_code = $this->get_ideal_issuer_code_from_label( $label );
+
+						if ( null !== $ideal_issuer_code && \array_key_exists( $ideal_issuer_code->value, $ideal_issuers->items ) ) {
+							$ideal_issuer = $ideal_issuers->items[ $ideal_issuer_code->value ];
+						}
+
+						$image_path = null;
+
+						if ( null !== $ideal_issuer && \array_key_exists( $image_variation, $ideal_issuer->images ) ) {
+							$image_path = $ideal_issuer->images[ $image_variation ];
+						}
+
+						if ( null !== $image_path && \file_exists( $image_path ) ) {
 							$image_url = \plugins_url( \basename( $image_path ), $image_path );
 
 							$label_content = \sprintf(

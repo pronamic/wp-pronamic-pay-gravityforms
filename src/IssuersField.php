@@ -295,21 +295,21 @@ class IssuersField extends GF_Field_Select {
 					// Icon file and size.
 					switch ( $this->pronamicPayDisplayMode ) {
 						case 'icons-24':
-							$display_width    = 24;
-							$display_height   = 24;
+							$display_width   = 24;
+							$display_height  = 24;
 							$image_variation = 'icon-512x512.svg';
 
 							break;
 						case 'icons-64':
-							$display_width    = 64;
-							$display_height   = 64;
+							$display_width   = 64;
+							$display_height  = 64;
 							$image_variation = 'icon-512x512.svg';
 
 							break;
 						case 'icons-125':
 						default:
-							$display_width    = 125;
-							$display_height   = 70;
+							$display_width   = 125;
+							$display_height  = 70;
 							$image_variation = '640x360.svg';
 					}
 

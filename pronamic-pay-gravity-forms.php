@@ -74,4 +74,3 @@ if ( class_exists( \Pronamic\WordPress\Pay\Gateways\Mollie\Integration::class ) 
 		}
 	);
 }
-

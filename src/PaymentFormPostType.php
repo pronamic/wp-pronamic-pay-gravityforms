@@ -3,7 +3,7 @@
  * Payment form post type
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2023 Pronamic
+ * @copyright 2005-2024 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -13,7 +13,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 /**
  * Title: WordPress payment form post type
  * Description:
- * Copyright: 2005-2023 Pronamic
+ * Copyright: 2005-2024 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -38,7 +38,7 @@ class PaymentFormPostType {
 
 	/**
 	 * Initialize.
-	 * 
+	 *
 	 * @return void
 	 */
 	public function init() {

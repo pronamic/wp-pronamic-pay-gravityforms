@@ -3,7 +3,7 @@
  * Payment add-on
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2023 Pronamic
+ * @copyright 2005-2024 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -17,7 +17,7 @@ use WP_Query;
 /**
  * Title: WordPress pay extension Gravity Forms payment add-on
  * Description:
- * Copyright: 2005-2023 Pronamic
+ * Copyright: 2005-2024 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -238,7 +238,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 					\sprintf(
 						'Could not read WordPress admin menu icon from file: %s.',
 						$file
-					) 
+					)
 				)
 			);
 		}
@@ -251,7 +251,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 					\sprintf(
 						'Could not read WordPress admin menu icon from file: %s.',
 						$file
-					) 
+					)
 				)
 			);
 		}

@@ -3,7 +3,7 @@
  * Issuers field
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2023 Pronamic
+ * @copyright 2005-2024 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -21,7 +21,7 @@ use Pronamic\WordPress\Pay\Plugin;
 /**
  * Title: WordPress pay extension Gravity Forms issuers field
  * Description:
- * Copyright: 2005-2023 Pronamic
+ * Copyright: 2005-2024 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma
@@ -233,7 +233,7 @@ class IssuersField extends GF_Field_Select {
 				 * Gravity Forms automatically fills an empty value with the label.
 				 * For a first empty choice option, Gravity Forms works with a
 				 * `placeholder` property.
-				 * 
+				 *
 				 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/19
 				 */
 				if ( '' === $option->value ) {
@@ -254,7 +254,7 @@ class IssuersField extends GF_Field_Select {
 
 	/**
 	 * Get iDEAL issuer code from label.
-	 * 
+	 *
 	 * @param string $label Label.
 	 * @return string|null
 	 */

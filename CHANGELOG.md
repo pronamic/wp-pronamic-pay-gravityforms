@@ -7,6 +7,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.8.1] - 2024-12-17
+
+### Commits
+
+- Happy 2024. ([165c80d](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/165c80d3911ed10ca32e05689fb864ee423d6f58))
+
+Full set of changes: [`4.8.0...4.8.1`][4.8.1]
+
+[4.8.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.8.0...v4.8.1
+
 ## [4.8.0] - 2024-06-07
 
 ### Added

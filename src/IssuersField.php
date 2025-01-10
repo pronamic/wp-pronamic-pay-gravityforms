@@ -60,6 +60,15 @@ class IssuersField extends GF_Field_Select {
 			add_action( 'gform_editor_js_set_default_values', [ __CLASS__, 'editor_js_set_default_values' ] );
 		}
 
+		// Filters.
+		if ( ! has_filter( 'gform_pre_render', [ $this, 'maybe_remove_empty_issuers_field' ] ) ) {
+			\add_filter( 'gform_pre_render', [ $this, 'maybe_remove_empty_issuers_field' ] );
+		}
+
+		if ( ! has_filter( 'gform_field_validation', [ $this, 'maybe_validate_empty_issuers_field' ] ) ) {
+			\add_filter( 'gform_field_validation', [ $this, 'maybe_validate_empty_issuers_field' ], 10, 4 );
+		}
+
 		if (
 			! isset( $this->formId )
 				&&
@@ -672,5 +681,48 @@ class IssuersField extends GF_Field_Select {
 
 		break;
 		<?php
+	}
+
+	/**
+	 * Remove issuers field without any choices.
+	 *
+	 * @param array $form Form.
+	 * @return array
+	 */
+	public function maybe_remove_empty_issuers_field( $form ) {
+		foreach ( $form['fields'] as $key => $field ) {
+			if ( self::TYPE !== $field['type'] ) {
+				continue;
+			}
+
+			if ( 0 !== count( $field['choices'] ) ) {
+				continue;
+			}
+
+			unset( $form['fields'][ $key ] );
+		}
+
+		return $form;
+	}
+
+	/**
+	 * Skip validation for issuers fields without any choices.
+	 *
+	 * @param array $result Validation result.
+	 * @param mixed $value Field value.
+	 * @param array $form Form.
+	 * @param array $field Field.
+	 * @return array
+	 */
+	public function maybe_validate_empty_issuers_field( $result, $value, $form, $field ) {
+		if ( self::TYPE !== $field['type'] ) {
+			return $result;
+		}
+
+		if ( 0 === count( $field['choices'] ) ) {
+			$result['is_valid'] = true;
+		}
+
+		return $result;
 	}
 }

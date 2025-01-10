@@ -1145,13 +1145,19 @@ class Extension extends AbstractPluginIntegration {
 			require_once GFCommon::get_base_path() . '/form_display.php';
 		}
 
-		// Use only link confirmation if set.
+		/*
+		 * When a confirmation is set in the payment feed links, only use
+		 * configured confirmation or default confirmation if conditions are not met.
+		 */
 		if ( isset( $feed->links[ $link ]['confirmation_id'] ) && ! empty( $feed->links[ $link ]['confirmation_id'] ) ) {
-			$confirmation_id = $feed->links[ $link ]['confirmation_id'];
-
-			if ( isset( $form['confirmations'][ $confirmation_id ] ) ) {
-				$form['confirmations'] = array_intersect_key( $form['confirmations'], [ $confirmation_id => true ] );
-			}
+			$form['confirmations'] = \wp_filter_object_list(
+				$form['confirmations'],
+				[
+					'id'        => $feed->links[ $link ]['confirmation_id'],
+					'isDefault' => true,
+				],
+				'OR'
+			);
 		}
 
 		return GFFormDisplay::handle_confirmation( $form, $lead, false );

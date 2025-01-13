@@ -13,9 +13,9 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 use GF_Field_Select;
 use Pronamic\IDealIssuers\IDealIssuerCode;
 use Pronamic\IDealIssuers\IDealIssuerService;
-use Pronamic\WordPress\Pay\Core\Gateway;
-use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
 use Pronamic\WordPress\Pay\Core\PaymentMethods;
+use Pronamic\WordPress\Pay\Fields\IDealIssuerSelectField;
+use Pronamic\WordPress\Pay\Fields\SelectFieldOption;
 use Pronamic\WordPress\Pay\Plugin;
 
 /**
@@ -132,61 +132,6 @@ class IssuersField extends GF_Field_Select {
 	}
 
 	/**
-	 * Get the iDEAL gateway for this field.
-	 *
-	 * @return null|Gateway
-	 */
-	private function get_gateway() {
-		$gateway = null;
-
-		if ( isset( $this->pronamicPayConfigId ) && ! empty( $this->pronamicPayConfigId ) ) {
-			$gateway = Plugin::get_gateway( $this->pronamicPayConfigId );
-		}
-
-		if ( ! $gateway ) {
-			$feeds = FeedsDB::get_feeds_by_form_id( $this->formId );
-
-			foreach ( $feeds as $feed ) {
-				// Check if feed is active.
-				if ( '0' === get_post_meta( $feed->id, '_pronamic_pay_gf_feed_active', true ) ) {
-					continue;
-				}
-
-				$gateway = Plugin::get_gateway( $feed->config_id );
-
-				if ( null === $gateway ) {
-					continue;
-				}
-
-				// Always use iDEAL payment method for issuer field.
-				$issuer_field = $gateway->first_payment_method_field( PaymentMethods::IDEAL, IDealIssuerSelectField::class );
-
-				if ( null === $issuer_field ) {
-					continue;
-				}
-
-				/**
-				 * The iDEAL issuer field options can be requested from the
-				 * gateway and that can result in exceptions. In this case,
-				 * that's no problem and we'll move on to the next
-				 * feed/gateway.
-				 *
-				 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
-				 */
-				try {
-					$options = $issuer_field->get_options();
-				} catch ( \Exception $e ) {
-					continue;
-				}
-
-				return $gateway;
-			}
-		}
-
-		return $gateway;
-	}
-
-	/**
 	 * Set the issuer choices for this issuers field.
 	 *
 	 * @param int $form_id Gravity Forms form ID.
@@ -199,57 +144,109 @@ class IssuersField extends GF_Field_Select {
 			return;
 		}
 
-		$gateway = $this->get_gateway();
+		$options = $this->get_ideal_issuer_select_field_options();
 
-		if ( ! $gateway ) {
-			return;
-		}
-
-		// Always use iDEAL payment method for issuer field.
-		$issuer_field = $gateway->first_payment_method_field( PaymentMethods::IDEAL, IDealIssuerSelectField::class );
-
-		if ( null === $issuer_field ) {
-			return;
-		}
-
-		/**
-		 * The iDEAL issuer field options can be requested from the
-		 * gateway and that can result in exceptions. In this case,
-		 * that's no problem and we'll move on to the next
-		 * feed/gateway.
-		 *
-		 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
-		 */
-		try {
-			/**
-			 * Gravity Forms has no support for <optgroup>  elements.
+		if ( null === $options ) {
+			/*
+			 * When an issuers field is marked as required and there are no choices,
+			 * validation of the form submission will fail. However, a hosted payment
+			 * page of the payment gateway might still be able to process the payment.
+			 * Therefore, we fall back to a static list of iDEAL issuers in these cases.
 			 *
-			 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
+			 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/47
 			 */
-			$options = $issuer_field->get_flat_options();
+			$ideal_issuer_service = new IDealIssuerService();
 
-			foreach ( $options as $option ) {
-				/**
-				 * Gravity Forms automatically fills an empty value with the label.
-				 * For a first empty choice option, Gravity Forms works with a
-				 * `placeholder` property.
-				 *
-				 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/19
-				 */
-				if ( '' === $option->value ) {
-					$this->placeholder = $option->label;
+			$issuers = $ideal_issuer_service->get_issuers();
 
-					continue;
-				}
+			$options = [];
 
-				$this->choices[] = [
-					'value' => $option->value,
-					'text'  => $option->label,
-				];
+			foreach ( $issuers as $issuer ) {
+				$options[] = new SelectFieldOption( $issuer->code, $issuer->name );
 			}
-		} catch ( \Exception $e ) {
-			return;
 		}
+
+		foreach ( $options as $option ) {
+			/**
+			 * Gravity Forms automatically fills an empty value with the label.
+			 * For a first empty choice option, Gravity Forms works with a
+			 * `placeholder` property.
+			 *
+			 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/19
+			 */
+			if ( '' === $option->value ) {
+				$this->placeholder = $option->label;
+
+				continue;
+			}
+
+			$this->choices[] = [
+				'value' => $option->value,
+				'text'  => $option->label,
+			];
+		}
+	}
+
+	/**
+	 * Get the iDEAL issuer select field options from gateway for this field.
+	 *
+	 * @return SelectFieldOption[]|null
+	 */
+	private function get_ideal_issuer_select_field_options() {
+		$config_ids = null;
+
+		if ( isset( $this->pronamicPayConfigId ) && ! empty( $this->pronamicPayConfigId ) ) {
+			$config_ids = [
+				$this->pronamicPayConfigId,
+			];
+		}
+
+		if ( null === $config_ids ) {
+			$feeds = \array_filter(
+				FeedsDB::get_feeds_by_form_id( $this->formId ),
+				function ( $feed ) {
+					// Check if feed is active.
+					return '0' !== \get_post_meta( $feed->id, '_pronamic_pay_gf_feed_active', true );
+				}
+			);
+
+			$config_ids = \wp_list_pluck( $feeds, 'config_id' );
+		}
+
+		foreach ( $config_ids as $config_id ) {
+			$gateway = Plugin::get_gateway( $config_id );
+
+			if ( null === $gateway ) {
+				continue;
+			}
+
+			$issuer_field = $gateway->first_payment_method_field( PaymentMethods::IDEAL, IDealIssuerSelectField::class );
+
+			if ( null === $issuer_field ) {
+				continue;
+			}
+
+			/**
+			 * Exceptions can occur when requesting iDEAL issuer field options,
+			 * but we'll just move on to the next feed/gateway.
+			 *
+			 * @link https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/10
+			 */
+			try {
+				/**
+				 * Gravity Forms has no support for <optgroup>  elements.
+				 *
+				 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
+				 */
+				$options = $issuer_field->get_flat_options();
+			} catch ( \Exception $e ) {
+				continue;
+			}
+
+			return $options;
+		}
+
+		return null;
 	}
 
 	/**
@@ -596,8 +593,10 @@ class IssuersField extends GF_Field_Select {
 				$input = $link . $input;
 			}
 
-			if ( ! empty( $feeds ) && empty( $this->choices ) ) {
-				// If there are feeds and no choices it's very likely this field is no supported by the gateway.
+			$options = $this->get_ideal_issuer_select_field_options();
+
+			if ( ! empty( $feeds ) && null === $options ) {
+				// If there are feeds but no gateway issuer options, it's very likely this field is not supported by the gateway.
 				$error = sprintf(
 					'<p class="pronamic-pay-error"><strong>%s</strong><br><em>%s</em></p>',
 					__( 'This field is not supported by your payment gateway.', 'pronamic_ideal' ),

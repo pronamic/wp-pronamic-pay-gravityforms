@@ -7,6 +7,16 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.9.0] - 2025-02-14
+
+### Commits
+
+- Added fixed iDEAL issuers as fallback options in the issuers field. ([3dd8453](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/3dd8453de20f27a24d6dc5e304ec25ca63eed033))
+
+Full set of changes: [`4.8.1...4.9.0`][4.9.0]
+
+[4.9.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.8.1...v4.9.0
+
 ## [4.8.1] - 2024-12-17
 
 ### Commits

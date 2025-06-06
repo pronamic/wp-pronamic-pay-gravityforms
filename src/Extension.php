@@ -529,7 +529,7 @@ class Extension extends AbstractPluginIntegration {
 					$url = add_query_arg(
 						[
 							'pay_confirmation' => $payment->get_id(),
-							'_wpnonce'         => wp_create_nonce( 'gf_confirmation_payment_' . $payment->get_id() ),
+							'hash'             => \wp_hash( $payment->get_id() ),
 						],
 						$lead['source_url']
 					);
@@ -1077,16 +1077,16 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
-		// Verify nonce.
-		if ( ! \array_key_exists( '_wpnonce', $_GET ) ) {
+		// Verify hash.
+		if ( ! filter_has_var( INPUT_GET, 'hash' ) ) {
 			return;
 		}
 
-		$nonce = \sanitize_text_field( \wp_unslash( $_GET['_wpnonce'] ) );
+		$hash = \sanitize_text_field( \wp_unslash( filter_input( INPUT_GET, 'hash' ) ) );
 
 		$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
 
-		if ( ! wp_verify_nonce( $nonce, 'gf_confirmation_payment_' . $payment_id ) ) {
+		if ( \wp_hash( $payment_id ) !== $hash ) {
 			return;
 		}
 

@@ -1073,18 +1073,20 @@ class Extension extends AbstractPluginIntegration {
 	 * @return void
 	 */
 	public function maybe_display_confirmation() {
-		if ( ! filter_has_var( INPUT_GET, 'pay_confirmation' ) ) {
+		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		if ( ! \array_key_exists( 'pay_confirmation', $_GET ) ) {
 			return;
 		}
 
-		// Verify hash.
-		if ( ! filter_has_var( INPUT_GET, 'hash' ) ) {
+		$payment_id = (int) \sanitize_text_field( \wp_unslash( $_GET['pay_confirmation'] ) );
+
+		if ( ! \array_key_exists( 'hash', $_GET ) ) {
 			return;
 		}
 
-		$hash = \sanitize_text_field( \wp_unslash( filter_input( INPUT_GET, 'hash' ) ) );
+		$hash = \sanitize_text_field( \wp_unslash( $_GET['hash'] ) );
 
-		$payment_id = filter_input( INPUT_GET, 'pay_confirmation', FILTER_SANITIZE_NUMBER_INT );
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if ( \wp_hash( $payment_id ) !== $hash ) {
 			return;

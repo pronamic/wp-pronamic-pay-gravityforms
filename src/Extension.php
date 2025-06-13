@@ -1073,20 +1073,21 @@ class Extension extends AbstractPluginIntegration {
 	 * @return void
 	 */
 	public function maybe_display_confirmation() {
-		// phpcs:disable WordPress.Security.NonceVerification.Recommended
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! \array_key_exists( 'pay_confirmation', $_GET ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$payment_id = (int) \sanitize_text_field( \wp_unslash( $_GET['pay_confirmation'] ) );
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( ! \array_key_exists( 'hash', $_GET ) ) {
 			return;
 		}
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		$hash = \sanitize_text_field( \wp_unslash( $_GET['hash'] ) );
-
-		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 		if ( \wp_hash( $payment_id ) !== $hash ) {
 			return;

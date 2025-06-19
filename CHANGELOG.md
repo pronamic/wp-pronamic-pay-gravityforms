@@ -7,6 +7,17 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.10.0] - 2025-06-19
+
+### Changed
+
+- Updated usage of `filter_*` functions. ([aaed06f](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/aaed06f831893c8edf26695d0e89d93186b57453))
+- Use hash instead of nonce for redirect to payment confirmation. ([53dd567](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/53dd5679b1490c0f3463fbb55fd8c7f13b59ec3a))
+
+Full set of changes: [`4.9.0...4.10.0`][4.10.0]
+
+[4.10.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.9.0...v4.10.0
+
 ## [4.9.0] - 2025-02-14
 
 ### Commits

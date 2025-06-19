@@ -7,6 +7,21 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.10.1] - 2025-06-19
+
+### Commits
+
+- Allow Jetpack autoloader 3, 4 and 5 ([78ebc1a](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/78ebc1adf44fa0f6bbd271f0a53a124d32e53e1a))
+
+### Composer
+
+- Changed `automattic/jetpack-autoloader` from `^3.0` to `v5.0.7`.
+	Release notes: https://github.com/Automattic/jetpack-autoloader/releases/tag/v5.0.7
+
+Full set of changes: [`4.10.0...4.10.1`][4.10.1]
+
+[4.10.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.10.0...v4.10.1
+
 ## [4.10.0] - 2025-06-19
 
 ### Changed

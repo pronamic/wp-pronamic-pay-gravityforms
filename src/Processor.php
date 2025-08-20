@@ -378,6 +378,10 @@ class Processor {
 						}
 
 						$line->set_total_amount( new Money( $value, $currency ) );
+
+						if ( $value->get_value() < 0 ) {
+							$line->set_type( PaymentLineType::DISCOUNT );
+						}
 					}
 
 					if ( array_key_exists( 'quantity', $product ) ) {
@@ -411,6 +415,10 @@ class Processor {
 								$value = $value->multiply( Number::from_mixed( $line->get_quantity() ) );
 
 								$line->set_total_amount( new Money( $value, $currency ) );
+
+								if ( $value->get_value() < 0 ) {
+									$line->set_type( PaymentLineType::DISCOUNT );
+								}
 							}
 						}
 					}

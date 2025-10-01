@@ -60,7 +60,7 @@ class Extension extends AbstractPluginIntegration {
 	public function __construct() {
 		parent::__construct(
 			[
-				'name'    => __( 'Gravity Forms', 'pronamic_ideal' ),
+				'name'    => 'Gravity Forms',
 				'version' => '2.3.0',
 			]
 		);

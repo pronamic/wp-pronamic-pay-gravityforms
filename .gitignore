@@ -17,6 +17,9 @@
 # SASS
 .sass-cache
 
+# wp-env
+/.wp-env.override.json
+
 # WordPress
 /wordpress/
 

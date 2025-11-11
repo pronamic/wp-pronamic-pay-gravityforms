@@ -7,6 +7,17 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.10.2] - 2025-11-11
+
+### Commits
+
+- Updated .gitignore. ([d05824c](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/d05824cec02279ea9e13d32c2267af0e868541cf))
+- Added this point we shoud not use translation functions. ([58d8885](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/58d88855439c9eef8b657c9878e4f8c8f73602e3))
+
+Full set of changes: [`4.10.1...4.10.2`][4.10.2]
+
+[4.10.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.10.1...v4.10.2
+
 ## [4.10.1] - 2025-06-19
 
 ### Commits

@@ -358,7 +358,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
 						</th>
 						<td>
-							<?php if ( $feed->has_delayed_notifications() ) : ?>
+							<?php if ( $pay_feed->has_delayed_notifications() ) : ?>
 
 								<p>
 									<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic_ideal' ); ?>
@@ -397,7 +397,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 							<?php endif; ?>
 
-							<?php if ( ! $feed->has_delayed_notifications() ) : ?>
+							<?php if ( ! $pay_feed->has_delayed_notifications() ) : ?>
 
 								<p>
 									<?php esc_html_e( 'To send notifications after a succesful payment, choose an event in the notification settings.', 'pronamic_ideal' ); ?>

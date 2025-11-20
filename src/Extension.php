@@ -146,6 +146,8 @@ class Extension extends AbstractPluginIntegration {
 
 		\add_filter( 'gform_payment_statuses', [ $this, 'gform_payment_statuses' ] );
 
+		\add_action( 'gform_post_payment_completed', $this->fulfill_order( ... ) );
+
 		$this->maybe_display_confirmation();
 	}
 
@@ -639,9 +641,6 @@ class Extension extends AbstractPluginIntegration {
 					$this->payment_action( 'create_subscription', $lead, $action );
 				}
 
-				// Fulfill order.
-				$this->fulfill_order( $lead );
-
 				break;
 			case PaymentStatus::OPEN:
 			default:
@@ -971,12 +970,19 @@ class Extension extends AbstractPluginIntegration {
 	 * @param array $entry Gravity Forms entry.
 	 */
 	public function fulfill_order( $entry ) {
+		$entry_id = \rgar( $entry, 'id' );
+
+		// Check if one of our feeds is linked to the entry.
+		$feed_id = \gform_get_meta( $entry_id, 'ideal_feed_id' );
+
+		if ( empty( $feed_id ) ) {
+			return;
+		}
+		
 		// Check if already fulfilled.
 		if ( Entry::is_fulfilled( $entry ) ) {
 			return;
 		}
-
-		$entry_id = rgar( $entry, 'id' );
 
 		// Get entry with current payment status.
 		$entry = RGFormsModel::get_lead( $entry_id );
@@ -1053,18 +1059,6 @@ class Extension extends AbstractPluginIntegration {
 
 		// Store entry payment fulfillment in custom meta.
 		gform_update_meta( $entry_id, 'pronamic_pay_payment_fulfilled', true );
-
-		/**
-		 * Execute payment fulfillment action (PayPal uses `gform_paypal_fulfillment`).
-		 *
-		 * @link https://docs.gravityforms.com/gform_paypal_fulfillment/
-		 * @link https://docs.gravityforms.com/entry-object/
-		 * @since 1.0.0
-		 * @param object $entry The entry used to generate the (iDEAL) payment.
-		 * @param object $feed  The feed configuration data used to generate the payment.
-		 * @deprecated Fulfillment of payments without amount (free) will be removed in the future. Use `gform_post_payment_completed` action instead.
-		 */
-		\do_action( 'gform_ideal_fulfillment', $entry, $feed );
 	}
 
 	/**

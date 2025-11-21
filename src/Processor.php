@@ -381,7 +381,7 @@ class Processor {
 					}
 
 					if ( array_key_exists( 'quantity', $product ) ) {
-						$line->set_quantity( intval( $product['quantity'] ) );
+						$line->set_quantity( Number::from_mixed( $product['quantity'] ) );
 					}
 
 					if ( array_key_exists( 'options', $product ) && is_array( $product['options'] ) ) {
@@ -400,7 +400,7 @@ class Processor {
 							}
 
 							// Quantity.
-							$line->set_quantity( null === $product_quantity ? 1 : $product_quantity );
+							$line->set_quantity( Number::from_mixed( null === $product_quantity ? 1 : $product_quantity ) );
 
 							// Price.
 							if ( array_key_exists( 'price', $option ) ) {
@@ -435,7 +435,7 @@ class Processor {
 				$line = $payment->lines->new_line();
 
 				$line->set_type( PaymentLineType::SHIPPING );
-				$line->set_quantity( 1 );
+				$line->set_quantity( new Number( 1 ) );
 
 				if ( array_key_exists( 'id', $shipping ) ) {
 					$line->set_id( $shipping['id'] );

@@ -400,7 +400,7 @@ class Processor {
 							}
 
 							// Quantity.
-							$line->set_quantity( Number::from_mixed( null === $product_quantity ? 1 : $product_quantity ) );
+							$line->set_quantity( $product_quantity ?? new Number( 1 ) );
 
 							// Price.
 							if ( array_key_exists( 'price', $option ) ) {

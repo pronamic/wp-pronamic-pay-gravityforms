@@ -69,7 +69,7 @@
 		"pronamic/wp-datetime": "^2.1",
 		"pronamic/wp-gravityforms-nl": "^3.0",
 		"pronamic/wp-money": "^2.4",
-		"pronamic/wp-number": "^1.3",
+		"pronamic/wp-number": "^1.4",
 		"pronamic/wp-pay-logos": "^2.2",
 		"woocommerce/action-scheduler": "^3.7",
 		"wp-pay/core": "^4.19"

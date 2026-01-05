@@ -18,7 +18,6 @@ use RGFormsModel;
  * Copyright: 2005-2026 Pronamic
  * Company: Pronamic
  *
- * @author  Remco Tolsma
  * @version 2.1.14
  * @since   1.0.0
  */

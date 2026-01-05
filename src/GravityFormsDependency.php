@@ -15,7 +15,6 @@ use Pronamic\WordPress\Pay\Dependencies\Dependency;
 /**
  * Gravity Forms Dependency
  *
- * @author  Reüel van der Steege
  * @version 2.2.0
  * @since   2.2.0
  */

@@ -37,7 +37,6 @@ use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
  * Copyright: 2005-2026 Pronamic
  * Company: Pronamic
  *
- * @author  Remco Tolsma
  * @version 2.4.1
  * @since   1.0.0
  */

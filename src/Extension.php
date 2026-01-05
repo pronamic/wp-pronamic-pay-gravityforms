@@ -35,7 +35,6 @@ use WP_User;
  * Copyright: 2005-2026 Pronamic
  * Company: Pronamic
  *
- * @author  Remco Tolsma
  * @version 2.6.1
  * @since   1.0.0
  */

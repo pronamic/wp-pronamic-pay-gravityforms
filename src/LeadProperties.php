@@ -3,7 +3,7 @@
  * Lead properties
  *
  * @author    Pronamic <info@pronamic.eu>
- * @copyright 2005-2024 Pronamic
+ * @copyright 2005-2026 Pronamic
  * @license   GPL-3.0-or-later
  * @package   Pronamic\WordPress\Pay\Extensions\GravityForms
  */
@@ -13,7 +13,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 /**
  * Title: WordPress pay extension Gravity Forms lead properties
  * Description:
- * Copyright: 2005-2024 Pronamic
+ * Copyright: 2005-2026 Pronamic
  * Company: Pronamic
  *
  * @author  Remco Tolsma

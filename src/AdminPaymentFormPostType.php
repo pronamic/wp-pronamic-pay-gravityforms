@@ -16,9 +16,6 @@ use WP_Query;
 
 /**
  * Title: WordPress admin payment form post type
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.6.1
  * @since   1.0.0

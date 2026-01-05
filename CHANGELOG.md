@@ -7,6 +7,26 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 ## [Unreleased][unreleased]
 -
 
+## [4.11.0] - 2026-01-05
+
+### Commits
+
+- Merge pull request #59 from pronamic/core-230-payment-line-quantity-type ([a750f36](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/a750f3638e0b418692c9768329b4cbf6840a8700))
+- Simplify setting quantity. ([a13e6c2](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/a13e6c21d87eab0f8d2738a186c71b019c1e2abb))
+- Updated for quantity `Number` (https://github.com/pronamic/wp-pay-core/issues/230). ([6e85bad](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/6e85bad43e528630a11e9174411b0309af99131d))
+- Merge pull request #57 from pronamic/56-remove-action-gform_ideal_fulfillment ([15b0849](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/15b0849fe328e822c0967418bb6e26c231df0bcd))
+- Requires PHP: 8.1. ([12d0493](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/12d04935acc03436fc54f9ab1ed08f8ff7843985))
+- Removed action `gform_ideal_fulfillment`. ([29e75c4](https://github.com/pronamic/wp-pronamic-pay-gravityforms/commit/29e75c446debb82db158f6b3ac3fe0607fb35105))
+
+### Composer
+
+- Changed `pronamic/wp-number` from `^1.3` to `v1.4.0`.
+	Release notes: https://github.com/pronamic/wp-number/releases/tag/v1.4.0
+
+Full set of changes: [`4.10.2...4.11.0`][4.11.0]
+
+[4.11.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.10.2...v4.11.0
+
 ## [4.10.2] - 2025-11-11
 
 ### Commits

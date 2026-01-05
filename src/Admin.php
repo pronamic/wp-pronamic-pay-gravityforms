@@ -14,9 +14,6 @@ use RGFormsModel;
 
 /**
  * Title: WordPress pay extension Gravity Forms admin
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.1.14
  * @since   1.0.0

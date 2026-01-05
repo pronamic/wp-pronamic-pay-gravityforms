@@ -16,9 +16,6 @@ use WP_Query;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment add-on
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.6.1
  * @since   1.1.0

@@ -12,9 +12,6 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 /**
  * Title: WordPress payment form post type
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.1.2
  * @since   1.1.0

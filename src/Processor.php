@@ -33,9 +33,6 @@ use Pronamic\WordPress\Pay\Subscriptions\SubscriptionPhase;
 
 /**
  * Title: WordPress pay extension Gravity Forms processor
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.4.1
  * @since   1.0.0

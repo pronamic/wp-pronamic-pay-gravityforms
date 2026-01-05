@@ -12,9 +12,6 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 /**
  * Title: WordPress pay extension Gravity Forms entry
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.1.11
  * @since   1.0.0

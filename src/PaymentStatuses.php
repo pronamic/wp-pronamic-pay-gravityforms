@@ -14,9 +14,6 @@ use Pronamic\WordPress\Pay\Payments\PaymentStatus as Core_Statuses;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment statuses
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.1.12
  * @since   1.0.0

@@ -11,16 +11,12 @@
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
 use GFCommon;
-use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\CreditCard;
 use RGFormsModel;
 
 /**
  * Title: WordPress pay extension Gravity Forms payment data
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.1.10
  * @since   1.0.1

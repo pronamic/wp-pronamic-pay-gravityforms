@@ -19,7 +19,6 @@ use GFForms;
 use GFUserData;
 use Pronamic\WordPress\Money\Money;
 use Pronamic\WordPress\Pay\AbstractPluginIntegration;
-use Pronamic\WordPress\Pay\Core\PaymentMethods;
 use Pronamic\WordPress\Pay\Payments\PaymentStatus;
 use Pronamic\WordPress\Pay\Core\Util as Core_Util;
 use Pronamic\WordPress\Pay\Customer;
@@ -31,9 +30,6 @@ use WP_User;
 
 /**
  * Title: WordPress pay extension Gravity Forms extension
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.6.1
  * @since   1.0.0

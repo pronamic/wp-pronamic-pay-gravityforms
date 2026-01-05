@@ -14,9 +14,6 @@ use PHPUnit_Framework_TestCase;
 
 /**
  * Title: WordPress pay extension Gravity Forms links test
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.0.0
  * @since   1.0.0

@@ -14,9 +14,7 @@ use WP_Post;
 
 /**
  * Title: WordPress pay extension Gravity Forms pay feed
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
+ * 
  *
  * @version  2.6.1
  * @since    1.4.4

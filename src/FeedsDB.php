@@ -14,9 +14,6 @@ use WP_Query;
 
 /**
  * Title: WordPress pay extension Gravity Forms admin
- * Description:
- * Copyright: 2005-2026 Pronamic
- * Company: Pronamic
  *
  * @version 2.3.1
  * @since   1.0.0

@@ -5,7 +5,28 @@ All notable changes to this project will be documented in this file.
 This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a CHANGELOG](http://keepachangelog.com/).
 
 ## [Unreleased][unreleased]
+
 -
+
+## [4.12.0] - 2026-03-23
+
+### Changed
+
+- Raised the minimum supported PHP version to `8.2`.
+- Switched hooks documentation generation to SolveBeam WordPress Hooks Documentor and refreshed the generated hooks reference.
+
+### Removed
+
+- Removed outdated documentation for the previously removed `gform_ideal_fulfillment` hook.
+
+### Composer
+
+- Changed `php` from `>=8.1` to `>=8.2`.
+- Replaced `pronamic/wp-documentor` with `solvebeam/wp-hooks-documentor` `^1.5` for hook documentation generation.
+
+Full set of changes: [`4.11.0...4.12.0`][4.12.0]
+
+[4.12.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.11.0...v4.12.0
 
 ## [4.11.0] - 2026-01-05
 

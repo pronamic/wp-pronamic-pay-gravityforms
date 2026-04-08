@@ -87,11 +87,23 @@
 		"solvebeam/wp-hooks-documentor": "^1.5",
 		"szepeviktor/phpstan-wordpress": "^1.3",
 		"vimeo/psalm": "^5.24",
+		"wp-cli/dist-archive-command": "*",
+		"wp-cli/wp-cli-bundle": "*",
 		"wp-pay-gateways/mollie": "^4.12",
 		"wp-phpunit/wp-phpunit": "^6.4",
 		"yoast/phpunit-polyfills": "^2.0"
 	},
 	"scripts": {
+		"build": [
+			"rm -rf ./build/stage-1",
+			"rm -rf ./build/pronamic-pay-gravity-forms/*",
+			"rsync --recursive --verbose --exclude-from=.distignore --exclude=/vendor/ ./ ./build/stage-1/",
+			"composer install --no-dev --prefer-dist --optimize-autoloader --working-dir=./build/stage-1/",
+			"rsync --recursive --verbose --exclude-from=.distignore ./build/stage-1/ ./build/pronamic-pay-gravity-forms/",
+			"vendor/bin/wp i18n make-pot ./build/pronamic-pay-gravity-forms/ --slug=pronamic-pay-gravity-forms",
+			"vendor/bin/wp i18n make-mo ./build/pronamic-pay-gravity-forms/languages/",
+			"vendor/bin/wp dist-archive ./build/pronamic-pay-gravity-forms/ --plugin-dirname=pronamic-pay-gravity-forms --force"
+		],
 		"coveralls": "vendor/bin/php-coveralls -v",
 		"phpcbf": "XDEBUG_MODE=off vendor/bin/phpcbf",
 		"phpcs": "XDEBUG_MODE=off vendor/bin/phpcs -s -v",

@@ -13,7 +13,8 @@
 		"https://downloads.wordpress.org/plugin/wp-plugin-dependencies.zip"
 	],
 	"mappings": {
-		"wp-content/plugins/pronamic-pay-gravity-forms": ".",
+		"wp-content/plugins/pronamic-pay-gravity-forms-dev": ".",
+		"wp-content/plugins/pronamic-pay-gravity-forms": "./build/pronamic-pay-gravity-forms/",
 		"wp-content/plugins/gravityperks": "pronamic/gravityperks",
 		"wp-content/plugins/gp-unique-id": "pronamic/gp-unique-id",
 		"wp-content/plugins/gp-nested-forms": "pronamic/gp-nested-forms"

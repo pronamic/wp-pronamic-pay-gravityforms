@@ -15,7 +15,8 @@
 	"mappings": {
 		"wp-content/plugins/pronamic-pay-gravity-forms": ".",
 		"wp-content/plugins/gravityperks": "pronamic/gravityperks",
-		"wp-content/plugins/gp-unique-id": "pronamic/gp-unique-id"
+		"wp-content/plugins/gp-unique-id": "pronamic/gp-unique-id",
+		"wp-content/plugins/gp-nested-forms": "pronamic/gp-nested-forms"
 	},
 	"testsEnvironment": false
 }

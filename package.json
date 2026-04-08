@@ -35,10 +35,10 @@
     "last 2 versions"
   ],
   "devDependencies": {
-    "@wordpress/env": "^10.0.0",
-    "autoprefixer": "^10.4.19",
-    "eslint": "^9.4.0",
-    "eslint-plugin-json": "^4.0.0",
+    "@wordpress/env": "^11.3.0",
+    "autoprefixer": "^10.4.27",
+    "eslint": "^10.2.0",
+    "eslint-plugin-json": "^4.0.1",
     "grunt": "^1.6.1",
     "grunt-contrib-compass": "^1.1.1",
     "grunt-contrib-cssmin": "^5.0.0",

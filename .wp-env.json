@@ -1,10 +1,11 @@
 {
 	"core": null,
+	"config": {
+		"PRONAMIC_PAY_DEBUG": true
+	},
 	"plugins": [
 		"pronamic/wp-env-quick-login",
 		"pronamic/gravityforms",
-		"pronamic/gravityperks",
-		"pronamic/gp-unique-id",
 		"pronamic/wp-pronamic-pay-test-helper",
 		"https://downloads.wordpress.org/plugin/pronamic-client.zip",
 		"https://downloads.wordpress.org/plugin/query-monitor.zip",
@@ -12,9 +13,8 @@
 		"https://downloads.wordpress.org/plugin/wp-plugin-dependencies.zip"
 	],
 	"mappings": {
-		"wp-content/plugins/pronamic-pay-gravity-forms": "."
-	},
-	"config": {
-		"PRONAMIC_PAY_DEBUG": true
+		"wp-content/plugins/pronamic-pay-gravity-forms": ".",
+		"wp-content/plugins/gravityperks": "pronamic/gravityperks",
+		"wp-content/plugins/gp-unique-id": "pronamic/gp-unique-id"
 	}
 }

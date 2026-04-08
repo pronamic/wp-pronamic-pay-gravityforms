@@ -13,8 +13,7 @@ namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 use WP_Post;
 
 /**
- * Title: WordPress pay extension Gravity Forms pay feed
- * 
+ * Pay feed class
  *
  * @version  2.6.1
  * @since    1.4.4

@@ -8,6 +8,28 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 -
 
+## [4.12.1] - 2026-05-13
+
+### Added
+
+- Added Rector configuration for automated code refactoring support.
+- Added build workflow and `.distignore` file for automated plugin packaging.
+- Added support for Pronamic iDEAL and Gravity Perks nested forms in local development environment.
+
+### Changed
+
+- Updated Composer dependencies: `pronamic/wp-datetime` to `^2.2`, `pronamic/wp-pay-logos` to `^2.3`, `woocommerce/action-scheduler` to `^3.9`, and `wp-pay/core` to `^4.32`.
+- Updated development dependencies: `@wordpress/env` to `^11.3.0`, `autoprefixer` to `^10.4.27`, `eslint` to `^10.2.0`.
+- Simplified PayFeed class documentation.
+
+### Fixed
+
+- Fixed WordPress environment configuration to prevent test environment conflicts.
+
+Full set of changes: [`4.12.0...4.12.1`][4.12.1]
+
+[4.12.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.12.0...v4.12.1
+
 ## [4.12.0] - 2026-03-23
 
 ### Changed

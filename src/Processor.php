@@ -291,7 +291,7 @@ class Processor {
 		$address = new Address();
 
 		$country_name = $data->get_field_value( 'country' );
-		$country_code = GFCommon::get_country_code( $country_name );
+		$country_code = null !== $country_name ? GFCommon::get_country_code( $country_name ) : null;
 
 		if ( empty( $country_code ) ) {
 			$country_code = null;

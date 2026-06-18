@@ -5,7 +5,7 @@
  * Description: Extend the Pronamic Pay plugin with Gravity Forms support to receive payments through a variety of payment providers.
  *
  * Version: 4.12.1
- * Requires at least: 4.7
+ * Requires at least: 6.8
  * Requires PHP: 8.2
  *
  * Author: Pronamic

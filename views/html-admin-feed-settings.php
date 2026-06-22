@@ -279,70 +279,6 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 					</td>
 				</tr>
 
-				<?php
-
-				$notifications = [];
-
-				if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
-					$notifications = $form_meta['notifications'];
-				}
-
-				$notifications = \array_filter(
-					$notifications,
-					function ( $notification ) {
-						return 'form_submission' === $notification['event'];
-					}
-				);
-
-				if ( count( $notifications ) > 0 ) :
-					?>
-
-					<tr>
-						<th scope="row">
-							<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
-
-							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
-						</th>
-						<td>
-							<p>
-								<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic_ideal' ); ?>
-							</p>
-
-							<ul id="gf_ideal_delay_notifications">
-
-								<?php foreach ( $notifications as $notification ) : ?>
-
-									<li>
-										<?php
-
-										$id = $notification['id'];
-
-										printf(
-											'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
-											esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-											esc_attr( $id ),
-											checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
-										);
-
-										printf( ' ' );
-
-										printf(
-											'<label class="inline" for="%s">%s</label>',
-											esc_attr( 'pronamic-pay-gf-notification-' . $id ),
-											esc_html( $notification['name'] )
-										);
-
-										?>
-									</li>
-
-								<?php endforeach; ?>
-
-							</ul>
-						</td>
-					</tr>
-
-				<?php endif; ?>
-
 				<tr>
 					<th scope="row">
 						<?php esc_html_e( 'Delay actions', 'pronamic_ideal' ); ?>
@@ -396,6 +332,82 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 						</ul>
 					</td>
 				</tr>
+
+				<?php
+
+				$notifications = [];
+
+				if ( isset( $form_meta['notifications'] ) && is_array( $form_meta['notifications'] ) ) {
+					$notifications = $form_meta['notifications'];
+				}
+
+				$notifications = \array_filter(
+					$notifications,
+					function ( $notification ) {
+						return 'form_submission' === $notification['event'];
+					}
+				);
+
+				if ( count( $notifications ) > 0 ) :
+					?>
+
+					<tr>
+						<th scope="row">
+							<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
+
+							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						</th>
+						<td>
+							<?php if ( $pay_feed->has_delayed_notifications() ) : ?>
+
+								<p>
+									<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic_ideal' ); ?>
+								</p>
+
+								<ul id="gf_ideal_delay_notifications">
+
+									<?php foreach ( $notifications as $notification ) : ?>
+
+										<li>
+											<?php
+
+											$id = $notification['id'];
+
+											printf(
+												'<input id="%s" type="checkbox" value="%s" name="_pronamic_pay_gf_delay_notification_ids[]" %s />',
+												esc_attr( 'pronamic-pay-gf-notification-' . $id ),
+												esc_attr( $id ),
+												checked( in_array( $id, $pay_feed->delay_notification_ids, true ), true, false )
+											);
+
+											printf( ' ' );
+
+											printf(
+												'<label class="inline" for="%s">%s</label>',
+												esc_attr( 'pronamic-pay-gf-notification-' . $id ),
+												esc_html( $notification['name'] )
+											);
+
+											?>
+										</li>
+
+									<?php endforeach; ?>
+
+								</ul>
+
+							<?php endif; ?>
+
+							<?php if ( ! $pay_feed->has_delayed_notifications() ) : ?>
+
+								<p>
+									<?php esc_html_e( 'To send notifications after a succesful payment, choose an event in the notification settings.', 'pronamic_ideal' ); ?>
+								</p>
+
+							<?php endif; ?>
+						</td>
+					</tr>
+
+				<?php endif; ?>
 			</table>
 		</div>
 

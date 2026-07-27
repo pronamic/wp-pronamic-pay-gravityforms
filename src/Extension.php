@@ -475,6 +475,7 @@ class Extension extends AbstractPluginIntegration {
 		$privileged_capabilities = [
 			'activate_plugins',
 			'create_users',
+			'delete_plugins',
 			'delete_users',
 			'edit_files',
 			'edit_plugins',
@@ -482,9 +483,18 @@ class Extension extends AbstractPluginIntegration {
 			'edit_users',
 			'install_plugins',
 			'install_themes',
+			'manage_network',
+			'manage_network_options',
+			'manage_network_plugins',
+			'manage_network_themes',
+			'manage_network_users',
 			'manage_options',
+			'manage_sites',
 			'promote_users',
+			'unfiltered_html',
 			'update_core',
+			'update_plugins',
+			'update_themes',
 		];
 
 		foreach ( $privileged_capabilities as $capability ) {

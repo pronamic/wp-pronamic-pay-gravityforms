@@ -356,6 +356,17 @@ class Extension extends AbstractPluginIntegration {
 	 * @param PayFeed $feed Payment feed.
 	 */
 	private function maybe_update_user_role( $lead, $feed ) {
+		if ( empty( $feed->user_role_field_id ) || ! isset( $lead[ $feed->user_role_field_id ] ) ) {
+			return;
+		}
+
+		$value = $lead[ $feed->user_role_field_id ];
+		$value = GFCommon::get_selection_value( $value );
+
+		if ( ! $this->is_allowed_user_role( $value, $lead['form_id'], $feed->user_role_field_id ) ) {
+			return;
+		}
+
 		$user = false;
 
 		// Gravity Forms User Registration Add-on.
@@ -372,12 +383,117 @@ class Extension extends AbstractPluginIntegration {
 			$user = new WP_User( $created_by );
 		}
 
-		if ( $user && ! empty( $feed->user_role_field_id ) && isset( $lead[ $feed->user_role_field_id ] ) ) {
-			$value = $lead[ $feed->user_role_field_id ];
-			$value = GFCommon::get_selection_value( $value );
-
+		if ( $user ) {
 			$user->set_role( $value );
 		}
+	}
+
+	/**
+	 * Check whether the given user role may be assigned.
+	 *
+	 * The submitted value is only accepted if it is an existing WordPress role
+	 * and matches one of the choices — or the default value — the form
+	 * administrator configured on the mapped form field. This prevents
+	 * privilege escalation through tampered form submissions.
+	 *
+	 * @param string     $role     Role.
+	 * @param int|string $form_id  Form ID.
+	 * @param int|string $field_id Field ID.
+	 * @return bool
+	 */
+	private function is_allowed_user_role( $role, $form_id, $field_id ) {
+		$role = (string) $role;
+
+		if ( '' === $role ) {
+			return false;
+		}
+
+		if ( ! \wp_roles()->is_role( $role ) ) {
+			return false;
+		}
+
+		if ( $this->is_privileged_role( $role ) ) {
+			return false;
+		}
+
+		$form = GFAPI::get_form( $form_id );
+
+		if ( false === $form ) {
+			return false;
+		}
+
+		$field = RGFormsModel::get_field( $form, $field_id );
+
+		if ( null === $field ) {
+			return false;
+		}
+
+		// Admin-configured default value, e.g. on a hidden field.
+		if ( (string) $field->defaultValue === $role ) {
+			return true;
+		}
+
+		if ( ! \is_array( $field->choices ) ) {
+			return false;
+		}
+
+		foreach ( $field->choices as $choice ) {
+			$choice_value = \rgar( $choice, 'value' );
+
+			if ( '' === (string) $choice_value ) {
+				$choice_value = \rgar( $choice, 'text' );
+			}
+
+			if ( (string) $choice_value === $role ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check whether the given role holds privileged capabilities.
+	 *
+	 * Roles that can manage the site or other users must never be assignable
+	 * through a form submission, regardless of the feed configuration.
+	 *
+	 * @param string $role Role.
+	 * @return bool
+	 */
+	private function is_privileged_role( $role ) {
+		if ( 'administrator' === $role ) {
+			return true;
+		}
+
+		$role_object = \get_role( $role );
+
+		if ( null === $role_object ) {
+			return true;
+		}
+
+		$privileged_capabilities = [
+			'activate_plugins',
+			'create_users',
+			'delete_users',
+			'edit_files',
+			'edit_plugins',
+			'edit_themes',
+			'edit_users',
+			'install_plugins',
+			'install_themes',
+			'manage_options',
+			'promote_users',
+			'update_core',
+		];
+
+		foreach ( $privileged_capabilities as $capability ) {
+			if ( $role_object->has_cap( $capability ) ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

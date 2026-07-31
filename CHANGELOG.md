@@ -8,6 +8,33 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 -
 
+## [4.13.0] - 2026-07-31
+
+### Security
+
+- Hardened user role assignment from payment feeds to prevent privilege escalation through tampered form submissions. A submitted role is only accepted when it is an existing, non-privileged WordPress role that matches a choice or default value configured on the mapped form field. ([#66](https://github.com/pronamic/wp-pronamic-pay-gravityforms/pull/66))
+
+### Changed
+
+- Raised the minimum required WordPress version from `4.7` to `6.8`.
+
+### Fixed
+
+- Validated the country name before looking up its country code when saving an entry, preventing errors on empty values. ([#62](https://github.com/pronamic/wp-pronamic-pay-gravityforms/issues/62))
+
+### Composer
+
+- Widened `woocommerce/action-scheduler` from `^3.9` to `^3.9 || ^4.0`, updating the locked version to `4.0.0`.
+- Changed development dependency `roots/wordpress` from `^6.0` to `^6.8`.
+
+#### Dependency release notes
+
+- **`woocommerce/action-scheduler` `4.0.0`** — Major release with breaking changes: action arguments are now taken into account when scheduling unique actions, and failed actions are automatically purged after 3 months (configurable via the `action_scheduler_retention_period_for_failed` filter). Also includes performance improvements to action cleanup and raises the minimum WordPress version to 6.8. [Release notes](https://github.com/woocommerce/action-scheduler/releases/tag/4.0.0)
+
+Full set of changes: [`4.12.1...4.13.0`][4.13.0]
+
+[4.13.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.12.1...v4.13.0
+
 ## [4.12.1] - 2026-05-13
 
 ### Added
@@ -719,7 +746,7 @@ Full set of changes: [`4.3.0...4.4.0`][4.4.0]
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.3.0...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.0...HEAD
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.2...4.3.0
 [4.2.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.0...4.2.1

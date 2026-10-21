@@ -6,9 +6,21 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [Unreleased][unreleased]
 
+-
+
+## [4.13.1] - 2026-10-21
+
 ### Fixed
 
-- Fixed compatibility of `PaymentAddOn::is_feed_condition_met()` with Gravity Forms 3.1.3.4.
+- Fixed compatibility of `PaymentAddOn::is_feed_condition_met()` with Gravity Forms 3.1.3.4 ([#68](https://github.com/pronamic/wp-pronamic-pay-gravityforms/pull/68)).
+
+### Contributors
+
+- Jeffrey van Rossum ([@jeffreyvr](https://github.com/jeffreyvr)).
+
+Full Changelog: [`4.13.0...4.13.1`][4.13.1]
+
+[4.13.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.0...v4.13.1
 
 ## [4.13.0] - 2026-07-31
 
@@ -748,7 +760,7 @@ Full set of changes: [`4.3.0...4.4.0`][4.4.0]
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.0...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.1...HEAD
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.2...4.3.0
 [4.2.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.0...4.2.1

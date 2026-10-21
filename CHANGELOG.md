@@ -6,7 +6,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [Unreleased][unreleased]
 
--
+### Fixed
+
+- Fixed compatibility of `PaymentAddOn::is_feed_condition_met()` with Gravity Forms 3.1.3.4.
 
 ## [4.13.0] - 2026-07-31
 

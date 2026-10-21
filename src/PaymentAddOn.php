@@ -440,13 +440,17 @@ class PaymentAddOn extends GFPaymentAddOn {
 	/**
 	 * Is feed condition met?
 	 *
-	 * @param array $feed  Feed.
-	 * @param array $form  Gravity Forms form.
-	 * @param array $entry Gravity Forms entry.
+	 * The `$without_payment_status_rule` argument was added in Gravity Forms 3.1.3.4.
+	 * It stays optional so this override remains compatible with older Gravity Forms versions.
+	 *
+	 * @param array $feed                         Feed.
+	 * @param array $form                         Gravity Forms form.
+	 * @param array $entry                        Gravity Forms entry.
+	 * @param bool  $without_payment_status_rule Whether to remove the payment status rule before the rules are evaluated.
 	 *
 	 * @return bool
 	 */
-	public function is_feed_condition_met( $feed, $form, $entry ) {
+	public function is_feed_condition_met( $feed, $form, $entry, $without_payment_status_rule = false ) {
 		$pay_feed = new PayFeed( $feed['ID'] );
 
 		if ( ! \array_key_exists( 'meta', $feed ) ) {
@@ -458,7 +462,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 			'feed_condition_conditional_logic_object' => $pay_feed->conditional_logic_object,
 		];
 
-		return parent::is_feed_condition_met( $feed, $form, $entry );
+		return parent::is_feed_condition_met( $feed, $form, $entry, $without_payment_status_rule );
 	}
 
 	/**

@@ -6,7 +6,9 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [Unreleased][unreleased]
 
--
+### Composer
+
+- Updated development dependency `pronamic/gravityforms` to `^3.2`.
 
 ## [4.13.1] - 2026-10-21
 

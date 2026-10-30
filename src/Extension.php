@@ -1167,12 +1167,12 @@ class Extension extends AbstractPluginIntegration {
 				GFCommon::send_notifications( $delay_notification_ids, $form, $entry, true, 'form_submission' );
 			}
 
-			if ( $feed->delay_admin_notification && Core_Util::class_method_exists( 'GFCommon', 'send_admin_notification' ) ) {
+			if ( $feed->delay_admin_notification && method_exists( GFCommon::class, 'send_admin_notification' ) ) {
 				// @link https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1265-L1270.
 				GFCommon::send_admin_notification( $form, $entry );
 			}
 
-			if ( $feed->delay_user_notification && Core_Util::class_method_exists( 'GFCommon', 'send_user_notification' ) ) {
+			if ( $feed->delay_user_notification && method_exists( GFCommon::class, 'send_user_notification' ) ) {
 				// @link https://github.com/wp-premium/gravityforms/blob/1.8.9/common.php#L1258-L1263.
 				GFCommon::send_user_notification( $form, $entry );
 			}

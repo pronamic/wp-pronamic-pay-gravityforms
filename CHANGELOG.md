@@ -6,9 +6,23 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [Unreleased][unreleased]
 
+-
+
+## [4.13.2] - 2026-11-02
+
+### Changed
+
+- Simplified the checks for the legacy Gravity Forms admin and user notification methods by using PHP's native `method_exists()` ([#69](https://github.com/pronamic/wp-pronamic-pay-gravityforms/pull/69)).
+
 ### Composer
 
-- Updated development dependency `pronamic/gravityforms` to `^3.2`.
+- Changed development dependency `pronamic/gravityforms` from `^2.9` to `^3.2` (locked at `3.2.1`).
+	- Gravity Forms 3.x adds an Abilities API (MCP) integration, link/URL detection in fields, a new Repeater field, a Column Layout form setting and multiple security enhancements.
+	- Release notes: [3.0.2](https://github.com/pronamic/gravityforms/releases/tag/3.0.2), [3.1.0](https://github.com/pronamic/gravityforms/releases/tag/3.1.0), [3.2.0](https://github.com/pronamic/gravityforms/releases/tag/3.2.0), [3.2.1](https://github.com/pronamic/gravityforms/releases/tag/3.2.1).
+
+Full Changelog: [`4.13.1...4.13.2`][4.13.2]
+
+[4.13.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.1...v4.13.2
 
 ## [4.13.1] - 2026-10-21
 
@@ -762,7 +776,7 @@ Full set of changes: [`4.3.0...4.4.0`][4.4.0]
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.1...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.2...HEAD
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.2...4.3.0
 [4.2.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.0...4.2.1

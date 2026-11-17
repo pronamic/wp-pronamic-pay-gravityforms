@@ -3,6 +3,7 @@
 /scss              export-ignore
 /tests             export-ignore
 /eslint.config.mjs export-ignore
+/.editorconfig     export-ignore
 /.gitattributes    export-ignore
 /.github/          export-ignore
 /.gitignore        export-ignore

@@ -135,8 +135,8 @@
 	$( document ).ready( function() {
 		$( '.gforms_edit_form .ideal-edit-link' ).click( function( event ) {
 			event.stopPropagation();
-		} ); 
-		
+		} );
+
 		$( '#gf-pay-feed-editor' ).gravityFormsPayFeedEditor();
 
 		if ( 'undefined' !== typeof gform && 'undefined' !== typeof form ) {

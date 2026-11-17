@@ -28,8 +28,7 @@ rector.php
 
 /build/
 /docs/
-/js/
-/scss/
+/assets/src/
 /documentation/
 /node_modules/
 /tests/

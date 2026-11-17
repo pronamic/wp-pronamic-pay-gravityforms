@@ -4,7 +4,7 @@
 // eslint-disable-next-line import/no-unresolved -- Provided by WordPress, mapped to the global `jQuery` by wp-scripts.
 import $ from 'jquery';
 
-import '../scss/admin.scss';
+import './admin.scss';
 
 ( function () {
 	/**

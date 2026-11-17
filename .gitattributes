@@ -1,7 +1,6 @@
 /bin               export-ignore
 /images/src        export-ignore
-/js                export-ignore
-/scss              export-ignore
+/assets/src        export-ignore
 /tests             export-ignore
 /.editorconfig     export-ignore
 /.gitattributes    export-ignore

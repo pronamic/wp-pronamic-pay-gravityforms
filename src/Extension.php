@@ -189,11 +189,11 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
-		$asset = include \plugin_dir_path( __DIR__ ) . 'assets/admin.asset.php';
+		$asset = include \plugin_dir_path( __DIR__ ) . 'assets/dist/admin.asset.php';
 
 		wp_register_style(
 			'pronamic-pay-gravityforms',
-			plugins_url( 'assets/admin.css', __DIR__ ),
+			plugins_url( 'assets/dist/admin.css', __DIR__ ),
 			[],
 			$asset['version']
 		);
@@ -202,7 +202,7 @@ class Extension extends AbstractPluginIntegration {
 
 		wp_register_script(
 			'pronamic-pay-gravityforms',
-			plugins_url( 'assets/admin.js', __DIR__ ),
+			plugins_url( 'assets/dist/admin.js', __DIR__ ),
 			$asset['dependencies'],
 			$asset['version'],
 			true

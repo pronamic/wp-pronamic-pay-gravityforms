@@ -400,7 +400,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							<?php if ( ! $pay_feed->has_delayed_notifications() ) : ?>
 
 								<p>
-									<?php esc_html_e( 'To send notifications after a succesful payment, choose an event in the notification settings.', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'To send notifications after a successful payment, choose an event in the notification settings.', 'pronamic_ideal' ); ?>
 								</p>
 
 							<?php endif; ?>

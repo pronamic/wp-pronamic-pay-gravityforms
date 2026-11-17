@@ -2,18 +2,6 @@
 	"name": "gravityforms",
 	"version": "4.13.3",
 	"description": "Gravity Forms driver for the WordPress payment processing library.",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/wp-pay-extensions/gravityforms"
-	},
-	"keywords": [
-		"wordpress",
-		"wp",
-		"pay",
-		"gravityforms",
-		"gateway",
-		"pronamic"
-	],
 	"author": {
 		"name": "Pronamic",
 		"email": "info@pronamic.nl",
@@ -26,41 +14,37 @@
 			"url": "http://www.remcotolsma.nl/"
 		}
 	],
-	"license": "GPL-3.0",
+	"license": "GPL-3.0-or-later",
+	"keywords": [
+		"wordpress",
+		"wp",
+		"pay",
+		"gravityforms",
+		"gateway",
+		"pronamic"
+	],
+	"homepage": "http://www.wp-pay.org/extensions/gravityforms/",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/wp-pay-extensions/gravityforms"
+	},
 	"bugs": {
 		"url": "https://github.com/wp-pay-extensions/gravityforms/issues"
 	},
-	"homepage": "http://www.wp-pay.org/extensions/gravityforms/",
-	"browserslist": [
-		"last 2 versions"
-	],
 	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@eslint/json": "^2.1.1",
 		"@wordpress/env": "^12.1.0",
-		"autoprefixer": "^10.6.2",
-		"cssnano": "^9.9.0",
-		"eslint": "^10.15.0",
-		"globals": "^17.14.0",
-		"npm-run-all": "^4.1.5",
-		"postcss": "^8.5.33",
-		"postcss-cli": "^12.0.0",
-		"sass": "^1.108.2",
-		"sass-lint": "^1.13.1",
-		"terser": "^5.51.2"
+		"@wordpress/scripts": "^37.1.0",
+		"npm-run-all": "^4.1.5"
 	},
 	"scripts": {
-		"build": "npm-run-all build-css build-js",
-		"build-css": "npm-run-all build-css-sass build-css-autoprefixer build-css-minify",
-		"build-css-sass": "sass --no-source-map scss/admin.scss css/admin.css",
-		"build-css-autoprefixer": "postcss css/admin.css --use autoprefixer --no-map --replace",
-		"build-css-minify": "postcss css/admin.css --use cssnano --no-map --output css/admin.min.css",
-		"build-js": "terser js/admin.js --compress --mangle --source-map \"base='js',url='admin.min.js.map'\" --output js/admin.min.js",
+		"build": "wp-scripts build js/admin.js --output-path=assets",
+		"start-assets": "wp-scripts start js/admin.js --output-path=assets",
 		"build-image": "npm-run-all build-image-*",
 		"build-image-svg-default": "svgo images/src/wp-pay.svg -o images/dist/wp-pay.svgo-min.svg",
-		"eslint": "eslint .",
-		"lint": "npm-run-all --parallel eslint sass-lint",
-		"sass-lint": "sass-lint --verbose",
+		"lint": "npm-run-all --parallel lint-*",
+		"lint-js": "wp-scripts lint-js js",
+		"lint-style": "wp-scripts lint-style \"scss/**/*.scss\"",
+		"lint-pkg-json": "wp-scripts lint-pkg-json",
 		"start": "wp-env start && npm run setup && npm run login",
 		"setup": "npm-run-all setup-*",
 		"setup-gravityforms": "wp-env run cli wp config set GF_LICENSE_KEY $GRAVITYFORMS_LICENSE_KEY",
@@ -68,5 +52,16 @@
 		"setup-buckaroo-website-key": "wp-env run cli wp config set BUCKAROO_WEBSITE_KEY $BUCKAROO_WEBSITE_KEY",
 		"setup-buckaroo-secret-key": "wp-env run cli wp config set BUCKAROO_SECRET_KEY $BUCKAROO_SECRET_KEY",
 		"login": "wp-env run cli wp user one-time-login admin"
+	},
+	"npmpackagejsonlint": {
+		"extends": "@wordpress/npm-package-json-lint-config",
+		"rules": {
+			"valid-values-license": [
+				"error",
+				[
+					"GPL-3.0-or-later"
+				]
+			]
+		}
 	}
 }

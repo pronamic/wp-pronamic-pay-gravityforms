@@ -191,20 +191,22 @@ class Extension extends AbstractPluginIntegration {
 			return;
 		}
 
-		$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$asset = include \plugin_dir_path( __DIR__ ) . 'assets/admin.asset.php';
 
 		wp_register_style(
 			'pronamic-pay-gravityforms',
-			plugins_url( 'css/admin' . $min . '.css', __DIR__ ),
+			plugins_url( 'assets/admin.css', __DIR__ ),
 			[],
-			\hash_file( 'crc32', \plugin_dir_path( __DIR__ ) . 'css/admin' . $min . '.css' )
+			$asset['version']
 		);
+
+		wp_style_add_data( 'pronamic-pay-gravityforms', 'rtl', 'replace' );
 
 		wp_register_script(
 			'pronamic-pay-gravityforms',
-			plugins_url( 'js/admin' . $min . '.js', __DIR__ ),
-			[ 'jquery' ],
-			\hash_file( 'crc32', \plugin_dir_path( __DIR__ ) . 'js/admin' . $min . '.js' ),
+			plugins_url( 'assets/admin.js', __DIR__ ),
+			$asset['dependencies'],
+			$asset['version'],
 			true
 		);
 

@@ -4,14 +4,10 @@
 
 .editorconfig
 
-eslint.config.mjs
-
 .git/
 .github/
 .gitattributes
 .gitignore
-
-.sass-lint.yml
 
 .travis.yml
 
@@ -32,6 +28,8 @@ rector.php
 
 /build/
 /docs/
+/js/
+/scss/
 /documentation/
 /node_modules/
 /tests/

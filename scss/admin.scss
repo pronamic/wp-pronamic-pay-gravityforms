@@ -2,9 +2,14 @@
 $white: #fff;
 
 // Gravity Forms feed list
+// ID set by Gravity Forms.
+/* stylelint-disable-next-line selector-id-pattern */
 #tab_pronamic_pay {
+
 	h3 {
+
 		.dashicons {
+
 			&.fa- {
 				font-size: inherit;
 				width: auto;
@@ -20,19 +25,24 @@ $white: #fff;
 }
 
 #gf-pay-feed-editor {
+
 	.form-table {
+
 		ul {
 			margin: 10px 0 0;
 		}
 	}
 
 	.pronamic-pay-tab {
+
 		.pronamic-pay-tab-block {
 			background: $white;
 		}
 
 		.pronamic-pay-table-striped {
+
 			tr {
+
 				&:not(.even) {
 					background: $white;
 				}
@@ -45,8 +55,11 @@ $white: #fff;
 	}
 
 	.pronamic-gf-subscription-tab {
+
 		fieldset {
+
 			.pronamic-pay-gf-subscription-trial-settings {
+
 				label {
 					display: block;
 				}
@@ -57,6 +70,7 @@ $white: #fff;
 
 // Gravity Forms editor
 .gforms_edit_form {
+
 	.ideal-edit-link {
 		display: none;
 
@@ -73,6 +87,7 @@ $white: #fff;
 
 	.field_hover,
 	.field_selected {
+
 		.ideal-edit-link {
 			display: block;
 		}
@@ -88,8 +103,9 @@ $white: #fff;
 
 	// Status pages tab.
 	&.pronamic-gf-links-tab {
+
 		fieldset {
-			line-height: 2.75em;
+			line-height: 2.75;
 		}
 	}
 }
@@ -101,10 +117,6 @@ $white: #fff;
 
 .pronamic-pay-gf-form-choice-list > li {
 	margin: 0;
-}
-
-.pronamic-pay-gf-form-choice {
-
 }
 
 .pronamic-pay-gf-form-choice .pronamic-pay-gf-form-choice-checked {

@@ -87,7 +87,6 @@
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.3",
 		"pronamic/gravityforms": "^3.2",
-		"pronamic/pronamic-cli": "^1.1",
 		"pronamic/wp-coding-standards": "^2.5",
 		"rector/rector": "^2.8",
 		"roots/wordpress": "^6.9",
@@ -103,10 +102,9 @@
 	"scripts": {
 		"build": [
 			"rm -rf ./build/stage-1",
-			"rm -rf ./build/pronamic-pay-gravity-forms/*",
 			"rsync --recursive --verbose --exclude-from=.distignore --exclude=/vendor/ ./ ./build/stage-1/",
 			"composer install --no-dev --prefer-dist --optimize-autoloader --working-dir=./build/stage-1/",
-			"rsync --recursive --verbose --exclude-from=.distignore ./build/stage-1/ ./build/pronamic-pay-gravity-forms/",
+			"rsync --recursive --delete --delete-excluded --verbose --exclude-from=.distignore ./build/stage-1/ ./build/pronamic-pay-gravity-forms/",
 			"vendor/bin/wp i18n make-pot ./build/pronamic-pay-gravity-forms/ --slug=pronamic-pay-gravity-forms",
 			"vendor/bin/wp i18n make-mo ./build/pronamic-pay-gravity-forms/languages/",
 			"vendor/bin/wp dist-archive ./build/pronamic-pay-gravity-forms/ --plugin-dirname=pronamic-pay-gravity-forms --force"

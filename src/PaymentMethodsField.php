@@ -61,25 +61,25 @@ class PaymentMethodsField extends GF_Field_Select {
 		$this->inputs = null;
 
 		// Actions.
-		if ( ! has_action( 'gform_editor_js_set_default_values', [ $this, 'editor_js_set_default_values' ] ) ) {
-			add_action( 'gform_editor_js_set_default_values', [ $this, 'editor_js_set_default_values' ] );
+		if ( ! has_action( 'gform_editor_js_set_default_values', $this->editor_js_set_default_values( ... ) ) ) {
+			add_action( 'gform_editor_js_set_default_values', $this->editor_js_set_default_values( ... ) );
 		}
 
 		// Filters.
-		if ( ! has_filter( 'gform_gf_field_create', [ $this, 'field_create' ] ) ) {
-			add_filter( 'gform_gf_field_create', [ $this, 'field_create' ], 10, 2 );
+		if ( ! has_filter( 'gform_gf_field_create', $this->field_create( ... ) ) ) {
+			add_filter( 'gform_gf_field_create', $this->field_create( ... ), 10, 2 );
 		}
 
-		if ( ! has_filter( 'gform_get_field_value', [ $this, 'get_field_value' ] ) ) {
-			add_filter( 'gform_get_field_value', [ $this, 'get_field_value' ], 10, 3 );
+		if ( ! has_filter( 'gform_get_field_value', $this->get_field_value( ... ) ) ) {
+			add_filter( 'gform_get_field_value', $this->get_field_value( ... ), 10, 3 );
 		}
 
-		if ( ! has_filter( 'gform_form_update_meta', [ __CLASS__, 'form_update_meta' ] ) ) {
-			add_filter( 'gform_form_update_meta', [ __CLASS__, 'form_update_meta' ], 10, 3 );
+		if ( ! has_filter( 'gform_form_update_meta', self::form_update_meta( ... ) ) ) {
+			add_filter( 'gform_form_update_meta', self::form_update_meta( ... ), 10, 3 );
 		}
 
-		if ( ! has_filter( 'gform_pre_render', [ __CLASS__, 'form_pre_render' ] ) ) {
-			add_filter( 'gform_pre_render', [ __CLASS__, 'form_pre_render' ], 10, 3 );
+		if ( ! has_filter( 'gform_pre_render', self::form_pre_render( ... ) ) ) {
+			add_filter( 'gform_pre_render', self::form_pre_render( ... ), 10, 3 );
 		}
 
 		// Admin.
@@ -111,16 +111,14 @@ class PaymentMethodsField extends GF_Field_Select {
 		}
 
 		// Set default display mode.
-		if ( ! isset( $this->pronamicPayDisplayMode ) ) {
-			$this->pronamicPayDisplayMode = 'select';
-		}
+		$this->pronamicPayDisplayMode ??= 'select';
 
 		// Add display mode CSS classes.
-		if ( false === strpos( $this->cssClass, 'pronamic_pay_display_icons' ) && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+		if ( ! str_contains( $this->cssClass, 'pronamic_pay_display_icons' ) && str_starts_with( $this->pronamicPayDisplayMode, 'icons' ) ) {
 			$this->cssClass .= ' pronamic_pay_display_icons';
 		}
 
-		if ( false === strpos( $this->cssClass, 'gf_list_' ) && in_array( $this->pronamicPayDisplayMode, [ 'icons-64', 'icons-125' ], true ) ) {
+		if ( ! str_contains( $this->cssClass, 'gf_list_' ) && in_array( $this->pronamicPayDisplayMode, [ 'icons-64', 'icons-125' ], true ) ) {
 			$this->cssClass .= ' gf_list_2col';
 		}
 	}
@@ -216,7 +214,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Get all gateways if config ID setting is unused.
 		if ( empty( $gateways ) ) {
 			$gateways = array_map(
-				[ 'Pronamic\WordPress\Pay\Plugin', 'get_gateway' ],
+				\Pronamic\WordPress\Pay\Plugin::get_gateway( ... ),
 				$config_ids
 			);
 
@@ -262,15 +260,13 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Built-in.
 		foreach ( $payment_methods as $value => $label ) {
 			// Only add built-in payment if it's not already set.
-			if ( ! isset( $choices[ $value ] ) ) {
-				$choices[ $value ] = [
-					'value'      => $value,
-					'text'       => $label,
-					'isSelected' => false,
-					'builtin'    => true,
-					'enabled'    => false,
-				];
-			}
+			$choices[ $value ] ??= [
+				'value'      => $value,
+				'text'       => $label,
+				'isSelected' => false,
+				'builtin'    => true,
+				'enabled'    => false,
+			];
 		}
 
 		// Set choices.
@@ -313,10 +309,10 @@ class PaymentMethodsField extends GF_Field_Select {
 		// Filter choices for display.
 		$choices = $this->choices;
 
-		$display_choices = array_filter( $choices, [ __CLASS__, 'filter_choice_is_enabled' ] );
+		$display_choices = array_filter( $choices, self::filter_choice_is_enabled( ... ) );
 
 		// Select first item.
-		\array_walk( $display_choices, [ __CLASS__, 'unselect_choice' ] );
+		\array_walk( $display_choices, self::unselect_choice( ... ) );
 
 		$index = \array_key_first( $display_choices );
 
@@ -331,7 +327,7 @@ class PaymentMethodsField extends GF_Field_Select {
 
 		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
 
-		if ( ! is_admin() && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+		if ( ! is_admin() && str_starts_with( $this->pronamicPayDisplayMode, 'icons' ) ) {
 			ob_start();
 
 			?>
@@ -347,51 +343,43 @@ class PaymentMethodsField extends GF_Field_Select {
 					];
 
 					// Icon file and size.
-					switch ( $this->pronamicPayDisplayMode ) {
-						case 'icons-24':
-							$dimensions = [ 24, 24 ];
-
-							break;
-						case 'icons-64':
-							$dimensions = [ 64, 64 ];
-
-							break;
-						case 'icons-125':
-						default:
-							$dimensions = [ 125, 60 ];
-					}
+					$dimensions = match ( $this->pronamicPayDisplayMode ) {
+						'icons-24' => [ 24, 24 ],
+						'icons-64' => [ 64, 64 ],
+						default => [ 125, 60 ],
+					};
 
 					// Loop payment methods.
-					foreach ( $this->choices as $choice ) {
-						// Icon file name.
-						$payment_method = $choice['value'];
+			foreach ( $this->choices as $choice ) {
+				// Icon file name.
+				$payment_method = $choice['value'];
 
-						// Radio input.
-						$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
+				// Radio input.
+				$label_content = \sprintf( '<span>%s</span>', esc_html( $choice['text'] ) );
 
-						if ( \array_key_exists( $payment_method, PaymentMethods::get_payment_methods() ) ) {
-							$icon_url = PaymentMethods::get_icon_url( $payment_method );
+				if ( \array_key_exists( $payment_method, PaymentMethods::get_payment_methods() ) ) {
+					$icon_url = PaymentMethods::get_icon_url( $payment_method );
 
-							if ( null !== $icon_url ) {
-								$label_content = \sprintf(
-									'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
-									\esc_html( $choice['text'] ),
-									\esc_url( $icon_url )
-								);
-							}
-						}
-
-						\printf(
-							'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" %5$s/> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
-							\esc_attr( $this->formId ),
-							\esc_attr( $this->id ),
-							\esc_attr( $choice['value'] ),
-							\wp_kses_post( $label_content ),
-							\checked( $choice['value'], $value, false )
+					if ( null !== $icon_url ) {
+						$label_content = \sprintf(
+							'<img src="%2$s" alt="%1$s" /><span>%1$s</span>',
+							\esc_html( $choice['text'] ),
+							\esc_url( $icon_url )
 						);
 					}
+				}
 
-					?>
+				\printf(
+					'<li class="gchoice_%1$s_%2$s_%3$s"><input type="radio" id="choice_%1$s_%2$s_%3$s" name="input_%2$s" value="%3$s" %5$s/> <label for="choice_%1$s_%2$s_%3$s">%4$s</label></li>',
+					\esc_attr( $this->formId ),
+					\esc_attr( $this->id ),
+					\esc_attr( $choice['value'] ),
+					\wp_kses_post( $label_content ),
+					\checked( $choice['value'], $value, false )
+				);
+			}
+
+			?>
 				</ul>
 			</div>
 
@@ -688,10 +676,10 @@ class PaymentMethodsField extends GF_Field_Select {
 			}
 
 			// Remove unselected choices.
-			$display_choices = array_filter( $field['choices'], [ __CLASS__, 'filter_choice_is_enabled' ] );
+			$display_choices = array_filter( $field['choices'], self::filter_choice_is_enabled( ... ) );
 
 			// Select first item.
-			\array_walk( $display_choices, [ __CLASS__, 'unselect_choice' ] );
+			\array_walk( $display_choices, self::unselect_choice( ... ) );
 
 			$index = \array_key_first( $display_choices );
 

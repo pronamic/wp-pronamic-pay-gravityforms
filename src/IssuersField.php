@@ -52,8 +52,8 @@ class IssuersField extends GF_Field_Select {
 		parent::__construct( $properties );
 
 		// Actions.
-		if ( ! has_action( 'gform_editor_js_set_default_values', [ __CLASS__, 'editor_js_set_default_values' ] ) ) {
-			add_action( 'gform_editor_js_set_default_values', [ __CLASS__, 'editor_js_set_default_values' ] );
+		if ( ! has_action( 'gform_editor_js_set_default_values', self::editor_js_set_default_values( ... ) ) ) {
+			add_action( 'gform_editor_js_set_default_values', self::editor_js_set_default_values( ... ) );
 		}
 
 		if (
@@ -65,7 +65,7 @@ class IssuersField extends GF_Field_Select {
 				&&
 			'rg_add_field' === filter_input( INPUT_POST, 'action' )
 				&&
-			false !== strpos( filter_input( INPUT_POST, 'field' ), self::TYPE )
+			str_contains( filter_input( INPUT_POST, 'field' ), self::TYPE )
 		) {
 			$this->formId = filter_input( INPUT_POST, 'form_id', FILTER_SANITIZE_NUMBER_INT );
 		}
@@ -76,16 +76,14 @@ class IssuersField extends GF_Field_Select {
 		}
 
 		// Set default display mode.
-		if ( ! isset( $this->pronamicPayDisplayMode ) ) {
-			$this->pronamicPayDisplayMode = 'select';
-		}
+		$this->pronamicPayDisplayMode ??= 'select';
 
 		// Add display mode CSS classes.
-		if ( false === strpos( $this->cssClass, 'pronamic_pay_display_icons' ) && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+		if ( ! str_contains( $this->cssClass, 'pronamic_pay_display_icons' ) && str_starts_with( $this->pronamicPayDisplayMode, 'icons' ) ) {
 			$this->cssClass .= ' pronamic_pay_display_icons';
 		}
 
-		if ( false === strpos( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, [ 'icons-64', 'icons-125' ], true ) ) {
+		if ( ! str_contains( $this->cssClass, 'gf_list_2col' ) && in_array( $this->pronamicPayDisplayMode, [ 'icons-64', 'icons-125' ], true ) ) {
 			$this->cssClass .= ' gf_list_2col';
 		}
 	}
@@ -200,10 +198,9 @@ class IssuersField extends GF_Field_Select {
 		if ( null === $config_ids ) {
 			$feeds = \array_filter(
 				FeedsDB::get_feeds_by_form_id( $this->formId ),
-				function ( $feed ) {
-					// Check if feed is active.
-					return '0' !== \get_post_meta( $feed->id, '_pronamic_pay_gf_feed_active', true );
-				}
+				fn( $feed ) =>
+				// Check if feed is active.
+				'0' !== \get_post_meta( $feed->id, '_pronamic_pay_gf_feed_active', true )
 			);
 
 			$config_ids = \wp_list_pluck( $feeds, 'config_id' );
@@ -235,7 +232,7 @@ class IssuersField extends GF_Field_Select {
 				 * @link https://github.com/pronamic/wp-pronamic-pay/issues/154#issuecomment-1183309350
 				 */
 				$options = $issuer_field->get_flat_options();
-			} catch ( \Exception $e ) {
+			} catch ( \Exception ) {
 				continue;
 			}
 
@@ -306,7 +303,7 @@ class IssuersField extends GF_Field_Select {
 
 		$field_css_id = sprintf( '#field_%1$s_%2$s', $this->formId, $this->id );
 
-		if ( ! is_admin() && 'icons' === substr( $this->pronamicPayDisplayMode, 0, 5 ) ) {
+		if ( ! is_admin() && str_starts_with( $this->pronamicPayDisplayMode, 'icons' ) ) {
 
 			ob_start();
 

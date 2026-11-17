@@ -32,17 +32,17 @@ class AdminPaymentFormPostType {
 	 * Construct and initialize admin payment form post type.
 	 */
 	public function __construct() {
-		add_filter( 'manage_edit-pronamic_pay_gf_columns', [ $this, 'edit_columns' ] );
+		add_filter( 'manage_edit-pronamic_pay_gf_columns', $this->edit_columns( ... ) );
 
-		add_action( 'manage_pronamic_pay_gf_posts_custom_column', [ $this, 'custom_columns' ], 10, 2 );
+		add_action( 'manage_pronamic_pay_gf_posts_custom_column', $this->custom_columns( ... ), 10, 2 );
 
-		add_action( 'add_meta_boxes', [ $this, 'add_meta_boxes' ] );
+		add_action( 'add_meta_boxes', $this->add_meta_boxes( ... ) );
 
-		add_action( 'gform_after_delete_form', [ $this, 'delete_payment_form' ] );
+		add_action( 'gform_after_delete_form', $this->delete_payment_form( ... ) );
 
-		add_filter( 'wp_insert_post_data', [ $this, 'insert_post_data' ], 99, 2 );
+		add_filter( 'wp_insert_post_data', $this->insert_post_data( ... ), 99, 2 );
 
-		add_action( 'save_post_' . self::POST_TYPE, [ $this, 'save_post' ] );
+		add_action( 'save_post_' . self::POST_TYPE, $this->save_post( ... ) );
 	}
 
 	/**
@@ -118,7 +118,7 @@ class AdminPaymentFormPostType {
 		add_meta_box(
 			'pronamic_pay_gf',
 			__( 'Configuration', 'pronamic_ideal' ),
-			[ $this, 'meta_box_config' ],
+			$this->meta_box_config( ... ),
 			'pronamic_pay_gf',
 			'normal',
 			'high'
@@ -374,9 +374,7 @@ class AdminPaymentFormPostType {
 
 		$delay_actions = array_filter(
 			$delay_actions,
-			function ( $action ) {
-				return $action['active'];
-			}
+			fn( $action ) => $action['active']
 		);
 
 		foreach ( $delay_actions as $action ) {

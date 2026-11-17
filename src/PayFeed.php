@@ -68,13 +68,6 @@ class PayFeed {
 	const LINK_TYPE_CONFIRMATION = 'confirmation';
 
 	/**
-	 * The payment (post) ID.
-	 *
-	 * @var int
-	 */
-	public $id;
-
-	/**
 	 * The payment post object.
 	 *
 	 * @var WP_Post
@@ -136,28 +129,31 @@ class PayFeed {
 	public $subscription_frequency;
 
 	/**
-	 * Construct and initialize payment object.
-	 *
-	 * @param int $post_id Post ID.
-	 */
-	public function __construct( $post_id ) {
-		$this->id   = $post_id;
-		$this->post = get_post( $post_id );
+ * Construct and initialize payment object.
+ *
+ * @param int $id Post ID.
+ */
+	public function __construct( /**
+		 * The payment (post) ID.
+		 */
+		public $id 
+	) {
+		$this->post = get_post( $this->id );
 
 		// Load.
-		$this->form_id                 = get_post_meta( $post_id, '_pronamic_pay_gf_form_id', true );
-		$this->config_id               = get_post_meta( $post_id, '_pronamic_pay_gf_config_id', true );
-		$this->entry_id_prefix         = get_post_meta( $post_id, '_pronamic_pay_gf_entry_id_prefix', true );
-		$this->order_id                = get_post_meta( $post_id, '_pronamic_pay_gf_order_id', true );
-		$this->transaction_description = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
-		$this->condition_enabled       = get_post_meta( $post_id, '_pronamic_pay_gf_condition_enabled', true );
+		$this->form_id                 = get_post_meta( $this->id, '_pronamic_pay_gf_form_id', true );
+		$this->config_id               = get_post_meta( $this->id, '_pronamic_pay_gf_config_id', true );
+		$this->entry_id_prefix         = get_post_meta( $this->id, '_pronamic_pay_gf_entry_id_prefix', true );
+		$this->order_id                = get_post_meta( $this->id, '_pronamic_pay_gf_order_id', true );
+		$this->transaction_description = get_post_meta( $this->id, '_pronamic_pay_gf_transaction_description', true );
+		$this->condition_enabled       = get_post_meta( $this->id, '_pronamic_pay_gf_condition_enabled', true );
 
 		// Conditional logic.
-		$conditional_logic_object = get_post_meta( $post_id, '_gform_setting_feed_condition_conditional_logic_object', true );
+		$conditional_logic_object = get_post_meta( $this->id, '_gform_setting_feed_condition_conditional_logic_object', true );
 
 		// Check legacy meta key `_gaddon_setting_feed_condition_conditional_logic_object`.
 		if ( empty( $conditional_logic_object ) ) {
-			$conditional_logic_object = get_post_meta( $post_id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
+			$conditional_logic_object = get_post_meta( $this->id, '_gaddon_setting_feed_condition_conditional_logic_object', true );
 		}
 
 		// JSON decode conditional logic object.
@@ -189,9 +185,9 @@ class PayFeed {
 		 * @since 2.3.0
 		 */
 		if ( null === $this->conditional_logic_object ) {
-			$condition_field_id = get_post_meta( $post_id, '_pronamic_pay_gf_condition_field_id', true );
-			$condition_operator = get_post_meta( $post_id, '_pronamic_pay_gf_condition_operator', true );
-			$condition_value    = get_post_meta( $post_id, '_pronamic_pay_gf_condition_value', true );
+			$condition_field_id = get_post_meta( $this->id, '_pronamic_pay_gf_condition_field_id', true );
+			$condition_operator = get_post_meta( $this->id, '_pronamic_pay_gf_condition_operator', true );
+			$condition_value    = get_post_meta( $this->id, '_pronamic_pay_gf_condition_value', true );
 
 			$rule = [
 				'fieldId'  => 0,
@@ -217,9 +213,9 @@ class PayFeed {
 		}
 
 		// Delay actions.
-		$this->delay_admin_notification = get_post_meta( $post_id, '_pronamic_pay_gf_delay_admin_notification', true );
-		$this->delay_user_notification  = get_post_meta( $post_id, '_pronamic_pay_gf_delay_user_notification', true );
-		$this->delay_post_creation      = get_post_meta( $post_id, '_pronamic_pay_gf_delay_post_creation', true );
+		$this->delay_admin_notification = get_post_meta( $this->id, '_pronamic_pay_gf_delay_admin_notification', true );
+		$this->delay_user_notification  = get_post_meta( $this->id, '_pronamic_pay_gf_delay_user_notification', true );
+		$this->delay_post_creation      = get_post_meta( $this->id, '_pronamic_pay_gf_delay_post_creation', true );
 
 		$this->delay_actions = [];
 
@@ -227,36 +223,34 @@ class PayFeed {
 
 		$delay_actions = array_filter(
 			$delay_actions,
-			function ( $action ) {
-				return $action['active'];
-			}
+			fn( $action ) => $action['active']
 		);
 
 		foreach ( $delay_actions as $slug => $data ) {
-			if ( '1' === get_post_meta( $post_id, $data['meta_key'], true ) ) {
+			if ( '1' === get_post_meta( $this->id, $data['meta_key'], true ) ) {
 				$this->delay_actions[ $slug ] = $data;
 			}
 		}
 
 		// Other.
-		$this->user_role_field_id = get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true );
+		$this->user_role_field_id = get_post_meta( $this->id, '_pronamic_pay_gf_user_role_field_id', true );
 
 		// Subscription.
-		$this->subscription_amount_type           = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_type', true );
-		$this->subscription_amount_field          = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_amount_field', true );
-		$this->subscription_interval_type         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_type', true );
-		$this->subscription_interval              = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval', true );
-		$this->subscription_interval_period       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_period', true );
-		$this->subscription_interval_date_type    = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_type', true );
-		$this->subscription_interval_date         = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date', true );
-		$this->subscription_interval_date_day     = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_day', true );
-		$this->subscription_interval_date_month   = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_month', true );
-		$this->subscription_interval_date_prorate = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_date_prorate', true );
-		$this->subscription_interval_field        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_interval_field', true );
-		$this->subscription_frequency_type        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_type', true );
-		$this->subscription_frequency             = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency', true );
-		$this->subscription_number_periods        = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_number_periods', true );
-		$this->subscription_frequency_field       = get_post_meta( $post_id, '_pronamic_pay_gf_subscription_frequency_field', true );
+		$this->subscription_amount_type           = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_amount_type', true );
+		$this->subscription_amount_field          = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_amount_field', true );
+		$this->subscription_interval_type         = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_type', true );
+		$this->subscription_interval              = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval', true );
+		$this->subscription_interval_period       = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_period', true );
+		$this->subscription_interval_date_type    = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_date_type', true );
+		$this->subscription_interval_date         = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_date', true );
+		$this->subscription_interval_date_day     = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_date_day', true );
+		$this->subscription_interval_date_month   = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_date_month', true );
+		$this->subscription_interval_date_prorate = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_date_prorate', true );
+		$this->subscription_interval_field        = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_interval_field', true );
+		$this->subscription_frequency_type        = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_frequency_type', true );
+		$this->subscription_frequency             = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_frequency', true );
+		$this->subscription_number_periods        = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_number_periods', true );
+		$this->subscription_frequency_field       = get_post_meta( $this->id, '_pronamic_pay_gf_subscription_frequency_field', true );
 
 		/*
 		 * Set subscription number periods from deprecated frequency setting
@@ -282,15 +276,15 @@ class PayFeed {
 		}
 
 		// Delay notification IDs.
-		$ids                          = get_post_meta( $post_id, '_pronamic_pay_gf_delay_notification_ids', true );
+		$ids                          = get_post_meta( $this->id, '_pronamic_pay_gf_delay_notification_ids', true );
 		$this->delay_notification_ids = is_array( $ids ) ? $ids : [];
 
 		// Fields.
-		$fields       = get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
+		$fields       = get_post_meta( $this->id, '_pronamic_pay_gf_fields', true );
 		$this->fields = is_array( $fields ) ? $fields : [];
 
 		// Links.
-		$links       = get_post_meta( $post_id, '_pronamic_pay_gf_links', true );
+		$links       = get_post_meta( $this->id, '_pronamic_pay_gf_links', true );
 		$this->links = is_array( $links ) ? $links : [];
 	}
 

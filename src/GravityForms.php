@@ -137,11 +137,7 @@ class GravityForms {
 	public static function get_entry_property( $entry_id, $property ) {
 		$entry = GFFormsModel::get_lead( $entry_id );
 
-		if ( isset( $entry[ $property ] ) ) {
-			return $entry[ $property ];
-		}
-
-		return null;
+		return $entry[ $property ] ?? null;
 	}
 
 	/**

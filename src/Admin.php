@@ -26,16 +26,16 @@ class Admin {
 	 */
 	public static function bootstrap() {
 		// Actions.
-		add_action( 'admin_init', [ __CLASS__, 'admin_init' ] );
-		add_action( 'admin_init', [ __CLASS__, 'maybe_redirect_to_entry' ] );
+		add_action( 'admin_init', self::admin_init( ... ) );
+		add_action( 'admin_init', self::maybe_redirect_to_entry( ... ) );
 
-		add_action( 'gform_entry_info', [ __CLASS__, 'entry_info' ], 10, 2 );
+		add_action( 'gform_entry_info', self::entry_info( ... ), 10, 2 );
 
 		// Filters.
-		add_filter( 'gform_custom_merge_tags', [ __CLASS__, 'custom_merge_tags' ], 10 );
+		add_filter( 'gform_custom_merge_tags', self::custom_merge_tags( ... ), 10 );
 
 		// Actions - AJAX.
-		add_action( 'wp_ajax_gf_get_form_data', [ __CLASS__, 'ajax_get_form_data' ] );
+		add_action( 'wp_ajax_gf_get_form_data', self::ajax_get_form_data( ... ) );
 	}
 
 	/**

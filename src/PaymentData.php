@@ -23,39 +23,30 @@ use RGFormsModel;
  */
 class PaymentData {
 	/**
-	 * Gravity Forms form object
-	 *
-	 * @link http://www.gravityhelp.com/documentation/page/Form_Object
-	 * @var array
-	 */
-	private $form;
-
-	/**
-	 * Gravity Forms entry object
-	 *
-	 * @link http://www.gravityhelp.com/documentation/page/Entry_Object
-	 * @var array
-	 */
-	private $lead;
-
-	/**
-	 * Payment feed object
-	 *
-	 * @var PayFeed
-	 */
-	private $feed;
-
-	/**
 	 * Constructs and initialize a Gravity Forms iDEAL data proxy
 	 *
 	 * @param array   $form Gravity Forms form.
 	 * @param array   $lead Gravity Forms lead/entry.
 	 * @param PayFeed $feed Pay feed.
 	 */
-	public function __construct( $form, $lead, $feed ) {
-		$this->form = $form;
-		$this->lead = $lead;
-		$this->feed = $feed;
+	public function __construct(
+		/**
+		 * Gravity Forms form object
+		 *
+		 * @link http://www.gravityhelp.com/documentation/page/Form_Object
+		 */
+		private $form,
+		/**
+		 * Gravity Forms entry object
+		 *
+		 * @link http://www.gravityhelp.com/documentation/page/Entry_Object
+		 */
+		private $lead,
+		/**
+		 * Payment feed object
+		 */
+		private $feed
+	) {
 	}
 
 	/**
@@ -131,11 +122,7 @@ class PaymentData {
 	 * @return string
 	 */
 	public function get_currency_alphabetic_code(): string {
-		if ( isset( $this->lead['currency'] ) ) {
-			return $this->lead['currency'];
-		}
-
-		return GFCommon::get_currency();
+		return $this->lead['currency'] ?? GFCommon::get_currency();
 	}
 
 	/**

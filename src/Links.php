@@ -63,18 +63,12 @@ class Links {
 	 * @return string
 	 */
 	public static function transform_status( $payment_status ) {
-		switch ( $payment_status ) {
-			case PaymentStatus::CANCELLED:
-				return self::CANCEL;
-			case PaymentStatus::EXPIRED:
-				return self::EXPIRED;
-			case PaymentStatus::FAILURE:
-				return self::ERROR;
-			case PaymentStatus::SUCCESS:
-				return self::SUCCESS;
-			case PaymentStatus::OPEN:
-			default:
-				return self::OPEN;
-		}
+		return match ( $payment_status ) {
+			PaymentStatus::CANCELLED => self::CANCEL,
+			PaymentStatus::EXPIRED => self::EXPIRED,
+			PaymentStatus::FAILURE => self::ERROR,
+			PaymentStatus::SUCCESS => self::SUCCESS,
+			default => self::OPEN,
+		};
 	}
 }

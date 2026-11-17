@@ -29,7 +29,7 @@ class PaymentFormPostType {
 		 *
 		 * @link https://github.com/WordPress/WordPress/blob/4.0/wp-includes/post.php#L167
 		 */
-		add_action( 'init', [ $this, 'init' ], 0 ); // Highest priority.
+		add_action( 'init', $this->init( ... ), 0 ); // Highest priority.
 	}
 
 	/**

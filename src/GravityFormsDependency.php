@@ -25,6 +25,7 @@ class GravityFormsDependency extends Dependency {
 	 * @link https://github.com/WebSharks/s2Member/blob/130816/s2member/s2member.php#L69
 	 * @return bool True if dependency is met, false otherwise.
 	 */
+	#[\Override]
 	public function is_met() {
 		if ( ! \class_exists( '\GFCommon' ) ) {
 			return false;

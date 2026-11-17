@@ -104,27 +104,14 @@ class PaymentStatuses {
 	 * @return string|null
 	 */
 	public static function transform( $status ) {
-		switch ( $status ) {
-			case Core_Statuses::SUCCESS:
-				return self::PAID;
-
-			case Core_Statuses::CANCELLED:
-				return self::CANCELLED;
-
-			case Core_Statuses::EXPIRED:
-				return self::EXPIRED;
-
-			case Core_Statuses::FAILURE:
-				return self::FAILED;
-
-			case Core_Statuses::REFUNDED:
-				return self::REFUNDED;
-
-			case Core_Statuses::OPEN:
-				return self::PROCESSING;
-
-			default:
-				return null;
-		}
+		return match ( $status ) {
+			Core_Statuses::SUCCESS => self::PAID,
+			Core_Statuses::CANCELLED => self::CANCELLED,
+			Core_Statuses::EXPIRED => self::EXPIRED,
+			Core_Statuses::FAILURE => self::FAILED,
+			Core_Statuses::REFUNDED => self::REFUNDED,
+			Core_Statuses::OPEN => self::PROCESSING,
+			default => null,
+		};
 	}
 }

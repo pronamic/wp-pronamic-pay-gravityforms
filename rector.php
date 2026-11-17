@@ -10,6 +10,7 @@
 
 declare(strict_types=1);
 
+use Rector\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
@@ -20,6 +21,16 @@ return RectorConfig::configure()
 			__DIR__ . '/views',
 		]
 	)
-	// uncomment to reach your current PHP version
-	// ->withPhpSets()
+	->withPhpSets()
+	->withSkip(
+		[
+			/*
+			 * WordPress Coding Standards does not recognize first-class callables
+			 * such as `sanitize_text_field( ... )` as sanitizing functions.
+			 */
+			FunctionFirstClassCallableRector::class => [
+				__DIR__ . '/src/PaymentData.php',
+			],
+		]
+	)
 	->withTypeCoverageLevel( 0 );

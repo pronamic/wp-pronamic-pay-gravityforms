@@ -110,13 +110,13 @@ class PaymentAddOn extends GFPaymentAddOn {
 		/*
 		 * Actions.
 		 */
-		add_action( 'admin_init', [ $this, 'pronamic_maybe_save_feed' ], 20 );
+		add_action( 'admin_init', $this->pronamic_maybe_save_feed( ... ), 20 );
 		add_action( 'init', $this->translate( ... ), 20 );
 
 		/*
 		 * Filters.
 		 */
-		add_filter( 'gform_admin_pre_render', [ $this, 'admin_pre_render' ], 10, 1 );
+		add_filter( 'gform_admin_pre_render', $this->admin_pre_render( ... ), 10, 1 );
 	}
 
 	/**
@@ -336,7 +336,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$bulk_actions          = $this->get_bulk_actions();
 		$action_links          = $this->get_action_links();
 		$column_value_callback = [ $this, 'get_column_value' ];
-		$no_item_callback      = [ $this, 'feed_list_no_item_message' ];
+		$no_item_callback      = $this->feed_list_no_item_message( ... );
 		$message_callback      = [ $this, 'feed_list_message' ];
 
 		$feed_table = new GFAddOnFeedsTable( $feeds, $this->_slug, $columns, $bulk_actions, $action_links, $column_value_callback, $no_item_callback, $message_callback, $this );

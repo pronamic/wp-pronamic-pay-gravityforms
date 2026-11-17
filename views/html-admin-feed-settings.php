@@ -298,9 +298,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 						$delay_actions = array_filter(
 							$delay_actions,
-							function ( $action ) {
-								return $action['active'];
-							}
+							fn( $action ) => $action['active']
 						);
 
 						foreach ( $delay_actions as $slug => $data ) {
@@ -343,9 +341,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 				$notifications = \array_filter(
 					$notifications,
-					function ( $notification ) {
-						return 'form_submission' === $notification['event'];
-					}
+					fn( $notification ) => 'form_submission' === $notification['event']
 				);
 
 				if ( count( $notifications ) > 0 ) :
@@ -442,10 +438,10 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 						if ( isset( $pay_feed->links[ $name ] ) ) {
 							$link = $pay_feed->links[ $name ];
 
-							$type            = isset( $link['type'] ) ? $link['type'] : null;
-							$confirmation_id = isset( $link['confirmation_id'] ) ? $link['confirmation_id'] : null;
-							$page_id         = isset( $link['page_id'] ) ? $link['page_id'] : null;
-							$url             = isset( $link['url'] ) ? $link['url'] : null;
+							$type            = $link['type'] ?? null;
+							$confirmation_id = $link['confirmation_id'] ?? null;
+							$page_id         = $link['page_id'] ?? null;
+							$url             = $link['url'] ?? null;
 						}
 
 						?>

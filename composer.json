@@ -48,8 +48,7 @@
 			"php": "8.3"
 		},
 		"platform-check": false,
-		"sort-packages": true,
-		"wp-slug": "pronamic-pay-gravity-forms"
+		"sort-packages": true
 	},
 	"extra": {
 		"installer-paths": {
@@ -67,8 +66,20 @@
 			"vendor/{$vendor}/{$name}/": [
 				"wp-plugin/sqlite-database-integration"
 			]
-		}
+		},
+		"wp-slug": "pronamic-pay-gravity-forms"
 	},
+	"repositories": [
+		{
+			"name": "wp-packages",
+			"type": "composer",
+			"url": "https://repo.wp-packages.org",
+			"only": [
+				"wp-plugin/*",
+				"wp-theme/*"
+			]
+		}
+	],
 	"require": {
 		"php": ">=8.3",
 		"automattic/jetpack-autoloader": "^3.0 || ^4.0 || ^5.0 || ^6.0",
@@ -123,16 +134,5 @@
 		"build-docs": [
 			"vendor/bin/wphd parse src --format=markdown --relative=docs > docs/hooks.md"
 		]
-	},
-	"repositories": [
-		{
-			"name": "wp-packages",
-			"type": "composer",
-			"url": "https://repo.wp-packages.org",
-			"only": [
-				"wp-plugin/*",
-				"wp-theme/*"
-			]
-		}
-	]
+	}
 }

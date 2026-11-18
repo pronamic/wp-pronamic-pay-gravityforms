@@ -22,18 +22,23 @@ define( 'WP_DEFAULT_THEME', 'default' );
 // Test with WordPress debug mode (default).
 define( 'WP_DEBUG', true );
 
-// ** MySQL settings ** //
+// ** Database settings ** //
 
+// The tests use SQLite through the SQLite Database Integration drop-in,
+// see `tests/bootstrap.php`. No MySQL server is required.
 // This configuration file will be used by the copy of WordPress being tested.
 // wordpress/wp-config.php will be ignored.
 
 // WARNING WARNING WARNING!
-// These tests will DROP ALL TABLES in the database with the prefix named below.
-// DO NOT use a production database or one that is shared with something else.
-define( 'DB_NAME', getenv( 'WP_TESTS_DB_NAME' ) ?: 'wp_phpunit_tests' );
-define( 'DB_USER', getenv( 'WP_TESTS_DB_USER' ) ?: 'root' );
-define( 'DB_PASSWORD', getenv( 'WP_TESTS_DB_PASS' ) ?: '' );
-define( 'DB_HOST', getenv( 'WP_TESTS_DB_HOST' ) ?: 'localhost' );
+// These tests will DROP ALL TABLES in the database below.
+define( 'DB_DIR', dirname( __DIR__ ) . '/wp-content/database/' );
+define( 'DB_FILE', 'wp-phpunit-tests.sqlite' );
+
+// Required by `wpdb`, not used by SQLite.
+define( 'DB_NAME', 'wp_phpunit_tests' );
+define( 'DB_USER', '' );
+define( 'DB_PASSWORD', '' );
+define( 'DB_HOST', '' );
 define( 'DB_CHARSET', 'utf8' );
 define( 'DB_COLLATE', '' );
 

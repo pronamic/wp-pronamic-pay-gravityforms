@@ -166,7 +166,9 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 					<td>
 						<input name="_pronamic_pay_gf_entry_id_prefix" value="" type="hidden" />
 
-						<input id="_pronamic_pay_gf_order_id" name="_pronamic_pay_gf_order_id" value="<?php echo esc_attr( $order_id ); ?>" placeholder="{entry_id}" type="text" class="input-text regular-input merge-tag-support mt-position-right mt-hide_all_fields" />
+						<div class="gform-settings-input__container gform-settings-input__container--with-merge-tag">
+							<input id="_pronamic_pay_gf_order_id" name="_pronamic_pay_gf_order_id" value="<?php echo esc_attr( $order_id ); ?>" placeholder="{entry_id}" type="text" class="input-text regular-input merge-tag-support mt-position-right mt-hide_all_fields" />
+						</div>
 
 						<span class="description pronamic-pay-description">
 							<?php
@@ -194,7 +196,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							echo wp_kses(
 								sprintf(
 									'%s %s',
-									__( 'Available tags:', 'pronamic_ideal' ),
+									__( 'Frequently used tags:', 'pronamic_ideal' ),
 									sprintf(
 										'<code>%s</code> <code>%s</code> <code>%s</code>',
 										'{entry_id}',
@@ -229,7 +231,9 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 						$transaction_description = get_post_meta( $post_id, '_pronamic_pay_gf_transaction_description', true );
 
 						?>
-						<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" placeholder="{entry_id}" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
+						<div class="gform-settings-input__container gform-settings-input__container--with-merge-tag">
+							<input id="_pronamic_pay_gf_transaction_description" name="_pronamic_pay_gf_transaction_description" value="<?php echo esc_attr( $transaction_description ); ?>" placeholder="{entry_id}" type="text" class="regular-text merge-tag-support mt-position-right mt-hide_all_fields" />
+						</div>
 
 						<span class="description pronamic-pay-description">
 							<?php
@@ -257,7 +261,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							echo wp_kses(
 								sprintf(
 									'%s %s',
-									__( 'Available tags:', 'pronamic_ideal' ),
+									__( 'Frequently used tags:', 'pronamic_ideal' ),
 									sprintf(
 										'<code>%s</code> <code>%s</code> <code>%s</code>',
 										'{entry_id}',

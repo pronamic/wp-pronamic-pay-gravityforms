@@ -115,11 +115,11 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 	<div class="pronamic-pay-tabs">
 
 		<ul class="pronamic-pay-tabs-items">
-			<li><?php esc_html_e( 'General', 'pronamic_ideal' ); ?></li>
-			<li><?php esc_html_e( 'Status pages', 'pronamic_ideal' ); ?></li>
-			<li><?php esc_html_e( 'Subscription', 'pronamic_ideal' ); ?></li>
-			<li><?php esc_html_e( 'Fields', 'pronamic_ideal' ); ?></li>
-			<li><?php esc_html_e( 'Advanced', 'pronamic_ideal' ); ?></li>
+			<li><?php esc_html_e( 'General', 'pronamic-pay-gravity-forms' ); ?></li>
+			<li><?php esc_html_e( 'Status pages', 'pronamic-pay-gravity-forms' ); ?></li>
+			<li><?php esc_html_e( 'Subscription', 'pronamic-pay-gravity-forms' ); ?></li>
+			<li><?php esc_html_e( 'Fields', 'pronamic-pay-gravity-forms' ); ?></li>
+			<li><?php esc_html_e( 'Advanced', 'pronamic-pay-gravity-forms' ); ?></li>
 		</ul>
 
 		<div class="pronamic-pay-tab">
@@ -131,10 +131,10 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label for="_pronamic_pay_gf_config_id">
-							<?php esc_html_e( 'Configuration', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Configuration', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Gateway configuration, created via <strong>Pay » Configurations</strong>.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Gateway configuration, created via <strong>Pay » Configurations</strong>.', 'pronamic-pay-gravity-forms' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -158,10 +158,10 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label for="_pronamic_pay_gf_order_id">
-							<?php esc_html_e( 'Order ID', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Order ID', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Order ID.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Order ID.', 'pronamic-pay-gravity-forms' ); ?>"></span>
 					</th>
 					<td>
 						<input name="_pronamic_pay_gf_entry_id_prefix" value="" type="hidden" />
@@ -176,7 +176,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							echo wp_kses(
 								sprintf(
 									'%s %s',
-									__( 'Default:', 'pronamic_ideal' ),
+									__( 'Default:', 'pronamic-pay-gravity-forms' ),
 									sprintf(
 										'<code>%s</code>',
 										'{entry_id}'
@@ -196,7 +196,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							echo wp_kses(
 								sprintf(
 									'%s %s',
-									__( 'Frequently used tags:', 'pronamic_ideal' ),
+									__( 'Frequently used tags:', 'pronamic-pay-gravity-forms' ),
 									sprintf(
 										'<code>%s</code> <code>%s</code> <code>%s</code>',
 										'{entry_id}',
@@ -213,17 +213,17 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 							<br />
 
-							<?php esc_html_e( 'An order ID makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'An order ID makes it easier to match payments from transaction overviews to a form and is required by some payment providers.', 'pronamic-pay-gravity-forms' ); ?>
 						</span>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
 						<label for="_pronamic_pay_gf_transaction_description">
-							<?php esc_html_e( 'Transaction Description', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Transaction Description', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Transaction description that will be send with the payment. Use tags to customize the description.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Transaction description that will be send with the payment. Use tags to customize the description.', 'pronamic-pay-gravity-forms' ); ?>"></span>
 					</th>
 					<td>
 						<?php
@@ -241,7 +241,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							echo wp_kses(
 								sprintf(
 									'%s %s',
-									__( 'Default:', 'pronamic_ideal' ),
+									__( 'Default:', 'pronamic-pay-gravity-forms' ),
 									sprintf(
 										'<code>%s</code>',
 										'{entry_id}'
@@ -261,7 +261,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							echo wp_kses(
 								sprintf(
 									'%s %s',
-									__( 'Frequently used tags:', 'pronamic_ideal' ),
+									__( 'Frequently used tags:', 'pronamic-pay-gravity-forms' ),
 									sprintf(
 										'<code>%s</code> <code>%s</code> <code>%s</code>',
 										'{entry_id}',
@@ -278,20 +278,20 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 							<br />
 
-							<?php esc_html_e( 'A description which uses tags and results in more than 32 characters will be truncated.', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'A description which uses tags and results in more than 32 characters will be truncated.', 'pronamic-pay-gravity-forms' ); ?>
 						</span>
 					</td>
 				</tr>
 
 				<tr>
 					<th scope="row">
-						<?php esc_html_e( 'Delay actions', 'pronamic_ideal' ); ?>
+						<?php esc_html_e( 'Delay actions', 'pronamic-pay-gravity-forms' ); ?>
 
-						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Actions for which execution will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+						<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Actions for which execution will be delayed until the payment has been received.', 'pronamic-pay-gravity-forms' ); ?>"></span>
 					</th>
 					<td>
 						<p>
-							<?php esc_html_e( 'Delay actions until payment has been received.', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Delay actions until payment has been received.', 'pronamic-pay-gravity-forms' ); ?>
 						</p>
 
 						<?php
@@ -315,7 +315,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 								<input type="checkbox" name="_pronamic_pay_gf_delay_post_creation" id="_pronamic_pay_gf_delay_post_creation" value="true" <?php checked( $delay_post_creation ); ?> />
 
 								<label for="_pronamic_pay_gf_delay_post_creation">
-									<?php esc_html_e( 'Creating a post', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'Creating a post', 'pronamic-pay-gravity-forms' ); ?>
 								</label>
 							</li>
 
@@ -353,15 +353,15 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 					<tr>
 						<th scope="row">
-							<?php esc_html_e( 'Send Notifications Delay', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Send Notifications Delay', 'pronamic-pay-gravity-forms' ); ?>
 
-							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic_ideal' ); ?>"></span>
+							<span class="dashicons dashicons-editor-help pronamic-pay-tip" title="<?php esc_attr_e( 'Notifications for which sending will be delayed until the payment has been received.', 'pronamic-pay-gravity-forms' ); ?>"></span>
 						</th>
 						<td>
 							<?php if ( $pay_feed->has_delayed_notifications() ) : ?>
 
 								<p>
-									<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'Delay sending notifications until payment has been received.', 'pronamic-pay-gravity-forms' ); ?>
 								</p>
 
 								<ul id="gf_ideal_delay_notifications">
@@ -400,7 +400,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							<?php if ( ! $pay_feed->has_delayed_notifications() ) : ?>
 
 								<p>
-									<?php esc_html_e( 'To send notifications after a successful payment, choose an event in the notification settings.', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'To send notifications after a successful payment, choose an event in the notification settings.', 'pronamic-pay-gravity-forms' ); ?>
 								</p>
 
 							<?php endif; ?>
@@ -413,18 +413,18 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 		<div class="pronamic-pay-tab">
 			<div class="pronamic-pay-tab-block">
-				<?php esc_html_e( 'Set Gravity Forms confirmations, pages or URLs to redirect to after a payment with the mentioned status.', 'pronamic_ideal' ); ?>
+				<?php esc_html_e( 'Set Gravity Forms confirmations, pages or URLs to redirect to after a payment with the mentioned status.', 'pronamic-pay-gravity-forms' ); ?>
 			</div>
 
 			<table class="pronamic-pay-table-striped form-table pronamic-gf-links-tab">
 				<?php
 
 				$fields = [
-					Links::SUCCESS => __( 'Success', 'pronamic_ideal' ),
-					Links::CANCEL  => __( 'Cancelled', 'pronamic_ideal' ),
-					Links::EXPIRED => __( 'Expired', 'pronamic_ideal' ),
-					Links::ERROR   => __( 'Error', 'pronamic_ideal' ),
-					Links::OPEN    => __( 'Open', 'pronamic_ideal' ),
+					Links::SUCCESS => __( 'Success', 'pronamic-pay-gravity-forms' ),
+					Links::CANCEL  => __( 'Cancelled', 'pronamic-pay-gravity-forms' ),
+					Links::EXPIRED => __( 'Expired', 'pronamic-pay-gravity-forms' ),
+					Links::ERROR   => __( 'Error', 'pronamic-pay-gravity-forms' ),
+					Links::OPEN    => __( 'Open', 'pronamic-pay-gravity-forms' ),
 				];
 
 				foreach ( $fields as $name => $label ) :
@@ -464,7 +464,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<li style="margin: 0;">
 										<label>
 											<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_confirmation" value="confirmation" <?php checked( $type, 'confirmation' ); ?> />
-											<?php esc_html_e( 'Confirmation:', 'pronamic_ideal' ); ?>
+											<?php esc_html_e( 'Confirmation:', 'pronamic-pay-gravity-forms' ); ?>
 										</label>
 
 										<?php
@@ -480,7 +480,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											'<option value="%s" %s>%s</option>',
 											\esc_attr( '' ),
 											\selected( null === $confirmation_id, true, false ),
-											\esc_html__( '— Select Confirmation —', 'pronamic_ideal' )
+											\esc_html__( '— Select Confirmation —', 'pronamic-pay-gravity-forms' )
 										);
 
 										foreach ( $confirmations as $confirmation ) {
@@ -499,7 +499,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<li style="margin: 0;">
 										<label>
 											<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_page" value="page" <?php checked( $type, 'page' ); ?> />
-											<?php esc_html_e( 'Page:', 'pronamic_ideal' ); ?>
+											<?php esc_html_e( 'Page:', 'pronamic-pay-gravity-forms' ); ?>
 										</label>
 
 										<?php
@@ -508,7 +508,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											[
 												'selected' => esc_attr( $page_id ),
 												'name'     => esc_attr( '_pronamic_pay_gf_links[' . $name . '][page_id]' ),
-												'show_option_none' => esc_html__( '— Select Page —', 'pronamic_ideal' ),
+												'show_option_none' => esc_html__( '— Select Page —', 'pronamic-pay-gravity-forms' ),
 											]
 										);
 
@@ -517,7 +517,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<li style="margin: 0;">
 										<label>
 											<input type="radio" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][type]" id="gf_ideal_link_<?php echo esc_attr( $name ); ?>_url" value="url" <?php checked( $type, 'url' ); ?> />
-											<?php esc_html_e( 'URL:', 'pronamic_ideal' ); ?>
+											<?php esc_html_e( 'URL:', 'pronamic-pay-gravity-forms' ); ?>
 										</label>
 
 										<input type="text" name="_pronamic_pay_gf_links[<?php echo esc_attr( $name ); ?>][url]" value="<?php echo esc_attr( $url ); ?>" class="regular-text" />
@@ -533,20 +533,20 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 		<div class="pronamic-pay-tab">
 			<div class="pronamic-pay-tab-block">
-				<?php esc_html_e( 'Set the subscription details for recurring payments.', 'pronamic_ideal' ); ?>
+				<?php esc_html_e( 'Set the subscription details for recurring payments.', 'pronamic-pay-gravity-forms' ); ?>
 			</div>
 
 			<table class="pronamic-pay-table-striped form-table pronamic-gf-subscription-tab">
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Recurring amount', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Recurring amount', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Recurring amount', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Recurring amount', 'pronamic-pay-gravity-forms' ); ?></span>
 							</legend>
 
 							<ul class="pronamic-pay-gf-form-choice-list">
@@ -554,21 +554,21 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<input id="pronamic_pay_gf_subscription_amount_type_none" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="" <?php checked( $pay_feed->subscription_amount_type, '' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_amount_type_none">
-										<?php esc_html_e( 'None', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'None', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 								</li>
 								<li class="pronamic-pay-gf-form-choice">
 									<input id="pronamic_pay_gf_subscription_amount_type_total" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="total" <?php checked( $pay_feed->subscription_amount_type, 'total' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_amount_type_total">
-										<?php esc_html_e( 'Total Amount', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Total Amount', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 								</li>
 								<li class="pronamic-pay-gf-form-choice">
 									<input id="pronamic_pay_gf_subscription_amount_type_field" name="_pronamic_pay_gf_subscription_amount_type" type="radio" value="field" <?php checked( $pay_feed->subscription_amount_type, 'field' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_amount_type_field">
-										<?php esc_html_e( 'Form Field', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Form Field', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 
 									<div class="pronamic-pay-gf-form-choice-checked">
@@ -598,13 +598,13 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Interval', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Interval', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Interval', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Interval', 'pronamic-pay-gravity-forms' ); ?></span>
 							</legend>
 
 							<ul class="pronamic-pay-gf-form-choice-list">
@@ -612,19 +612,19 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<input id="pronamic_pay_gf_subscription_interval_type_fixed" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="fixed" <?php checked( $pay_feed->subscription_interval_type, 'fixed' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_interval_type_fixed">
-										<?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Fixed', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 
 									<div class="pronamic-pay-gf-form-choice-checked">
-										<?php echo esc_html( _x( 'Every', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+										<?php echo esc_html( _x( 'Every', 'Recurring payment', 'pronamic-pay-gravity-forms' ) ); ?>
 
 										<input id="pronamic_pay_gf_subscription_interval" name="_pronamic_pay_gf_subscription_interval" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_interval ); ?>" />
 
 										<select id="pronamic_pay_gf_subscription_interval_period" name="_pronamic_pay_gf_subscription_interval_period">
-											<option value="D" <?php selected( $pay_feed->subscription_interval_period, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
-											<option value="W" <?php selected( $pay_feed->subscription_interval_period, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
-											<option value="M" <?php selected( $pay_feed->subscription_interval_period, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
-											<option value="Y" <?php selected( $pay_feed->subscription_interval_period, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
+											<option value="D" <?php selected( $pay_feed->subscription_interval_period, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic-pay-gravity-forms' ); ?></option>
+											<option value="W" <?php selected( $pay_feed->subscription_interval_period, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic-pay-gravity-forms' ); ?></option>
+											<option value="M" <?php selected( $pay_feed->subscription_interval_period, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic-pay-gravity-forms' ); ?></option>
+											<option value="Y" <?php selected( $pay_feed->subscription_interval_period, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic-pay-gravity-forms' ); ?></option>
 										</select>
 									</div>
 								</li>
@@ -632,7 +632,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<input id="pronamic_pay_gf_subscription_interval_type_field" name="_pronamic_pay_gf_subscription_interval_type" type="radio" value="field" <?php checked( $pay_feed->subscription_interval_type, 'field' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_interval_type_field">
-										<?php esc_html_e( 'Form field', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Form field', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 
 									<div class="pronamic-pay-gf-form-choice-checked">
@@ -652,7 +652,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 										echo ' ';
 
-										esc_html_e( 'days', 'pronamic_ideal' );
+										esc_html_e( 'days', 'pronamic-pay-gravity-forms' );
 
 										?>
 
@@ -661,7 +661,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 										<p class="description pronamic-pay-description">
 											<?php
 
-											esc_html_e( 'Use a field value of 0 days for one-time payments.', 'pronamic_ideal' );
+											esc_html_e( 'Use a field value of 0 days for one-time payments.', 'pronamic-pay-gravity-forms' );
 
 											?>
 										</p>
@@ -674,13 +674,13 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Number of Periods', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Number of Periods', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Number of Periods', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Number of Periods', 'pronamic-pay-gravity-forms' ); ?></span>
 							</legend>
 
 							<ul class="pronamic-pay-gf-form-choice-list">
@@ -688,27 +688,27 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<input id="pronamic_pay_gf_subscription_frequency_type_unlimited" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="unlimited" <?php checked( $pay_feed->subscription_frequency_type, 'unlimited' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_frequency_type_unlimited">
-										<?php echo esc_html_x( 'Unlimited', 'Recurring payment', 'pronamic_ideal' ); ?>
+										<?php echo esc_html_x( 'Unlimited', 'Recurring payment', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 								</li>
 								<li class="pronamic-pay-gf-form-choice">
 									<input id="pronamic_pay_gf_subscription_frequency_type_fixed" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="fixed" <?php checked( $pay_feed->subscription_frequency_type, 'fixed' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_frequency_type_fixed">
-										<?php esc_html_e( 'Fixed', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Fixed', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 
 									<div class="pronamic-pay-gf-form-choice-checked">
 										<input id="pronamic_pay_gf_subscription_number_periods" name="_pronamic_pay_gf_subscription_number_periods" type="text" size="4" value="<?php echo esc_attr( $pay_feed->subscription_number_periods ); ?>" />
 
-										<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) ); ?>
+										<?php echo esc_html( _x( 'times', 'Recurring payment', 'pronamic-pay-gravity-forms' ) ); ?>
 									</div>
 								</li>
 								<li class="pronamic-pay-gf-form-choice">
 									<input id="pronamic_pay_gf_subscription_frequency_type_field" name="_pronamic_pay_gf_subscription_frequency_type" type="radio" value="field" <?php checked( $pay_feed->subscription_frequency_type, 'field' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_frequency_type_field">
-										<?php esc_html_e( 'Form Field', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Form Field', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 
 									<div class="pronamic-pay-gf-form-choice-checked">
@@ -728,7 +728,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 										echo ' ';
 
-										echo esc_html( _x( 'times', 'Recurring payment', 'pronamic_ideal' ) );
+										echo esc_html( _x( 'times', 'Recurring payment', 'pronamic-pay-gravity-forms' ) );
 
 										?>
 									</div>
@@ -740,7 +740,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Trial Period', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Trial Period', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
@@ -752,28 +752,28 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Trial Period', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Trial Period', 'pronamic-pay-gravity-forms' ); ?></span>
 							</legend>
 
 							<div class="pronamic-pay-gf-form-choice">
 								<input id="pronamic_pay_gf_subscription_trial_enabled" name="_pronamic_pay_gf_subscription_trial_enabled" type="checkbox" value="1" <?php checked( $trial->enabled ); ?> />
 
 								<label for="pronamic_pay_gf_subscription_trial_enabled">
-									<?php esc_html_e( 'Enable trial period', 'pronamic_ideal' ); ?>
+									<?php esc_html_e( 'Enable trial period', 'pronamic-pay-gravity-forms' ); ?>
 								</label>
 
 								<div class="pronamic-pay-gf-form-choice-checked">
 									<label for="pronamic_pay_gf_subscription_trial_length">
-										<?php esc_html_e( 'Length', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Length', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 
 									<input id="pronamic_pay_gf_subscription_trial_length" name="_pronamic_pay_gf_subscription_trial_length" type="number" step="1" min="1" value="<?php echo esc_attr( $trial->length ); ?>" />
 
 									<select id="pronamic_pay_gf_subscription_trial_length_unit" name="_pronamic_pay_gf_subscription_trial_length_unit">
-										<option value="D" <?php selected( $trial->length_unit, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic_ideal' ); ?></option>
-										<option value="W" <?php selected( $trial->length_unit, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic_ideal' ); ?></option>
-										<option value="M" <?php selected( $trial->length_unit, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic_ideal' ); ?></option>
-										<option value="Y" <?php selected( $trial->length_unit, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic_ideal' ); ?></option>
+										<option value="D" <?php selected( $trial->length_unit, 'D' ); ?>><?php esc_html_e( 'day(s)', 'pronamic-pay-gravity-forms' ); ?></option>
+										<option value="W" <?php selected( $trial->length_unit, 'W' ); ?>><?php esc_html_e( 'week(s)', 'pronamic-pay-gravity-forms' ); ?></option>
+										<option value="M" <?php selected( $trial->length_unit, 'M' ); ?>><?php esc_html_e( 'month(s)', 'pronamic-pay-gravity-forms' ); ?></option>
+										<option value="Y" <?php selected( $trial->length_unit, 'Y' ); ?>><?php esc_html_e( 'year(s)', 'pronamic-pay-gravity-forms' ); ?></option>
 									</select>
 
 									<br />
@@ -783,7 +783,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 										\esc_html_e(
 											'The trial period uses the total amount of the form. You can set the recurring amount separately and add product fields with negative amounts for a discounted trial period.',
-											'pronamic_ideal'
+											'pronamic-pay-gravity-forms'
 										);
 
 										?>
@@ -796,19 +796,19 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 				<tr>
 					<th scope="row">
 						<label>
-							<?php esc_html_e( 'Payment Date Alignment', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Payment Date Alignment', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
 						<fieldset>
 							<legend class="screen-reader-text">
-								<span><?php esc_html_e( 'Payment Date Alignment', 'pronamic_ideal' ); ?></span>
+								<span><?php esc_html_e( 'Payment Date Alignment', 'pronamic-pay-gravity-forms' ); ?></span>
 							</legend>
 
 							<p>
 								<?php
 
-								esc_html_e( 'The payment date can be aligned to a fixed day of the week, month, or year. An additional subscription phase is added at the beginning of the subscription to achieve this, resulting in one extra period being added to the configured number of periods. Optionally, the amount of this alignment phase can be prorated.', 'pronamic_ideal' );
+								esc_html_e( 'The payment date can be aligned to a fixed day of the week, month, or year. An additional subscription phase is added at the beginning of the subscription to achieve this, resulting in one extra period being added to the configured number of periods. Optionally, the amount of this alignment phase can be prorated.', 'pronamic-pay-gravity-forms' );
 
 								?>
 							</p>
@@ -818,7 +818,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 									<input id="pronamic_pay_gf_subscription_interval_date_type_payment_date" name="_pronamic_pay_gf_subscription_interval_date_type" type="radio" value="payment_date" <?php checked( $pay_feed->subscription_interval_date_type, 'payment_date' ); ?> />
 
 									<label for="pronamic_pay_gf_subscription_interval_date_type_payment_date">
-										<?php esc_html_e( 'Entry Date', 'pronamic_ideal' ); ?>
+										<?php esc_html_e( 'Entry Date', 'pronamic-pay-gravity-forms' ); ?>
 									</label>
 								</li>
 								<li class="pronamic-pay-gf-form-choice">
@@ -900,7 +900,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 										?>
 
 										<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-D">
-											<?php esc_html_e( 'Not Available', 'pronamic_ideal' ); ?>
+											<?php esc_html_e( 'Not Available', 'pronamic-pay-gravity-forms' ); ?>
 										</span>
 
 										<span class="pronamic-pay-gf-subscription-interval-date-sync-settings interval-W">
@@ -916,7 +916,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											echo wp_kses(
 												sprintf(
 													/* translators: %s: input HTML */
-													__( 'On %s', 'pronamic_ideal' ),
+													__( 'On %s', 'pronamic-pay-gravity-forms' ),
 													$select
 												),
 												$allowed_html
@@ -939,7 +939,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											echo wp_kses(
 												sprintf(
 													/* translators: %s: <select> Monthday (1-27). */
-													__( 'On the %s <sup>th</sup> day of the month', 'pronamic_ideal' ),
+													__( 'On the %s <sup>th</sup> day of the month', 'pronamic-pay-gravity-forms' ),
 													$select
 												),
 												$allowed_html
@@ -969,7 +969,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											echo wp_kses(
 												sprintf(
 													/* translators: 1: <select> Monthday (1-27), 2: <select> Month (Jan-Dec). */
-													__( 'On %1$s %2$s', 'pronamic_ideal' ),
+													__( 'On %1$s %2$s', 'pronamic-pay-gravity-forms' ),
 													$select_monthday,
 													$select_month
 												),
@@ -987,7 +987,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 											<?php
 
 											/* translators: nl: Bereken bedrag uitlijingsperiode pro rata. */
-											esc_html_e( 'Prorate the amount of the alignment period.', 'pronamic_ideal' );
+											esc_html_e( 'Prorate the amount of the alignment period.', 'pronamic-pay-gravity-forms' );
 
 											?>
 										</label>
@@ -1002,29 +1002,29 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 		<div class="pronamic-pay-tab">
 			<div class="pronamic-pay-tab-block">
-				<?php esc_html_e( 'Set corresponding form fields to include user data in the payment data with some payment providers.', 'pronamic_ideal' ); ?>
+				<?php esc_html_e( 'Set corresponding form fields to include user data in the payment data with some payment providers.', 'pronamic-pay-gravity-forms' ); ?>
 			</div>
 
 			<?php
 
 			$fields = [
-				'prefix_name'                => __( 'Prefix Name', 'pronamic_ideal' ),
-				'first_name'                 => __( 'First Name', 'pronamic_ideal' ),
-				'middle_name'                => __( 'Middle Name', 'pronamic_ideal' ),
-				'last_name'                  => __( 'Last Name', 'pronamic_ideal' ),
-				'suffix_name'                => __( 'Suffix Name', 'pronamic_ideal' ),
-				'address1'                   => __( 'Address', 'pronamic_ideal' ),
-				'address2'                   => __( 'Address 2', 'pronamic_ideal' ),
-				'zip'                        => __( 'Zip', 'pronamic_ideal' ),
-				'city'                       => __( 'City', 'pronamic_ideal' ),
-				'state'                      => __( 'State', 'pronamic_ideal' ),
-				'country'                    => __( 'Country', 'pronamic_ideal' ),
-				'telephone_number'           => __( 'Telephone Number', 'pronamic_ideal' ),
-				'email'                      => __( 'Email', 'pronamic_ideal' ),
-				'consumer_bank_details_name' => __( 'Account Holder Name', 'pronamic_ideal' ),
-				'consumer_bank_details_iban' => __( 'Account IBAN', 'pronamic_ideal' ),
-				'company_name'               => __( 'Company Name', 'pronamic_ideal' ),
-				'vat_number'                 => __( 'VAT Number', 'pronamic_ideal' ),
+				'prefix_name'                => __( 'Prefix Name', 'pronamic-pay-gravity-forms' ),
+				'first_name'                 => __( 'First Name', 'pronamic-pay-gravity-forms' ),
+				'middle_name'                => __( 'Middle Name', 'pronamic-pay-gravity-forms' ),
+				'last_name'                  => __( 'Last Name', 'pronamic-pay-gravity-forms' ),
+				'suffix_name'                => __( 'Suffix Name', 'pronamic-pay-gravity-forms' ),
+				'address1'                   => __( 'Address', 'pronamic-pay-gravity-forms' ),
+				'address2'                   => __( 'Address 2', 'pronamic-pay-gravity-forms' ),
+				'zip'                        => __( 'Zip', 'pronamic-pay-gravity-forms' ),
+				'city'                       => __( 'City', 'pronamic-pay-gravity-forms' ),
+				'state'                      => __( 'State', 'pronamic-pay-gravity-forms' ),
+				'country'                    => __( 'Country', 'pronamic-pay-gravity-forms' ),
+				'telephone_number'           => __( 'Telephone Number', 'pronamic-pay-gravity-forms' ),
+				'email'                      => __( 'Email', 'pronamic-pay-gravity-forms' ),
+				'consumer_bank_details_name' => __( 'Account Holder Name', 'pronamic-pay-gravity-forms' ),
+				'consumer_bank_details_iban' => __( 'Account IBAN', 'pronamic-pay-gravity-forms' ),
+				'company_name'               => __( 'Company Name', 'pronamic-pay-gravity-forms' ),
+				'vat_number'                 => __( 'VAT Number', 'pronamic-pay-gravity-forms' ),
 			];
 
 			$meta_fields = \get_post_meta( $post_id, '_pronamic_pay_gf_fields', true );
@@ -1048,13 +1048,13 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							$auto_option_label = '';
 
 							if ( in_array( $name, [ 'prefix_name', 'first_name', 'middle_name', 'last_name', 'suffix_name' ], true ) ) {
-								$auto_option_label = __( '— From first name field —', 'pronamic_ideal' );
+								$auto_option_label = __( '— From first name field —', 'pronamic-pay-gravity-forms' );
 							} elseif ( in_array( $name, [ 'address1', 'address2', 'zip', 'city', 'state', 'country' ], true ) ) {
-								$auto_option_label = __( '— From first address field —', 'pronamic_ideal' );
+								$auto_option_label = __( '— From first address field —', 'pronamic-pay-gravity-forms' );
 							} elseif ( 'telephone_number' === $name ) {
-								$auto_option_label = __( '— First phone field —', 'pronamic_ideal' );
+								$auto_option_label = __( '— First phone field —', 'pronamic-pay-gravity-forms' );
 							} elseif ( 'email' === $name ) {
-								$auto_option_label = __( '— First email address field —', 'pronamic_ideal' );
+								$auto_option_label = __( '— First email address field —', 'pronamic-pay-gravity-forms' );
 							}
 
 							$current = 'auto';
@@ -1092,14 +1092,14 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 		<div class="pronamic-pay-tab">
 			<div class="pronamic-pay-tab-block">
-				<?php esc_html_e( 'Optional settings for advanced usage only.', 'pronamic_ideal' ); ?>
+				<?php esc_html_e( 'Optional settings for advanced usage only.', 'pronamic-pay-gravity-forms' ); ?>
 			</div>
 
 			<table class="pronamic-pay-table-striped form-table">
 				<tr>
 					<th scope="row">
 						<label for="gf_ideal_condition_field_id">
-							<?php esc_html_e( 'Conditional Logic', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Conditional Logic', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
@@ -1171,7 +1171,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 
 							$field = [
 								'name'  => 'conditionalLogic',
-								'label' => __( 'Conditional Logic', 'pronamic_ideal' ),
+								'label' => __( 'Conditional Logic', 'pronamic-pay-gravity-forms' ),
 								'type'  => 'feed_condition',
 							];
 
@@ -1184,14 +1184,14 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 							value="<?php echo esc_attr( $pay_feed->condition_enabled ); ?>"/>
 
 						<p class="description pronamic-pay-description">
-							<?php esc_html_e( 'Set conditional logic to only use this gateway if the entry matches the condition(s).', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Set conditional logic to only use this gateway if the entry matches the condition(s).', 'pronamic-pay-gravity-forms' ); ?>
 						</p>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row">
 						<label for="gf_ideal_user_role_field_id">
-							<?php esc_html_e( 'Update user role', 'pronamic_ideal' ); ?>
+							<?php esc_html_e( 'Update user role', 'pronamic-pay-gravity-forms' ); ?>
 						</label>
 					</th>
 					<td>
@@ -1204,7 +1204,7 @@ function _pronamic_pay_gravityforms_dropdown_input( $form, $args ) {
 								'name'     => '_pronamic_pay_gf_user_role_field_id',
 								'selected' => \get_post_meta( $post_id, '_pronamic_pay_gf_user_role_field_id', true ),
 								'options'  => [
-									'' => \__( '— Select Field —', 'pronamic_ideal' ),
+									'' => \__( '— Select Field —', 'pronamic-pay-gravity-forms' ),
 								],
 							]
 						);

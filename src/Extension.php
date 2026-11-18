@@ -268,13 +268,13 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function source_text( $text, Payment $payment ) {
-		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
+		$text = __( 'Gravity Forms', 'pronamic-pay-gravity-forms' ) . '<br />';
 
 		$text .= sprintf(
 			'<a href="%1$s">%2$s</a>',
 			add_query_arg( [ 'pronamic_gf_lid' => $payment->get_source_id() ], admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
-			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $payment->get_source_id() )
+			sprintf( __( 'Entry #%s', 'pronamic-pay-gravity-forms' ), $payment->get_source_id() )
 		);
 
 		return $text;
@@ -289,7 +289,7 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function source_description( $description, Payment $payment ) {
-		return __( 'Gravity Forms Entry', 'pronamic_ideal' );
+		return __( 'Gravity Forms Entry', 'pronamic-pay-gravity-forms' );
 	}
 
 	/**
@@ -313,13 +313,13 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function subscription_source_text( $text, Subscription $subscription ) {
-		$text = __( 'Gravity Forms', 'pronamic_ideal' ) . '<br />';
+		$text = __( 'Gravity Forms', 'pronamic-pay-gravity-forms' ) . '<br />';
 
 		$text .= sprintf(
 			'<a href="%1$s">%2$s</a>',
 			add_query_arg( [ 'pronamic_gf_lid' => $subscription->get_source_id() ], admin_url( 'admin.php' ) ),
 			/* translators: %s: source id  */
-			sprintf( __( 'Entry #%s', 'pronamic_ideal' ), $subscription->get_source_id() )
+			sprintf( __( 'Entry #%s', 'pronamic-pay-gravity-forms' ), $subscription->get_source_id() )
 		);
 
 		return $text;
@@ -334,7 +334,7 @@ class Extension extends AbstractPluginIntegration {
 	 * @return string
 	 */
 	public function subscription_source_description( $description, Subscription $subscription ) {
-		return __( 'Gravity Forms Entry', 'pronamic_ideal' );
+		return __( 'Gravity Forms Entry', 'pronamic-pay-gravity-forms' );
 	}
 
 	/**
@@ -853,7 +853,7 @@ class Extension extends AbstractPluginIntegration {
 				 */
 				'note'           => \sprintf(
 					/* translators: %s: refunded amount */
-					\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic_ideal' ),
+					\__( 'Payment has been (partially) refunded. Amount: %s.', 'pronamic-pay-gravity-forms' ),
 					$diff_amount->format_i18n()
 				),
 			]
@@ -908,7 +908,7 @@ class Extension extends AbstractPluginIntegration {
 		switch ( $subscription->get_status() ) {
 			case SubscriptionStatus::ACTIVE:
 				if ( ! Entry::is_payment_active( $lead ) ) {
-					$action['note'] = __( 'Subscription manually activated.', 'pronamic_ideal' );
+					$action['note'] = __( 'Subscription manually activated.', 'pronamic-pay-gravity-forms' );
 
 					// Set amount to `0` to prevent incorrect revenue in reports.
 					$action['amount'] = 0;
@@ -1061,7 +1061,7 @@ class Extension extends AbstractPluginIntegration {
 			case 'cancel_subscription':
 				$feed = FeedsDB::get_feed_by_entry_id( $lead['id'] );
 
-				$action['note'] ??= __( 'Subscription manually canceled.', 'pronamic_ideal' );
+				$action['note'] ??= __( 'Subscription manually canceled.', 'pronamic-pay-gravity-forms' );
 
 				$result = $this->addon->cancel_subscription( $lead, $feed, $action['note'] );
 
@@ -1439,13 +1439,13 @@ class Extension extends AbstractPluginIntegration {
 				'active'                      => false,
 				'meta_key_suffix'             => 'activecampaign_subscription',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Subscribing the user to ActiveCampaign', 'pronamic_ideal' ),
+				'label'                       => __( 'Subscribing the user to ActiveCampaign', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityformsaweber'           => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'aweber_subscription',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic_ideal' ),
+				'label'                       => __( 'Subscribing the user to AWeber', 'pronamic-pay-gravity-forms' ),
 				'delay_callback'              => function (): void {
 					// @link https://github.com/wp-premium/gravityformsaweber/blob/1.4.2/aweber.php#L124-L125
 					\remove_action( 'gform_post_submission', [ 'GFAWeber', 'export' ], 10 );
@@ -1460,7 +1460,7 @@ class Extension extends AbstractPluginIntegration {
 				'active'                      => false,
 				'meta_key_suffix'             => 'campaignmonitor_subscription',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic_ideal' ),
+				'label'                       => __( 'Subscribing the user to Campaign Monitor', 'pronamic-pay-gravity-forms' ),
 				'delay_callback'              => function (): void {
 					// @link https://github.com/wp-premium/gravityformscampaignmonitor/blob/2.5.1/campaignmonitor.php#L124-L125
 					\remove_action( 'gform_after_submission', [ 'GFCampaignMonitor', 'export' ], 10 );
@@ -1476,7 +1476,7 @@ class Extension extends AbstractPluginIntegration {
 				'active'                      => false,
 				'meta_key_suffix'             => 'mailchimp_subscription',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic_ideal' ),
+				'label'                       => __( 'Subscribing the user to MailChimp', 'pronamic-pay-gravity-forms' ),
 				'delay_callback'              => function (): void {
 					// @link https://github.com/wp-premium/gravityformsmailchimp/blob/2.4.1/mailchimp.php#L120-L121
 					\remove_action( 'gform_after_submission', [ 'GFMailChimp', 'export' ], 10 );
@@ -1492,37 +1492,37 @@ class Extension extends AbstractPluginIntegration {
 				'active'                      => false,
 				'meta_key_suffix'             => 'sliced_invoices',
 				'delayed_payment_integration' => false,
-				'label'                       => __( 'Creating quotes and invoices with Sliced Invoices', 'pronamic_ideal' ),
+				'label'                       => __( 'Creating quotes and invoices with Sliced Invoices', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityforms-moneybird'       => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'moneybird',
 				'delayed_payment_integration' => false,
-				'label'                       => __( 'Sending estimates and invoices with Moneybird', 'pronamic_ideal' ),
+				'label'                       => __( 'Sending estimates and invoices with Moneybird', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityformstwilio'           => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'twilio',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Sending data to Twilio', 'pronamic_ideal' ),
+				'label'                       => __( 'Sending data to Twilio', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityformswebhooks'         => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'webhooks',
 				'delayed_payment_integration' => false,
-				'label'                       => __( 'Sending a trigger to Webhooks', 'pronamic_ideal' ),
+				'label'                       => __( 'Sending a trigger to Webhooks', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityformsdropbox'          => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'dropbox',
 				'delayed_payment_integration' => false,
-				'label'                       => __( 'Uploading files to Dropbox', 'pronamic_ideal' ),
+				'label'                       => __( 'Uploading files to Dropbox', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityformszapier'           => [
 				'active'                      => class_exists( 'GFZapier' ),
 				'meta_key_suffix'             => 'zapier',
 				'delayed_payment_integration' => false,
-				'label'                       => __( 'Sending data to Zapier', 'pronamic_ideal' ),
+				'label'                       => __( 'Sending data to Zapier', 'pronamic-pay-gravity-forms' ),
 				'delay_callback'              => function (): void {
 					// @link https://github.com/wp-premium/gravityformszapier/blob/1.4.2/zapier.php#L106
 					remove_action( 'gform_after_submission', [ 'GFZapier', 'send_form_data_to_zapier' ], 10 );
@@ -1538,13 +1538,13 @@ class Extension extends AbstractPluginIntegration {
 				'active'                      => false,
 				'meta_key_suffix'             => 'user_registration',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Registering the user', 'pronamic_ideal' ),
+				'label'                       => __( 'Registering the user', 'pronamic-pay-gravity-forms' ),
 			],
 			'gravityflow'                  => [
 				'active'                      => false,
 				'meta_key_suffix'             => 'gravityflow',
 				'delayed_payment_integration' => true,
-				'label'                       => __( 'Start the Workflow once payment has been received.', 'pronamic_ideal' ),
+				'label'                       => __( 'Start the Workflow once payment has been received.', 'pronamic-pay-gravity-forms' ),
 				'delay_callback'              => function (): void {
 					// @link https://github.com/gravityflow/gravityflow/blob/master/class-gravity-flow.php#L4711-L4720
 				},
@@ -1579,7 +1579,7 @@ class Extension extends AbstractPluginIntegration {
 				$actions[ $slug ]['delayed_payment_integration'] = true;
 				$actions[ $slug ]['label']                       = \sprintf(
 					/* translators: %s: plugin title */
-					\__( 'Process %s feeds', 'pronamic_ideal' ),
+					\__( 'Process %s feeds', 'pronamic-pay-gravity-forms' ),
 					$addon->plugin_page_title()
 				);
 
@@ -1781,7 +1781,7 @@ class Extension extends AbstractPluginIntegration {
 			return $payment_statuses;
 		}
 
-		$payment_statuses['PartlyRefunded'] = __( 'Partially Refunded', 'pronamic_ideal' );
+		$payment_statuses['PartlyRefunded'] = __( 'Partially Refunded', 'pronamic-pay-gravity-forms' );
 
 		return $payment_statuses;
 	}

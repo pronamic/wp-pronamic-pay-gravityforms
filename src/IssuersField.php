@@ -580,7 +580,7 @@ class IssuersField extends GF_Field_Select {
 				$link = sprintf(
 					'<a class="ideal-edit-link" href="%s" target="_blank">%s</a>',
 					esc_url( $new_feed_url ),
-					__( 'New Payment Feed', 'pronamic_ideal' )
+					__( 'New Payment Feed', 'pronamic-pay-gravity-forms' )
 				);
 
 				$input = $link . $input;
@@ -592,10 +592,10 @@ class IssuersField extends GF_Field_Select {
 				// If there are feeds but no gateway issuer options, it's very likely this field is not supported by the gateway.
 				$error = sprintf(
 					'<p class="pronamic-pay-error"><strong>%s</strong><br><em>%s</em></p>',
-					__( 'This field is not supported by your payment gateway.', 'pronamic_ideal' ),
+					__( 'This field is not supported by your payment gateway.', 'pronamic-pay-gravity-forms' ),
 					sprintf(
 						/* translators: %s: new feed URL */
-						__( 'Please remove it from this form or <a href="%s" target="_blank">add a supported payment gateway</a>.', 'pronamic_ideal' ),
+						__( 'Please remove it from this form or <a href="%s" target="_blank">add a supported payment gateway</a>.', 'pronamic-pay-gravity-forms' ),
 						esc_url( $new_feed_url )
 					)
 				);
@@ -615,7 +615,7 @@ class IssuersField extends GF_Field_Select {
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
-		return esc_attr__( 'Issuer', 'pronamic_ideal' );
+		return esc_attr__( 'Issuer', 'pronamic-pay-gravity-forms' );
 	}
 
 	/**
@@ -627,7 +627,7 @@ class IssuersField extends GF_Field_Select {
 	public function get_form_editor_button() {
 		return [
 			'group' => 'pronamic_pay_fields',
-			'text'  => __( 'Issuer', 'pronamic_ideal' ),
+			'text'  => __( 'Issuer', 'pronamic-pay-gravity-forms' ),
 		];
 	}
 
@@ -654,7 +654,7 @@ class IssuersField extends GF_Field_Select {
 	 * @link https://github.com/wp-premium/gravityforms/blob/2.0.3/js.php#L587-L599
 	 */
 	public static function editor_js_set_default_values() {
-		$label = __( 'Choose a bank for iDEAL payment', 'pronamic_ideal' );
+		$label = __( 'Choose a bank for iDEAL payment', 'pronamic-pay-gravity-forms' );
 
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :

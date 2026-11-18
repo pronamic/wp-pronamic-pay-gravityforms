@@ -53,7 +53,7 @@ class Admin {
 	public static function form_settings_menu_item( $menu_items ) {
 		$menu_items[] = [
 			'name'  => 'pronamic_pay',
-			'label' => __( 'Pay', 'pronamic_ideal' ),
+			'label' => __( 'Pay', 'pronamic-pay-gravity-forms' ),
 			'query' => [ 'fid' => null ],
 		];
 
@@ -90,114 +90,114 @@ class Admin {
 	public static function custom_merge_tags( $merge_tags ) {
 		// Payment.
 		$merge_tags[] = [
-			'label' => __( 'Payment Status', 'pronamic_ideal' ),
+			'label' => __( 'Payment Status', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{payment_status}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Payment Date', 'pronamic_ideal' ),
+			'label' => __( 'Payment Date', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{payment_date}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Transaction Id', 'pronamic_ideal' ),
+			'label' => __( 'Transaction Id', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{transaction_id}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Payment Amount', 'pronamic_ideal' ),
+			'label' => __( 'Payment Amount', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{payment_amount}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Payment ID', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Payment ID', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_id}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Pay Again URL', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Pay Again URL', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_pay_again_url}',
 		];
 
 		// Bank transfer.
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient reference', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient reference', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_reference}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient bank name', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient bank name', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_bank_name}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient name', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient name', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_name}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient IBAN', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient IBAN', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_iban}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient BIC', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient BIC', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_bic}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient city', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient city', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_city}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient country', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient country', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_country}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic bank transfer recipient account number', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic bank transfer recipient account number', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_bank_transfer_recipient_account_number}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic consumer bank account name', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic consumer bank account name', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_consumer_bank_account_name}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic consumer IBAN', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic consumer IBAN', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_payment_consumer_iban}',
 		];
 
 		// Subscription.
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Subscription ID', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Subscription ID', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_subscription_id}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Subscription Payment ID', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Subscription Payment ID', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_subscription_payment_id}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Subscription Amount', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Subscription Amount', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_subscription_amount}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Subscription Cancel URL', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Subscription Cancel URL', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_subscription_cancel_url}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Subscription Renew URL', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Subscription Renew URL', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_subscription_renew_url}',
 		];
 
 		$merge_tags[] = [
-			'label' => __( 'Pronamic Subscription Renewal Date', 'pronamic_ideal' ),
+			'label' => __( 'Pronamic Subscription Renewal Date', 'pronamic-pay-gravity-forms' ),
 			'tag'   => '{pronamic_subscription_renewal_date}',
 		];
 
@@ -221,7 +221,7 @@ class Admin {
 		$lead = RGFormsModel::get_lead( $lead_id );
 
 		if ( false === $lead ) {
-			\wp_die( \esc_html__( 'The requested Gravity Forms entry could not be found.', 'pronamic_ideal' ) );
+			\wp_die( \esc_html__( 'The requested Gravity Forms entry could not be found.', 'pronamic-pay-gravity-forms' ) );
 		}
 
 		$url = \add_query_arg(

@@ -37,4 +37,22 @@
 	<rule ref="WordPress.WP.GlobalVariablesOverride.OverrideProhibited">
 		<exclude-pattern>views/html-admin-feed-settings.php</exclude-pattern>
 	</rule>
+
+	<rule ref="WordPress.WP.I18n">
+		<properties>
+			<property name="text_domain" type="array">
+				<element value="pronamic-pay-gravity-forms" />
+			</property>
+		</properties>
+	</rule>
+
+	<rule ref="WordPress.Utils.I18nTextDomainFixer">
+		<properties>
+			<property name="old_text_domain" type="array">
+				<element value="pronamic_ideal" />
+				<element value="pronamic-ideal" />
+			</property>
+			<property name="new_text_domain" value="pronamic-pay-gravity-forms" />
+		</properties>
+	</rule>
 </ruleset>

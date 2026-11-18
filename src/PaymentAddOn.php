@@ -123,9 +123,9 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 * Translate.
 	 */
 	private function translate() {
-		$this->_title = \__( 'Pronamic Pay Add-On', 'pronamic-ideal' );
+		$this->_title = \__( 'Pronamic Pay Add-On', 'pronamic-pay-gravity-forms' );
 
-		$this->_short_title = \__( 'Pay', 'pronamic-ideal' );
+		$this->_short_title = \__( 'Pay', 'pronamic-pay-gravity-forms' );
 	}
 
 	/**
@@ -159,14 +159,14 @@ class PaymentAddOn extends GFPaymentAddOn {
 		if ( '' === trim( $post_title ) ) {
 			$feeds = $this->get_feeds( $form_id );
 
-			$post_title = __( 'Payment Feed', 'pronamic_ideal' );
+			$post_title = __( 'Payment Feed', 'pronamic-pay-gravity-forms' );
 
 			$count = count( $feeds ) + 1;
 
 			if ( $count > 1 ) {
 				$post_title = sprintf(
 					/* translators: %d: payment feed index */
-					__( 'Payment Feed #%d', 'pronamic_ideal' ),
+					__( 'Payment Feed #%d', 'pronamic-pay-gravity-forms' ),
 					$count
 				);
 			}
@@ -300,12 +300,12 @@ class PaymentAddOn extends GFPaymentAddOn {
 	public function feed_list_title() {
 		// Gravity Forms 2.5.
 		if ( GravityForms::version_compare( '2.5-rc', '>=' ) ) {
-			return __( 'Pay', 'pronamic_ideal' );
+			return __( 'Pay', 'pronamic-pay-gravity-forms' );
 		}
 
 		$title = sprintf(
 			'<i class="dashicons dashicons-money fa-"></i> %s',
-			esc_html__( 'Pay Feeds', 'pronamic_ideal' )
+			esc_html__( 'Pay Feeds', 'pronamic-pay-gravity-forms' )
 		);
 
 		if ( ! $this->can_create_feed() ) {
@@ -317,7 +317,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$title .= sprintf(
 			'<a class="add-new-h2" href="%s">%s</a>',
 			esc_url( $url ),
-			esc_html__( 'Add New', 'pronamic_ideal' )
+			esc_html__( 'Add New', 'pronamic-pay-gravity-forms' )
 		);
 
 		return $title;
@@ -472,9 +472,9 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 */
 	public function feed_list_columns() {
 		return [
-			'name'                    => esc_html__( 'Name', 'pronamic_ideal' ),
-			'transaction_description' => esc_html__( 'Transaction Description', 'pronamic_ideal' ),
-			'configuration'           => esc_html__( 'Configuration', 'pronamic_ideal' ),
+			'name'                    => esc_html__( 'Name', 'pronamic-pay-gravity-forms' ),
+			'transaction_description' => esc_html__( 'Transaction Description', 'pronamic-pay-gravity-forms' ),
+			'configuration'           => esc_html__( 'Configuration', 'pronamic-pay-gravity-forms' ),
 		];
 	}
 
@@ -489,7 +489,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 		$title = get_the_title( $feed['id'] );
 
 		if ( empty( $title ) ) {
-			$title = __( 'Default pay feed', 'pronamic_ideal' );
+			$title = __( 'Default pay feed', 'pronamic-pay-gravity-forms' );
 		}
 
 		$edit_url = add_query_arg( [ 'fid' => $feed['id'] ] );
@@ -541,7 +541,7 @@ class PaymentAddOn extends GFPaymentAddOn {
 	 */
 	public function feed_list_no_item_message() {
 		/* translators: 1: <a href="new feed URL">, 2: </a> */
-		$label = \__( 'This form doesn’t have any pay feeds. Let’s go %1$screate one%2$s.', 'pronamic_ideal' );
+		$label = \__( 'This form doesn’t have any pay feeds. Let’s go %1$screate one%2$s.', 'pronamic-pay-gravity-forms' );
 
 		return \sprintf(
 			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -567,17 +567,17 @@ class PaymentAddOn extends GFPaymentAddOn {
 		}
 
 		$events = [
-			'complete_payment'          => esc_html__( 'Payment Completed', 'pronamic_ideal' ),
-			'fail_payment'              => esc_html__( 'Payment Failed', 'pronamic_ideal' ),
-			'add_pending_payment'       => esc_html__( 'Payment Pending', 'pronamic_ideal' ),
+			'complete_payment'          => esc_html__( 'Payment Completed', 'pronamic-pay-gravity-forms' ),
+			'fail_payment'              => esc_html__( 'Payment Failed', 'pronamic-pay-gravity-forms' ),
+			'add_pending_payment'       => esc_html__( 'Payment Pending', 'pronamic-pay-gravity-forms' ),
 
 			// Subscription events.
-			'create_subscription'       => esc_html__( 'Subscription Created', 'pronamic_ideal' ),
-			'cancel_subscription'       => esc_html__( 'Subscription Canceled', 'pronamic_ideal' ),
-			'expire_subscription'       => esc_html__( 'Subscription Expired', 'pronamic_ideal' ),
-			'renew_subscription'        => esc_html__( 'Subscription Renewal Notice', 'pronamic_ideal' ),
-			'add_subscription_payment'  => esc_html__( 'Subscription Payment Added', 'pronamic_ideal' ),
-			'fail_subscription_payment' => esc_html__( 'Subscription Payment Failed', 'pronamic_ideal' ),
+			'create_subscription'       => esc_html__( 'Subscription Created', 'pronamic-pay-gravity-forms' ),
+			'cancel_subscription'       => esc_html__( 'Subscription Canceled', 'pronamic-pay-gravity-forms' ),
+			'expire_subscription'       => esc_html__( 'Subscription Expired', 'pronamic-pay-gravity-forms' ),
+			'renew_subscription'        => esc_html__( 'Subscription Renewal Notice', 'pronamic-pay-gravity-forms' ),
+			'add_subscription_payment'  => esc_html__( 'Subscription Payment Added', 'pronamic-pay-gravity-forms' ),
+			'fail_subscription_payment' => esc_html__( 'Subscription Payment Failed', 'pronamic-pay-gravity-forms' ),
 		];
 
 		return $events;

@@ -54,11 +54,11 @@ class AdminPaymentFormPostType {
 	public function edit_columns( $columns ) {
 		$columns = [
 			'cb'                                      => '<input type="checkbox" />',
-			'title'                                   => __( 'Title', 'pronamic_ideal' ),
-			'pronamic_pay_gf_form'                    => __( 'Form', 'pronamic_ideal' ),
-			'pronamic_pay_gf_config'                  => __( 'Configuration', 'pronamic_ideal' ),
-			'pronamic_pay_gf_transaction_description' => __( 'Transaction Description', 'pronamic_ideal' ),
-			'date'                                    => __( 'Date', 'pronamic_ideal' ),
+			'title'                                   => __( 'Title', 'pronamic-pay-gravity-forms' ),
+			'pronamic_pay_gf_form'                    => __( 'Form', 'pronamic-pay-gravity-forms' ),
+			'pronamic_pay_gf_config'                  => __( 'Configuration', 'pronamic-pay-gravity-forms' ),
+			'pronamic_pay_gf_transaction_description' => __( 'Transaction Description', 'pronamic-pay-gravity-forms' ),
+			'date'                                    => __( 'Date', 'pronamic-pay-gravity-forms' ),
 		];
 
 		return $columns;
@@ -117,7 +117,7 @@ class AdminPaymentFormPostType {
 	public function add_meta_boxes() {
 		add_meta_box(
 			'pronamic_pay_gf',
-			__( 'Configuration', 'pronamic_ideal' ),
+			__( 'Configuration', 'pronamic-pay-gravity-forms' ),
 			$this->meta_box_config( ... ),
 			'pronamic_pay_gf',
 			'normal',

@@ -17,12 +17,12 @@
 
 	if ( null !== $message ) {
 		// Notice.
-		$msg   = __( 'There was an error updating this payment feed.', 'pronamic_ideal' );
+		$msg   = __( 'There was an error updating this payment feed.', 'pronamic-pay-gravity-forms' );
 		$class = 'error';
 
 		if ( '1' === $message ) {
 			$class = 'updated';
-			$msg   = __( 'Payment feed updated successfully.', 'pronamic_ideal' );
+			$msg   = __( 'Payment feed updated successfully.', 'pronamic-pay-gravity-forms' );
 		}
 
 		printf(
@@ -40,7 +40,7 @@
 
 			$title = empty( $post_id ) ? '' : get_the_title( $post_id );
 
-			$title_placeholder = __( 'Enter title here', 'pronamic_ideal' );
+			$title_placeholder = __( 'Enter title here', 'pronamic-pay-gravity-forms' );
 
 			?>
 

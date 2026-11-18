@@ -64,7 +64,7 @@ class Fields {
 	public static function add_pay_field_group( $field_groups ) {
 		$field_groups['pronamic_pay_fields'] ??= [
 			'name'   => 'pronamic_pay_fields',
-			'label'  => __( 'Payment Fields', 'pronamic_ideal' ),
+			'label'  => __( 'Payment Fields', 'pronamic-pay-gravity-forms' ),
 			'fields' => [],
 		];
 
@@ -93,14 +93,14 @@ class Fields {
 		?>
 		<li class="pronamic_pay_config_field_setting field_setting">
 			<label for="pronamic_pay_config_field" class="section_label">
-				<?php \esc_html_e( 'Payment Gateway Configuration', 'pronamic_ideal' ); ?>
+				<?php \esc_html_e( 'Payment Gateway Configuration', 'pronamic-pay-gravity-forms' ); ?>
 
 				<?php \gform_tooltip( 'form_field_pronamic_pay_config' ); ?>
 			</label>
 
 			<select id="pronamic_pay_config_field"
 					onchange="SetFieldProperty( 'pronamicPayConfigId', jQuery( this ).val() );" class="fieldwidth-3">
-				<option value=""><?php \esc_html_e( '— Use Payment Feed Setting —', 'pronamic_ideal' ); ?></option>
+				<option value=""><?php \esc_html_e( '— Use Payment Feed Setting —', 'pronamic-pay-gravity-forms' ); ?></option>
 				<?php
 
 				$config_ids = \wp_list_pluck( $feeds, 'config_id' );
@@ -121,17 +121,17 @@ class Fields {
 
 		<li class="pronamic_pay_display_field_setting field_setting">
 			<label for="pronamic_pay_display_field" class="section_label">
-				<?php \esc_html_e( 'Display Mode', 'pronamic_ideal' ); ?>
+				<?php \esc_html_e( 'Display Mode', 'pronamic-pay-gravity-forms' ); ?>
 
 				<?php \gform_tooltip( 'form_field_pronamic_pay_display' ); ?>
 			</label>
 
 			<select id="pronamic_pay_display_field" onchange="SetFieldProperty( 'pronamicPayDisplayMode', jQuery( this ).val() );" class="fieldwidth-3">
-				<option value=""><?php \esc_html_e( '— Use field default —', 'pronamic_ideal' ); ?></option>
-				<option value="select"><?php echo \esc_html_x( 'Select', 'Field display mode', 'pronamic_ideal' ); ?></option>
-				<option value="icons-24"><?php echo \esc_html_x( 'List with icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
-				<option value="icons-64"><?php echo \esc_html_x( 'Small icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
-				<option value="icons-125"><?php echo \esc_html_x( 'Large icons', 'Field display mode', 'pronamic_ideal' ); ?></option>
+				<option value=""><?php \esc_html_e( '— Use field default —', 'pronamic-pay-gravity-forms' ); ?></option>
+				<option value="select"><?php echo \esc_html_x( 'Select', 'Field display mode', 'pronamic-pay-gravity-forms' ); ?></option>
+				<option value="icons-24"><?php echo \esc_html_x( 'List with icons', 'Field display mode', 'pronamic-pay-gravity-forms' ); ?></option>
+				<option value="icons-64"><?php echo \esc_html_x( 'Small icons', 'Field display mode', 'pronamic-pay-gravity-forms' ); ?></option>
+				<option value="icons-125"><?php echo \esc_html_x( 'Large icons', 'Field display mode', 'pronamic-pay-gravity-forms' ); ?></option>
 			</select>
 		</li>
 		<?php

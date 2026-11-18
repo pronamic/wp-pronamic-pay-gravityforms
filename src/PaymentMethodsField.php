@@ -578,7 +578,7 @@ class PaymentMethodsField extends GF_Field_Select {
 				$link = sprintf(
 					"<a class='ideal-edit-link' href='%s' target='_blank'>%s</a>",
 					esc_url( Admin::get_new_feed_url( $form['id'] ) ),
-					esc_html__( 'New Payment Feed', 'pronamic_ideal' )
+					esc_html__( 'New Payment Feed', 'pronamic-pay-gravity-forms' )
 				);
 
 				$input = $link . $input;
@@ -704,7 +704,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	 * @return string
 	 */
 	public function get_form_editor_field_title() {
-		return esc_attr__( 'Payment Method', 'pronamic_ideal' );
+		return esc_attr__( 'Payment Method', 'pronamic-pay-gravity-forms' );
 	}
 
 	/**
@@ -717,7 +717,7 @@ class PaymentMethodsField extends GF_Field_Select {
 	public function get_form_editor_button() {
 		return [
 			'group' => 'pronamic_pay_fields',
-			'text'  => __( 'Payment Method', 'pronamic_ideal' ),
+			'text'  => __( 'Payment Method', 'pronamic-pay-gravity-forms' ),
 		];
 	}
 
@@ -781,7 +781,7 @@ class PaymentMethodsField extends GF_Field_Select {
 		?>
 		case '<?php echo esc_js( self::TYPE ); ?>' :
 			if ( ! field.label ) {
-				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic_ideal' ) ); ?>';
+				field.label = '<?php echo esc_js( __( 'Choose a payment method', 'pronamic-pay-gravity-forms' ) ); ?>';
 			}
 
 			field.enableChoiceValue = true;

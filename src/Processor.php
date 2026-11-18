@@ -231,7 +231,7 @@ class Processor {
 
 		$payment->title = sprintf(
 			/* translators: %s: payment data title */
-			__( 'Payment for %s', 'pronamic_ideal' ),
+			__( 'Payment for %s', 'pronamic-pay-gravity-forms' ),
 			$data->get_description()
 		);
 

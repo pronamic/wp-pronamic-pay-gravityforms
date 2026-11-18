@@ -122,6 +122,11 @@
 			"vendor/bin/wp i18n make-mo ./build/pronamic-pay-gravity-forms/languages/",
 			"vendor/bin/wp dist-archive ./build/pronamic-pay-gravity-forms/ --plugin-dirname=pronamic-pay-gravity-forms --force"
 		],
+		"make-pot": [
+			"@build",
+			"rsync --recursive --delete --verbose ./build/pronamic-pay-gravity-forms/languages/ ./languages/",
+			"vendor/bin/wp i18n update-po ./languages/pronamic-pay-gravity-forms.pot"
+		],
 		"coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover build/logs/clover.xml --coverage-text",
 		"coveralls": "vendor/bin/php-coveralls -v",
 		"phpcbf": "XDEBUG_MODE=off vendor/bin/phpcbf",

@@ -139,7 +139,11 @@ class Processor {
 		 */
 		add_action( 'gform_after_submission_' . $this->form_id, $this->after_submission( ... ), 10, 2 );
 
-		add_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, $this->maybe_delay_feed( ... ), 10, 4 );
+		/*
+		 * This callback is removed again for free payments, which requires an
+		 * array callable: each first-class callable is a new `Closure` object.
+		 */
+		add_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, [ $this, 'maybe_delay_feed' ], 10, 4 );
 		add_filter( 'gravityflow_is_delayed_pre_process_workflow', $this->maybe_delay_workflow( ... ), 10, 3 );
 	}
 
@@ -475,7 +479,7 @@ class Processor {
 			( $payment->get_lines()->get_amount()->get_number()->is_zero() && $subscription_lines->get_amount()->get_number()->is_zero() )
 		) {
 			// Allow delayed feeds to be processed during fulfilment for free payments (e.g. user registration for entry with discount).
-			\remove_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, $this->maybe_delay_feed( ... ), 10 );
+			\remove_filter( 'gform_is_delayed_pre_process_feed_' . $this->form_id, [ $this, 'maybe_delay_feed' ], 10 );
 
 			$payment->set_status( PaymentStatus::SUCCESS );
 			$payment->save();

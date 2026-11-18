@@ -12,6 +12,7 @@ declare(strict_types=1);
 
 use Rector\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector;
 use Rector\Config\RectorConfig;
+use Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector;
 
 return RectorConfig::configure()
 	->withPaths(
@@ -30,6 +31,17 @@ return RectorConfig::configure()
 			 */
 			FunctionFirstClassCallableRector::class => [
 				__DIR__ . '/src/PaymentData.php',
+			],
+
+			/*
+			 * Each first-class callable is a new `Closure` object, so it can't be
+			 * used to find a registered callback with `has_filter()` or
+			 * `remove_filter()`.
+			 */
+			ArrayToFirstClassCallableRector::class  => [
+				__DIR__ . '/src/IssuersField.php',
+				__DIR__ . '/src/PaymentMethodsField.php',
+				__DIR__ . '/src/Processor.php',
 			],
 		]
 	)

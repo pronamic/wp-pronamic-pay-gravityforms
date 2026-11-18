@@ -61,25 +61,25 @@ class PaymentMethodsField extends GF_Field_Select {
 		$this->inputs = null;
 
 		// Actions.
-		if ( ! has_action( 'gform_editor_js_set_default_values', $this->editor_js_set_default_values( ... ) ) ) {
-			add_action( 'gform_editor_js_set_default_values', $this->editor_js_set_default_values( ... ) );
+		if ( ! has_action( 'gform_editor_js_set_default_values', [ $this, 'editor_js_set_default_values' ] ) ) {
+			add_action( 'gform_editor_js_set_default_values', [ $this, 'editor_js_set_default_values' ] );
 		}
 
 		// Filters.
-		if ( ! has_filter( 'gform_gf_field_create', $this->field_create( ... ) ) ) {
-			add_filter( 'gform_gf_field_create', $this->field_create( ... ), 10, 2 );
+		if ( ! has_filter( 'gform_gf_field_create', [ $this, 'field_create' ] ) ) {
+			add_filter( 'gform_gf_field_create', [ $this, 'field_create' ], 10, 2 );
 		}
 
-		if ( ! has_filter( 'gform_get_field_value', $this->get_field_value( ... ) ) ) {
-			add_filter( 'gform_get_field_value', $this->get_field_value( ... ), 10, 3 );
+		if ( ! has_filter( 'gform_get_field_value', [ $this, 'get_field_value' ] ) ) {
+			add_filter( 'gform_get_field_value', [ $this, 'get_field_value' ], 10, 3 );
 		}
 
-		if ( ! has_filter( 'gform_form_update_meta', self::form_update_meta( ... ) ) ) {
-			add_filter( 'gform_form_update_meta', self::form_update_meta( ... ), 10, 3 );
+		if ( ! has_filter( 'gform_form_update_meta', [ self::class, 'form_update_meta' ] ) ) {
+			add_filter( 'gform_form_update_meta', [ self::class, 'form_update_meta' ], 10, 3 );
 		}
 
-		if ( ! has_filter( 'gform_pre_render', self::form_pre_render( ... ) ) ) {
-			add_filter( 'gform_pre_render', self::form_pre_render( ... ), 10, 3 );
+		if ( ! has_filter( 'gform_pre_render', [ self::class, 'form_pre_render' ] ) ) {
+			add_filter( 'gform_pre_render', [ self::class, 'form_pre_render' ], 10, 3 );
 		}
 
 		// Admin.

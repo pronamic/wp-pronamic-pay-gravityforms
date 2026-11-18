@@ -52,8 +52,8 @@ class IssuersField extends GF_Field_Select {
 		parent::__construct( $properties );
 
 		// Actions.
-		if ( ! has_action( 'gform_editor_js_set_default_values', self::editor_js_set_default_values( ... ) ) ) {
-			add_action( 'gform_editor_js_set_default_values', self::editor_js_set_default_values( ... ) );
+		if ( ! has_action( 'gform_editor_js_set_default_values', [ self::class, 'editor_js_set_default_values' ] ) ) {
+			add_action( 'gform_editor_js_set_default_values', [ self::class, 'editor_js_set_default_values' ] );
 		}
 
 		if (

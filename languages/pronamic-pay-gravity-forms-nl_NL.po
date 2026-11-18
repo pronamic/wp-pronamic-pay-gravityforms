@@ -1,0 +1,832 @@
+# Copyright (C) 2026 Pronamic
+# This file is distributed under the GPL-3.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Pronamic Pay Gravity Forms Add-On\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-pay-gravity-forms\n"
+"POT-Creation-Date: 2026-11-18T09:25:38+00:00\n"
+"PO-Revision-Date: 2026-11-18 10:30+0100\n"
+"Last-Translator: \n"
+"Language-Team: Pronamic\n"
+"Language: nl_NL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.10\n"
+"X-Domain: pronamic-pay-gravity-forms\n"
+
+#. Plugin Name of the plugin
+#: pronamic-pay-gravity-forms.php:3
+msgid "Pronamic Pay Gravity Forms Add-On"
+msgstr "Pronamic Pay Gravity Forms Add-On"
+
+#. Plugin URI of the plugin
+#: pronamic-pay-gravity-forms.php:4
+msgid "https://www.pronamic.eu/plugins/pronamic-pay-gravityforms/"
+msgstr "https://www.pronamic.eu/plugins/pronamic-pay-gravityforms/"
+
+#. Description of the plugin
+#: pronamic-pay-gravity-forms.php:5
+msgid "Extend the Pronamic Pay plugin with Gravity Forms support to receive payments through a variety of payment providers."
+msgstr "Breid de Pronamic Pay plugin uit met Gravity Forms ondersteuning om betalingen te ontvangen via diverse betalingsproviders."
+
+#. Author of the plugin
+#: pronamic-pay-gravity-forms.php:11
+msgid "Pronamic"
+msgstr "Pronamic"
+
+#. Author URI of the plugin
+#: pronamic-pay-gravity-forms.php:12
+msgid "https://www.pronamic.eu/"
+msgstr "https://www.pronamic.nl/"
+
+#: src/Admin.php:56 src/PaymentAddOn.php:128 src/PaymentAddOn.php:303
+msgid "Pay"
+msgstr "Betalen"
+
+#: src/Admin.php:93
+msgid "Payment Status"
+msgstr "Betalingsstatus"
+
+#: src/Admin.php:98
+msgid "Payment Date"
+msgstr "Betalingsdatum"
+
+#: src/Admin.php:103
+msgid "Transaction Id"
+msgstr "Transactie ID"
+
+#: src/Admin.php:108
+msgid "Payment Amount"
+msgstr "Te betalen bedrag"
+
+#: src/Admin.php:113
+msgid "Pronamic Payment ID"
+msgstr "Pronamic betaling ID"
+
+#: src/Admin.php:118
+msgid "Pronamic Pay Again URL"
+msgstr "Pronamic Opnieuw Betalen URL"
+
+#: src/Admin.php:124
+msgid "Pronamic bank transfer recipient reference"
+msgstr "Pronamic bankoverschrijving ontvanger referentie"
+
+#: src/Admin.php:129
+msgid "Pronamic bank transfer recipient bank name"
+msgstr "Pronamic bankoverschrijving ontvanger banknaam"
+
+#: src/Admin.php:134
+msgid "Pronamic bank transfer recipient name"
+msgstr "Pronamic bankoverschrijving ontvanger naam"
+
+#: src/Admin.php:139
+msgid "Pronamic bank transfer recipient IBAN"
+msgstr "Pronamic bankoverschrijving ontvanger IBAN"
+
+#: src/Admin.php:144
+msgid "Pronamic bank transfer recipient BIC"
+msgstr "Pronamic bankoverschrijving ontvanger BIC"
+
+#: src/Admin.php:149
+msgid "Pronamic bank transfer recipient city"
+msgstr "Pronamic bankoverschrijving ontvanger plaats"
+
+#: src/Admin.php:154
+msgid "Pronamic bank transfer recipient country"
+msgstr "Pronamic bankoverschrijving ontvanger land"
+
+#: src/Admin.php:159
+msgid "Pronamic bank transfer recipient account number"
+msgstr "Pronamic bankoverschrijving ontvanger rekeningnummer"
+
+#: src/Admin.php:164
+msgid "Pronamic consumer bank account name"
+msgstr "Pronamic consument rekeninghouder"
+
+#: src/Admin.php:169
+msgid "Pronamic consumer IBAN"
+msgstr "Pronamic consument IBAN"
+
+#: src/Admin.php:175
+msgid "Pronamic Subscription ID"
+msgstr "Pronamic abonnement ID"
+
+#: src/Admin.php:180
+msgid "Pronamic Subscription Payment ID"
+msgstr "Pronamic abonnement betaling ID"
+
+#: src/Admin.php:185
+msgid "Pronamic Subscription Amount"
+msgstr "Pronamic abonnement bedrag"
+
+#: src/Admin.php:190
+msgid "Pronamic Subscription Cancel URL"
+msgstr "Pronamic abonnement annuleren URL"
+
+#: src/Admin.php:195
+msgid "Pronamic Subscription Renew URL"
+msgstr "Pronamic abonnement vernieuwen URL"
+
+#: src/Admin.php:200
+msgid "Pronamic Subscription Renewal Date"
+msgstr "Pronamic abonnement vernieuwingsdatum"
+
+#: src/Admin.php:224
+msgid "The requested Gravity Forms entry could not be found."
+msgstr "De opgevraagde Gravity Forms inzending kon niet worden gevonden."
+
+#: src/AdminPaymentFormPostType.php:57
+msgid "Title"
+msgstr "Titel"
+
+#: src/AdminPaymentFormPostType.php:58
+msgid "Form"
+msgstr "Formulier"
+
+#: src/AdminPaymentFormPostType.php:59 src/AdminPaymentFormPostType.php:120
+#: src/PaymentAddOn.php:477 views/html-admin-feed-settings.php:134
+msgid "Configuration"
+msgstr "Configuratie"
+
+#: src/AdminPaymentFormPostType.php:60 src/PaymentAddOn.php:476
+#: views/html-admin-feed-settings.php:223
+msgid "Transaction Description"
+msgstr "Transactiebeschrijving"
+
+#: src/AdminPaymentFormPostType.php:61
+msgid "Date"
+msgstr "Datum"
+
+#: src/Extension.php:271 src/Extension.php:316
+msgid "Gravity Forms"
+msgstr "Gravity Forms"
+
+#. translators: %s: source id
+#: src/Extension.php:277 src/Extension.php:322
+#, php-format
+msgid "Entry #%s"
+msgstr "Inzending #%s"
+
+#: src/Extension.php:292 src/Extension.php:337
+msgid "Gravity Forms Entry"
+msgstr "Gravity Forms inzending"
+
+#. translators: %s: refunded amount
+#: src/Extension.php:856
+#, php-format
+msgid "Payment has been (partially) refunded. Amount: %s."
+msgstr "Betaling is (gedeeltelijk) terugbetaald. Bedrag: %s."
+
+#: src/Extension.php:911
+msgid "Subscription manually activated."
+msgstr "Abonnement handmatig geactiveerd."
+
+#: src/Extension.php:1064
+msgid "Subscription manually canceled."
+msgstr "Abonnement handmatig geannuleerd."
+
+#: src/Extension.php:1442
+msgid "Subscribing the user to ActiveCampaign"
+msgstr "De gebruiker inschrijven bij ActiveCampaign"
+
+#: src/Extension.php:1448
+msgid "Subscribing the user to AWeber"
+msgstr "De gebruiker inschrijven bij AWeber"
+
+#: src/Extension.php:1463
+msgid "Subscribing the user to Campaign Monitor"
+msgstr "De gebruiker inschrijven bij Campaign Monitor"
+
+#: src/Extension.php:1479
+msgid "Subscribing the user to MailChimp"
+msgstr "De gebruiker inschrijven bij MailChimp"
+
+#: src/Extension.php:1495
+msgid "Creating quotes and invoices with Sliced Invoices"
+msgstr "Offertes en facturen aanmaken met Sliced Invoices"
+
+#: src/Extension.php:1501
+msgid "Sending estimates and invoices with Moneybird"
+msgstr "Offertes en facturen versturen met Moneybird"
+
+#: src/Extension.php:1507
+msgid "Sending data to Twilio"
+msgstr "Gegevens versturen naar Twilio"
+
+#: src/Extension.php:1513
+msgid "Sending a trigger to Webhooks"
+msgstr "Een trigger naar Webhooks sturen"
+
+#: src/Extension.php:1519
+msgid "Uploading files to Dropbox"
+msgstr "Bestanden uploaden naar Dropbox"
+
+#: src/Extension.php:1525
+msgid "Sending data to Zapier"
+msgstr "Gegevens versturen naar Zapier"
+
+#: src/Extension.php:1541
+msgid "Registering the user"
+msgstr "De gebruiker registreren"
+
+#: src/Extension.php:1547
+msgid "Start the Workflow once payment has been received."
+msgstr "Start de workflow zodra betaling is ontvangen."
+
+#. translators: %s: plugin title
+#: src/Extension.php:1582
+#, php-format
+msgid "Process %s feeds"
+msgstr "Verwerk %s feeds"
+
+#: src/Extension.php:1784
+msgid "Partially Refunded"
+msgstr "Gedeeltelijk terugbetaald"
+
+#: src/Fields.php:67
+msgid "Payment Fields"
+msgstr "Betaalvelden"
+
+#: src/Fields.php:96
+msgid "Payment Gateway Configuration"
+msgstr "Betalingsgateway configuratie"
+
+#: src/Fields.php:103
+msgid "— Use Payment Feed Setting —"
+msgstr "— Gebruik betalingsfeed instelling —"
+
+#: src/Fields.php:124
+msgid "Display Mode"
+msgstr "Weergavemodus"
+
+#: src/Fields.php:130
+msgid "— Use field default —"
+msgstr "— Gebruik veld standaard —"
+
+#: src/Fields.php:131
+msgctxt "Field display mode"
+msgid "Select"
+msgstr "Uitschuifkeuzelijst"
+
+#: src/Fields.php:132
+msgctxt "Field display mode"
+msgid "List with icons"
+msgstr "Lijst met iconen"
+
+#: src/Fields.php:133
+msgctxt "Field display mode"
+msgid "Small icons"
+msgstr "Kleine iconen"
+
+#: src/Fields.php:134
+msgctxt "Field display mode"
+msgid "Large icons"
+msgstr "Grote iconen"
+
+#: src/IssuersField.php:583 src/PaymentFormPostType.php:51
+#: src/PaymentMethodsField.php:581
+msgid "New Payment Feed"
+msgstr "Nieuwe betalingsfeed"
+
+#: src/IssuersField.php:595
+msgid "This field is not supported by your payment gateway."
+msgstr "Dit veld wordt niet ondersteund door je betalingsgateway."
+
+#. translators: %s: new feed URL
+#: src/IssuersField.php:598
+#, php-format
+msgid "Please remove it from this form or <a href=\"%s\" target=\"_blank\">add a supported payment gateway</a>."
+msgstr "Verwijder het van dit formulier of <a href=\"%s\" target=\"_blank\">voeg een ondersteunde betalingsgateway toe</a>."
+
+#: src/IssuersField.php:618 src/IssuersField.php:630
+msgid "Issuer"
+msgstr "Bankenlijst"
+
+#: src/IssuersField.php:657
+msgid "Choose a bank for iDEAL payment"
+msgstr "Kies een bank voor iDEAL-betaling"
+
+#: src/PaymentAddOn.php:126
+msgid "Pronamic Pay Add-On"
+msgstr "Pronamic Pay Add-On"
+
+#: src/PaymentAddOn.php:162 src/PaymentFormPostType.php:47
+msgid "Payment Feed"
+msgstr "Betalingsfeed"
+
+#. translators: %d: payment feed index
+#: src/PaymentAddOn.php:169
+#, php-format
+msgid "Payment Feed #%d"
+msgstr "Betalingsfeed #%d"
+
+#: src/PaymentAddOn.php:308
+msgid "Pay Feeds"
+msgstr "Betalen feeds"
+
+#: src/PaymentAddOn.php:320 src/PaymentFormPostType.php:48
+msgid "Add New"
+msgstr "Nieuwe toevoegen"
+
+#: src/PaymentAddOn.php:475
+msgid "Name"
+msgstr "Naam"
+
+#: src/PaymentAddOn.php:492
+msgid "Default pay feed"
+msgstr "Standaard betalingsfeed"
+
+#. translators: 1: <a href="new feed URL">, 2: </a>
+#: src/PaymentAddOn.php:544
+#, php-format
+msgid "This form doesn’t have any pay feeds. Let’s go %1$screate one%2$s."
+msgstr "Dit formulier heeft nog geen betalingsfeeds. %1$sMaak er één aan%2$s."
+
+#: src/PaymentAddOn.php:570
+msgid "Payment Completed"
+msgstr "Betaling voltooid"
+
+#: src/PaymentAddOn.php:571
+msgid "Payment Failed"
+msgstr "Betaling mislukt"
+
+#: src/PaymentAddOn.php:572
+msgid "Payment Pending"
+msgstr "Betaling in afwachting"
+
+#: src/PaymentAddOn.php:575
+msgid "Subscription Created"
+msgstr "Abonnement aangemaakt"
+
+#: src/PaymentAddOn.php:576
+msgid "Subscription Canceled"
+msgstr "Abonnement geannuleerd"
+
+#: src/PaymentAddOn.php:577
+msgid "Subscription Expired"
+msgstr "Abonnement verlopen"
+
+#: src/PaymentAddOn.php:578
+msgid "Subscription Renewal Notice"
+msgstr "Abonnement vernieuwingsmelding"
+
+#: src/PaymentAddOn.php:579
+msgid "Subscription Payment Added"
+msgstr "Abonnement betaling aangemaakt"
+
+#: src/PaymentAddOn.php:580
+msgid "Subscription Payment Failed"
+msgstr "Abonnement betaling mislukt"
+
+#: src/PaymentFormPostType.php:44 src/PaymentFormPostType.php:46
+#: src/PaymentFormPostType.php:57
+msgid "Payment Feeds"
+msgstr "Betalingsfeeds"
+
+#: src/PaymentFormPostType.php:49
+msgid "Add New Payment Feed"
+msgstr "Nieuwe betalingsfeed"
+
+#: src/PaymentFormPostType.php:50
+msgid "Edit Payment Feed"
+msgstr "Betalingsfeed bewerken"
+
+#: src/PaymentFormPostType.php:52
+msgid "All Payment Feeds"
+msgstr "Alle betalingsfeeds"
+
+#: src/PaymentFormPostType.php:53
+msgid "View Payment Feed"
+msgstr "Betalingsfeed bekijken"
+
+#: src/PaymentFormPostType.php:54
+msgid "Search Payment Feeds"
+msgstr "Betalingsfeeds zoeken"
+
+#: src/PaymentFormPostType.php:55
+msgid "No payment feeds found."
+msgstr "Geen betalingsfeeds gevonden."
+
+#: src/PaymentFormPostType.php:56
+msgid "No payment feeds found in Trash."
+msgstr "Geen betalingsfeeds gevonden in prullenbak."
+
+#: src/PaymentFormPostType.php:58
+msgid "Filter payment feeds list"
+msgstr "Filter betalingsfeeds lijst"
+
+#: src/PaymentFormPostType.php:59
+msgid "Payment feeds list navigation"
+msgstr "Betalingsfeeds lijst navigatie"
+
+#: src/PaymentFormPostType.php:60
+msgid "Payment feeds list"
+msgstr "Betalingsfeeds lijst"
+
+#: src/PaymentMethodsField.php:707 src/PaymentMethodsField.php:720
+msgid "Payment Method"
+msgstr "Betaalmethode"
+
+#: src/PaymentMethodsField.php:784
+msgid "Choose a payment method"
+msgstr "Kies een betaalmethode"
+
+#. translators: %s: payment data title
+#: src/Processor.php:234
+#, php-format
+msgid "Payment for %s"
+msgstr "Betaling voor %s"
+
+#: views/html-admin-feed-gf-box.php:20
+msgid "There was an error updating this payment feed."
+msgstr "Er ging iets fout tijdens het bijwerken van deze betalingsfeed."
+
+#: views/html-admin-feed-gf-box.php:25
+msgid "Payment feed updated successfully."
+msgstr "Betalingsfeed succesvol bijgewerkt."
+
+#: views/html-admin-feed-gf-box.php:43
+msgid "Enter title here"
+msgstr "Titel hier invoeren"
+
+#: views/html-admin-feed-settings.php:118
+msgid "General"
+msgstr "Algemeen"
+
+#: views/html-admin-feed-settings.php:119
+msgid "Status pages"
+msgstr "Statuspagina's"
+
+#: views/html-admin-feed-settings.php:120
+msgid "Subscription"
+msgstr "Abonnement"
+
+#: views/html-admin-feed-settings.php:121
+msgid "Fields"
+msgstr "Velden"
+
+#: views/html-admin-feed-settings.php:122
+msgid "Advanced"
+msgstr "Geavanceerd"
+
+#: views/html-admin-feed-settings.php:137
+msgid "Gateway configuration, created via <strong>Pay » Configurations</strong>."
+msgstr "Configuratie voor de betalingsprovider, aangemaakt via <strong>Betalen » Configuraties</strong>."
+
+#: views/html-admin-feed-settings.php:161
+msgid "Order ID"
+msgstr "Bestelling ID"
+
+#: views/html-admin-feed-settings.php:164
+msgid "Order ID."
+msgstr "Bestelling ID."
+
+#: views/html-admin-feed-settings.php:179
+#: views/html-admin-feed-settings.php:244
+msgid "Default:"
+msgstr "Standaard:"
+
+#: views/html-admin-feed-settings.php:199
+#: views/html-admin-feed-settings.php:264
+msgid "Frequently used tags:"
+msgstr "Veelgebruikte tags:"
+
+#: views/html-admin-feed-settings.php:216
+msgid "An order ID makes it easier to match payments from transaction overviews to a form and is required by some payment providers."
+msgstr "Een bestelling ID maakt het eenvoudiger om betalingen vanuit transactieoverzichten naar een formulier te kunnen herleiden en is vereist voor sommige betalingsproviders."
+
+#: views/html-admin-feed-settings.php:226
+msgid "Transaction description that will be send with the payment. Use tags to customize the description."
+msgstr "Transactiebeschrijving die met de betaling zal worden meegestuurd. Gebruik tags voor aangepaste beschrijvingen."
+
+#: views/html-admin-feed-settings.php:281
+msgid "A description which uses tags and results in more than 32 characters will be truncated."
+msgstr "Een beschrijving met tags die resulteert in meer dan 32 tekens wordt afgekapt."
+
+#: views/html-admin-feed-settings.php:288
+msgid "Delay actions"
+msgstr "Uitgestelde acties"
+
+#: views/html-admin-feed-settings.php:290
+msgid "Actions for which execution will be delayed until the payment has been received."
+msgstr "Acties waarvoor de uitvoering zal worden uitgesteld totdat de betaling ontvangen is."
+
+#: views/html-admin-feed-settings.php:294
+msgid "Delay actions until payment has been received."
+msgstr "Stel acties uit totdat de betaling ontvangen is."
+
+#: views/html-admin-feed-settings.php:318
+msgid "Creating a post"
+msgstr "Een bericht aanmaken"
+
+#: views/html-admin-feed-settings.php:356
+msgid "Send Notifications Delay"
+msgstr "Uitgestelde meldingen"
+
+#: views/html-admin-feed-settings.php:358
+msgid "Notifications for which sending will be delayed until the payment has been received."
+msgstr "Meldingen waarvoor het versturen zal worden uitgesteld totdat de betaling ontvangen is."
+
+#: views/html-admin-feed-settings.php:364
+msgid "Delay sending notifications until payment has been received."
+msgstr "Stel het versturen van meldingen uit totdat de betaling ontvangen is."
+
+#: views/html-admin-feed-settings.php:403
+msgid "To send notifications after a successful payment, choose an event in the notification settings."
+msgstr "Kies een gebeurtenis in de meldingsinstellingen om meldingen te versturen na een succesvolle betaling."
+
+#: views/html-admin-feed-settings.php:416
+msgid "Set Gravity Forms confirmations, pages or URLs to redirect to after a payment with the mentioned status."
+msgstr "Stel Gravity Forms bevestigingen, pagina's of URL's in om naar door te sturen na een betaling met de genoemde status."
+
+#: views/html-admin-feed-settings.php:423
+msgid "Success"
+msgstr "Succes"
+
+#: views/html-admin-feed-settings.php:424
+msgid "Cancelled"
+msgstr "Geannuleerd"
+
+#: views/html-admin-feed-settings.php:425
+msgid "Expired"
+msgstr "Verlopen"
+
+#: views/html-admin-feed-settings.php:426
+msgid "Error"
+msgstr "Fout"
+
+#: views/html-admin-feed-settings.php:427
+msgid "Open"
+msgstr "Open"
+
+#: views/html-admin-feed-settings.php:467
+msgid "Confirmation:"
+msgstr "Bevestiging:"
+
+#: views/html-admin-feed-settings.php:483
+msgid "— Select Confirmation —"
+msgstr "— Selecteer bevestiging —"
+
+#: views/html-admin-feed-settings.php:502
+msgid "Page:"
+msgstr "Pagina:"
+
+#: views/html-admin-feed-settings.php:511
+msgid "— Select Page —"
+msgstr "— Selecteer pagina —"
+
+#: views/html-admin-feed-settings.php:520
+msgid "URL:"
+msgstr "URL:"
+
+#: views/html-admin-feed-settings.php:536
+msgid "Set the subscription details for recurring payments."
+msgstr "Stel de abonnementsgegevens in voor terugkerende betalingen."
+
+#: views/html-admin-feed-settings.php:543
+#: views/html-admin-feed-settings.php:549
+msgid "Recurring amount"
+msgstr "Terugkerend bedrag"
+
+#: views/html-admin-feed-settings.php:557
+msgid "None"
+msgstr "Geen"
+
+#: views/html-admin-feed-settings.php:564
+msgid "Total Amount"
+msgstr "Totaalbedrag"
+
+#: views/html-admin-feed-settings.php:571
+#: views/html-admin-feed-settings.php:711
+msgid "Form Field"
+msgstr "Formulierveld"
+
+#: views/html-admin-feed-settings.php:601
+#: views/html-admin-feed-settings.php:607
+msgid "Interval"
+msgstr "Interval"
+
+#: views/html-admin-feed-settings.php:615
+#: views/html-admin-feed-settings.php:698
+msgid "Fixed"
+msgstr "Vast"
+
+#: views/html-admin-feed-settings.php:619
+msgctxt "Recurring payment"
+msgid "Every"
+msgstr "Elke"
+
+#: views/html-admin-feed-settings.php:624
+#: views/html-admin-feed-settings.php:773
+msgid "day(s)"
+msgstr "dag(en)"
+
+#: views/html-admin-feed-settings.php:625
+#: views/html-admin-feed-settings.php:774
+msgid "week(s)"
+msgstr "week/weken"
+
+#: views/html-admin-feed-settings.php:626
+#: views/html-admin-feed-settings.php:775
+msgid "month(s)"
+msgstr "maand(en)"
+
+#: views/html-admin-feed-settings.php:627
+#: views/html-admin-feed-settings.php:776
+msgid "year(s)"
+msgstr "jaar/jaren"
+
+#: views/html-admin-feed-settings.php:635
+msgid "Form field"
+msgstr "Formulierveld"
+
+#: views/html-admin-feed-settings.php:655
+msgid "days"
+msgstr "dagen"
+
+#: views/html-admin-feed-settings.php:664
+msgid "Use a field value of 0 days for one-time payments."
+msgstr "Gebruik een veld waarde van 0 dagen voor eenmalige betalingen."
+
+#: views/html-admin-feed-settings.php:677
+#: views/html-admin-feed-settings.php:683
+msgid "Number of Periods"
+msgstr "Aantal perioden"
+
+#: views/html-admin-feed-settings.php:691
+msgctxt "Recurring payment"
+msgid "Unlimited"
+msgstr "Ongelimiteerd"
+
+#: views/html-admin-feed-settings.php:704
+#: views/html-admin-feed-settings.php:731
+msgctxt "Recurring payment"
+msgid "times"
+msgstr "keer"
+
+#: views/html-admin-feed-settings.php:743
+#: views/html-admin-feed-settings.php:755
+msgid "Trial Period"
+msgstr "Proefperiode"
+
+#: views/html-admin-feed-settings.php:762
+msgid "Enable trial period"
+msgstr "Proefperiode inschakelen"
+
+#: views/html-admin-feed-settings.php:767
+msgid "Length"
+msgstr "Duur"
+
+#: views/html-admin-feed-settings.php:784
+msgid "The trial period uses the total amount of the form. You can set the recurring amount separately and add product fields with negative amounts for a discounted trial period."
+msgstr "De proefperiode gebruikt het totaalbedrag van het formulier. Je kunt het terugkerende bedrag apart instellen en productvelden met negatieve bedragen toevoegen voor een proefperiode met korting."
+
+#: views/html-admin-feed-settings.php:799
+#: views/html-admin-feed-settings.php:805
+msgid "Payment Date Alignment"
+msgstr "Betalingsdatum uitlijnen"
+
+#: views/html-admin-feed-settings.php:811
+msgid "The payment date can be aligned to a fixed day of the week, month, or year. An additional subscription phase is added at the beginning of the subscription to achieve this, resulting in one extra period being added to the configured number of periods. Optionally, the amount of this alignment phase can be prorated."
+msgstr "De betaaldatum kan worden afgestemd op een vaste dag van de week, maand of jaar. Hiervoor wordt een extra abonnementsfase aan het begin van het abonnement toegevoegd, waardoor één extra periode wordt toegevoegd aan het ingestelde aantal perioden. Optioneel kan het bedrag van deze uitlijningsfase pro rata worden berekend."
+
+#: views/html-admin-feed-settings.php:821
+msgid "Entry Date"
+msgstr "Inzendingsdatum"
+
+#: views/html-admin-feed-settings.php:903
+msgid "Not Available"
+msgstr "Niet beschikbaar"
+
+#. translators: %s: input HTML
+#: views/html-admin-feed-settings.php:919
+#, php-format
+msgid "On %s"
+msgstr "Op %s"
+
+#. translators: %s: <select> Monthday (1-27).
+#: views/html-admin-feed-settings.php:942
+#, php-format
+msgid "On the %s <sup>th</sup> day of the month"
+msgstr "Op de %s<sup>e</sup> dag van de maand"
+
+#. translators: 1: <select> Monthday (1-27), 2: <select> Month (Jan-Dec).
+#: views/html-admin-feed-settings.php:972
+#, php-format
+msgid "On %1$s %2$s"
+msgstr "Op %1$s %2$s"
+
+#. translators: nl: Bereken bedrag uitlijingsperiode pro rata.
+#: views/html-admin-feed-settings.php:990
+msgid "Prorate the amount of the alignment period."
+msgstr "Herbereken bedrag van de uitlijningsperiode."
+
+#: views/html-admin-feed-settings.php:1005
+msgid "Set corresponding form fields to include user data in the payment data with some payment providers."
+msgstr "Stel corresponderende formuliervelden in om gebruikergegevens op te nemen in de betaling met sommige betalingsproviders."
+
+#: views/html-admin-feed-settings.php:1011
+msgid "Prefix Name"
+msgstr "Voorvoegsel"
+
+#: views/html-admin-feed-settings.php:1012
+msgid "First Name"
+msgstr "Voornaam"
+
+#: views/html-admin-feed-settings.php:1013
+msgid "Middle Name"
+msgstr "Middelnaam"
+
+#: views/html-admin-feed-settings.php:1014
+msgid "Last Name"
+msgstr "Achternaam"
+
+#: views/html-admin-feed-settings.php:1015
+msgid "Suffix Name"
+msgstr "Achtervoegsel"
+
+#: views/html-admin-feed-settings.php:1016
+msgid "Address"
+msgstr "Adres"
+
+#: views/html-admin-feed-settings.php:1017
+msgid "Address 2"
+msgstr "Adres 2"
+
+#: views/html-admin-feed-settings.php:1018
+msgid "Zip"
+msgstr "Postcode"
+
+#: views/html-admin-feed-settings.php:1019
+msgid "City"
+msgstr "Plaats"
+
+#: views/html-admin-feed-settings.php:1020
+msgid "State"
+msgstr "Provincie"
+
+#: views/html-admin-feed-settings.php:1021
+msgid "Country"
+msgstr "Land"
+
+#: views/html-admin-feed-settings.php:1022
+msgid "Telephone Number"
+msgstr "Telefoonnummer"
+
+#: views/html-admin-feed-settings.php:1023
+msgid "Email"
+msgstr "E-mail"
+
+#: views/html-admin-feed-settings.php:1024
+msgid "Account Holder Name"
+msgstr "Rekeninghouder naam"
+
+#: views/html-admin-feed-settings.php:1025
+msgid "Account IBAN"
+msgstr "Rekening IBAN"
+
+#: views/html-admin-feed-settings.php:1026
+msgid "Company Name"
+msgstr "Bedrijfsnaam"
+
+#: views/html-admin-feed-settings.php:1027
+msgid "VAT Number"
+msgstr "Btw-nummer"
+
+#: views/html-admin-feed-settings.php:1051
+msgid "— From first name field —"
+msgstr "— Uit eerste naam veld —"
+
+#: views/html-admin-feed-settings.php:1053
+msgid "— From first address field —"
+msgstr "— Uit eerste adres veld —"
+
+#: views/html-admin-feed-settings.php:1055
+msgid "— First phone field —"
+msgstr "— Eerste telefoon veld —"
+
+#: views/html-admin-feed-settings.php:1057
+msgid "— First email address field —"
+msgstr "— Eerste e-mailadres veld —"
+
+#: views/html-admin-feed-settings.php:1095
+msgid "Optional settings for advanced usage only."
+msgstr "Optionele instellingen voor geavanceerd gebruik."
+
+#: views/html-admin-feed-settings.php:1102
+#: views/html-admin-feed-settings.php:1174
+msgid "Conditional Logic"
+msgstr "Voorwaardelijke logica"
+
+#: views/html-admin-feed-settings.php:1187
+msgid "Set conditional logic to only use this gateway if the entry matches the condition(s)."
+msgstr "Stel voorwaarden in om deze gateway alleen te gebruiken als de inzending aan de voorwaarden voldoet."
+
+#: views/html-admin-feed-settings.php:1194
+msgid "Update user role"
+msgstr "Gebruikersrol bijwerken"
+
+#: views/html-admin-feed-settings.php:1207
+msgid "— Select Field —"
+msgstr "— Selecteer veld —"

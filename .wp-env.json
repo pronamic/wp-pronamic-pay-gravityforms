@@ -1,6 +1,7 @@
 {
 	"core": null,
 	"config": {
+		"JETPACK_AUTOLOAD_DEV": true,
 		"PRONAMIC_PAY_DEBUG": true
 	},
 	"plugins": [

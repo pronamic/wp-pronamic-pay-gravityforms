@@ -10,6 +10,9 @@
 /.project
 /.settings
 
+# macOS
+.DS_Store
+
 # Node.js
 /package-lock.json
 /node_modules/

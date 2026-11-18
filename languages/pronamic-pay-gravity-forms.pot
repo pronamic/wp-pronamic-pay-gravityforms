@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-3.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Pronamic Pay Gravity Forms Add-On 4.13.3\n"
+"Project-Id-Version: Pronamic Pay Gravity Forms Add-On 4.14.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-pay-gravity-forms\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-11-18T09:25:38+00:00\n"
+"POT-Creation-Date: 2026-11-18T09:45:05+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: pronamic-pay-gravity-forms\n"
@@ -446,7 +446,7 @@ msgid "Choose a payment method"
 msgstr ""
 
 #. translators: %s: payment data title
-#: src/Processor.php:234
+#: src/Processor.php:238
 #, php-format
 msgid "Payment for %s"
 msgstr ""

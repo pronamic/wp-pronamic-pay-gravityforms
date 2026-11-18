@@ -1,17 +1,15 @@
-# Copyright (C) 2026 Pronamic
-# This file is distributed under the GPL-3.0-or-later.
 msgid ""
 msgstr ""
 "Project-Id-Version: Pronamic Pay Gravity Forms Add-On\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/pronamic-pay-gravity-forms\n"
-"POT-Creation-Date: 2026-11-18T09:25:38+00:00\n"
-"PO-Revision-Date: 2026-11-18 10:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: Pronamic\n"
-"Language: nl_NL\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-11-18T09:25:38+00:00\n"
+"PO-Revision-Date: 2026-11-18T09:45:06+00:00\n"
+"Language: nl_NL\n"
 "X-Generator: Poedit 3.10\n"
 "X-Domain: pronamic-pay-gravity-forms\n"
 
@@ -40,7 +38,9 @@ msgstr "Pronamic"
 msgid "https://www.pronamic.eu/"
 msgstr "https://www.pronamic.nl/"
 
-#: src/Admin.php:56 src/PaymentAddOn.php:128 src/PaymentAddOn.php:303
+#: src/Admin.php:56
+#: src/PaymentAddOn.php:128
+#: src/PaymentAddOn.php:303
 msgid "Pay"
 msgstr "Betalen"
 
@@ -144,12 +144,15 @@ msgstr "Titel"
 msgid "Form"
 msgstr "Formulier"
 
-#: src/AdminPaymentFormPostType.php:59 src/AdminPaymentFormPostType.php:120
-#: src/PaymentAddOn.php:477 views/html-admin-feed-settings.php:134
+#: src/AdminPaymentFormPostType.php:59
+#: src/AdminPaymentFormPostType.php:120
+#: src/PaymentAddOn.php:477
+#: views/html-admin-feed-settings.php:134
 msgid "Configuration"
 msgstr "Configuratie"
 
-#: src/AdminPaymentFormPostType.php:60 src/PaymentAddOn.php:476
+#: src/AdminPaymentFormPostType.php:60
+#: src/PaymentAddOn.php:476
 #: views/html-admin-feed-settings.php:223
 msgid "Transaction Description"
 msgstr "Transactiebeschrijving"
@@ -158,17 +161,20 @@ msgstr "Transactiebeschrijving"
 msgid "Date"
 msgstr "Datum"
 
-#: src/Extension.php:271 src/Extension.php:316
+#: src/Extension.php:271
+#: src/Extension.php:316
 msgid "Gravity Forms"
 msgstr "Gravity Forms"
 
 #. translators: %s: source id
-#: src/Extension.php:277 src/Extension.php:322
+#: src/Extension.php:277
+#: src/Extension.php:322
 #, php-format
 msgid "Entry #%s"
 msgstr "Inzending #%s"
 
-#: src/Extension.php:292 src/Extension.php:337
+#: src/Extension.php:292
+#: src/Extension.php:337
 msgid "Gravity Forms Entry"
 msgstr "Gravity Forms inzending"
 
@@ -284,7 +290,8 @@ msgctxt "Field display mode"
 msgid "Large icons"
 msgstr "Grote iconen"
 
-#: src/IssuersField.php:583 src/PaymentFormPostType.php:51
+#: src/IssuersField.php:583
+#: src/PaymentFormPostType.php:51
 #: src/PaymentMethodsField.php:581
 msgid "New Payment Feed"
 msgstr "Nieuwe betalingsfeed"
@@ -299,7 +306,8 @@ msgstr "Dit veld wordt niet ondersteund door je betalingsgateway."
 msgid "Please remove it from this form or <a href=\"%s\" target=\"_blank\">add a supported payment gateway</a>."
 msgstr "Verwijder het van dit formulier of <a href=\"%s\" target=\"_blank\">voeg een ondersteunde betalingsgateway toe</a>."
 
-#: src/IssuersField.php:618 src/IssuersField.php:630
+#: src/IssuersField.php:618
+#: src/IssuersField.php:630
 msgid "Issuer"
 msgstr "Bankenlijst"
 
@@ -311,7 +319,8 @@ msgstr "Kies een bank voor iDEAL-betaling"
 msgid "Pronamic Pay Add-On"
 msgstr "Pronamic Pay Add-On"
 
-#: src/PaymentAddOn.php:162 src/PaymentFormPostType.php:47
+#: src/PaymentAddOn.php:162
+#: src/PaymentFormPostType.php:47
 msgid "Payment Feed"
 msgstr "Betalingsfeed"
 
@@ -325,7 +334,8 @@ msgstr "Betalingsfeed #%d"
 msgid "Pay Feeds"
 msgstr "Betalen feeds"
 
-#: src/PaymentAddOn.php:320 src/PaymentFormPostType.php:48
+#: src/PaymentAddOn.php:320
+#: src/PaymentFormPostType.php:48
 msgid "Add New"
 msgstr "Nieuwe toevoegen"
 
@@ -379,7 +389,8 @@ msgstr "Abonnement betaling aangemaakt"
 msgid "Subscription Payment Failed"
 msgstr "Abonnement betaling mislukt"
 
-#: src/PaymentFormPostType.php:44 src/PaymentFormPostType.php:46
+#: src/PaymentFormPostType.php:44
+#: src/PaymentFormPostType.php:46
 #: src/PaymentFormPostType.php:57
 msgid "Payment Feeds"
 msgstr "Betalingsfeeds"
@@ -424,7 +435,8 @@ msgstr "Betalingsfeeds lijst navigatie"
 msgid "Payment feeds list"
 msgstr "Betalingsfeeds lijst"
 
-#: src/PaymentMethodsField.php:707 src/PaymentMethodsField.php:720
+#: src/PaymentMethodsField.php:707
+#: src/PaymentMethodsField.php:720
 msgid "Payment Method"
 msgstr "Betaalmethode"
 
@@ -433,7 +445,7 @@ msgid "Choose a payment method"
 msgstr "Kies een betaalmethode"
 
 #. translators: %s: payment data title
-#: src/Processor.php:234
+#: src/Processor.php:238
 #, php-format
 msgid "Payment for %s"
 msgstr "Betaling voor %s"

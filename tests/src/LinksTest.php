@@ -10,7 +10,7 @@
 
 namespace Pronamic\WordPress\Pay\Extensions\GravityForms;
 
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Title: WordPress pay extension Gravity Forms links test
@@ -18,7 +18,7 @@ use PHPUnit_Framework_TestCase;
  * @version 2.0.0
  * @since   1.0.0
  */
-class LinksTest extends PHPUnit_Framework_TestCase {
+class LinksTest extends TestCase {
 	/**
 	 * Test.
 	 *
@@ -36,7 +36,7 @@ class LinksTest extends PHPUnit_Framework_TestCase {
 	 *
 	 * @return array
 	 */
-	public function matrix_provider() {
+	public static function matrix_provider() {
 		return [
 			[ 'open', Links::OPEN ],
 			[ 'cancel', Links::CANCEL ],

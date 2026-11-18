@@ -65,6 +65,9 @@
 				"vendor:wp-pay-extensions",
 				"vendor:wp-pay-gateways",
 				"woocommerce/action-scheduler"
+			],
+			"vendor/{$vendor}/{$name}/": [
+				"wp-plugin/sqlite-database-integration"
 			]
 		}
 	},
@@ -86,6 +89,7 @@
 		"phpmd/phpmd": "^2.15",
 		"phpstan/extension-installer": "^1.4",
 		"phpstan/phpstan": "^2.3",
+		"phpunit/phpunit": "^10.5",
 		"pronamic/gravityforms": "^3.2",
 		"pronamic/wp-coding-standards": "^2.5",
 		"rector/rector": "^2.8",
@@ -97,6 +101,7 @@
 		"wp-cli/wp-cli-bundle": "^2.12",
 		"wp-pay-gateways/mollie": "^4.20",
 		"wp-phpunit/wp-phpunit": "^7.1",
+		"wp-plugin/sqlite-database-integration": "^3.1",
 		"yoast/phpunit-polyfills": "^2.0"
 	},
 	"scripts": {
@@ -109,6 +114,7 @@
 			"vendor/bin/wp i18n make-mo ./build/pronamic-pay-gravity-forms/languages/",
 			"vendor/bin/wp dist-archive ./build/pronamic-pay-gravity-forms/ --plugin-dirname=pronamic-pay-gravity-forms --force"
 		],
+		"coverage": "XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover build/logs/clover.xml --coverage-text",
 		"coveralls": "vendor/bin/php-coveralls -v",
 		"phpcbf": "XDEBUG_MODE=off vendor/bin/phpcbf",
 		"phpcs": "XDEBUG_MODE=off vendor/bin/phpcs -s -v",
@@ -120,5 +126,16 @@
 		"build-docs": [
 			"vendor/bin/wphd parse src --format=markdown --relative=docs > docs/hooks.md"
 		]
-	}
+	},
+	"repositories": [
+		{
+			"name": "wp-packages",
+			"type": "composer",
+			"url": "https://repo.wp-packages.org",
+			"only": [
+				"wp-plugin/*",
+				"wp-theme/*"
+			]
+		}
+	]
 }

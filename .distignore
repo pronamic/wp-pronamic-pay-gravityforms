@@ -9,6 +9,8 @@
 .gitattributes
 .gitignore
 
+.phpunit.cache/
+
 .travis.yml
 
 .wp-env.json

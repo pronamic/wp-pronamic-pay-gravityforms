@@ -6,6 +6,8 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 
 ## [Unreleased][unreleased]
 
+## [4.14.0] - 2026-11-18
+
 ### Added
 
 - Added a Dutch (`nl_NL`) translation.
@@ -33,6 +35,10 @@ This projects adheres to [Semantic Versioning](http://semver.org/) and [Keep a C
 - Changed `wp-pay/core` from `^4.32` to `^4.35`.
 - Upgraded the development tools, including `rector/rector` to `^2.8`, `phpstan/phpstan` to `^2.3` and `vimeo/psalm` to `^6.0`.
 - Removed the development dependencies `pronamic/pronamic-cli` and `wp-pay-gateways/mollie`.
+
+Full set of changes: [`4.13.3...4.14.0`][4.14.0]
+
+[4.14.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.3...v4.14.0
 
 ## [4.13.3] - 2026-11-02
 
@@ -812,7 +818,7 @@ Full set of changes: [`4.3.0...4.4.0`][4.4.0]
 ## 1.0.0 - 2015-01-01
 - First release.
 
-[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.13.3...HEAD
+[unreleased]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/v4.14.0...HEAD
 [4.3.0]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.2...4.3.0
 [4.2.2]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.1...4.2.2
 [4.2.1]: https://github.com/pronamic/wp-pronamic-pay-gravityforms/compare/4.2.0...4.2.1
